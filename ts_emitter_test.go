@@ -65,3 +65,29 @@ func TestRenderTS_IntAndNumberBothMapToNumber(t *testing.T) {
 		t.Errorf("number should map to number:\n%s", out)
 	}
 }
+
+func TestRenderTS_DefaultFieldType(t *testing.T) {
+	m := &PluginManifest{
+		ActionPrefix: ptr("p"),
+		ActionTypes: map[string]ActionTypeSchema{
+			"do": {Fields: []ActionFieldSchema{{Key: "x", Required: true}}},
+		},
+	}
+	out := RenderTS(m)
+	if !strings.Contains(out, "x: string;") {
+		t.Errorf("omitted field_type should default to string:\n%s", out)
+	}
+}
+
+func TestRenderTS_JsonFieldType(t *testing.T) {
+	m := &PluginManifest{
+		ActionPrefix: ptr("p"),
+		ActionTypes: map[string]ActionTypeSchema{
+			"do": {Fields: []ActionFieldSchema{{Key: "data", FieldType: FieldTypeJson, Required: true}}},
+		},
+	}
+	out := RenderTS(m)
+	if !strings.Contains(out, "data: unknown;") {
+		t.Errorf("json field should map to unknown:\n%s", out)
+	}
+}

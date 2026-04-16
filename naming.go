@@ -41,12 +41,16 @@ func CapitalizeFirst(s string) string {
 	if s == "" {
 		return ""
 	}
-	runes := []rune(s)
-	runes[0] = unicode.ToUpper(runes[0])
-	for i := 1; i < len(runes); i++ {
-		runes[i] = unicode.ToLower(runes[i])
+	var b strings.Builder
+	b.Grow(len(s))
+	for i, r := range s {
+		if i == 0 {
+			b.WriteRune(unicode.ToUpper(r))
+		} else {
+			b.WriteRune(unicode.ToLower(r))
+		}
 	}
-	return string(runes)
+	return b.String()
 }
 
 // splitIdentifier breaks a string on '_', '-', and '.' separators,

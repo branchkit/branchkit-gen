@@ -133,6 +133,23 @@ func TestRenderGo_AlphabeticalOrder(t *testing.T) {
 	}
 }
 
+func TestRenderGo_EmptyEnumValuesNoTypeDecl(t *testing.T) {
+	m := &PluginManifest{
+		ActionPrefix: ptr("p"),
+		ActionTypes: map[string]ActionTypeSchema{
+			"do": {
+				Fields: []ActionFieldSchema{
+					{Key: "mode", FieldType: FieldTypeEnum, Required: true, EnumValues: []string{}},
+				},
+			},
+		},
+	}
+	out := RenderGo(m)
+	if strings.Contains(out, "type DoMode string") {
+		t.Errorf("empty enum_values should not produce a type declaration:\n%s", out)
+	}
+}
+
 func TestRenderGo_DefaultFieldType(t *testing.T) {
 	// field_type omitted in JSON → FieldType("") → defaults to string.
 	m := &PluginManifest{
