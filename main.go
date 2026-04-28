@@ -1,13 +1,12 @@
-// branchkit-gen generates typed action param structs from BranchKit
-// plugin.json manifests. The generated files (actions_gen.go for Go,
-// actions_gen.ts for TypeScript) contain struct/interface definitions
-// and typed enum constants derived from the manifest's action_types
-// block — the single source of truth for each plugin's action surface.
+// branchkit-gen generates typed action param structs and validates
+// BranchKit plugin manifests.
 //
 // Usage:
 //
 //	branchkit-gen --plugin <dir>     Generate for one plugin
-//	branchkit-gen --all              Generate for every plugin in plugins/
+//	branchkit-gen --all              Generate for every plugin in cwd
+//	branchkit-gen validate [dir]     Validate plugin.json (defaults to cwd)
+//	branchkit-gen validate --all     Validate every plugin under cwd
 //
 // Install:
 //
@@ -15,6 +14,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -23,6 +23,10 @@ import (
 )
 
 func main() {
+	if len(os.Args) >= 2 && os.Args[1] == "validate" {
+		os.Exit(runValidate(os.Args[2:]))
+	}
+
 	pluginDir := flag.String("plugin", "", "Plugin directory containing plugin.json")
 	all := flag.Bool("all", false, "Iterate subdirectories of current directory for plugin.json")
 	flag.Parse()
@@ -33,9 +37,65 @@ func main() {
 	} else if *pluginDir != "" {
 		run([]string{*pluginDir})
 	} else {
-		fmt.Fprintln(os.Stderr, "usage: branchkit-gen --plugin <dir> | --all")
+		fmt.Fprintln(os.Stderr, "usage: branchkit-gen --plugin <dir> | --all | validate [dir]")
 		os.Exit(2)
 	}
+}
+
+// runValidate handles `branchkit-gen validate ...`. Returns the
+// process exit code: 0 if no errors, 1 if any error issues, 2 on
+// usage problems or unreadable manifests.
+func runValidate(args []string) int {
+	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
+	all := fs.Bool("all", false, "Validate every subdirectory containing a plugin.json")
+	asJSON := fs.Bool("json", false, "Emit issues as a JSON array on stdout")
+	if err := fs.Parse(args); err != nil {
+		return 2
+	}
+
+	var dirs []string
+	if *all {
+		dirs = enumeratePluginDirs(".")
+	} else if fs.NArg() == 0 {
+		dirs = []string{"."}
+	} else {
+		dirs = fs.Args()
+	}
+
+	if len(dirs) == 0 {
+		fmt.Fprintln(os.Stderr, "[branchkit-gen] no plugin directories found")
+		return 2
+	}
+
+	var allIssues []Issue
+	exitCode := 0
+	for _, dir := range dirs {
+		manifest, raw, err := LoadManifestRaw(dir)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "[branchkit-gen] %s: %v\n", dir, err)
+			exitCode = 2
+			continue
+		}
+		issues := Validate(manifest, raw)
+		allIssues = append(allIssues, issues...)
+		if HasErrors(issues) {
+			exitCode = 1
+		}
+	}
+
+	if *asJSON {
+		out, err := json.MarshalIndent(allIssues, "", "  ")
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "[branchkit-gen] json encode: %v\n", err)
+			return 2
+		}
+		fmt.Println(string(out))
+		return exitCode
+	}
+
+	fmt.Printf("Validated %d plugin(s)\n\n", len(dirs))
+	fmt.Print(formatHuman(allIssues))
+	return exitCode
 }
 
 func run(dirs []string) {

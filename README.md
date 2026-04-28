@@ -1,8 +1,9 @@
 # branchkit-gen
 
-Generate typed action param structs from [BranchKit](https://branchkit.dev) plugin manifests.
+Codegen and validation for [BranchKit](https://branchkit.dev) plugin manifests.
 
-`branchkit-gen` reads your `plugin.json`'s `action_types` block and emits `actions_gen.go` and/or `actions_gen.ts` with typed struct/interface definitions and enum constants — the same typed params your plugin handlers consume at runtime.
+- **Generate** typed action param structs from your `plugin.json`'s `action_types` block (`actions_gen.go` and/or `actions_gen.ts`).
+- **Validate** your `plugin.json` against the manifest contract — same checks the BranchKit runtime applies, runnable in CI before you ship.
 
 ## Install
 
@@ -20,6 +21,8 @@ go build -o branchkit-gen .
 
 ## Usage
 
+### Generate
+
 ```bash
 # Generate for a single plugin
 branchkit-gen --plugin ./my-plugin
@@ -31,6 +34,24 @@ cd plugins && branchkit-gen --all
 The tool detects which languages to emit based on the plugin's source directory:
 - **Go** output (`src/actions_gen.go`) — emitted when `src/go.mod` exists
 - **TypeScript** output (`src/actions_gen.ts`) — emitted when `src/package.json` exists
+
+### Validate
+
+```bash
+# Validate the plugin.json in the current directory
+branchkit-gen validate
+
+# Validate a specific plugin directory
+branchkit-gen validate ./my-plugin
+
+# Validate every subdirectory containing a plugin.json
+branchkit-gen validate --all
+
+# JSON output for CI
+branchkit-gen validate --json ./my-plugin
+```
+
+`validate` checks the same rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `settings_tabs` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields. Errors exit non-zero so CI can gate on a clean run.
 
 ## Example
 
