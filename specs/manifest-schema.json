@@ -1,0 +1,774 @@
+{
+  "$defs": {
+    "AccessLevel": {
+      "description": "Access level for plugin-provided resources (stores, events, action prefix).\nControls who can consume the resource. Part of the Plugin Interaction Model.",
+      "oneOf": [
+        {
+          "const": "open",
+          "description": "Any declared consumer can access. Bundled/same-author auto-approved, third-party needs user approval.",
+          "type": "string"
+        },
+        {
+          "const": "same_author",
+          "description": "Only plugins from the same author can access. Auto-granted, no user prompt.",
+          "type": "string"
+        },
+        {
+          "const": "private",
+          "description": "Only the providing plugin itself can access. No external access.",
+          "type": "string"
+        }
+      ]
+    },
+    "ActionFieldSchema": {
+      "description": "Schema for a single field within an action type.",
+      "properties": {
+        "enum_values": {
+          "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "field_type": {
+          "$ref": "#/$defs/FieldType",
+          "default": "string",
+          "description": "Declared type for this field. See `FieldType`."
+        },
+        "fields": {
+          "description": "Nested field list for `field_type: \"object\"` (recursive). Ignored\nfor other field types.",
+          "items": {
+            "$ref": "#/$defs/ActionFieldSchema"
+          },
+          "type": "array"
+        },
+        "key": {
+          "description": "JSON key name (e.g. \"selector\", \"direction\").",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "description": "Human-readable label for UI rendering.",
+          "type": "string"
+        },
+        "placeholder": {
+          "description": "Placeholder text for input fields.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "required": {
+          "default": false,
+          "description": "Whether this field is required.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "type": "object"
+    },
+    "ActionTypeSchema": {
+      "description": "Schema declaration for a plugin-defined action type.\nEnables generic UI rendering (structured editor fields) for any plugin's actions.",
+      "properties": {
+        "fields": {
+          "description": "Ordered list of fields for this action type.",
+          "items": {
+            "$ref": "#/$defs/ActionFieldSchema"
+          },
+          "type": "array"
+        },
+        "label": {
+          "default": "",
+          "description": "Human-readable label (e.g. \"Click Element\", \"Snap Window\").",
+          "type": "string"
+        },
+        "modes": {
+          "description": "Supported interaction modes: \"tap\" (single press), \"hold\" (start/stop via phase),\nand/or \"toggle\" (start/stop cycle). Defaults to [\"tap\"] if omitted.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Anchor": {
+      "description": "Anchor position for a HUD window on screen.",
+      "enum": [
+        "top-left",
+        "top-right",
+        "bottom-left",
+        "bottom-right",
+        "bottom-center",
+        "center"
+      ],
+      "type": "string"
+    },
+    "CollectionDataSource": {
+      "anyOf": [
+        {
+          "description": "File path relative to plugin directory (e.g. \"commands.json\").",
+          "type": "string"
+        },
+        {
+          "description": "Inline JSON data (e.g. keybind combos, configuration objects)."
+        }
+      ],
+      "description": "Data source for a collection contribution. A string is a file path relative to the plugin\ndirectory; anything else (object, array) is inline JSON data."
+    },
+    "CollectionKind": {
+      "description": "What kind of data a collection contains and how the platform processes it.",
+      "oneOf": [
+        {
+          "const": "entity",
+          "description": "Named things the matching engine resolves against. Requires key_field + value_field.\nShown with editable table in Collections tab.",
+          "type": "string"
+        },
+        {
+          "const": "data",
+          "description": "Structured data shared between plugins. No matching engine registration.",
+          "type": "string"
+        },
+        {
+          "const": "commands",
+          "description": "Command definitions processed by the matching engine. Each contributor's\ndata is parsed, validated, expanded, and registered in plugin_commands.",
+          "type": "string"
+        }
+      ]
+    },
+    "CollectionSchema": {
+      "description": "Unified schema for a collection.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/AccessLevel",
+          "description": "Access level: who can read this collection. Default: `open`."
+        },
+        "description": {
+          "description": "Human-readable description of this collection's purpose.",
+          "type": "string"
+        },
+        "fields": {
+          "description": "Field schema for entries (entity only).",
+          "items": {
+            "$ref": "#/$defs/ActionFieldSchema"
+          },
+          "type": "array"
+        },
+        "id_field": {
+          "description": "Stable identity field for record-based overrides (entity only).",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "key_field": {
+          "description": "Which entry field the matching engine matches against (entity only).",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CollectionKind"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "What kind of data this collection contains. Required."
+        },
+        "merge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MergeStrategy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How contributions from multiple plugins are merged when read. Required."
+        },
+        "value_field": {
+          "description": "Which entry field is returned on match (entity only).",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Consumes": {
+      "description": "What a plugin consumes from the ecosystem.",
+      "properties": {
+        "collections": {
+          "description": "Collection names this plugin reads (declares read-dependency on the introducer).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "events": {
+          "description": "Event patterns this plugin subscribes to.",
+          "items": {
+            "$ref": "#/$defs/Subscription"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "description": "Tags this plugin reads/requires (e.g. [\"app.*\"]).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Dependency": {
+      "description": "A plugin dependency with optional version constraint.",
+      "properties": {
+        "plugin": {
+          "description": "Target plugin ID.",
+          "type": "string"
+        },
+        "version": {
+          "description": "Semver version constraint (e.g. \">=1.0.0\", \">=1.0.0 <2.0.0\").\nOptional — omitted means any version.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "plugin"
+      ],
+      "type": "object"
+    },
+    "DispatchVia": {
+      "description": "How a plugin determines dispatch targets.",
+      "oneOf": [
+        {
+          "const": "commands",
+          "description": "Dispatches whatever the matching engine returns.",
+          "type": "string"
+        },
+        {
+          "const": "action_types",
+          "description": "Dispatches structured Plugin actions by type prefix.",
+          "type": "string"
+        },
+        {
+          "const": "direct",
+          "description": "Constructs action strings directly; must also declare `dispatch_prefixes`.",
+          "type": "string"
+        }
+      ]
+    },
+    "EventSchemaDecl": {
+      "description": "Schema declaration for an emitted event type.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/AccessLevel",
+          "description": "Access level: who can subscribe to this event. Default: `open`."
+        },
+        "description": {
+          "default": "",
+          "type": "string"
+        },
+        "schema": true
+      },
+      "type": "object"
+    },
+    "FieldType": {
+      "description": "The declared shape of a single action-type field. See `ActionFieldSchema`.\n\nWire format uses snake_case strings (`\"string\"`, `\"int\"`, `\"enum\"`, …).\nUnknown values fail deserialization — that's deliberate: a typo in\n`plugin.json` should surface at load time, not at dispatch. The `Json`\nvariant is the documented escape hatch for shapes too dynamic to\ndeclare statically.",
+      "enum": [
+        "string",
+        "int",
+        "number",
+        "boolean",
+        "string[]",
+        "enum",
+        "object",
+        "json"
+      ],
+      "type": "string"
+    },
+    "HudWindowDecl": {
+      "description": "A HUD window declaration from a plugin manifest.",
+      "properties": {
+        "accepts_input": {
+          "default": false,
+          "type": "boolean"
+        },
+        "anchor": {
+          "$ref": "#/$defs/Anchor",
+          "default": "top-right"
+        },
+        "channel": {
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "type": "string"
+        },
+        "follows_focus": {
+          "default": true,
+          "description": "Whether this channel follows the active display on focus changes.\nDefaults to `true`.",
+          "type": "boolean"
+        },
+        "min_height": {
+          "default": 100,
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "width": {
+          "default": 320,
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "type": "object"
+    },
+    "MergeStrategy": {
+      "description": "How contributions to a shared store are merged when read.",
+      "oneOf": [
+        {
+          "const": "authoritative",
+          "description": "Only the introducer's contribution is returned. Default.",
+          "type": "string"
+        },
+        {
+          "const": "collect",
+          "description": "All contributions are concatenated into a single array, ordered by plugin ordering.",
+          "type": "string"
+        },
+        {
+          "const": "keyed",
+          "description": "Contributions are merged as key-value objects. Later contributors override earlier keys.",
+          "type": "string"
+        }
+      ]
+    },
+    "MethodDecl": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      ],
+      "description": "A method declaration: `true` (simple opt-in) or an object (method with metadata)."
+    },
+    "NetworkConfig": {
+      "anyOf": [
+        {
+          "description": "Simple preset: \"localhost\" or \"outbound\"",
+          "type": "string"
+        },
+        {
+          "description": "Host-scoped: { \"hosts\": [\"api.spotify.com\"] }",
+          "properties": {
+            "hosts": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "hosts"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
+    },
+    "PluginImplements": {
+      "additionalProperties": {
+        "$ref": "#/$defs/MethodDecl"
+      },
+      "description": "Methods a plugin declares it implements (actuator → plugin RPC).\n\n`settings_tabs` is a named field because it carries structured metadata (label, key, reads)\nand is semantically different from method declarations. All other method names are open-ended\n— plugins can declare any method name without actuator code changes.",
+      "properties": {
+        "settings_tabs": {
+          "description": "Settings tabs provided by this plugin (structured metadata, not a method declaration).",
+          "items": {
+            "$ref": "#/$defs/PluginSettingsTabDecl"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "PluginSettingsTab": {
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "template": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "template"
+      ],
+      "type": "object"
+    },
+    "PluginSettingsTabDecl": {
+      "description": "A settings tab declared in the plugin manifest.",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "reads": {
+          "description": "Shared store names this tab needs for rendering (e.g. [\"commands\", \"corrections\"]).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "label",
+        "key"
+      ],
+      "type": "object"
+    },
+    "Provides": {
+      "description": "What a plugin provides to the ecosystem.",
+      "properties": {
+        "collections": {
+          "additionalProperties": {
+            "$ref": "#/$defs/CollectionSchema"
+          },
+          "description": "Collections this plugin introduces, keyed by collection name.\nEach entry declares schema, merge strategy, access, and optional resolution fields.",
+          "type": "object"
+        },
+        "events": {
+          "additionalProperties": {
+            "$ref": "#/$defs/EventSchemaDecl"
+          },
+          "description": "Event types this plugin emits, keyed by event type name.",
+          "type": "object"
+        },
+        "tag_namespaces": {
+          "description": "Tag namespace prefixes with lifecycle rules (singleton, transient).\nTags under a declared namespace prefix inherit its lifecycle behavior.",
+          "items": {
+            "$ref": "#/$defs/TagNamespace"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "additionalProperties": {
+            "$ref": "#/$defs/TagSchema"
+          },
+          "description": "Tags this plugin owns/sets, with optional labels and descriptions.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "Subscription": {
+      "description": "A subscription pattern for consuming events.",
+      "properties": {
+        "optional": {
+          "default": false,
+          "type": "boolean"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "pattern"
+      ],
+      "type": "object"
+    },
+    "TagLifecycle": {
+      "description": "Lifecycle behavior for a tag namespace prefix.",
+      "oneOf": [
+        {
+          "const": "persistent",
+          "description": "Platform stores, plugin clears. Default for plain tags.",
+          "type": "string"
+        },
+        {
+          "const": "singleton",
+          "description": "One tag per prefix group. Setting a new tag auto-clears siblings under the same prefix.",
+          "type": "string"
+        },
+        {
+          "const": "transient",
+          "description": "Auto-cleared when a specified event fires on the event bus.",
+          "type": "string"
+        },
+        {
+          "const": "ttl",
+          "description": "Auto-expires after a duration (ttl_ms). Re-setting refreshes the timer.",
+          "type": "string"
+        }
+      ]
+    },
+    "TagNamespace": {
+      "description": "A tag namespace declared by a plugin with lifecycle rules.\n\nExample:\n```json\n{ \"prefix\": \"plugin.voice.mode.\", \"lifecycle\": \"singleton\" }\n{ \"prefix\": \"plugin.browser.hints.\", \"lifecycle\": \"transient\", \"clear_on\": \"...\", \"access\": \"open\" }\n```",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/TagNamespaceAccess",
+          "description": "Access control: `owner` (default) = only declaring plugin can set,\n`open` = any plugin can set tags under this prefix."
+        },
+        "clear_on": {
+          "description": "For transient namespaces: the event type that triggers auto-clearing.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "description": "Human-readable description of this tag namespace.",
+          "type": "string"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/TagLifecycle",
+          "description": "Lifecycle behavior for tags under this prefix."
+        },
+        "prefix": {
+          "description": "The tag prefix this namespace covers (e.g. \"plugin.voice.mode.\").",
+          "type": "string"
+        },
+        "read_access": {
+          "$ref": "#/$defs/AccessLevel",
+          "description": "Read access control: who can see tags under this namespace via `tags.get`.\nDefault: `open` (all plugins can read). Separate from `access` which controls writes."
+        },
+        "scoped": {
+          "default": false,
+          "description": "When true, commands requiring tags under this prefix get Priority 1 matching\n(tried before unscoped commands) and are filtered from ungrouped discovery HUDs.",
+          "type": "boolean"
+        },
+        "ttl_ms": {
+          "description": "For TTL namespaces: default time-to-live in milliseconds. Tags auto-expire after this duration.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "prefix",
+        "lifecycle"
+      ],
+      "type": "object"
+    },
+    "TagNamespaceAccess": {
+      "description": "Access control for a tag namespace.",
+      "oneOf": [
+        {
+          "const": "owner",
+          "description": "Only the declaring plugin can set tags under this prefix. Default.",
+          "type": "string"
+        },
+        {
+          "const": "open",
+          "description": "Any plugin can set tags under this prefix. The declaring plugin owns\nthe lifecycle but other plugins contribute tags — like shared stores\nwhere one plugin introduces and others contribute.",
+          "type": "string"
+        }
+      ]
+    },
+    "TagSchema": {
+      "description": "Schema declaration for a tag provided by a plugin.",
+      "properties": {
+        "description": {
+          "default": "",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "$id": "https://branchkit.dev/schemas/manifest.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Declares what a plugin does. BranchKit reads plugin.json at startup to configure routing, dependency graphs, store ownership, and UI.",
+  "properties": {
+    "action_prefix": {
+      "description": "Action routing prefix claimed by this plugin (e.g. \"voice\", \"wm\").",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "action_prefix_access": {
+      "$ref": "#/$defs/AccessLevel",
+      "description": "Access level for this plugin's action prefix — who can dispatch to it.\nDefault: `open` (declaring an action prefix is inherently a public contract)."
+    },
+    "action_types": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ActionTypeSchema"
+      },
+      "description": "Action type schemas declared by this plugin (e.g. \"click\" → {fields: [...]}).\nKeys are the action name without prefix (e.g. \"click\" not \"browser.click\").\nThe full action type is formed by joining action_prefix + \".\" + key.",
+      "type": "object"
+    },
+    "author": {
+      "default": "",
+      "type": "string"
+    },
+    "capabilities": {
+      "description": "Platform-defined permissions this plugin requires.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "collection_data": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CollectionDataSource"
+      },
+      "description": "Collection data sources: maps collection name → data source (file path or inline JSON).\nHaving an entry here implicitly means the plugin contributes to that collection,\ncreating a dependency on the collection's introducer in the dep graph.",
+      "type": "object"
+    },
+    "consumes": {
+      "$ref": "#/$defs/Consumes",
+      "description": "What this plugin consumes from the ecosystem."
+    },
+    "default_footer": {
+      "description": "Default HUD footer text when this plugin's commands are shown.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "depends_on": {
+      "description": "Explicit plugin dependencies (supplement auto-derived graph).",
+      "items": {
+        "$ref": "#/$defs/Dependency"
+      },
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "type": "string"
+    },
+    "dispatch_prefixes": {
+      "description": "When `dispatch_via` is `direct`, the action prefixes this plugin targets.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "dispatch_via": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/DispatchVia"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` capability."
+    },
+    "hud_targets": {
+      "description": "HUD targets this plugin provides (e.g. [\"alphabet\", \"calibrate\"]).",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "hud_windows": {
+      "description": "HUD windows this plugin wants to display. Each entry auto-creates a\nbroadcast channel on plugin load. See `hud_channels::HudWindowDecl`.",
+      "items": {
+        "$ref": "#/$defs/HudWindowDecl"
+      },
+      "type": "array"
+    },
+    "id": {
+      "type": "string"
+    },
+    "implements": {
+      "$ref": "#/$defs/PluginImplements"
+    },
+    "min_api_version": {
+      "description": "Minimum API version this plugin requires (e.g. \"0.1.0\").\nIf set, the actuator rejects the plugin at load time if API_VERSION < min_api_version.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "default": "",
+      "type": "string"
+    },
+    "network": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/NetworkConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
+    },
+    "provides": {
+      "$ref": "#/$defs/Provides",
+      "description": "What this plugin provides to the ecosystem."
+    },
+    "run": {
+      "description": "Shell command to run the plugin process. When set, the actuator spawns + monitors this process.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "settings_tab": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginSettingsTab"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "version": {
+      "default": "",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "title": "BranchKit Plugin Manifest",
+  "type": "object"
+}

@@ -49,9 +49,25 @@ branchkit-gen validate --all
 
 # JSON output for CI
 branchkit-gen validate --json ./my-plugin
+
+# Skip the source-analysis drift checks
+branchkit-gen validate --no-drift ./my-plugin
 ```
 
-`validate` checks the same rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `settings_tabs` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields. Errors exit non-zero so CI can gate on a clean run.
+`validate` runs two layers of checks. Errors exit non-zero so CI can gate on a clean run.
+
+**Manifest checks** mirror the rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `settings_tabs` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields.
+
+**Drift checks** (Go plugins only, today) compare the plugin against an OpenRPC spec embedded in the binary at build time:
+
+- Each capability you declare must exist in the public capability list — typos here only surface at install time without `validate`.
+- For every `*.Call("method.name", …)` callsite in your `src/` tree, the validator looks up the method in the spec and reports:
+  - **error** if the method's `x-removed-in` ≤ your `min_api_version` (the call will hard-fail at runtime)
+  - **error** if the method's `x-since` is greater than your `min_api_version` (you'd run on an older actuator that doesn't have it)
+  - **warn** if the method is currently deprecated (plan a migration)
+  - **info** if the method isn't in the platform spec at all (typo, or a plugin-to-plugin call)
+
+Static analysis is best-effort — runtime-computed method names slip through. TypeScript drift detection is not yet implemented; pass `--no-drift` if you only want manifest checks.
 
 ## Example
 

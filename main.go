@@ -49,6 +49,7 @@ func runValidate(args []string) int {
 	fs := flag.NewFlagSet("validate", flag.ContinueOnError)
 	all := fs.Bool("all", false, "Validate every subdirectory containing a plugin.json")
 	asJSON := fs.Bool("json", false, "Emit issues as a JSON array on stdout")
+	noDrift := fs.Bool("no-drift", false, "Skip static-analysis drift checks against the embedded spec")
 	if err := fs.Parse(args); err != nil {
 		return 2
 	}
@@ -67,6 +68,16 @@ func runValidate(args []string) int {
 		return 2
 	}
 
+	var spec *Spec
+	if !*noDrift {
+		s, err := LoadEmbeddedSpec()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "[branchkit-gen] embedded spec is malformed: %v\n", err)
+			return 2
+		}
+		spec = s
+	}
+
 	var allIssues []Issue
 	exitCode := 0
 	for _, dir := range dirs {
@@ -77,6 +88,12 @@ func runValidate(args []string) int {
 			continue
 		}
 		issues := Validate(manifest, raw)
+
+		if spec != nil {
+			called, _ := AnalyzeGoSource(dir)
+			issues = append(issues, CheckDrift(manifest, called, spec)...)
+		}
+
 		allIssues = append(allIssues, issues...)
 		if HasErrors(issues) {
 			exitCode = 1
