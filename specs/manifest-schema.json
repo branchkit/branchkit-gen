@@ -1178,8 +1178,13 @@
           "type": "string"
         },
         {
+          "const": "tag_list",
+          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (substrate doc §Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
+          "type": "string"
+        },
+        {
           "const": "none",
-          "description": "Hidden from the Collections tab. Default for `tag`.",
+          "description": "Hidden from the Collections tab. An explicit \"don't surface\"\nescape hatch — no preset defaults to this.",
           "type": "string"
         }
       ]
