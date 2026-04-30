@@ -144,33 +144,8 @@
       ],
       "description": "Data source for a collection contribution. A string is a file path relative to the plugin\ndirectory; anything else (object, array) is inline JSON data."
     },
-    "CollectionKind": {
-      "description": "What kind of data a collection contains and how the platform processes it.",
-      "oneOf": [
-        {
-          "const": "entity",
-          "description": "Named things the matching engine resolves against. Requires key_field + value_field.\nShown with editable table in Collections tab.",
-          "type": "string"
-        },
-        {
-          "const": "data",
-          "description": "Structured data shared between plugins. No matching engine registration.",
-          "type": "string"
-        },
-        {
-          "const": "commands",
-          "description": "Command definitions processed by the matching engine. Each contributor's\ndata is parsed, validated, expanded, and registered in plugin_commands.",
-          "type": "string"
-        },
-        {
-          "const": "log",
-          "description": "Plugin-private append-only records (per-entry ULID, ordered by time).\nSingle contributor (the introducer); entries never overwritten. Carries\nrecording_enabled + retention_days privacy primitives. Rendered as a\ntimeline in the Collections tab.",
-          "type": "string"
-        }
-      ]
-    },
     "CollectionSchema": {
-      "description": "Unified schema for a collection.\n\nPhase A introduces the substrate fields (`preset`, `cardinality`,\n`feeds_matching`, etc.) alongside the legacy `kind`-based fields.\nPlugin manifests can declare either shape; Phase B will read the\nresolved policy uniformly; Phase F migrates internal manifests and\nremoves the legacy fields.",
+      "description": "Unified schema for a collection.\n\nPhase F: legacy `kind` enum + `key_field`/`value_field`/`id_field`/\n`default_recording_enabled`/`retention_days` fields removed. Every\ndeclaration uses the substrate shape: `preset` + slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
       "properties": {
         "access": {
           "$ref": "#/$defs/AccessLevel",
@@ -186,10 +161,6 @@
             }
           ],
           "description": "Substrate policy slot — meaningful only with `preset: \"tag\"`."
-        },
-        "default_recording_enabled": {
-          "description": "Initial recording state for legacy `log` collections. New shape\nuses `privacy.default_recording`.",
-          "type": "boolean"
         },
         "description": {
           "description": "Human-readable description of this collection's purpose.",
@@ -220,13 +191,6 @@
           },
           "type": "array"
         },
-        "id_field": {
-          "description": "Stable identity field for record-based overrides (legacy entity).",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "id_strategy": {
           "anyOf": [
             {
@@ -237,24 +201,6 @@
             }
           ],
           "description": "Substrate policy slot — id strategy override."
-        },
-        "key_field": {
-          "description": "Which entry field the matching engine matches against (legacy entity).\nIn the new shape this is encoded via `feeds_matching: as_named_entities`.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "kind": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/CollectionKind"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "What kind of data this collection contains. Legacy enum; new\nmanifests should use `preset` instead."
         },
         "lifecycle": {
           "anyOf": [
@@ -311,15 +257,6 @@
           ],
           "description": "Substrate policy slot — privacy posture (recording, access level)."
         },
-        "retention_days": {
-          "description": "Legacy retention slot for `log` collections. New shape uses\n`lifecycle: { type: \"retention\", retention_days: ... }`.",
-          "format": "uint32",
-          "minimum": 0,
-          "type": [
-            "integer",
-            "null"
-          ]
-        },
         "storage": {
           "anyOf": [
             {
@@ -341,13 +278,6 @@
             }
           ],
           "description": "Substrate policy slot — Settings UI render mode."
-        },
-        "value_field": {
-          "description": "Which entry field is returned on match (legacy entity).",
-          "type": [
-            "string",
-            "null"
-          ]
         },
         "writers": {
           "anyOf": [
