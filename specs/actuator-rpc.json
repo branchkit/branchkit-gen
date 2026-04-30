@@ -474,6 +474,19 @@
         ],
         "type": "object"
       },
+      "CollectionRecord": {
+        "description": "One record as returned by a backend. The `id` field is whatever the\ncollection's `id_strategy` resolves to (auto-ulid string, by-field value,\nkey/value composite, or \"singleton\" for singleton collections).\n\nThe wire / schema name is `CollectionRecord` to avoid colliding with\nTypeScript's builtin `Record<K, V>` utility type (the codegen emits\n`Record<string, T>` map shapes alongside our own types).",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "payload": {}
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "CollectionsListItem": {
         "properties": {
           "id": {
@@ -1271,19 +1284,6 @@
           "not_handled"
         ],
         "type": "string"
-      },
-      "Record": {
-        "description": "One record as returned by a backend. The `id` field is whatever the\ncollection's `id_strategy` resolves to (auto-ulid string, by-field value,\nkey/value composite, or \"singleton\" for singleton collections).",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "payload": {}
-        },
-        "required": [
-          "id"
-        ],
-        "type": "object"
       },
       "RunningApp": {
         "description": "A running application as reported by the OS.",
@@ -2734,7 +2734,7 @@
             "record": {
               "anyOf": [
                 {
-                  "$ref": "#/$defs/Record"
+                  "$ref": "#/$defs/CollectionRecord"
                 },
                 {
                   "type": "null"
@@ -2920,7 +2920,7 @@
           "properties": {
             "records": {
               "items": {
-                "$ref": "#/$defs/Record"
+                "$ref": "#/$defs/CollectionRecord"
               },
               "type": "array"
             },
