@@ -23,6 +23,17 @@
     "ActionFieldSchema": {
       "description": "Schema for a single field within an action type.",
       "properties": {
+        "display": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FieldDisplay"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary."
+        },
         "enum_values": {
           "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
           "items": {
@@ -106,6 +117,21 @@
       ],
       "type": "string"
     },
+    "Cardinality": {
+      "description": "For the `tag` preset only — picks between singleton flag and multi-record.\nResolves `id_strategy` and `merge` at preset expansion. Other presets pin\nthese slots and ignore cardinality.",
+      "oneOf": [
+        {
+          "const": "singleton",
+          "description": "One record per collection. Writes replace; gate string is the\ncollection name (or the singleton record's name field if declared).",
+          "type": "string"
+        },
+        {
+          "const": "multi",
+          "description": "Many records keyed by a `name` field. Multiple records coexist;\ngate strings are formed from the collection name + each record's name.",
+          "type": "string"
+        }
+      ]
+    },
     "CollectionDataSource": {
       "anyOf": [
         {
@@ -135,36 +161,85 @@
           "const": "commands",
           "description": "Command definitions processed by the matching engine. Each contributor's\ndata is parsed, validated, expanded, and registered in plugin_commands.",
           "type": "string"
+        },
+        {
+          "const": "log",
+          "description": "Plugin-private append-only records (per-entry ULID, ordered by time).\nSingle contributor (the introducer); entries never overwritten. Carries\nrecording_enabled + retention_days privacy primitives. Rendered as a\ntimeline in the Collections tab.",
+          "type": "string"
         }
       ]
     },
     "CollectionSchema": {
-      "description": "Unified schema for a collection.",
+      "description": "Unified schema for a collection.\n\nPhase A introduces the substrate fields (`preset`, `cardinality`,\n`feeds_matching`, etc.) alongside the legacy `kind`-based fields.\nPlugin manifests can declare either shape; Phase B will read the\nresolved policy uniformly; Phase F migrates internal manifests and\nremoves the legacy fields.",
       "properties": {
         "access": {
           "$ref": "#/$defs/AccessLevel",
-          "description": "Access level: who can read this collection. Default: `open`."
+          "description": "Read access level. Default `open`. (Phase F: subsumed by `privacy.access_level`.)"
+        },
+        "cardinality": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Cardinality"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — meaningful only with `preset: \"tag\"`."
+        },
+        "default_recording_enabled": {
+          "description": "Initial recording state for legacy `log` collections. New shape\nuses `privacy.default_recording`.",
+          "type": "boolean"
         },
         "description": {
           "description": "Human-readable description of this collection's purpose.",
           "type": "string"
         },
+        "emits_on_change": {
+          "description": "Substrate policy slot — whether mutations emit collection.updated events.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "feeds_matching": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FeedsMatching"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — matching-engine consumption opt-in."
+        },
         "fields": {
-          "description": "Field schema for entries (entity only).",
+          "description": "Field schema for records. Used by all presets that have structured\npayloads (named_entities, log, data, etc.).",
           "items": {
             "$ref": "#/$defs/ActionFieldSchema"
           },
           "type": "array"
         },
         "id_field": {
-          "description": "Stable identity field for record-based overrides (entity only).",
+          "description": "Stable identity field for record-based overrides (legacy entity).",
           "type": [
             "string",
             "null"
           ]
         },
+        "id_strategy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IdStrategy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — id strategy override."
+        },
         "key_field": {
-          "description": "Which entry field the matching engine matches against (entity only).",
+          "description": "Which entry field the matching engine matches against (legacy entity).\nIn the new shape this is encoded via `feeds_matching: as_named_entities`.",
           "type": [
             "string",
             "null"
@@ -179,7 +254,18 @@
               "type": "null"
             }
           ],
-          "description": "What kind of data this collection contains. Required."
+          "description": "What kind of data this collection contains. Legacy enum; new\nmanifests should use `preset` instead."
+        },
+        "lifecycle": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Lifecycle"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — record lifecycle (TTL, event-clear, retention)."
         },
         "merge": {
           "anyOf": [
@@ -190,14 +276,89 @@
               "type": "null"
             }
           ],
-          "description": "How contributions from multiple plugins are merged when read. Required."
+          "description": "How contributions from multiple plugins are merged when read.\nIn the new shape this is a policy slot; in the legacy shape it\nwas a top-level field. Same field, same wire key."
+        },
+        "ordering": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Ordering"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — record ordering for list/subscribe."
+        },
+        "preset": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Preset"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Manifest-level shorthand. When set, expands to a default policy\nbundle at parse time; per-slot fields below override the bundle."
+        },
+        "privacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Privacy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — privacy posture (recording, access level)."
+        },
+        "retention_days": {
+          "description": "Legacy retention slot for `log` collections. New shape uses\n`lifecycle: { type: \"retention\", retention_days: ... }`.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "storage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Storage"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — storage backend."
+        },
+        "ui_render": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/UiRender"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — Settings UI render mode."
         },
         "value_field": {
-          "description": "Which entry field is returned on match (entity only).",
+          "description": "Which entry field is returned on match (legacy entity).",
           "type": [
             "string",
             "null"
           ]
+        },
+        "writers": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Writers"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Substrate policy slot — write authorization."
         }
       },
       "type": "object"
@@ -284,6 +445,128 @@
       },
       "type": "object"
     },
+    "FeedsMatching": {
+      "description": "Opt-in modes for matching-engine consumption. Closed enum at the platform\nlevel; growth requires a deliberate platform release. See proposal §3.4.",
+      "oneOf": [
+        {
+          "description": "Most data — not consumed by the matching engine.",
+          "properties": {
+            "type": {
+              "const": "none",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Vocabulary for `<name>` captures during pattern matching.",
+          "properties": {
+            "key_field": {
+              "type": "string"
+            },
+            "type": {
+              "const": "as_named_entities",
+              "type": "string"
+            },
+            "value_field": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "key_field",
+            "value_field"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Patterns to match against (today's `kind: \"commands\"`).",
+          "properties": {
+            "type": {
+              "const": "as_command_set",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Active-context filter. `name_field: None` → gate string is the\ncollection name (presence-only). `scoped: true` → commands gating\non this collection get priority matching.",
+          "properties": {
+            "name_field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "scoped": {
+              "type": "boolean"
+            },
+            "type": {
+              "const": "as_gates",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only (proposal §9.3).",
+          "properties": {
+            "from_field": {
+              "type": "string"
+            },
+            "to_field": {
+              "type": "string"
+            },
+            "type": {
+              "const": "as_aliases",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "from_field",
+            "to_field"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant (proposal §9.4).",
+          "properties": {
+            "name_field": {
+              "type": "string"
+            },
+            "type": {
+              "const": "as_referenceable",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "name_field"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "FieldDisplay": {
+      "description": "Where a field appears in generic UI rendering. Currently used by\n`kind: \"log\"` collections in the Collections tab to drive the timeline\nrow summary line. Extending this enum is how new generic display roles\nget added (detail-only, hidden, etc.) without smuggling presentation\nhints into freeform strings.",
+      "oneOf": [
+        {
+          "const": "summary",
+          "description": "Include this field in the one-line summary shown for each row.\nMultiple `summary` fields are concatenated in declaration order.",
+          "type": "string"
+        }
+      ]
+    },
     "FieldType": {
       "description": "The declared shape of a single action-type field. See `ActionFieldSchema`.\n\nWire format uses snake_case strings (`\"string\"`, `\"int\"`, `\"enum\"`, …).\nUnknown values fail deserialization — that's deliberate: a typo in\n`plugin.json` should surface at load time, not at dispatch. The `Json`\nvariant is the documented escape hatch for shapes too dynamic to\ndeclare statically.",
       "enum": [
@@ -338,6 +621,163 @@
         "channel"
       ],
       "type": "object"
+    },
+    "IdStrategy": {
+      "description": "How records are identified within a collection.",
+      "oneOf": [
+        {
+          "description": "Auto-generate ULIDs on append (default for `log`).",
+          "properties": {
+            "type": {
+              "const": "auto_ulid",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Use the named field as the record identifier.",
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "type": {
+              "const": "by_field",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "field"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Use a (key, value) field pair (for `named_entities` lookups).",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "type": {
+              "const": "key_value",
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "key",
+            "value"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "At most one record exists; writes replace (default for singleton `tag`).",
+          "properties": {
+            "type": {
+              "const": "singleton",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "No identifier — collection is conceptually unordered records.",
+          "properties": {
+            "type": {
+              "const": "none",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Lifecycle": {
+      "description": "When records are deleted by the platform's lifecycle sweep.\n`retention_days` lives here (the deletion mechanism), not on `Privacy`.",
+      "oneOf": [
+        {
+          "description": "Records persist until manually deleted. Default.",
+          "properties": {
+            "type": {
+              "const": "persistent",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Records auto-expire `ttl_ms` milliseconds after creation. Re-setting refreshes.",
+          "properties": {
+            "ttl_ms": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "type": {
+              "const": "ttl",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "ttl_ms"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Records cleared when a specified event fires on the event bus.",
+          "properties": {
+            "event": {
+              "type": "string"
+            },
+            "type": {
+              "const": "clear_on_event",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "event"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Records older than `retention_days` deleted by the periodic sweep.\n`None` keeps entries until manually deleted.",
+          "properties": {
+            "retention_days": {
+              "format": "uint32",
+              "minimum": 0,
+              "type": [
+                "integer",
+                "null"
+              ]
+            },
+            "type": {
+              "const": "retention",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        }
+      ]
     },
     "MergeStrategy": {
       "description": "How contributions to a shared store are merged when read.",
@@ -395,6 +835,26 @@
       ],
       "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
     },
+    "Ordering": {
+      "description": "Total ordering of records returned by `list()` and `subscribe()`.",
+      "oneOf": [
+        {
+          "const": "time",
+          "description": "Time-ordered (typically ULID-derived). Default for `log`.",
+          "type": "string"
+        },
+        {
+          "const": "by_id",
+          "description": "Lexicographic by id field. Default for `named_entities`, `data`.",
+          "type": "string"
+        },
+        {
+          "const": "none",
+          "description": "No defined order.",
+          "type": "string"
+        }
+      ]
+    },
     "PluginImplements": {
       "additionalProperties": {
         "$ref": "#/$defs/MethodDecl"
@@ -449,6 +909,71 @@
       ],
       "type": "object"
     },
+    "Preset": {
+      "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.\nSee proposal §3.5.",
+      "oneOf": [
+        {
+          "const": "tag",
+          "description": "Active-context flag. `cardinality: singleton` (default) → one record,\nowner-only writer; `cardinality: multi` → by-field id, collect merge.",
+          "type": "string"
+        },
+        {
+          "const": "log",
+          "description": "Append-only record store. Per-collection disk, time order, recording\ntoggle, retention sweep.",
+          "type": "string"
+        },
+        {
+          "const": "named_entities",
+          "description": "Vocabulary collection consumed by matching engine via `as_named_entities`.",
+          "type": "string"
+        },
+        {
+          "const": "command_set",
+          "description": "Command set consumed by matching engine via `as_command_set`.",
+          "type": "string"
+        },
+        {
+          "const": "data",
+          "description": "Inter-plugin shared state with no special matching-engine processing.",
+          "type": "string"
+        }
+      ]
+    },
+    "Privacy": {
+      "description": "Privacy posture declarations. Retention enforcement lives on\n`Lifecycle::Retention` — this struct carries policy declarations only.",
+      "properties": {
+        "access_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AccessLevel"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Read access for cross-plugin reads. Default `open`."
+        },
+        "default_recording": {
+          "description": "Initial value of the recording toggle on first install.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "recording": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RecordingPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Whether records may be recorded at all and whether the user can toggle.\nCurrently used for log-shaped collections."
+        }
+      },
+      "type": "object"
+    },
     "Provides": {
       "description": "What a plugin provides to the ecosystem.",
       "properties": {
@@ -482,6 +1007,89 @@
         }
       },
       "type": "object"
+    },
+    "RecordingPolicy": {
+      "description": "Whether recording is user-toggleable or platform-enforced.",
+      "oneOf": [
+        {
+          "const": "toggleable",
+          "description": "User can toggle recording on/off in the Settings UI.",
+          "type": "string"
+        },
+        {
+          "const": "always_on",
+          "description": "Always recording, no user toggle.",
+          "type": "string"
+        },
+        {
+          "const": "disabled",
+          "description": "Recording disabled, plugin cannot append.",
+          "type": "string"
+        }
+      ]
+    },
+    "Storage": {
+      "description": "Backend that holds the collection's records.",
+      "oneOf": [
+        {
+          "description": "Per-collection JSON file in app support dir. Default for `log`, `command_set`.",
+          "properties": {
+            "type": {
+              "const": "per_collection_disk",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Stored in shared collection_overrides backend. Default for\n`named_entities`, `data`.",
+          "properties": {
+            "type": {
+              "const": "shared_overrides",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "In-memory only, lost on restart. Default for `tag`.",
+          "properties": {
+            "type": {
+              "const": "memory_only",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "In-memory ring buffer with maximum size; oldest evicted on overflow.",
+          "properties": {
+            "capacity": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "type": {
+              "const": "memory_ring",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "capacity"
+          ],
+          "type": "object"
+        }
+      ]
     },
     "Subscription": {
       "description": "A subscription pattern for consuming events.",
@@ -615,6 +1223,56 @@
         }
       },
       "type": "object"
+    },
+    "UiRender": {
+      "description": "How the collection renders in the Settings UI's Collections tab.",
+      "oneOf": [
+        {
+          "const": "editable_table",
+          "description": "Editable rows-and-columns table. Default for `named_entities`.",
+          "type": "string"
+        },
+        {
+          "const": "timeline",
+          "description": "Time-ordered timeline with summary fields. Default for `log`.",
+          "type": "string"
+        },
+        {
+          "const": "summary",
+          "description": "One-line summary card. Default for `data`.",
+          "type": "string"
+        },
+        {
+          "const": "command_list",
+          "description": "Command list with patterns and bindings. Default for `command_set`.",
+          "type": "string"
+        },
+        {
+          "const": "none",
+          "description": "Hidden from the Collections tab. Default for `tag`.",
+          "type": "string"
+        }
+      ]
+    },
+    "Writers": {
+      "description": "Who is allowed to write records to this collection.",
+      "oneOf": [
+        {
+          "const": "introducer_only",
+          "description": "Only the introducer plugin. Default for `tag`, `log`.",
+          "type": "string"
+        },
+        {
+          "const": "anyone_who_declares",
+          "description": "Any plugin that declares the collection in `consumes` (and contributes\nvia `collection_data`). Default for `named_entities`, `command_set`,\n`data`.",
+          "type": "string"
+        },
+        {
+          "const": "platform_only",
+          "description": "Only the platform itself; plugins read but cannot write.",
+          "type": "string"
+        }
+      ]
     }
   },
   "$id": "https://branchkit.dev/schemas/manifest.json",

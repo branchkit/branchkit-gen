@@ -155,6 +155,17 @@
       "ActionFieldSchema": {
         "description": "Schema for a single field within an action type.",
         "properties": {
+          "display": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FieldDisplay"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary."
+          },
           "enum_values": {
             "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
             "items": {
@@ -194,6 +205,7 @@
           }
         },
         "required": [
+          "display",
           "enum_values",
           "field_type",
           "fields",
@@ -763,6 +775,13 @@
         ],
         "type": "object"
       },
+      "FieldDisplay": {
+        "description": "Where a field appears in generic UI rendering. Currently used by\n`kind: \"log\"` collections in the Collections tab to drive the timeline\nrow summary line. Extending this enum is how new generic display roles\nget added (detail-only, hidden, etc.) without smuggling presentation\nhints into freeform strings.",
+        "enum": [
+          "summary"
+        ],
+        "type": "string"
+      },
       "FieldType": {
         "description": "The declared shape of a single action-type field. See `ActionFieldSchema`.\n\nWire format uses snake_case strings (`\"string\"`, `\"int\"`, `\"enum\"`, …).\nUnknown values fail deserialization — that's deliberate: a typo in\n`plugin.json` should surface at load time, not at dispatch. The `Json`\nvariant is the documented escape hatch for shapes too dynamic to\ndeclare statically.",
         "enum": [
@@ -1083,6 +1102,97 @@
         ],
         "type": "object"
       },
+      "ListOpts": {
+        "description": "Listing parameters for `list`. All fields optional — empty `ListOpts`\nmeans \"every record, default ordering.\"",
+        "properties": {
+          "cursor": {
+            "description": "Opaque pagination cursor. Backends define the format; callers pass\nback the cursor value returned by a prior `list` call.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Maximum records to return. None = no limit.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "since_ms": {
+            "description": "Inclusive lower bound on `timestamp_ms` (or equivalent ordering key).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "until_ms": {
+            "description": "Exclusive upper bound on `timestamp_ms`.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cursor",
+          "limit",
+          "since_ms",
+          "until_ms"
+        ],
+        "type": "object"
+      },
+      "LogEntry": {
+        "description": "One record in a log collection.",
+        "properties": {
+          "id": {
+            "description": "ULID — Crockford base32, sortable by creation time. Acts as the\nentry's primary key for `get(id)` and `delete(id)` calls.",
+            "type": "string"
+          },
+          "payload": {
+            "description": "Plugin-defined entry payload. Validated against the collection's\n`fields` schema at append time by the service layer (not here)."
+          },
+          "timestamp_ms": {
+            "description": "Unix milliseconds. Duplicated from the ULID's embedded timestamp for\ncheap range queries that don't want to decode the ULID.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "timestamp_ms"
+        ],
+        "type": "object"
+      },
+      "LogListOpts": {
+        "description": "Pagination + filter params for `list`.",
+        "properties": {
+          "cursor": {
+            "description": "Pagination cursor — return entries with id strictly less than this.\nPass the last id of the previous page.",
+            "type": "string"
+          },
+          "limit": {
+            "description": "Max entries returned.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "since_ms": {
+            "description": "Lower bound on `timestamp_ms` (inclusive).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "until_ms": {
+            "description": "Upper bound on `timestamp_ms` (inclusive).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cursor",
+          "limit",
+          "since_ms",
+          "until_ms"
+        ],
+        "type": "object"
+      },
       "LoginItem": {
         "description": "A login item (launch-at-login entry).",
         "properties": {
@@ -1161,6 +1271,19 @@
           "not_handled"
         ],
         "type": "string"
+      },
+      "Record": {
+        "description": "One record as returned by a backend. The `id` field is whatever the\ncollection's `id_strategy` resolves to (auto-ulid string, by-field value,\nkey/value composite, or \"singleton\" for singleton collections).",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "payload": {}
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
       },
       "RunningApp": {
         "description": "A running application as reported by the OS.",
@@ -2373,6 +2496,89 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "collection.append",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Collection name. Must be a `kind: \"log\"` collection.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "payload",
+          "required": true,
+          "schema": {
+            "description": "Entry payload — validated against the collection's `fields` schema."
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_append_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "entry": {
+              "$ref": "#/$defs/LogEntry",
+              "description": "The newly-appended entry, including its assigned ULID and timestamp."
+            }
+          },
+          "required": [
+            "entry"
+          ],
+          "title": "CollectionAppendResult",
+          "type": "object"
+        }
+      },
+      "summary": "Append an entry to a log-kind collection",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.count",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_count_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "count": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "count"
+          ],
+          "title": "CollectionCountResult",
+          "type": "object"
+        }
+      },
+      "summary": "Total record count for a collection",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collection.delete",
       "paramStructure": "by-name",
       "params": [
@@ -2402,6 +2608,146 @@
         }
       },
       "summary": "Delete a dynamic collection",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.delete_log_entry",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_delete_log_entry_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "deleted": {
+              "description": "True if the entry existed and was deleted, false if it didn't exist.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "deleted"
+          ],
+          "title": "CollectionDeleteLogEntryResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete one entry from a log-kind collection by id",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.delete_record",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_delete_record_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "deleted": {
+              "description": "True if the record existed and was removed, false if it was already gone.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "deleted"
+          ],
+          "title": "CollectionDeleteRecordResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete one record from a collection by id",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated",
+        "_platform.tags.changed"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.fetch",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_fetch_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "record": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Record"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The record, or null if no record with that id exists."
+            }
+          },
+          "title": "CollectionFetchResult",
+          "type": "object"
+        }
+      },
+      "summary": "Fetch a single record from a collection by id",
       "tags": [
         {
           "name": "collections"
@@ -2454,6 +2800,202 @@
         }
       },
       "summary": "Read collection data with optional merge metadata",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.get_log_entry",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "description": "Entry id (the ULID returned from `append`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_get_log_entry_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "entry": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/LogEntry"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The entry, or null if no entry with that id exists."
+            }
+          },
+          "title": "CollectionGetLogEntryResult",
+          "type": "object"
+        }
+      },
+      "summary": "Fetch one entry from a log-kind collection by id",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.get_recording",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_get_recording_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "description": "Effective recording flag — the user override if set, otherwise the\nmanifest's `default_recording_enabled`.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "CollectionGetRecordingResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read the effective recording flag for a log-kind collection",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.list",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "opts",
+          "required": false,
+          "schema": {
+            "$ref": "#/$defs/ListOpts",
+            "default": {}
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_list_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "records": {
+              "items": {
+                "$ref": "#/$defs/Record"
+              },
+              "type": "array"
+            },
+            "total": {
+              "description": "Total record count for the collection, independent of filter / limit.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "records",
+            "total"
+          ],
+          "title": "CollectionListResult",
+          "type": "object"
+        }
+      },
+      "summary": "List records in a collection (paginated)",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.list_log",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Collection name. Must be a `kind: \"log\"` collection.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "opts",
+          "required": false,
+          "schema": {
+            "$ref": "#/$defs/LogListOpts",
+            "default": {},
+            "description": "Filter and pagination options. All fields optional."
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_list_log_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "entries": {
+              "items": {
+                "$ref": "#/$defs/LogEntry"
+              },
+              "type": "array"
+            },
+            "total": {
+              "description": "Total entries in the collection (independent of filters/pagination).",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "entries",
+            "total"
+          ],
+          "title": "CollectionListLogResult",
+          "type": "object"
+        }
+      },
+      "summary": "List entries in a log-kind collection (paginated, newest first)",
       "tags": [
         {
           "name": "collections"
@@ -2527,6 +3069,59 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "collection.patch",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "fields",
+          "required": true,
+          "schema": {
+            "description": "Object of fields to merge over the existing record."
+          }
+        },
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_patch_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CollectionPatchResult",
+          "type": "object"
+        }
+      },
+      "summary": "Partial update of an existing record",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collection.push",
       "paramStructure": "by-name",
       "params": [
@@ -2582,6 +3177,101 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "collection.put",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "payload",
+          "required": true,
+          "schema": {}
+        }
+      ],
+      "result": {
+        "name": "collection_put_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CollectionPutResult",
+          "type": "object"
+        }
+      },
+      "summary": "Upsert a record at the given id",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated",
+        "_platform.tags.changed"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.set_recording",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_set_recording_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CollectionSetRecordingResult",
+          "type": "object"
+        }
+      },
+      "summary": "Toggle the recording flag on a log-kind collection",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collections.list",
       "paramStructure": "by-name",
       "params": [
@@ -2590,7 +3280,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Filter by collection kind: \"entity\", \"data\", \"commands\". If omitted, returns all.",
+            "description": "Filter by collection kind: \"entity\", \"data\", \"commands\", \"log\". If omitted, returns all.",
             "type": "string"
           }
         }
@@ -9382,7 +10072,8 @@
         }
       ],
       "x-branchkit-emits": [
-        "_platform.tags.changed"
+        "_platform.tags.changed",
+        "_platform.collection.updated"
       ],
       "x-since": "0.1.0"
     }
