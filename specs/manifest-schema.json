@@ -162,6 +162,10 @@
           ],
           "description": "Substrate policy slot — meaningful only with `preset: \"tag\"`."
         },
+        "clear_on_unrelated_command": {
+          "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nSub-sprint 6.4: replaces voice's inline auto-clear in matchWords with\na manifest-declared trigger resolved server-side in `commands.match`.\nOnly meaningful for `feeds_matching: AsGates { scoped: true }` —\nvalidation rejects the flag on other shapes. Distinct from\n`Lifecycle::ClearOnEvent` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
+          "type": "boolean"
+        },
         "description": {
           "description": "Human-readable description of this collection's purpose.",
           "type": "string"
@@ -307,13 +311,6 @@
           "description": "Event patterns this plugin subscribes to.",
           "items": {
             "$ref": "#/$defs/Subscription"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "description": "Tags this plugin reads/requires (e.g. [\"app.*\"]).",
-          "items": {
-            "type": "string"
           },
           "type": "array"
         }
@@ -670,10 +667,13 @@
           "type": "object"
         },
         {
-          "description": "Records cleared when a specified event fires on the event bus.",
+          "description": "Records cleared when any of the listed events fires on the event bus.\nSub-sprint 6.3 extended this from a single `event: String` to a list\nso scoped+transient namespaces can clear on multiple boundaries (e.g.\nboth `_platform.input.session_ended` and `_platform.discovery.closed`,\nwhich §7.2's audit established as genuinely distinct triggers).\nAuthors writing a single-event lifecycle still use the array form\n(`\"events\": [\"x\"]`) — keeping the wire shape uniform with the JSON\nSchema so external validators agree with the runtime parser.",
           "properties": {
-            "event": {
-              "type": "string"
+            "events": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
             },
             "type": {
               "const": "clear_on_event",
@@ -682,7 +682,7 @@
           },
           "required": [
             "type",
-            "event"
+            "events"
           ],
           "type": "object"
         },
@@ -1102,7 +1102,7 @@
         },
         "read_access": {
           "$ref": "#/$defs/AccessLevel",
-          "description": "Read access control: who can see tags under this namespace via `tags.get`.\nDefault: `open` (all plugins can read). Separate from `access` which controls writes."
+          "description": "Read access control: who can read records of the gate-shape collection\nowning this namespace (via the substrate verbs `collection.get` /\n`collection.list`). Default: `open` (all plugins can read). Separate from\n`access` which controls writes."
         },
         "scoped": {
           "default": false,

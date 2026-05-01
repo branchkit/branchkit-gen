@@ -837,6 +837,32 @@
         ],
         "type": "object"
       },
+      "GateWrite": {
+        "description": "Resolved structured write for a single gate string in a command's\n`sets_tags` / `clears_tags`. Produced once at command-load time by the\nresolver pass in `rebuild_commands_cache`, so the runtime path can\ndispatch via substrate ops (`Plugin.Put` / `Plugin.Delete`) without\nre-resolving the gate-namespace policy on each match.\n\nSub-sprint 6.1: command-driven tag writes flow as structured writes\nalongside the gate-string sugar in manifests; gate strings stay as\nthe authoring surface, resolution happens upstream.",
+        "properties": {
+          "collection": {
+            "description": "Resolved substrate collection name.",
+            "type": "string"
+          },
+          "id": {
+            "description": "Resolved record id — `\"singleton\"` for presence-only gates, the\nleaf token for namespace-feed gates.",
+            "type": "string"
+          },
+          "payload": {
+            "description": "Payload for `collection.put`. Empty object for presence-only gates;\n`{<name_field>: <leaf>}` for namespace-feed gates so the substrate's\n`derive_gate_string` round-trips back to the original tag."
+          },
+          "tag": {
+            "description": "Original gate string this write resolves. Preserved so callers can\ncompare resolved writes against the source `sets_tags` / `clears_tags`\ngate-string lists for validation, logging, and event payloads.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "collection",
+          "id",
+          "tag"
+        ],
+        "type": "object"
+      },
       "HidDeviceEntry": {
         "properties": {
           "axes": {
@@ -1738,6 +1764,19 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.discovery.closed",
+      "paramStructure": "by-name",
+      "params": [],
+      "summary": "Discovery HUD closed — clears transient tags declared with this clear_on event",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.display.changed",
       "paramStructure": "by-name",
       "params": [
@@ -2147,69 +2186,6 @@
         }
       ],
       "summary": "User selected an item from the selection HUD",
-      "tags": [
-        {
-          "name": "notifications"
-        }
-      ],
-      "x-branchkit-delivery": "at-most-once",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "_platform.tags.changed",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "active",
-          "required": true,
-          "schema": {
-            "description": "All currently active tags after the change.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "author",
-          "required": true,
-          "schema": {
-            "description": "Plugin ID that declared/owns the tags being set, or `_platform`.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "cleared",
-          "required": true,
-          "schema": {
-            "description": "Tags that were removed.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "executor",
-          "required": true,
-          "schema": {
-            "description": "Plugin ID that triggered the tag change, or `_platform`.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "set",
-          "required": true,
-          "schema": {
-            "description": "Tags that were added.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "summary": "Active tags were modified (set, cleared, or prefix-cleared)",
       "tags": [
         {
           "name": "notifications"
@@ -2702,8 +2678,7 @@
         }
       ],
       "x-branchkit-emits": [
-        "_platform.collection.updated",
-        "_platform.tags.changed"
+        "_platform.collection.updated"
       ],
       "x-since": "0.1.0"
     },
@@ -3223,8 +3198,7 @@
         }
       ],
       "x-branchkit-emits": [
-        "_platform.collection.updated",
-        "_platform.tags.changed"
+        "_platform.collection.updated"
       ],
       "x-since": "0.1.0"
     },
@@ -3520,6 +3494,13 @@
               "items": {},
               "type": "array"
             },
+            "clears_tag_writes": {
+              "description": "Resolved substrate writes for each `clears_tags` entry. Voice's\npipeline dispatches via `Plugin.Delete` on these.",
+              "items": {
+                "$ref": "#/$defs/GateWrite"
+              },
+              "type": "array"
+            },
             "clears_tags": {
               "items": {
                 "type": "string"
@@ -3540,6 +3521,13 @@
             "requires_tags": {
               "items": {
                 "type": "string"
+              },
+              "type": "array"
+            },
+            "sets_tag_writes": {
+              "description": "Resolved substrate writes for each `sets_tags` entry, produced by\nthe load-time gate-string resolver (sub-sprint 6.1). Voice's pipeline\ndispatches via `Plugin.Put` on these. Sub-sprint 6.4 (Option Z) made\nevery command-driven gate write resolvable, so this list is exhaustive\nfor the parallel `sets_tags` field.",
+              "items": {
+                "$ref": "#/$defs/GateWrite"
               },
               "type": "array"
             },
@@ -3648,6 +3636,37 @@
         {
           "name": "control"
         }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "discovery.closed",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "discovery_closed_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "DiscoveryClosedResult",
+          "type": "object"
+        }
+      },
+      "summary": "Notify that the discovery HUD closed; emits _platform.discovery.closed",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.discovery.closed"
       ],
       "x-since": "0.1.0"
     },
@@ -9974,108 +9993,6 @@
       ],
       "x-branchkit-capability": "shell",
       "x-since": "0.1.0"
-    },
-    {
-      "name": "tags.get",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "tags_get_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "tags": {
-              "description": "Sorted list of currently active tags.",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "tags"
-          ],
-          "title": "TagsGetResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get all active tags",
-      "tags": [
-        {
-          "name": "tags"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "tags.modify",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "clear",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Tags to remove from the active set. Same null-tolerance as\n[`Self::set`].",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "clear_scoped",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "If true, clear all transient scoped tags before applying set/clear.",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "set",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Tags to add to the active set.\n\n`vec_or_null` accepts both `[]` and `null` for the field.\nThis is defensive against Go plugins that declare\n`var x []string` (nil slice → JSON `null`). See\n`crate::operations::types::serde_compat` for the rationale.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "tags_modify_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "tags": {
-              "description": "Updated active tag set, sorted.",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "tags"
-          ],
-          "title": "TagsModifyResult",
-          "type": "object"
-        }
-      },
-      "summary": "Set and/or clear active tags",
-      "tags": [
-        {
-          "name": "tags"
-        }
-      ],
-      "x-branchkit-emits": [
-        "_platform.tags.changed",
-        "_platform.collection.updated"
-      ],
-      "x-since": "0.1.0"
     }
   ],
   "openrpc": "1.2.4",
@@ -10243,17 +10160,14 @@
     "request_timeout_ms": 15000
   },
   "x-branchkit-tags": {
-    "constants": {
-      "_platform.input.active": "Set when any input session (voice, typed) is active. Cleared on session end.",
-      "_platform.input.lift_keys": "When set, execute RPC lifts held modifier keys before simulating key actions. Set by hold-to-talk modes."
-    },
+    "constants": {},
     "namespaces": {
       "app": {
         "description": "Active application bundle ID. Set automatically when app focus changes. Only one app.* tag is active at a time.",
         "prefix": "app."
       },
       "plugin": {
-        "description": "Plugin-owned state tags. Plugins set/clear via tags.modify RPC. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
+        "description": "Plugin-owned state tags. Plugins set/clear via the substrate verbs (collection.put / collection.delete_record) on the gate-shape collection that owns the namespace. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
         "prefix": "plugin."
       }
     }
