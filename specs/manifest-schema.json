@@ -297,6 +297,16 @@
       },
       "type": "object"
     },
+    "ConflictResolution": {
+      "description": "Conflict-resolution mode declared on an `EffectDeclaration`. v1\nships only `ExclusiveLastWriter`; future variants (first-writer,\ncomposable) join when concrete demand surfaces, per the design\ndoc's algebra-not-taxonomy principle.",
+      "oneOf": [
+        {
+          "const": "exclusive_last_writer",
+          "description": "Most-recent assertion holds top-of-stack ownership. When the top\nretracts, the previous asserter auto-restores. Matches the\nmode-shaped first-wave consumers (Focus, Meeting, Presentation,\nRecording Mode).",
+          "type": "string"
+        }
+      ]
+    },
     "Consumes": {
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
@@ -356,6 +366,65 @@
           "type": "string"
         }
       ]
+    },
+    "EffectAssertEntry": {
+      "anyOf": [
+        {
+          "description": "Bare string — sugar form. Equivalent to `Object { name, args: None }`.",
+          "type": "string"
+        },
+        {
+          "description": "Structured form with optional `args` (reserved for future\nparameter support; v1 rejects non-empty args at validation time).",
+          "properties": {
+            "args": {
+              "additionalProperties": true,
+              "type": [
+                "object",
+                "null"
+              ]
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters (§10.4 wire-forward-compat).\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
+    },
+    "EffectDeclaration": {
+      "description": "One exclusivity-shape effect declaration. A plugin may declare\nmultiple entries when its experience surfaces have independent\nlifecycles; each entry is one consent unit at install time.",
+      "properties": {
+        "asserts": {
+          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (§10.4 wire-forward-compat).",
+          "items": {
+            "$ref": "#/$defs/EffectAssertEntry"
+          },
+          "type": "array"
+        },
+        "conflict_resolution": {
+          "$ref": "#/$defs/ConflictResolution",
+          "description": "How concurrent assertions of these effects are arbitrated. v1\nships only `exclusive_last_writer`; the per-effect registry\ngates which modes are allowed for each effect name."
+        },
+        "user_visible_description": {
+          "description": "One- or two-sentence description shown in the install-time\nconsent prompt under `user_visible_name`. Same v1 localization\nposture as `user_visible_name`.",
+          "type": "string"
+        },
+        "user_visible_name": {
+          "description": "Plugin-facing display name shown in the install-time consent\nprompt (e.g. \"Focus Mode\", \"Meeting Mode\"). v1: plain string,\nEnglish-only. The wire format reserves the structure to evolve\ninto a locale map without breaking existing manifests.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "asserts",
+        "conflict_resolution",
+        "user_visible_name",
+        "user_visible_description"
+      ],
+      "type": "object"
     },
     "EventSchemaDecl": {
       "description": "Schema declaration for an emitted event type.",
@@ -913,6 +982,13 @@
           },
           "description": "Collections this plugin introduces, keyed by collection name.\nEach entry declares schema, merge strategy, access, and optional resolution fields.",
           "type": "object"
+        },
+        "effects": {
+          "description": "Exclusivity-shape platform effects this plugin participates in.\nEach entry declares a set of registered effect names the plugin\nwill assert during its session, plus the user-facing branding for\nthe install-time consent prompt. Effect names are validated\nagainst the closed `effects::REGISTERED_EFFECTS` registry at\nmanifest load time. See `notes/DESIGN_CAPABILITY_MECHANISM.md`.",
+          "items": {
+            "$ref": "#/$defs/EffectDeclaration"
+          },
+          "type": "array"
         },
         "events": {
           "additionalProperties": {

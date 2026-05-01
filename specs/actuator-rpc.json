@@ -1801,6 +1801,36 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.effect.displaced",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "effect",
+          "required": true,
+          "schema": {
+            "description": "The effect name that was displaced (e.g. \"suppress_notifications\").",
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_owner",
+          "required": true,
+          "schema": {
+            "description": "Plugin id that just took top-of-stack ownership of the effect.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "Plugin's exclusivity-shape effect assertion was overridden by a later asserter — see notes/DESIGN_CAPABILITY_MECHANISM.md §10.2",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.hid.connected",
       "paramStructure": "by-name",
       "params": [
@@ -3723,6 +3753,137 @@
       ],
       "x-branchkit-emits": [
         "_platform.action.executed"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "effects.assert",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Registered effect name (e.g. `suppress_notifications`). Must be\ndeclared in the plugin's manifest `provides.effects.asserts` and\nmatch an entry in the closed `effects::REGISTERED_EFFECTS` registry.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "effects_assert_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "already_held": {
+              "description": "True when this plugin already held an active assertion for this\neffect — assert is idempotent. Implies `granted=true`.",
+              "type": "boolean"
+            },
+            "displaced": {
+              "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The displaced plugin should receive an\n`effect_displaced` notification (§10.2). Notification path is\nstubbed in v1 — see registered handler.",
+              "type": "string"
+            },
+            "granted": {
+              "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (fail-next-assertion semantics per §10.3) or when the\neffect name is unknown.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "granted",
+            "already_held"
+          ],
+          "title": "EffectsAssertResult",
+          "type": "object"
+        }
+      },
+      "summary": "Assert an exclusivity-shape platform effect on behalf of this plugin",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "effects.is_active",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Registered effect name to query.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "effects_is_active_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "active": {
+              "description": "True when the calling plugin currently holds top-of-stack\n(i.e. is the effective owner) for this effect. False otherwise —\nincluding when the plugin has a frame underneath someone else's,\nwhen the stack is empty, or when the effect name is unknown.",
+              "type": "boolean"
+            },
+            "current_owner": {
+              "description": "The current effective owner, if any. Useful for plugins that\nwant to surface \"Meeting Mode is overriding Focus Mode\" UI.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "active"
+          ],
+          "title": "EffectsIsActiveResult",
+          "type": "object"
+        }
+      },
+      "summary": "Query whether this plugin holds top-of-stack for the named effect",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "effects.retract",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Registered effect name to retract. The plugin's frame is removed\nfrom this effect's ownership stack. If no frame exists, the call\nis a no-op (`retracted=false`, no error).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "effects_retract_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "new_owner": {
+              "description": "Effective owner after the retract — `None` when the stack is\nnow empty. Equal to the previous top when the retract removed\na non-top frame (current top unchanged).",
+              "type": "string"
+            },
+            "retracted": {
+              "description": "True when a frame was actually removed. False when this plugin\nheld no assertion (idempotent retract) or when the effect name\nis unknown.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "retracted"
+          ],
+          "title": "EffectsRetractResult",
+          "type": "object"
+        }
+      },
+      "summary": "Retract this plugin's assertion of an exclusivity-shape platform effect",
+      "tags": [
+        {
+          "name": "misc"
+        }
       ],
       "x-since": "0.1.0"
     },
