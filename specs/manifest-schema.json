@@ -1237,13 +1237,6 @@
       "default": "",
       "type": "string"
     },
-    "capabilities": {
-      "description": "Platform-defined permissions this plugin requires.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
     "collection_data": {
       "additionalProperties": {
         "$ref": "#/$defs/CollectionDataSource"
@@ -1289,7 +1282,7 @@
           "type": "null"
         }
       ],
-      "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` capability."
+      "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` privilege."
     },
     "hud_targets": {
       "description": "HUD targets this plugin provides (e.g. [\"alphabet\", \"calibrate\"]).",
@@ -1332,6 +1325,13 @@
         }
       ],
       "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
+    },
+    "privileges": {
+      "description": "Platform-defined privileges this plugin requires.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
     },
     "provides": {
       "$ref": "#/$defs/Provides",
