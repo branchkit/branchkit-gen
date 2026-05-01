@@ -838,10 +838,10 @@
         "type": "object"
       },
       "GateWrite": {
-        "description": "Resolved structured write for a single gate string in a command's\n`sets_tags` / `clears_tags`. Produced once at command-load time by the\nresolver pass in `rebuild_commands_cache`, so the runtime path can\ndispatch via substrate ops (`Plugin.Put` / `Plugin.Delete`) without\nre-resolving the gate-namespace policy on each match.\n\nSub-sprint 6.1: command-driven tag writes flow as structured writes\nalongside the gate-string sugar in manifests; gate strings stay as\nthe authoring surface, resolution happens upstream.",
+        "description": "Resolved structured write for a single gate string in a command's\n`sets_tags` / `clears_tags`. Produced once at command-load time by the\nresolver pass in `rebuild_commands_cache`, so the runtime path can\ndispatch via state ops (`Plugin.Put` / `Plugin.Delete`) without\nre-resolving the gate-namespace policy on each match.\n\nSub-sprint 6.1: command-driven tag writes flow as structured writes\nalongside the gate-string sugar in manifests; gate strings stay as\nthe authoring surface, resolution happens upstream.",
         "properties": {
           "collection": {
-            "description": "Resolved substrate collection name.",
+            "description": "Resolved state collection name.",
             "type": "string"
           },
           "id": {
@@ -849,7 +849,7 @@
             "type": "string"
           },
           "payload": {
-            "description": "Payload for `collection.put`. Empty object for presence-only gates;\n`{<name_field>: <leaf>}` for namespace-feed gates so the substrate's\n`derive_gate_string` round-trips back to the original tag."
+            "description": "Payload for `collection.put`. Empty object for presence-only gates;\n`{<name_field>: <leaf>}` for namespace-feed gates so the state's\n`derive_gate_string` round-trips back to the original tag."
           },
           "tag": {
             "description": "Original gate string this write resolves. Preserved so callers can\ncompare resolved writes against the source `sets_tags` / `clears_tags`\ngate-string lists for validation, logging, and event payloads.",
@@ -3495,7 +3495,7 @@
               "type": "array"
             },
             "clears_tag_writes": {
-              "description": "Resolved substrate writes for each `clears_tags` entry. Voice's\npipeline dispatches via `Plugin.Delete` on these.",
+              "description": "Resolved state writes for each `clears_tags` entry. Voice's\npipeline dispatches via `Plugin.Delete` on these.",
               "items": {
                 "$ref": "#/$defs/GateWrite"
               },
@@ -3525,7 +3525,7 @@
               "type": "array"
             },
             "sets_tag_writes": {
-              "description": "Resolved substrate writes for each `sets_tags` entry, produced by\nthe load-time gate-string resolver (sub-sprint 6.1). Voice's pipeline\ndispatches via `Plugin.Put` on these. Sub-sprint 6.4 (Option Z) made\nevery command-driven gate write resolvable, so this list is exhaustive\nfor the parallel `sets_tags` field.",
+              "description": "Resolved state writes for each `sets_tags` entry, produced by\nthe load-time gate-string resolver (sub-sprint 6.1). Voice's pipeline\ndispatches via `Plugin.Put` on these. Sub-sprint 6.4 (Option Z) made\nevery command-driven gate write resolvable, so this list is exhaustive\nfor the parallel `sets_tags` field.",
               "items": {
                 "$ref": "#/$defs/GateWrite"
               },
@@ -9940,7 +9940,7 @@
         "prefix": "app."
       },
       "plugin": {
-        "description": "Plugin-owned state tags. Plugins set/clear via the substrate verbs (collection.put / collection.delete_record) on the gate-shape collection that owns the namespace. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
+        "description": "Plugin-owned state tags. Plugins set/clear via the state verbs (collection.put / collection.delete_record) on the gate-shape collection that owns the namespace. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
         "prefix": "plugin."
       }
     }

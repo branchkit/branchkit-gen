@@ -145,7 +145,7 @@
       "description": "Data source for a collection contribution. A string is a file path relative to the plugin\ndirectory; anything else (object, array) is inline JSON data."
     },
     "CollectionSchema": {
-      "description": "Unified schema for a collection.\n\nPhase F: legacy `kind` enum + `key_field`/`value_field`/`id_field`/\n`default_recording_enabled`/`retention_days` fields removed. Every\ndeclaration uses the substrate shape: `preset` + slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
+      "description": "Unified schema for a collection.\n\nPhase F: legacy `kind` enum + `key_field`/`value_field`/`id_field`/\n`default_recording_enabled`/`retention_days` fields removed. Every\ndeclaration uses the state shape: `preset` + slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
       "properties": {
         "access": {
           "$ref": "#/$defs/AccessLevel",
@@ -160,7 +160,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — meaningful only with `preset: \"tag\"`."
+          "description": "State policy slot — meaningful only with `preset: \"tag\"`."
         },
         "clear_on_unrelated_command": {
           "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nSub-sprint 6.4: replaces voice's inline auto-clear in matchWords with\na manifest-declared trigger resolved server-side in `commands.match`.\nOnly meaningful for `feeds_matching: AsGates { scoped: true }` —\nvalidation rejects the flag on other shapes. Distinct from\n`Lifecycle::ClearOnEvent` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
@@ -171,7 +171,7 @@
           "type": "string"
         },
         "emits_on_change": {
-          "description": "Substrate policy slot — whether mutations emit collection.updated events.",
+          "description": "State policy slot — whether mutations emit collection.updated events.",
           "type": [
             "boolean",
             "null"
@@ -186,7 +186,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — matching-engine consumption opt-in."
+          "description": "State policy slot — matching-engine consumption opt-in."
         },
         "fields": {
           "description": "Field schema for records. Used by all presets that have structured\npayloads (named_entities, log, data, etc.).",
@@ -204,7 +204,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — id strategy override."
+          "description": "State policy slot — id strategy override."
         },
         "lifecycle": {
           "anyOf": [
@@ -215,7 +215,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — record lifecycle (TTL, event-clear, retention)."
+          "description": "State policy slot — record lifecycle (TTL, event-clear, retention)."
         },
         "merge": {
           "anyOf": [
@@ -237,7 +237,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — record ordering for list/subscribe."
+          "description": "State policy slot — record ordering for list/subscribe."
         },
         "preset": {
           "anyOf": [
@@ -259,7 +259,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — privacy posture (recording, access level)."
+          "description": "State policy slot — privacy posture (recording, access level)."
         },
         "storage": {
           "anyOf": [
@@ -270,7 +270,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — storage backend."
+          "description": "State policy slot — storage backend."
         },
         "ui_render": {
           "anyOf": [
@@ -281,7 +281,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — Settings UI render mode."
+          "description": "State policy slot — Settings UI render mode."
         },
         "writers": {
           "anyOf": [
@@ -292,7 +292,7 @@
               "type": "null"
             }
           ],
-          "description": "Substrate policy slot — write authorization."
+          "description": "State policy slot — write authorization."
         }
       },
       "type": "object"
@@ -1102,7 +1102,7 @@
         },
         "read_access": {
           "$ref": "#/$defs/AccessLevel",
-          "description": "Read access control: who can read records of the gate-shape collection\nowning this namespace (via the substrate verbs `collection.get` /\n`collection.list`). Default: `open` (all plugins can read). Separate from\n`access` which controls writes."
+          "description": "Read access control: who can read records of the gate-shape collection\nowning this namespace (via the state verbs `collection.get` /\n`collection.list`). Default: `open` (all plugins can read). Separate from\n`access` which controls writes."
         },
         "scoped": {
           "default": false,
@@ -1179,7 +1179,7 @@
         },
         {
           "const": "tag_list",
-          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (substrate doc §Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
+          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (state doc §Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
           "type": "string"
         },
         {
