@@ -952,10 +952,24 @@
           ],
           "description": "Read access for cross-plugin reads. Default `open`."
         },
+        "acknowledged_persistence": {
+          "description": "Suppression slot for state §10.2 rule 1: when `true`, declares that\nthe plugin author has intentionally chosen `lifecycle: persistent`\non a collection with sensitive-shaped fields. Silences the warning\nwhile leaving the privacy claim auditable from the manifest.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "default_recording": {
           "description": "Initial value of the recording toggle on first install.",
           "type": [
             "boolean",
+            "null"
+          ]
+        },
+        "reason_for_default_on": {
+          "description": "Suppression slot for state §10.2 rule 2: when set, declares why\nthe plugin needs `default_recording: true` (or\n`recording: AlwaysOn`) on a `log`-preset collection. Silences the\nwarning; the reason text surfaces in the Settings UI inspector\nalongside the privacy posture.",
+          "type": [
+            "string",
             "null"
           ]
         },
