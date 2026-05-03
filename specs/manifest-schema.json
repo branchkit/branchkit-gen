@@ -166,6 +166,17 @@
           "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nSub-sprint 6.4: replaces voice's inline auto-clear in matchWords with\na manifest-declared trigger resolved server-side in `commands.match`.\nOnly meaningful for `feeds_matching: AsGates { scoped: true }` —\nvalidation rejects the flag on other shapes. Distinct from\n`Lifecycle::ClearOnEvent` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
           "type": "boolean"
         },
+        "denylist": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DenylistPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "`policy.denylist` — declares the collection's writes are subject\nto the user's soft denylist toggle. The user toggle lives in\n`denylisted_writers.json`, not the manifest."
+        },
         "description": {
           "description": "Human-readable description of this collection's purpose.",
           "type": "string"
@@ -261,6 +272,28 @@
           ],
           "description": "State policy slot — privacy posture (recording, access level)."
         },
+        "rate_limit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RateLimitPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "`policy.rate_limit` — token-bucket per (caller, collection)."
+        },
+        "requires_tag": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/RequiresTagPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "`policy.requires_tag` — write only commits while the named tag\nis in the active gate set."
+        },
         "storage": {
           "anyOf": [
             {
@@ -323,6 +356,20 @@
             "$ref": "#/$defs/Subscription"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "DenylistPolicy": {
+      "description": "`policy.denylist` — manifest affordance.\n\nThe manifest declares the affordance (\"the user may freeze writes from\nthis plugin to this collection\"); the user toggles the per-plugin gate\nin Settings → Plugins → Inspector. v1 ships a single boolean affordance;\nfuture versions could add per-collection scoping or\n\"always denylisted\" claims.",
+      "properties": {
+        "user_toggleable": {
+          "default": null,
+          "description": "Reserved. Always treated as `true` in v1 — the affordance is its\npresence on the manifest. Future-compat slot if the policy grows\n`mode` / `scope` knobs.",
+          "type": [
+            "boolean",
+            "null"
+          ]
         }
       },
       "type": "object"
@@ -1028,6 +1075,44 @@
       },
       "type": "object"
     },
+    "RateLimitParams": {
+      "properties": {
+        "burst": {
+          "description": "Maximum burst the bucket can absorb before throttling. Must be > 0\nand ≥ `writes_per_second` for the bucket's math to make sense.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "writes_per_second": {
+          "description": "Steady-state writes per second the bucket admits. Must be > 0.",
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "writes_per_second",
+        "burst"
+      ],
+      "type": "object"
+    },
+    "RateLimitPolicy": {
+      "description": "`policy.rate_limit` — manifest payload shape.\n\nToken-bucket params ship in `per_caller`; the bucket's keying is always\n`(plugin_id, collection_name)` per design §\"Concrete v1 policies →\nrate_limit\". `introducer_exempt: true` (the default) means the\nintroducer's own writes don't draw from the bucket — intuitive default\nsince the introducer is the trust anchor for `_platform.*` and for any\ncollection it owns. User-state-lowered values override the manifest\ndeclaration when present.",
+      "properties": {
+        "introducer_exempt": {
+          "default": true,
+          "description": "When true, writes from the collection's introducer bypass the\nbucket. Default true. Plugins that need the introducer rate-limited\n(e.g. testing the limit applies to themselves) set this to false.",
+          "type": "boolean"
+        },
+        "per_caller": {
+          "$ref": "#/$defs/RateLimitParams"
+        }
+      },
+      "required": [
+        "per_caller"
+      ],
+      "type": "object"
+    },
     "RecordingPolicy": {
       "description": "Whether recording is user-toggleable or platform-enforced.",
       "oneOf": [
@@ -1047,6 +1132,19 @@
           "type": "string"
         }
       ]
+    },
+    "RequiresTagPolicy": {
+      "description": "`policy.requires_tag` — gate-tag declaration.\n\nSpecifies a tag name that must be active at write time. Different\nfrom `feeds_matching: AsGates` (which describes how *this* collection\nproduces gates) — this is the inverse: what gate is required to write\nhere. Avoid declaring `requires_tag` on a collection whose own writes\nset/clear the named tag (self-referential gate).",
+      "properties": {
+        "tag": {
+          "description": "The exact tag name (e.g. `\"_platform.input.active\"`) that must be\nin the active gate set when a write reaches the chain.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag"
+      ],
+      "type": "object"
     },
     "Storage": {
       "description": "Backend that holds the collection's records.",
