@@ -2502,6 +2502,50 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "bridge.emit_observability_event",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "event_type",
+          "required": true,
+          "schema": {
+            "description": "Dotted event name from the closed vocabulary, e.g.\n`\"audio.session_started\"`, `\"hud.opened\"`. Must be in the\nSwift-emittable allowlist.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "params",
+          "required": true,
+          "schema": {
+            "description": "Variant-specific payload — the contents of the `*Params` struct\nfor `event_type`. Keys must match the registered schema."
+          }
+        }
+      ],
+      "result": {
+        "name": "bridge_emit_observability_event_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "BridgeEmitObservabilityEventResult",
+          "type": "object"
+        }
+      },
+      "summary": "Inject a Swift-originated observability event onto the actuator's bus.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collection.append",
       "paramStructure": "by-name",
       "params": [
