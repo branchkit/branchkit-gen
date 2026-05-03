@@ -1058,6 +1058,13 @@
           "description": "Event types this plugin emits, keyed by event type name.",
           "type": "object"
         },
+        "stages": {
+          "additionalProperties": {
+            "$ref": "#/$defs/StageDeclaration"
+          },
+          "description": "Pipeline stage implementations this plugin contributes, keyed by\nplugin-local stage name (e.g. `applespeech-wakeword`). The\nfully-qualified name on the wire is `<plugin_id>.<stage_name>`.\nSee `docs/in-progress/DESIGN_PIPELINE_PRIMITIVE.md` §3.",
+          "type": "object"
+        },
         "tag_namespaces": {
           "description": "Tag namespace prefixes with lifecycle rules (singleton, transient).\nTags under a declared namespace prefix inherit its lifecycle behavior.",
           "items": {
@@ -1145,6 +1152,37 @@
         "tag"
       ],
       "type": "object"
+    },
+    "StageDeclaration": {
+      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`applespeech-wakeword`); the fully-qualified name on the wire and in\npipeline records is `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (§15 step 4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
+      "properties": {
+        "parameters": {
+          "description": "Parameter schema for this stage. Reuses the existing\n`ActionFieldSchema` / `FieldType` machinery — same algebra applied\nto a new dimension. Empty if the stage takes no parameters.",
+          "items": {
+            "$ref": "#/$defs/ActionFieldSchema"
+          },
+          "type": "array"
+        },
+        "stage_type": {
+          "$ref": "#/$defs/StageType",
+          "description": "Which closed-vocabulary stage type this implementation fills."
+        }
+      },
+      "required": [
+        "stage_type"
+      ],
+      "type": "object"
+    },
+    "StageType": {
+      "description": "Closed vocabulary of pipeline stage types. The set is platform-defined;\nextension is platform-release-scope, not plugin-extension-scope. Mirrors\nthe `StageType` enum in `contracts/pipeline.json`. See\n`docs/in-progress/DESIGN_PIPELINE_PRIMITIVE.md` §1.",
+      "enum": [
+        "audio_source",
+        "wake_word",
+        "stt",
+        "resolver",
+        "tts"
+      ],
+      "type": "string"
     },
     "Storage": {
       "description": "Backend that holds the collection's records.",
