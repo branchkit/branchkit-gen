@@ -901,6 +901,28 @@
         }
       ]
     },
+    "Platform": {
+      "enum": [
+        "macos",
+        "linux",
+        "windows"
+      ],
+      "type": "string"
+    },
+    "PlatformConstraint": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Platform"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/Platform"
+          },
+          "type": "array"
+        }
+      ],
+      "description": "Platform constraint for a stage declaration."
+    },
     "PluginImplements": {
       "additionalProperties": {
         "$ref": "#/$defs/MethodDecl"
@@ -1064,20 +1086,6 @@
           },
           "description": "Pipeline stage implementations this plugin contributes, keyed by\nplugin-local stage name (e.g. `applespeech-wakeword`). The\nfully-qualified name on the wire is `<plugin_id>.<stage_name>`.\nSee `docs/in-progress/DESIGN_PIPELINE_PRIMITIVE.md` §3.",
           "type": "object"
-        },
-        "tag_namespaces": {
-          "description": "Tag namespace prefixes with lifecycle rules (singleton, transient).\nTags under a declared namespace prefix inherit its lifecycle behavior.",
-          "items": {
-            "$ref": "#/$defs/TagNamespace"
-          },
-          "type": "array"
-        },
-        "tags": {
-          "additionalProperties": {
-            "$ref": "#/$defs/TagSchema"
-          },
-          "description": "Tags this plugin owns/sets, with optional labels and descriptions.",
-          "type": "object"
         }
       },
       "type": "object"
@@ -1156,6 +1164,13 @@
     "StageDeclaration": {
       "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`applespeech-wakeword`); the fully-qualified name on the wire and in\npipeline records is `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (§15 step 4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
       "properties": {
+        "binary": {
+          "description": "Binary name to spawn for this stage. Resolved relative to the plugin\ndirectory. If omitted, defaults to the stage name.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "parameters": {
           "description": "Parameter schema for this stage. Reuses the existing\n`ActionFieldSchema` / `FieldType` machinery — same algebra applied\nto a new dimension. Empty if the stage takes no parameters.",
           "items": {
@@ -1163,26 +1178,31 @@
           },
           "type": "array"
         },
+        "platform": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlatformConstraint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Platform constraint. Omitted = available on all platforms."
+        },
+        "priority": {
+          "description": "Resolution priority when multiple stages match a type-based reference.\nHigher wins. Default 0.",
+          "format": "int32",
+          "type": "integer"
+        },
         "stage_type": {
-          "$ref": "#/$defs/StageType",
-          "description": "Which closed-vocabulary stage type this implementation fills."
+          "description": "Plugin-defined stage type string. The platform uses this for\ntype-based resolution (`*.stt`) — matching producers to consumers.\nPlugins define their own vocabulary (e.g. `stt`, `tts`, `resolver`).",
+          "type": "string"
         }
       },
       "required": [
         "stage_type"
       ],
       "type": "object"
-    },
-    "StageType": {
-      "description": "Closed vocabulary of pipeline stage types. The set is platform-defined;\nextension is platform-release-scope, not plugin-extension-scope. Mirrors\nthe `StageType` enum in `contracts/pipeline.json`. See\n`docs/in-progress/DESIGN_PIPELINE_PRIMITIVE.md` §1.",
-      "enum": [
-        "audio_source",
-        "wake_word",
-        "stt",
-        "resolver",
-        "tts"
-      ],
-      "type": "string"
     },
     "Storage": {
       "description": "Backend that holds the collection's records.",
@@ -1273,111 +1293,6 @@
       "required": [
         "pattern"
       ],
-      "type": "object"
-    },
-    "TagLifecycle": {
-      "description": "Lifecycle behavior for a tag namespace prefix.",
-      "oneOf": [
-        {
-          "const": "persistent",
-          "description": "Platform stores, plugin clears. Default for plain tags.",
-          "type": "string"
-        },
-        {
-          "const": "singleton",
-          "description": "One tag per prefix group. Setting a new tag auto-clears siblings under the same prefix.",
-          "type": "string"
-        },
-        {
-          "const": "transient",
-          "description": "Auto-cleared when a specified event fires on the event bus.",
-          "type": "string"
-        },
-        {
-          "const": "ttl",
-          "description": "Auto-expires after a duration (ttl_ms). Re-setting refreshes the timer.",
-          "type": "string"
-        }
-      ]
-    },
-    "TagNamespace": {
-      "description": "A tag namespace declared by a plugin with lifecycle rules.\n\nExample:\n```json\n{ \"prefix\": \"plugin.voice.mode.\", \"lifecycle\": \"singleton\" }\n{ \"prefix\": \"plugin.browser.hints.\", \"lifecycle\": \"transient\", \"clear_on\": \"...\", \"access\": \"open\" }\n```",
-      "properties": {
-        "access": {
-          "$ref": "#/$defs/TagNamespaceAccess",
-          "description": "Access control: `owner` (default) = only declaring plugin can set,\n`open` = any plugin can set tags under this prefix."
-        },
-        "clear_on": {
-          "description": "For transient namespaces: the event type that triggers auto-clearing.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "description": {
-          "description": "Human-readable description of this tag namespace.",
-          "type": "string"
-        },
-        "lifecycle": {
-          "$ref": "#/$defs/TagLifecycle",
-          "description": "Lifecycle behavior for tags under this prefix."
-        },
-        "prefix": {
-          "description": "The tag prefix this namespace covers (e.g. \"plugin.voice.mode.\").",
-          "type": "string"
-        },
-        "read_access": {
-          "$ref": "#/$defs/AccessLevel",
-          "description": "Read access control: who can read records of the gate-shape collection\nowning this namespace (via the state verbs `collection.get` /\n`collection.list`). Default: `open` (all plugins can read). Separate from\n`access` which controls writes."
-        },
-        "scoped": {
-          "default": false,
-          "description": "When true, commands requiring tags under this prefix get Priority 1 matching\n(tried before unscoped commands) and are filtered from ungrouped discovery HUDs.",
-          "type": "boolean"
-        },
-        "ttl_ms": {
-          "description": "For TTL namespaces: default time-to-live in milliseconds. Tags auto-expire after this duration.",
-          "format": "uint64",
-          "minimum": 0,
-          "type": [
-            "integer",
-            "null"
-          ]
-        }
-      },
-      "required": [
-        "prefix",
-        "lifecycle"
-      ],
-      "type": "object"
-    },
-    "TagNamespaceAccess": {
-      "description": "Access control for a tag namespace.",
-      "oneOf": [
-        {
-          "const": "owner",
-          "description": "Only the declaring plugin can set tags under this prefix. Default.",
-          "type": "string"
-        },
-        {
-          "const": "open",
-          "description": "Any plugin can set tags under this prefix. The declaring plugin owns\nthe lifecycle but other plugins contribute tags — like shared stores\nwhere one plugin introduces and others contribute.",
-          "type": "string"
-        }
-      ]
-    },
-    "TagSchema": {
-      "description": "Schema declaration for a tag provided by a plugin.",
-      "properties": {
-        "description": {
-          "default": "",
-          "type": "string"
-        },
-        "label": {
-          "default": "",
-          "type": "string"
-        }
-      },
       "type": "object"
     },
     "UiRender": {
