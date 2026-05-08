@@ -1275,41 +1275,6 @@
         ],
         "type": "object"
       },
-      "IngestSegmentSpec": {
-        "description": "A single speech recognition segment (word-level timestamp from the engine).",
-        "properties": {
-          "alternatives": {
-            "default": [],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "duration": {
-            "format": "double",
-            "type": "number"
-          },
-          "id": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "start": {
-            "format": "double",
-            "type": "number"
-          },
-          "text": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "alternatives",
-          "duration",
-          "id",
-          "start",
-          "text"
-        ],
-        "type": "object"
-      },
       "InputSource": {
         "description": "An available keyboard input source.",
         "properties": {
@@ -1882,23 +1847,6 @@
           "w",
           "x",
           "y"
-        ],
-        "type": "object"
-      },
-      "SelectionItemSpec": {
-        "description": "A selection item snapshot for phonetic matching during active selection.",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "tag": {
-            "default": null,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id",
-          "tag"
         ],
         "type": "object"
       },
@@ -4145,6 +4093,95 @@
       "tags": [
         {
           "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.completions",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "active_tags",
+          "required": false,
+          "schema": {
+            "default": null,
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "collections",
+          "required": false,
+          "schema": {
+            "default": null,
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "require_tag",
+          "required": false,
+          "schema": {
+            "default": null,
+            "type": "string"
+          }
+        },
+        {
+          "name": "words",
+          "required": false,
+          "schema": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_completions_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of a completions query — combines has_partial, discover, and\nnext-word grammar data into a single response.",
+          "properties": {
+            "has_completions": {
+              "type": "boolean"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/DiscoverItem"
+              },
+              "type": "array"
+            },
+            "next_words": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "has_completions",
+            "next_words",
+            "title",
+            "items"
+          ],
+          "title": "CompletionsResult",
+          "type": "object"
+        }
+      },
+      "summary": "Get completions for a command prefix: partial match status, next words for grammar, and display items",
+      "tags": [
+        {
+          "name": "commands"
         }
       ],
       "x-since": "0.1.0"
@@ -23780,6 +23817,56 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "pipelines.inject",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "data",
+          "required": false,
+          "schema": {
+            "default": null
+          }
+        },
+        {
+          "name": "event_type",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "pipelines_inject_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "injected": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "injected"
+          ],
+          "title": "PipelinesInjectResult",
+          "type": "object"
+        }
+      },
+      "summary": "Inject an event into a running pipeline",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "pipelines.run",
       "paramStructure": "by-name",
       "params": [
@@ -24521,169 +24608,6 @@
       "tags": [
         {
           "name": "settings"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "speech_pipeline_full",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "channel_visibility",
-          "required": false,
-          "schema": {
-            "additionalProperties": {
-              "type": "boolean"
-            },
-            "default": {},
-            "description": "Per-channel HUD visibility snapshot (`{ \"main\": true, \"discovery\": false, … }`).",
-            "type": "object"
-          }
-        },
-        {
-          "name": "is_continuous",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "Whether the session is continuous (always-listening) vs hold-to-talk.",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "is_final",
-          "required": true,
-          "schema": {
-            "description": "Whether this is the final recognition result for the current utterance.",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "mute_matching",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "Whether command matching should be suppressed (dictation-only mode).",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "scoped_prefixes",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Tag prefixes that are scoped to the current session.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "segments",
-          "required": true,
-          "schema": {
-            "description": "Raw speech segments from the recognition engine.",
-            "items": {
-              "$ref": "#/$defs/IngestSegmentSpec"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "selection_active",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "Whether a selection HUD is active (items displayed for phonetic picking).",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "selection_items",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Snapshot of selectable items for phonetic matching.",
-            "items": {
-              "$ref": "#/$defs/SelectionItemSpec"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "session_end",
-          "required": true,
-          "schema": {
-            "description": "Whether the input session is ending (key released).",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "session_id",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Opaque session identifier for correlation.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "should_lift",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "Whether held modifier keys should be lifted before simulating key actions.",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "tags",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Currently active tags.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "speech_pipeline_full_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "control_message": {
-              "default": null,
-              "description": "Control message to forward to the Swift host.",
-              "type": "string"
-            },
-            "paste_text": {
-              "default": null,
-              "description": "Text to paste at the cursor (dictation result).",
-              "type": "string"
-            },
-            "reset_engine": {
-              "default": false,
-              "description": "Whether the speech recognition engine should be recycled.",
-              "type": "boolean"
-            },
-            "status": {
-              "default": "ok",
-              "description": "Processing status: `\"ok\"` or `\"error\"`.",
-              "type": "string"
-            }
-          },
-          "title": "SpeechPipelineFullResult",
-          "type": "object"
-        }
-      },
-      "summary": "Process raw speech input through the full pipeline (mode check, matching, orchestration)",
-      "tags": [
-        {
-          "name": "actuator-to-plugin"
         }
       ],
       "x-since": "0.1.0"
