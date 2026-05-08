@@ -4147,7 +4147,7 @@
         "name": "commands_completions_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a completions query — combines has_partial, discover, and\nnext-word grammar data into a single response.",
+          "description": "Result of a completions query: partial-match status, next-word grammar\ndata, and display items in a single response.",
           "properties": {
             "has_completions": {
               "type": "boolean"
@@ -4179,132 +4179,6 @@
         }
       },
       "summary": "Get completions for a command prefix: partial match status, next words for grammar, and display items",
-      "tags": [
-        {
-          "name": "commands"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "description": "With no words: returns first tokens of all eligible commands. With words: returns next unsatisfied tokens for partial matches. Use require_tag to scope to commands requiring a specific tag.",
-      "name": "commands.discover",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "active_tags",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Override state's active_tags for eligibility filtering.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "require_tag",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Only include commands whose `requires_tags` contains this tag.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "words",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Partial match prefix words. If absent/empty, returns first tokens\nof all eligible commands.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "commands_discover_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a discover operation.",
-          "properties": {
-            "items": {
-              "items": {
-                "$ref": "#/$defs/DiscoverItem"
-              },
-              "type": "array"
-            },
-            "title": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "title",
-            "items"
-          ],
-          "title": "DiscoverResult",
-          "type": "object"
-        }
-      },
-      "summary": "Discover available commands or next tokens for a partial match",
-      "tags": [
-        {
-          "name": "commands"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "commands.has_partial",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "active_tags",
-          "required": false,
-          "schema": {
-            "default": null,
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "words",
-          "required": false,
-          "schema": {
-            "default": [],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "commands_has_partial_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a partial match check.",
-          "properties": {
-            "has_partial": {
-              "type": "boolean"
-            },
-            "next_list": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "has_partial"
-          ],
-          "title": "HasPartialResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if words partially match any command (prefix matching)",
       "tags": [
         {
           "name": "matching"

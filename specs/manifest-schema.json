@@ -188,6 +188,10 @@
             "null"
           ]
         },
+        "exclusive": {
+          "description": "When true, the gate becomes an exclusive gate: while active, only\ncommands whose `requires_tags` includes this gate can match.\nAll other commands are suppressed. Used for sub-command modes\n(e.g. snap directions) where only the displayed options should work.",
+          "type": "boolean"
+        },
         "feeds_matching": {
           "anyOf": [
             {
