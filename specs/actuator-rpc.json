@@ -1712,6 +1712,47 @@
         ],
         "type": "object"
       },
+      "PipelineTranscriptAlternative": {
+        "properties": {
+          "confidence": {
+            "format": "float",
+            "type": "number"
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "confidence",
+          "text"
+        ],
+        "type": "object"
+      },
+      "PoolStageStatusEntry": {
+        "properties": {
+          "alive": {
+            "type": "boolean"
+          },
+          "generation": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "leased": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alive",
+          "generation",
+          "leased",
+          "name"
+        ],
+        "type": "object"
+      },
       "PrinterInfo": {
         "properties": {
           "is_default": {
@@ -2829,6 +2870,24 @@
       "name": "_platform.pipeline.transcript",
       "paramStructure": "by-name",
       "params": [
+        {
+          "name": "alternatives",
+          "required": false,
+          "schema": {
+            "items": {
+              "$ref": "#/$defs/PipelineTranscriptAlternative"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "confidence",
+          "required": false,
+          "schema": {
+            "format": "float",
+            "type": "number"
+          }
+        },
         {
           "name": "is_final",
           "required": true,
@@ -23802,6 +23861,12 @@
               },
               "type": "array"
             },
+            "pool_stages": {
+              "items": {
+                "$ref": "#/$defs/PoolStageStatusEntry"
+              },
+              "type": "array"
+            },
             "running": {
               "items": {
                 "type": "string"
@@ -23811,7 +23876,8 @@
           },
           "required": [
             "running",
-            "pipelines"
+            "pipelines",
+            "pool_stages"
           ],
           "title": "PipelinesStatusResult",
           "type": "object"

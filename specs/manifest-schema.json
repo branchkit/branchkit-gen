@@ -1088,7 +1088,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/StageDeclaration"
           },
-          "description": "Pipeline stage implementations this plugin contributes, keyed by\nplugin-local stage name (e.g. `applespeech-wakeword`). The\nfully-qualified name on the wire is `<plugin_id>.<stage_name>`.\nSee `docs/in-progress/DESIGN_PIPELINE_PRIMITIVE.md` §3.",
+          "description": "Pipeline stage implementations this plugin contributes, keyed by\nplugin-local stage name (e.g. `custom-stt`). The fully-qualified\nname on the wire is `<plugin_id>.<stage_name>`.",
           "type": "object"
         }
       },
@@ -1166,7 +1166,7 @@
       "type": "object"
     },
     "StageDeclaration": {
-      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`applespeech-wakeword`); the fully-qualified name on the wire and in\npipeline records is `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (§15 step 4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
+      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (§15 step 4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
       "properties": {
         "binary": {
           "description": "Binary name to spawn for this stage. Resolved relative to the plugin\ndirectory. If omitted, defaults to the stage name.",
