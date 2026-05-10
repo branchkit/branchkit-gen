@@ -24096,6 +24096,11 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "css": {
+              "default": "",
+              "description": "CSS styles scoped to this settings tab. Injected as an inline style element in the iframe.",
+              "type": "string"
+            },
             "html": {
               "description": "HTML content for the settings tab. May include Datastar attributes for reactivity.",
               "type": "string"
