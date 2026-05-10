@@ -657,6 +657,13 @@
           },
           "tier": {
             "type": "string"
+          },
+          "variants": {
+            "description": "All expanded spoken forms (cartesian product of pattern alternatives).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -666,7 +673,8 @@
           "is_user",
           "pattern",
           "plugin_name",
-          "tier"
+          "tier",
+          "variants"
         ],
         "type": "object"
       },
