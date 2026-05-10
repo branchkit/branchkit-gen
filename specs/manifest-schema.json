@@ -511,6 +511,12 @@
         {
           "description": "Vocabulary for `<name>` captures during pattern matching.",
           "properties": {
+            "aliases_field": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
             "key_field": {
               "type": "string"
             },

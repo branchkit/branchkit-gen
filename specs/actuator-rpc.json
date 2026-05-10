@@ -646,6 +646,12 @@
           "category": {
             "type": "string"
           },
+          "clears_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "is_user": {
             "type": "boolean"
           },
@@ -654,6 +660,18 @@
           },
           "plugin_name": {
             "type": "string"
+          },
+          "requires_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           },
           "tier": {
             "type": "string"
@@ -670,9 +688,12 @@
           "action",
           "canonical",
           "category",
+          "clears_tags",
           "is_user",
           "pattern",
           "plugin_name",
+          "requires_tags",
+          "sets_tags",
           "tier",
           "variants"
         ],
