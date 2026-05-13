@@ -2515,7 +2515,7 @@
           }
         }
       ],
-      "summary": "Plugin's exclusivity-shape effect assertion was overridden by a later asserter — see notes/DESIGN_CAPABILITY_MECHANISM.md §10.2",
+      "summary": "Plugin's exclusivity-shape effect assertion was overridden by a later asserter — see notes/DESIGN_CAPABILITY_MECHANISM.md section 10.2",
       "tags": [
         {
           "name": "notifications"
@@ -4612,11 +4612,11 @@
               "type": "boolean"
             },
             "displaced": {
-              "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The displaced plugin should receive an\n`effect_displaced` notification (§10.2). Notification path is\nstubbed in v1 — see registered handler.",
+              "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The displaced plugin should receive an\n`effect_displaced` notification (section 10.2). Notification path is\nstubbed in v1 — see registered handler.",
               "type": "string"
             },
             "granted": {
-              "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (fail-next-assertion semantics per §10.3) or when the\neffect name is unknown.",
+              "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (fail-next-assertion semantics per section 10.3) or when the\neffect name is unknown.",
               "type": "boolean"
             }
           },

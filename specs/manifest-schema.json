@@ -444,13 +444,13 @@
           "type": "object"
         }
       ],
-      "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters (§10.4 wire-forward-compat).\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
+      "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters (section 10.4 wire-forward-compat).\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
     },
     "EffectDeclaration": {
       "description": "One exclusivity-shape effect declaration. A plugin may declare\nmultiple entries when its experience surfaces have independent\nlifecycles; each entry is one consent unit at install time.",
       "properties": {
         "asserts": {
-          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (§10.4 wire-forward-compat).",
+          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (section 10.4 wire-forward-compat).",
           "items": {
             "$ref": "#/$defs/EffectAssertEntry"
           },
@@ -493,7 +493,7 @@
       "type": "object"
     },
     "FeedsMatching": {
-      "description": "Opt-in modes for matching-engine consumption. Closed enum at the platform\nlevel; growth requires a deliberate platform release. See proposal §3.4.",
+      "description": "Opt-in modes for matching-engine consumption. Closed enum at the platform\nlevel; growth requires a deliberate platform release. See proposal section 3.4.",
       "oneOf": [
         {
           "description": "Most data — not consumed by the matching engine.",
@@ -571,7 +571,7 @@
           "type": "object"
         },
         {
-          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only (proposal §9.3).",
+          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only (proposal section 9.3).",
           "properties": {
             "from_field": {
               "type": "string"
@@ -592,7 +592,7 @@
           "type": "object"
         },
         {
-          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant (proposal §9.4).",
+          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant (proposal section 9.4).",
           "properties": {
             "name_field": {
               "type": "string"
@@ -793,7 +793,7 @@
           "type": "object"
         },
         {
-          "description": "Records cleared when any of the listed events fires on the event bus.\nSub-sprint 6.3 extended this from a single `event: String` to a list\nso scoped+transient namespaces can clear on multiple boundaries (e.g.\nboth `_platform.input.session_ended` and `_platform.discovery.closed`,\nwhich §7.2's audit established as genuinely distinct triggers).\nAuthors writing a single-event lifecycle still use the array form\n(`\"events\": [\"x\"]`) — keeping the wire shape uniform with the JSON\nSchema so external validators agree with the runtime parser.",
+          "description": "Records cleared when any of the listed events fires on the event bus.\nSub-sprint 6.3 extended this from a single `event: String` to a list\nso scoped+transient namespaces can clear on multiple boundaries (e.g.\nboth `_platform.input.session_ended` and `_platform.discovery.closed`,\nwhich section 7.2's audit established as genuinely distinct triggers).\nAuthors writing a single-event lifecycle still use the array form\n(`\"events\": [\"x\"]`) — keeping the wire shape uniform with the JSON\nSchema so external validators agree with the runtime parser.",
           "properties": {
             "events": {
               "items": {
@@ -988,7 +988,7 @@
       "type": "object"
     },
     "Preset": {
-      "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.\nSee proposal §3.5.",
+      "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.\nSee proposal section 3.5.",
       "oneOf": [
         {
           "const": "tag",
@@ -1032,7 +1032,7 @@
           "description": "Read access for cross-plugin reads. Default `open`."
         },
         "acknowledged_persistence": {
-          "description": "Suppression slot for state §10.2 rule 1: when `true`, declares that\nthe plugin author has intentionally chosen `lifecycle: persistent`\non a collection with sensitive-shaped fields. Silences the warning\nwhile leaving the privacy claim auditable from the manifest.",
+          "description": "Suppression slot for state rule 10.2.1: when `true`, declares that\nthe plugin author has intentionally chosen `lifecycle: persistent`\non a collection with sensitive-shaped fields. Silences the warning\nwhile leaving the privacy claim auditable from the manifest.",
           "type": [
             "boolean",
             "null"
@@ -1046,7 +1046,7 @@
           ]
         },
         "reason_for_default_on": {
-          "description": "Suppression slot for state §10.2 rule 2: when set, declares why\nthe plugin needs `default_recording: true` (or\n`recording: AlwaysOn`) on a `log`-preset collection. Silences the\nwarning; the reason text surfaces in the Settings UI inspector\nalongside the privacy posture.",
+          "description": "Suppression slot for state rule 10.2.2: when set, declares why\nthe plugin needs `default_recording: true` (or\n`recording: AlwaysOn`) on a `log`-preset collection. Silences the\nwarning; the reason text surfaces in the Settings UI inspector\nalongside the privacy posture.",
           "type": [
             "string",
             "null"
@@ -1122,7 +1122,7 @@
       "type": "object"
     },
     "RateLimitPolicy": {
-      "description": "`policy.rate_limit` — manifest payload shape.\n\nToken-bucket params ship in `per_caller`; the bucket's keying is always\n`(plugin_id, collection_name)` per design §\"Concrete v1 policies →\nrate_limit\". `introducer_exempt: true` (the default) means the\nintroducer's own writes don't draw from the bucket — intuitive default\nsince the introducer is the trust anchor for `_platform.*` and for any\ncollection it owns. User-state-lowered values override the manifest\ndeclaration when present.",
+      "description": "`policy.rate_limit` — manifest payload shape.\n\nToken-bucket params ship in `per_caller`; the bucket's keying is always\n`(plugin_id, collection_name)` per design section \"Concrete v1 policies →\nrate_limit\". `introducer_exempt: true` (the default) means the\nintroducer's own writes don't draw from the bucket — intuitive default\nsince the introducer is the trust anchor for `_platform.*` and for any\ncollection it owns. User-state-lowered values override the manifest\ndeclaration when present.",
       "properties": {
         "introducer_exempt": {
           "default": true,
@@ -1172,7 +1172,7 @@
       "type": "object"
     },
     "StageDeclaration": {
-      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (§15 step 4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
+      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (step 15.4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
       "properties": {
         "binary": {
           "description": "Binary name to spawn for this stage. Resolved relative to the plugin\ndirectory. If omitted, defaults to the stage name.",
@@ -1330,7 +1330,7 @@
         },
         {
           "const": "tag_list",
-          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (state doc §Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
+          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (state doc Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
           "type": "string"
         },
         {
