@@ -11,10 +11,11 @@ import (
 func minimalValid() *PluginManifest {
 	prefix := "demo"
 	return &PluginManifest{
-		ID:           "demo-plugin",
-		Name:         "Demo Plugin",
-		Version:      "0.1.0",
-		ActionPrefix: &prefix,
+		ID:            "demo-plugin",
+		Name:          "Demo Plugin",
+		Version:       "0.1.0",
+		MinAPIVersion: "0.1.0",
+		ActionPrefix:  &prefix,
 		Implements: PluginImplements{
 			Methods: map[string]json.RawMessage{
 				"on_action": json.RawMessage("true"),
@@ -76,12 +77,14 @@ func TestValidate_minAPIVersion(t *testing.T) {
 		val      string
 		wantHave bool
 	}{
-		{"", false},
+		{"", true},         // required — empty is an error
 		{"0.1.0", false},
 		{"1.2.3", false},
-		{"0.1", true},
-		{"v0.1.0", true},
-		{"latest", true},
+		{"0.1", true},      // not strict semver
+		{"v0.1.0", true},   // not strict semver
+		{"latest", true},   // not strict semver
+		{"0.0.0", false},   // valid semver, even if unusual
+		{"99.99.99", false}, // valid semver
 	}
 	for _, c := range cases {
 		m := minimalValid()
@@ -96,6 +99,38 @@ func TestValidate_minAPIVersion(t *testing.T) {
 		if have != c.wantHave {
 			t.Errorf("min_api_version=%q: got error=%v, want %v", c.val, have, c.wantHave)
 		}
+	}
+}
+
+func TestValidate_minAPIVersionRequiredMessage(t *testing.T) {
+	m := minimalValid()
+	m.MinAPIVersion = ""
+	got := Validate(m, nil)
+	found := false
+	for _, i := range got {
+		if i.Field == "min_api_version" && i.Severity == SeverityError &&
+			strings.Contains(i.Message, "required") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected 'required' in error message for missing min_api_version, got: %+v", got)
+	}
+}
+
+func TestValidate_minAPIVersionFormatMessage(t *testing.T) {
+	m := minimalValid()
+	m.MinAPIVersion = "0.1"
+	got := Validate(m, nil)
+	found := false
+	for _, i := range got {
+		if i.Field == "min_api_version" && i.Severity == SeverityError &&
+			strings.Contains(i.Message, "not valid semver") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected 'not valid semver' in error message for bad format, got: %+v", got)
 	}
 }
 

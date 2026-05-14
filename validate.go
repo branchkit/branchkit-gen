@@ -147,8 +147,11 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 			"version %q does not look like semver (expected N.N.N)", m.Version))
 	}
 
-	// min_api_version (strict semver)
-	if m.MinAPIVersion != "" && !semverStrictRegex.MatchString(m.MinAPIVersion) {
+	// min_api_version (required, strict semver)
+	if m.MinAPIVersion == "" {
+		add(SeverityError, "min_api_version",
+			"min_api_version is required — declare the minimum API version this plugin targets (e.g. \"0.1.0\")")
+	} else if !semverStrictRegex.MatchString(m.MinAPIVersion) {
 		add(SeverityError, "min_api_version", fmt.Sprintf(
 			"min_api_version %q is not valid semver (expected N.N.N)", m.MinAPIVersion))
 	}

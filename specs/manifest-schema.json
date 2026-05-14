@@ -360,6 +360,13 @@
             "$ref": "#/$defs/Subscription"
           },
           "type": "array"
+        },
+        "writes": {
+          "description": "Collection names this plugin writes to at runtime via collection.push\n(cross-plugin runtime writes). Not needed for collections the plugin\nintroduces via `provides.collections` or contributes to via `collection_data`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -1456,7 +1463,7 @@
       "$ref": "#/$defs/PluginImplements"
     },
     "min_api_version": {
-      "description": "Minimum API version this plugin requires (e.g. \"0.1.0\").\nIf set, the actuator rejects the plugin at load time if API_VERSION < min_api_version.",
+      "description": "Minimum API version this plugin requires (e.g. \"0.1.0\").\nRequired — the actuator rejects the plugin at load time if omitted or if API_VERSION < min_api_version.",
       "type": [
         "string",
         "null"

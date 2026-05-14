@@ -35,7 +35,7 @@ type rawSpec struct {
 		Version string `json:"version"`
 	} `json:"info"`
 	Methods []rawSpecMethod `json:"methods"`
-	XCaps   []rawSpecCap    `json:"x-branchkit-capabilities"`
+	XCaps   []rawSpecCap    `json:"x-branchkit-privileges"`
 }
 
 type rawSpecMethod struct {

@@ -47,9 +47,6 @@ func CheckDrift(m *PluginManifest, called []CalledMethod, spec *Spec) []Issue {
 	//    the spec. Static analysis is best-effort: runtime-computed
 	//    method names slip through silently.
 	declaredMin := m.MinAPIVersion
-	if declaredMin == "" {
-		declaredMin = "0.1.0" // assumed default per the API versioning doc
-	}
 
 	// Deduplicate so a method called from many sites only produces one issue.
 	seen := map[string]CalledMethod{}
