@@ -4275,6 +4275,42 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "commands.delete",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "canonical",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_delete_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CommandsDeleteResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete a user command by canonical name",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "commands.list",
       "paramStructure": "by-name",
       "params": [],
@@ -4457,6 +4493,42 @@
         }
       },
       "summary": "Register commands with the matching engine to the matching engine",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.reset",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "canonical",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_reset_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CommandsResetResult",
+          "type": "object"
+        }
+      },
+      "summary": "Reset a command override to the plugin default",
       "tags": [
         {
           "name": "commands"
@@ -6116,6 +6188,42 @@
       "tags": [
         {
           "name": "keybinds"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "model.delete",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "ref",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "model_delete_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "ModelDeleteResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete a speech model (Vosk: filesystem removal; WhisperKit: control message)",
+      "tags": [
+        {
+          "name": "misc"
         }
       ],
       "x-since": "0.1.0"
@@ -24261,6 +24369,42 @@
         }
       },
       "summary": "Push Datastar signal patches to all active settings SSE streams",
+      "tags": [
+        {
+          "name": "settings"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "settings.redirect",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "tab",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "settings_redirect_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "SettingsRedirectResult",
+          "type": "object"
+        }
+      },
+      "summary": "Navigate the settings UI to a tab declared by the calling plugin",
       "tags": [
         {
           "name": "settings"
