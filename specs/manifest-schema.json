@@ -175,7 +175,7 @@
               "type": "null"
             }
           ],
-          "description": "`policy.denylist` — declares the collection's writes are subject\nto the user's soft denylist toggle. The user toggle lives in\n`denylisted_writers.json`, not the manifest."
+          "description": "`policy.denylist` — declares the collection's writes are subject\nto the user's soft denylist toggle. The user toggle lives in the\n`_platform.frozen_writers` collection, not the manifest."
         },
         "description": {
           "description": "Human-readable description of this collection's purpose.",
@@ -386,11 +386,18 @@
       "type": "object"
     },
     "Dependency": {
-      "description": "A plugin dependency with optional version constraint.",
+      "description": "A plugin dependency with optional version constraint and source hint.\nAccepts either a bare string (\"keyboard\") or an object ({\"plugin\": \"keyboard\", \"version\": \">=1.0.0\", \"source\": \"github:owner/repo\"}).",
       "properties": {
         "plugin": {
           "description": "Target plugin ID.",
           "type": "string"
+        },
+        "source": {
+          "description": "Explicit source for resolution (e.g. \"github:owner/repo\").\nOptional — if omitted, resolved via catalog then installed plugins.",
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "version": {
           "description": "Semver version constraint (e.g. \">=1.0.0\", \">=1.0.0 <2.0.0\").\nOptional — omitted means any version.",
