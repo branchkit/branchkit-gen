@@ -24879,6 +24879,34 @@
       ],
       "x-branchkit-privilege": "shell",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "vocabulary.commit",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "vocabulary_commit_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "VocabularyCommitResult",
+          "type": "object"
+        }
+      },
+      "summary": "Commit pending vocabulary additions to the recognition pipeline",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
     }
   ],
   "openrpc": "1.2.4",
