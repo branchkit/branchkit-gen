@@ -2775,6 +2775,19 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.input.session_boundary",
+      "paramStructure": "by-name",
+      "params": [],
+      "summary": "Input session boundary — fires on key release, continuous exit, or explicit cancel",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.input.session_ended",
       "paramStructure": "by-name",
       "params": [],
@@ -24331,6 +24344,37 @@
         {
           "name": "selection"
         }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "session.boundary",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "session_boundary_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "SessionBoundaryResult",
+          "type": "object"
+        }
+      },
+      "summary": "Emit _platform.input.session_boundary at actual session boundaries",
+      "tags": [
+        {
+          "name": "session"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.input.session_boundary"
       ],
       "x-since": "0.1.0"
     },
