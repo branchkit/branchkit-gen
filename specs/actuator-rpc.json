@@ -1757,6 +1757,24 @@
         ],
         "type": "object"
       },
+      "PluginLogLevel": {
+        "oneOf": [
+          {
+            "enum": [
+              "trace",
+              "info",
+              "warn",
+              "error"
+            ],
+            "type": "string"
+          },
+          {
+            "const": "debug",
+            "description": "Default for back-compat: v1 callers omit `level` → handler sees\n`None` → falls through to `Debug`.",
+            "type": "string"
+          }
+        ]
+      },
       "PoolStageStatusEntry": {
         "properties": {
           "alive": {
@@ -24051,6 +24069,22 @@
           "schema": {
             "default": null,
             "description": "Arbitrary JSON payload — serialized to one line in the log file\nso `tail -f` and `grep` work, while `jq` can still operate on\nthe payload column."
+          }
+        },
+        {
+          "name": "level",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/PluginLogLevel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Severity level for the line. v1 callers omit this and the handler\nfalls through to `Debug`; v2 callers pass one of\n`trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin\nthreshold are dropped at the handler; `warn`/`error` additionally\ncross-post to `actuator.log` via the `plugin.diagnostic` event."
           }
         },
         {
