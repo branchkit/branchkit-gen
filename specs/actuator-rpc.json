@@ -24042,6 +24042,52 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "plugin.debug",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "data",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Arbitrary JSON payload — serialized to one line in the log file\nso `tail -f` and `grep` work, while `jq` can still operate on\nthe payload column."
+          }
+        },
+        {
+          "name": "tag",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).\nRenders between the timestamp and the payload in the per-plugin\nlog file, matching the actuator log's `[TAG]` column convention.\nEmpty/missing renders as `[<ts>] <payload>` with no tag bracket.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "plugin_debug_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "PluginDebugResult",
+          "type": "object"
+        }
+      },
+      "summary": "Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "render_hud",
       "paramStructure": "by-name",
       "params": [
