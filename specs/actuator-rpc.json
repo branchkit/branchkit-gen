@@ -4436,8 +4436,9 @@
               "description": "Opaque to schemars: `Action` is a large enum from `crate::actions`\nwhose schema we treat as a free-form JSON value in OpenAPI. The\ninventory closure still produces a fully-typed Action."
             },
             "args": {
-              "items": {},
-              "type": "array"
+              "additionalProperties": true,
+              "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template that's been resolved into the concrete `action`; populated\nonly when template resolution failed and the caller needs the raw\ncaptures for diagnostics.",
+              "type": "object"
             },
             "clears_tag_writes": {
               "description": "Resolved state writes for each `clears_tags` entry. Voice's\npipeline dispatches via `Plugin.Delete` on these.",
