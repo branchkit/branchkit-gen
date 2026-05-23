@@ -2476,6 +2476,61 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.dependent_capture.progress",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "captured",
+          "required": true,
+          "schema": {
+            "additionalProperties": true,
+            "description": "All captures bound by the partial match, keyed by binding name.",
+            "type": "object"
+          }
+        },
+        {
+          "name": "command_phrase",
+          "required": true,
+          "schema": {
+            "description": "Display form of the command's pattern (for log readability).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "next_capture",
+          "required": true,
+          "schema": {
+            "description": "Capture name the dependent capture is waiting to fill\n(e.g. `\"suffix\"`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "next_collection",
+          "required": true,
+          "schema": {
+            "description": "Collection name resolved by substituting bound captures into\nthe dependent capture's template (e.g. `\"browser_hints_arch\"`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin that owns the command being partially matched.\nSubscribers filter on this to receive only events for their\nown commands.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "Partial command match reached a DependentCapture token whose deps are bound and whose resolved collection exists.",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.discovery.closed",
       "paramStructure": "by-name",
       "params": [],
