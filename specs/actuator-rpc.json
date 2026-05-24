@@ -1115,32 +1115,6 @@
         ],
         "type": "object"
       },
-      "GateWrite": {
-        "description": "Resolved structured write for a single gate string in a command's\n`sets_tags` / `clears_tags`. Produced once at command-load time by the\nresolver pass in `rebuild_commands_cache`, so the runtime path can\ndispatch via state ops (`Plugin.Put` / `Plugin.Delete`) without\nre-resolving the gate-namespace policy on each match.\n\nSub-sprint 6.1: command-driven tag writes flow as structured writes\nalongside the gate-string sugar in manifests; gate strings stay as\nthe authoring surface, resolution happens upstream.",
-        "properties": {
-          "collection": {
-            "description": "Resolved state collection name.",
-            "type": "string"
-          },
-          "id": {
-            "description": "Resolved record id — `\"singleton\"` for presence-only gates, the\nleaf token for namespace-feed gates.",
-            "type": "string"
-          },
-          "payload": {
-            "description": "Payload for `collection.put`. Empty object for presence-only gates;\n`{<name_field>: <leaf>}` for namespace-feed gates so the state's\n`derive_gate_string` round-trips back to the original tag."
-          },
-          "tag": {
-            "description": "Original gate string this write resolves. Preserved so callers can\ncompare resolved writes against the source `sets_tags` / `clears_tags`\ngate-string lists for validation, logging, and event payloads.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "collection",
-          "id",
-          "tag"
-        ],
-        "type": "object"
-      },
       "HidDeviceEntry": {
         "properties": {
           "axes": {
@@ -1526,6 +1500,16 @@
         ],
         "type": "object"
       },
+      "MatchWinner": {
+        "description": "Which category the matcher's tiebreaker chose. Mirrors the four\nbranches of `find_match_at_start_impl`: gated Completes win over\nungated Completes (scoped beats unscoped within the gated set), an\nungated Complete loses if any gated command had a Partial in flight\n(`suppress_ungated`), and `NoMatch` is the fall-through.",
+        "enum": [
+          "gated_scoped",
+          "gated_unscoped",
+          "ungated",
+          "no_match"
+        ],
+        "type": "string"
+      },
       "MemoryInfo": {
         "properties": {
           "available_bytes": {
@@ -1879,6 +1863,23 @@
           "list_name",
           "priority",
           "title"
+        ],
+        "type": "object"
+      },
+      "ResolveTelemetry": {
+        "description": "Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The\ninternal type can't derive `Serialize`/`JsonSchema` because it lives in\nthe matching crate alongside non-serializable internals — this struct\nis the wire shape exposed through `commands.resolve`.",
+        "properties": {
+          "gated_partial_seen": {
+            "description": "True iff any gated command's Partial was observed during\ncategorization. When `winner == Ungated` and this is `true`, the\nmatcher's `suppress_ungated` propagation failed to fire.",
+            "type": "boolean"
+          },
+          "winner": {
+            "$ref": "#/$defs/MatchWinner"
+          }
+        },
+        "required": [
+          "gated_partial_seen",
+          "winner"
         ],
         "type": "object"
       },
@@ -4272,95 +4273,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "commands.completions",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "active_tags",
-          "required": false,
-          "schema": {
-            "default": null,
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "collections",
-          "required": false,
-          "schema": {
-            "default": null,
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "require_tag",
-          "required": false,
-          "schema": {
-            "default": null,
-            "type": "string"
-          }
-        },
-        {
-          "name": "words",
-          "required": false,
-          "schema": {
-            "default": [],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "commands_completions_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a completions query: partial-match status, next-word grammar\ndata, and display items in a single response.",
-          "properties": {
-            "has_completions": {
-              "type": "boolean"
-            },
-            "items": {
-              "items": {
-                "$ref": "#/$defs/DiscoverItem"
-              },
-              "type": "array"
-            },
-            "next_words": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "title": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "has_completions",
-            "next_words",
-            "title",
-            "items"
-          ],
-          "title": "CompletionsResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get completions for a command prefix: partial match status, next words for grammar, and display items",
-      "tags": [
-        {
-          "name": "matching"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "commands.delete",
       "paramStructure": "by-name",
       "params": [
@@ -4432,140 +4344,6 @@
       "tags": [
         {
           "name": "commands"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "commands.match",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "active_tags",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Active tags for tag-based scoping. If None, uses the state's active_tags.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "session_id",
-          "required": false,
-          "schema": {
-            "description": "Audio session ID from the Swift shell. Informational — links audio\nlifecycle events to command matches.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "source",
-          "required": false,
-          "schema": {
-            "description": "Input source: \"command_hold\", \"continuous\", \"selection\", \"api\".",
-            "type": "string"
-          }
-        },
-        {
-          "name": "words",
-          "required": false,
-          "schema": {
-            "default": [],
-            "description": "Words to match against the command registry.",
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        }
-      ],
-      "result": {
-        "name": "commands_match_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a command match operation. Also serves as the canonical\n`commands.match` result type re-exported by `crate::operations::types`.",
-          "properties": {
-            "action": {
-              "description": "Opaque to schemars: `Action` is a large enum from `crate::actions`\nwhose schema we treat as a free-form JSON value in OpenAPI. The\ninventory closure still produces a fully-typed Action."
-            },
-            "args": {
-              "additionalProperties": true,
-              "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template that's been resolved into the concrete `action`; populated\nonly when template resolution failed and the caller needs the raw\ncaptures for diagnostics.",
-              "type": "object"
-            },
-            "clears_tag_writes": {
-              "description": "Resolved state writes for each `clears_tags` entry. Voice's\npipeline dispatches via `Plugin.Delete` on these.",
-              "items": {
-                "$ref": "#/$defs/GateWrite"
-              },
-              "type": "array"
-            },
-            "clears_tags": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "consumed_count": {
-              "format": "uint",
-              "minimum": 0,
-              "type": "integer"
-            },
-            "matched": {
-              "type": "boolean"
-            },
-            "owner_plugin": {
-              "type": "string"
-            },
-            "requires_tags": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "scoped_tags": {
-              "description": "Currently active scoped tags at match time. Populated from the\nactuator's authoritative gate state so callers don't need to\nshadow tag state locally.",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "sets_tag_writes": {
-              "description": "Resolved state writes for each `sets_tags` entry, produced by\nthe load-time gate-string resolver (sub-sprint 6.1). Voice's pipeline\ndispatches via `Plugin.Put` on these. Sub-sprint 6.4 (Option Z) made\nevery command-driven gate write resolvable, so this list is exhaustive\nfor the parallel `sets_tags` field.",
-              "items": {
-                "$ref": "#/$defs/GateWrite"
-              },
-              "type": "array"
-            },
-            "sets_tags": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            },
-            "trace_id": {
-              "description": "Trace ID generated by the actuator for causal correlation. Links this\nmatch result to downstream dispatch, state writes, and HUD events.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "matched",
-            "args",
-            "consumed_count",
-            "sets_tags",
-            "clears_tags",
-            "requires_tags"
-          ],
-          "title": "MatchCommandsResult",
-          "type": "object"
-        }
-      },
-      "summary": "Match words against the command registry",
-      "tags": [
-        {
-          "name": "matching"
         }
       ],
       "x-since": "0.1.0"
@@ -4646,6 +4424,173 @@
       "tags": [
         {
           "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.resolve",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "active_tags",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Active tags for tag-based scoping. If None, uses the state's active_tags.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "collections",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Narrow completions to commands contributed by these collections'\ncontributors. None or empty = all.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "require_tag",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Restrict completions to commands requiring this tag.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "session_id",
+          "required": false,
+          "schema": {
+            "description": "Audio session ID from the Swift shell. Informational — links audio\nlifecycle events to command matches.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "source",
+          "required": false,
+          "schema": {
+            "description": "Input source: \"command_hold\", \"continuous\", \"selection\", \"api\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "words",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Words to match against the command registry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_resolve_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Unified result of `commands.resolve` — dispatch decision, partial-match\nfeedback, and tiebreaker telemetry in a single envelope. Consolidates\nthe prior `commands.match` + `commands.completions` response shapes; see\n`docs/completed/DESIGN_MATCHER_DECISION_CONSOLIDATION.md`.",
+          "properties": {
+            "action": {
+              "description": "Opaque to schemars: `Action` is a large enum whose schema is treated\nas a free-form JSON value in OpenAPI. The inventory closure still\nproduces a fully-typed Action."
+            },
+            "args": {
+              "additionalProperties": true,
+              "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed.",
+              "type": "object"
+            },
+            "clears_tags": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "consumed_count": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "has_completions": {
+              "type": "boolean"
+            },
+            "items": {
+              "items": {
+                "$ref": "#/$defs/DiscoverItem"
+              },
+              "type": "array"
+            },
+            "matched": {
+              "type": "boolean"
+            },
+            "next_words": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "owner_plugin": {
+              "type": "string"
+            },
+            "requires_tags": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "scoped_tags": {
+              "description": "Currently active scoped tags at match time.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "sets_tags": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "telemetry": {
+              "$ref": "#/$defs/ResolveTelemetry"
+            },
+            "title": {
+              "type": "string"
+            },
+            "trace_id": {
+              "description": "Trace ID generated by the actuator for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "matched",
+            "args",
+            "consumed_count",
+            "sets_tags",
+            "clears_tags",
+            "requires_tags",
+            "has_completions",
+            "next_words",
+            "title",
+            "items",
+            "telemetry"
+          ],
+          "title": "ResolveResult",
+          "type": "object"
+        }
+      },
+      "summary": "Resolve words against the command registry — returns dispatch decision, partial-match feedback, and tiebreaker telemetry in one envelope",
+      "tags": [
+        {
+          "name": "matching"
         }
       ],
       "x-since": "0.1.0"
@@ -4733,7 +4678,7 @@
           "name": "trace_id",
           "required": false,
           "schema": {
-            "description": "Trace ID echoed from `commands.match` response. Links dispatch events\nto the originating command match.",
+            "description": "Trace ID echoed from `commands.resolve` response. Links dispatch\nevents to the originating command match.",
             "type": "string"
           }
         }
