@@ -2573,14 +2573,6 @@
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "displaced_owner",
-          "required": true,
-          "schema": {
-            "description": "Plugin id that lost top-of-stack ownership. Subscribers filter on\nthis to know whether *they* are the displaced plugin (vs. another\nplugin's stack frame being overridden).",
-            "type": "string"
-          }
-        },
-        {
           "name": "effect",
           "required": true,
           "schema": {
@@ -4780,9 +4772,6 @@
         {
           "name": "misc"
         }
-      ],
-      "x-branchkit-emits": [
-        "_platform.effect.displaced"
       ],
       "x-since": "0.1.0"
     },

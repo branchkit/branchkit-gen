@@ -189,7 +189,7 @@
           ]
         },
         "exclusive": {
-          "description": "Deprecated — superseded by `protection_scope`. Kept on the parsed\nshape so the manifest validator can detect the legacy flag and emit\na migration-hint error pointing to `protection_scope: \"all\"`. The\nresolved-policy path no longer reads this field; setting it is a\nhard-fail validation error.",
+          "description": "When true, the gate becomes an exclusive gate: while active, only\ncommands whose `requires_tags` includes this gate can match.\nAll other commands are suppressed. Used for sub-command modes\n(e.g. snap directions) where only the displayed options should work.",
           "type": "boolean"
         },
         "feeds_matching": {
@@ -275,17 +275,6 @@
             }
           ],
           "description": "State policy slot — privacy posture (recording, access level)."
-        },
-        "protection_scope": {
-          "anyOf": [
-            {
-              "$ref": "#/$defs/ProtectionScope"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "description": "Protection scope — how this collection's presence as an active gate\nconstrains the eligible command set during matching. Three settings:\n\n- `\"all\"` — exclusive gate: while active, only commands whose\n  `requires_tags` include this gate (or another exclusive gate) are\n  eligible. Replaces the legacy `exclusive: true` field.\n- `\"none\"` (default when absent) — additive only: commands requiring\n  this gate become eligible; no other commands are filtered.\n- `{ \"collections\": [c1, c2, ...] }` — surgical: ungated commands\n  whose tokens read from any listed collection are filtered out.\n  Gated commands and ungated commands reading other collections\n  compose freely.\n\nSee `notes/DESIGN_PROTECTED_COLLECTIONS_GATE.md`."
         },
         "rate_limit": {
           "anyOf": [
@@ -1090,43 +1079,6 @@
         }
       },
       "type": "object"
-    },
-    "ProtectionMode": {
-      "description": "Static enum for the string forms of `protection_scope`. The structured\nform lives on `ProtectionScope::Collections`. Splitting the two shapes\nacross a wrapper enum keeps the manifest wire format\n(`\"all\"` / `\"none\"` / `{ \"collections\": [...] }`) representable via\nserde's untagged dispatch.",
-      "oneOf": [
-        {
-          "const": "all",
-          "description": "Exclusive gate. While any gate with this mode is active, only\ncommands whose `requires_tags` include such a gate (or whose\n`sets_tags` set one) are eligible.",
-          "type": "string"
-        },
-        {
-          "const": "none",
-          "description": "Additive only. No commands are filtered solely because this gate\nis active. Default when `protection_scope` is absent.",
-          "type": "string"
-        }
-      ]
-    },
-    "ProtectionScope": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/ProtectionMode"
-        },
-        {
-          "properties": {
-            "collections": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "collections"
-          ],
-          "type": "object"
-        }
-      ],
-      "description": "Manifest-declared scope of a gate collection's protection. See\n`CollectionSchema::protection_scope`. Three shapes:\n\n- `\"all\"` / `\"none\"` — string literals expressing the modes above\n- `{ \"collections\": [...] }` — surgical: lists collection names whose\n  ungated readers are filtered out when this gate is active"
     },
     "Provides": {
       "description": "What a plugin provides to the ecosystem.",
