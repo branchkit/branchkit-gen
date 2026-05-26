@@ -4511,6 +4511,13 @@
             "action": {
               "description": "Opaque to schemars: `Action` is a large enum whose schema is treated\nas a free-form JSON value in OpenAPI. The inventory closure still\nproduces a fully-typed Action."
             },
+            "active_plugin_gates": {
+              "description": "All currently-active gates from `plugin.<X>.*` namespaces other than\n`plugin.voice.*`. Voice plugin uses this for session-end cleanup\ndecisions (\"any non-voice plugin mode active?\") without maintaining\na parallel local view of state.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "args": {
               "additionalProperties": true,
               "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed.",
