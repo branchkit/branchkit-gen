@@ -166,6 +166,13 @@
           "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nSub-sprint 6.4: replaces voice's inline auto-clear in matchWords with\na manifest-declared trigger resolved server-side in `commands.match`.\nOnly meaningful for `feeds_matching: AsGates { scoped: true }` —\nvalidation rejects the flag on other shapes. Distinct from\n`Lifecycle::ClearOnEvent` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
           "type": "boolean"
         },
+        "clears_when_cleared": {
+          "description": "Tags whose clearing should automatically clear this tag too. Used\nfor dependent state that's only meaningful while a parent gate is\nheld — most commonly mid-capture mode tags (`sets_on_partial`)\nwhose lifetime is bounded by their parent's `requires_tags`. For\nthe common case the platform auto-infers the relationship from\n`requires_tags` + `sets_on_partial`; this field is an escape hatch\nfor cascades where the parent isn't in `requires_tags`. See\n`notes/DESIGN_TAG_CASCADE_CLEAR.md`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "denylist": {
           "anyOf": [
             {
