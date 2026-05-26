@@ -4561,6 +4561,13 @@
               },
               "type": "array"
             },
+            "scoped_prefixes": {
+              "description": "Platform-wide list of namespace prefixes that mark a tag as\n\"scoped.\" Voice plugin uses this to classify `sets_tags` entries\nfrom a matched command as scoped mode tags without shadowing the\nconfiguration locally.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
             "scoped_tags": {
               "description": "Currently active scoped tags at match time.",
               "items": {
