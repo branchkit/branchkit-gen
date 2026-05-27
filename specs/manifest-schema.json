@@ -389,6 +389,33 @@
       },
       "type": "object"
     },
+    "ContextNamePattern": {
+      "description": "One `provides.context_names` entry. The pattern matches when both:\n- every tag in `tags` is present in the live active-tag set\n  (subset semantics — the live set may carry additional tags)\n- `prefix_shape` matches the captured prefix positionally: literal\n  strings match the corresponding token verbatim; `<collection_name>`\n  placeholders match any token drawn from the named collection\n\nTiebreaking when multiple patterns match: longest `tags` wins;\nties break to the longer/more-specific `prefix_shape`; remaining\nties break lexicographically on `name` for determinism.",
+      "properties": {
+        "name": {
+          "description": "Friendly dotted name surfaced in logs (e.g. `\"browser.hints\"`).",
+          "type": "string"
+        },
+        "prefix_shape": {
+          "description": "Positional shape the captured prefix must match. Each element\nis either a literal word or a `<collection_name>` placeholder.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "tags": {
+          "description": "Tags required for this pattern to match.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
     "DenylistPolicy": {
       "description": "`policy.denylist` — manifest affordance.\n\nThe manifest declares the affordance (\"the user may freeze writes from\nthis plugin to this collection\"); the user toggles the per-plugin gate\nin Settings → Plugins → Inspector. v1 ships a single boolean affordance;\nfuture versions could add per-collection scoping or\n\"always denylisted\" claims.",
       "properties": {
@@ -1120,6 +1147,13 @@
           },
           "description": "Collections this plugin introduces, keyed by collection name.\nEach entry declares schema, merge strategy, access, and optional resolution fields.",
           "type": "object"
+        },
+        "context_names": {
+          "description": "Friendly context names this plugin owns. The context engine's\n`name_for(tag_set, partial_prefix)` lookup walks every plugin's\n`context_names`; the first pattern whose `tags` are a subset of\nthe live active-tag set and whose `prefix_shape` matches the\ncaptured prefix positionally wins. See\n`notes/DESIGN_CALIBRATION_CONTEXTS.md` §8.",
+          "items": {
+            "$ref": "#/$defs/ContextNamePattern"
+          },
+          "type": "array"
         },
         "effects": {
           "description": "Exclusivity-shape platform effects this plugin participates in.\nEach entry declares a set of registered effect names the plugin\nwill assert during its session, plus the user-facing branding for\nthe install-time consent prompt. Effect names are validated\nagainst the closed `effects::REGISTERED_EFFECTS` registry at\nmanifest load time. See `notes/DESIGN_CAPABILITY_MECHANISM.md`.",
