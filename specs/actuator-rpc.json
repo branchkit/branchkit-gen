@@ -3520,6 +3520,56 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "calibration.apply",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "trial_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_apply_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "fixture_handle": {
+              "description": "Opaque handle the owning plugin returned. The actuator already\nregistered it under the trial — callers don't need a follow-up\n`register_fixture_handle`. Returned here so the caller can log /\nsurface it for debugging.",
+              "type": "string"
+            },
+            "owner_plugin": {
+              "description": "Owning plugin the fixture call was forwarded to.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "fixture_handle",
+            "owner_plugin"
+          ],
+          "title": "ApplyFixtureResult",
+          "type": "object"
+        }
+      },
+      "summary": "Forward calibration_apply_fixture to the command's owner plugin and register the returned handle under the named trial — one RPC instead of two for the host",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "calibration.register_fixture_handle",
       "paramStructure": "by-name",
       "params": [
@@ -3624,6 +3674,73 @@
       "tags": [
         {
           "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration_apply_fixture",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "The dynamic command being calibrated — formatted as\n`<owner_plugin>:<display_pattern>`, matching `commands.enumerate`'s\n`id` field. The plugin uses this to decide which fixture recipe to\nrun (most owners have one canonical fixture per command).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_apply_fixture_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "fixture_handle": {
+              "description": "Opaque, plugin-chosen handle. The actuator hands it back via\n`calibration_release_fixture` so the plugin can reverse this\nspecific fixture's writes without keeping ambient state.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "fixture_handle"
+          ],
+          "title": "CalibrationApplyFixtureResult",
+          "type": "object"
+        }
+      },
+      "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the actuator passes to calibration_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration_release_fixture",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "fixture_handle",
+          "required": true,
+          "schema": {
+            "description": "Handle previously returned by `calibration_apply_fixture`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_release_fixture_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "CalibrationReleaseFixtureResult",
+          "type": "object"
+        }
+      },
+      "summary": "Reverse the state writes a previous calibration_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
         }
       ],
       "x-since": "0.1.0"
