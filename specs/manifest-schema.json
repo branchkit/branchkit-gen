@@ -217,6 +217,17 @@
           },
           "type": "array"
         },
+        "forbids_tag": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ForbidsTagPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "`policy.forbids_tag` — write only commits while the named tag is\n*not* in the active gate set. Introducer + platform writes bypass;\nonly cross-plugin writes are gated."
+        },
         "id_strategy": {
           "anyOf": [
             {
@@ -654,6 +665,19 @@
         "json"
       ],
       "type": "string"
+    },
+    "ForbidsTagPolicy": {
+      "description": "`policy.forbids_tag` — defensive negation of `requires_tag`.\n\nWrite only commits while the named tag is *not* active. Introducer\nand platform writes always pass — only cross-plugin writes are gated.\nIntended for plugins that want to defer external writes while a\nplatform-managed mode is in progress (e.g.\n`_platform.calibration.active`).",
+      "properties": {
+        "tag": {
+          "description": "The exact tag name that must be absent from the active gate set\nat write time (for cross-plugin writes).",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag"
+      ],
+      "type": "object"
     },
     "HudWindowDecl": {
       "description": "A HUD window declaration from a plugin manifest.",
