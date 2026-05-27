@@ -1031,6 +1031,50 @@
         ],
         "type": "object"
       },
+      "EnumeratedCommand": {
+        "properties": {
+          "dynamic": {
+            "type": "boolean"
+          },
+          "dynamic_owner": {
+            "description": "Same as `owner_plugin` when dynamic; omitted when static. Surfaced\nseparately so callers can pattern-match `if let Some(owner) = ...`.",
+            "type": "string"
+          },
+          "id": {
+            "description": "`<owner_plugin>:<display_pattern>` — stable across reloads.",
+            "type": "string"
+          },
+          "owner_plugin": {
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Human-readable pattern (first option of each slot).",
+            "type": "string"
+          },
+          "requires_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "dynamic",
+          "dynamic_owner",
+          "id",
+          "owner_plugin",
+          "pattern",
+          "requires_tags",
+          "sets_tags"
+        ],
+        "type": "object"
+      },
       "ExternalDisk": {
         "properties": {
           "file_system": {
@@ -1319,6 +1363,14 @@
       },
       "ListCommandItem": {
         "properties": {
+          "dynamic": {
+            "description": "True iff this command's vocabulary depends on runtime state pushes\n(DependentCapture, or a capture against a collection no plugin\ndeclares in provides.collections). Calibration consumers use this\nto decide whether to invoke a fixture RPC.",
+            "type": "boolean"
+          },
+          "dynamic_owner": {
+            "description": "Owning plugin when `dynamic` is true — the plugin to ask for a\ncalibration fixture. Omitted for static commands.",
+            "type": "string"
+          },
           "id": {
             "type": "string"
           },
@@ -1333,6 +1385,8 @@
           }
         },
         "required": [
+          "dynamic",
+          "dynamic_owner",
           "id",
           "subtitle",
           "tag",
@@ -4309,6 +4363,38 @@
         }
       },
       "summary": "Delete a user command by canonical name",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.enumerate",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "commands_enumerate_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Flat enumeration of every registered command with full identity and\nclassification metadata. Unlike `commands.list` (UI-shaped: filtered by\nactive tags, deduped by root word, hides capture-starts), `enumerate`\nreturns one item per command, includes capture-starts, and ignores\nthe active-tag context — the calibration host's source of truth for\n\"what commands exist.\"",
+          "properties": {
+            "commands": {
+              "items": {
+                "$ref": "#/$defs/EnumeratedCommand"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "commands"
+          ],
+          "title": "EnumerateCommandsResult",
+          "type": "object"
+        }
+      },
+      "summary": "Flat enumeration of every registered command with dynamic/static classification — calibration host source of truth",
       "tags": [
         {
           "name": "commands"
