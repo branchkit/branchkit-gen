@@ -670,11 +670,31 @@
       ]
     },
     "FieldDisplay": {
-      "description": "Where a field appears in generic UI rendering. Currently used by\n`kind: \"log\"` collections in the Collections tab to drive the timeline\nrow summary line. Extending this enum is how new generic display roles\nget added (detail-only, hidden, etc.) without smuggling presentation\nhints into freeform strings.",
+      "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `description`, `payload` are\nconsumed by `services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
       "oneOf": [
         {
+          "const": "primary",
+          "description": "The field that identifies the entry — typically the spoken\ncodeword. Discovery HUD renders as item title. When absent,\nsurfaces fall back to the entry's spoken key.",
+          "type": "string"
+        },
+        {
+          "const": "secondary",
+          "description": "The supporting detail shown next to the primary. Discovery HUD\nrenders as item subtitle.",
+          "type": "string"
+        },
+        {
+          "const": "description",
+          "description": "Long-form explanation. Render shape decided when the first\nconsumer ships (deferred to Phase 3 settings UI).",
+          "type": "string"
+        },
+        {
+          "const": "payload",
+          "description": "Carried for action templates only — never displayed. Stripped\nfrom `DiscoverItem` and any other display surface.",
+          "type": "string"
+        },
+        {
           "const": "summary",
-          "description": "Include this field in the one-line summary shown for each row.\nMultiple `summary` fields are concatenated in declaration order.",
+          "description": "Include this field in the one-line summary shown for each row.\nMultiple `summary` fields are concatenated in declaration order.\nPre-existing role; kept for the settings UI's log-kind timeline.",
           "type": "string"
         }
       ]

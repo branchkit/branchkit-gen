@@ -1111,8 +1111,12 @@
         "type": "object"
       },
       "FieldDisplay": {
-        "description": "Where a field appears in generic UI rendering. Currently used by\n`kind: \"log\"` collections in the Collections tab to drive the timeline\nrow summary line. Extending this enum is how new generic display roles\nget added (detail-only, hidden, etc.) without smuggling presentation\nhints into freeform strings.",
+        "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `description`, `payload` are\nconsumed by `services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
         "enum": [
+          "primary",
+          "secondary",
+          "description",
+          "payload",
           "summary"
         ],
         "type": "string"
@@ -4395,6 +4399,17 @@
           "schema": {
             "description": "Collection name (e.g., 'alphabet', 'key_name').",
             "type": "string"
+          }
+        },
+        {
+          "name": "roles",
+          "required": false,
+          "schema": {
+            "additionalProperties": {
+              "$ref": "#/$defs/FieldDisplay"
+            },
+            "description": "Optional display-role assignments for fields of this dynamic\ncollection. Map of field-name → role. Roles must be values\nfrom the `FieldDisplay` enum (serialized as snake_case).\nIgnored for manifest-declared collections — those declare\nroles in `provides.collections[name].fields[i].display`.\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md`.",
+            "type": "object"
           }
         }
       ],
