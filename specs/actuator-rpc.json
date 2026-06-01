@@ -5024,6 +5024,14 @@
           }
         },
         {
+          "name": "session_id",
+          "required": false,
+          "schema": {
+            "description": "Speech-session identifier carried from the originating `commands.resolve`.\nRe-derived into the same session-rooted correlation id here, so the\n`on_action` envelope this dispatch stamps shares the resolve's `tr_`\ntrace.",
+            "type": "string"
+          }
+        },
+        {
           "name": "trace_id",
           "required": false,
           "schema": {
