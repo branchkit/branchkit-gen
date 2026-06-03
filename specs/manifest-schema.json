@@ -595,6 +595,19 @@
           "type": "object"
         },
         {
+          "description": "Vocabulary keyed on the record id, with the whole payload as the\nvalue. Used by auto-registered dynamic collections (collections\nwhose names are runtime-determined, registered on first\n`collection.put`). The record id is what `<name:CollectionName>`\ncaptures match against; the payload travels through the matcher\nas the captured value. See notes/DESIGN_BROWSER_HINT_SILENT_EVICTION.md.",
+          "properties": {
+            "type": {
+              "const": "as_record_keyed",
+              "type": "string"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "type": "object"
+        },
+        {
           "description": "Patterns to match against (today's `kind: \"commands\"`).",
           "properties": {
             "type": {

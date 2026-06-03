@@ -563,6 +563,19 @@
         ],
         "type": "object"
       },
+      "CollectionPutEntry": {
+        "description": "One record to upsert. Same shape as the older single-record wire form\n`{id, payload}`; bulk callers pass multiple entries in one call.",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "payload": {}
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
       "CollectionRecord": {
         "description": "One record as returned by a backend. The `id` field is whatever the\ncollection's `id_strategy` resolves to (auto-ulid string, by-field value,\nkey/value composite, or \"singleton\" for singleton collections).\n\nThe wire / schema name is `CollectionRecord` to avoid colliding with\nTypeScript's builtin `Record<K, V>` utility type (the codegen emits\n`Record<string, T>` map shapes alongside our own types).",
         "properties": {
@@ -3914,14 +3927,18 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "collection.delete_record",
+      "name": "collection.delete_records",
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "id",
+          "name": "ids",
           "required": true,
           "schema": {
-            "type": "string"
+            "description": "Record ids to remove. Always an array; single-record callers wrap\none id. SDK helpers (`Delete` vs `DeleteMany`) hide the wrapping.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         {
@@ -3933,23 +3950,32 @@
         }
       ],
       "result": {
-        "name": "collection_delete_record_result",
+        "name": "collection_delete_records_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "already_absent": {
+              "description": "Number of ids that were already absent (no-op).",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
             "deleted": {
-              "description": "True if the record existed and was removed, false if it was already gone.",
-              "type": "boolean"
+              "description": "Number of records that existed and were removed.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
             }
           },
           "required": [
-            "deleted"
+            "deleted",
+            "already_absent"
           ],
-          "title": "CollectionDeleteRecordResult",
+          "title": "CollectionDeleteRecordsResult",
           "type": "object"
         }
       },
-      "summary": "Delete one record from a collection by id",
+      "summary": "Delete records from a collection by id (bulk).",
       "tags": [
         {
           "name": "collections"
@@ -4445,10 +4471,14 @@
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "id",
+          "name": "entries",
           "required": true,
           "schema": {
-            "type": "string"
+            "description": "Records to upsert. Always an array; single-record callers wrap one\nentry. The wire format is uniform across single and bulk callers;\nthe SDK helpers (`Put` vs `PutMany`) hide the wrapping for the\nsingle-record case. See notes/DESIGN_BROWSER_HINT_SILENT_EVICTION.md\nfor the rationale.",
+            "items": {
+              "$ref": "#/$defs/CollectionPutEntry"
+            },
+            "type": "array"
           }
         },
         {
@@ -4457,11 +4487,6 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "payload",
-          "required": true,
-          "schema": {}
         }
       ],
       "result": {
@@ -4469,18 +4494,25 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "count": {
+              "description": "Number of records upserted. Equals `entries.len()` on success.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
             "ok": {
               "type": "boolean"
             }
           },
           "required": [
-            "ok"
+            "ok",
+            "count"
           ],
           "title": "CollectionPutResult",
           "type": "object"
         }
       },
-      "summary": "Upsert a record at the given id",
+      "summary": "Upsert records by id (bulk). Auto-registers the target as a record-keyed dynamic collection on first plugin call to an unknown name.",
       "tags": [
         {
           "name": "collections"
@@ -4849,6 +4881,10 @@
               "additionalProperties": true,
               "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed.",
               "type": "object"
+            },
+            "bridge_active": {
+              "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `dependent_capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
+              "type": "boolean"
             },
             "clears_tags": {
               "items": {
