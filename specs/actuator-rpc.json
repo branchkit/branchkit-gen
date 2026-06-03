@@ -4487,6 +4487,17 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "roles",
+          "required": false,
+          "schema": {
+            "additionalProperties": {
+              "$ref": "#/$defs/FieldDisplay"
+            },
+            "description": "Optional per-payload-field display roles. Used by the Settings\nUI / discovery HUD to know which payload field is the primary\nlabel, which is the subtitle, etc. Equivalent to the `roles`\nargument on `collection.push`. Mostly meaningful for\nauto-registered dynamic collections — manifest-declared\ncollections get their roles from the schema. On the first\n`collection.put` to a not-yet-registered name, the roles are\nstored alongside the auto-registered schema. Subsequent puts\nwith `roles` overwrite the prior setting; puts omitting\n`roles` leave roles unchanged.",
+            "type": "object"
+          }
         }
       ],
       "result": {
