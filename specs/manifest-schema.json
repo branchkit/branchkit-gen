@@ -941,7 +941,7 @@
       ]
     },
     "MergeStrategy": {
-      "description": "How contributions to a shared store are merged when read.",
+      "description": "How contributions to a shared store are merged when read.\n\n`Keyed` was removed in Phase 3d of the collection-primitive\nunification — it had no legitimate multi-contributor users in\npractice; the implicit `Preset::Data` default flipped to\n`Authoritative` (matches the dominant single-writer pattern).\n`Collect` remains for genuine multi-contributor pooling (keybinds,\n`Preset::Tag` multi-cardinality tag collections).",
       "oneOf": [
         {
           "const": "authoritative",
@@ -951,11 +951,6 @@
         {
           "const": "collect",
           "description": "All contributions are concatenated into a single array, ordered by plugin ordering.",
-          "type": "string"
-        },
-        {
-          "const": "keyed",
-          "description": "Contributions are merged as key-value objects. Later contributors override earlier keys.",
           "type": "string"
         }
       ]

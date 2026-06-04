@@ -1657,11 +1657,10 @@
         "type": "object"
       },
       "MergeStrategy": {
-        "description": "How contributions to a shared store are merged when read.",
+        "description": "How contributions to a shared store are merged when read.\n\n`Keyed` was removed in Phase 3d of the collection-primitive\nunification — it had no legitimate multi-contributor users in\npractice; the implicit `Preset::Data` default flipped to\n`Authoritative` (matches the dominant single-writer pattern).\n`Collect` remains for genuine multi-contributor pooling (keybinds,\n`Preset::Tag` multi-cardinality tag collections).",
         "enum": [
           "authoritative",
-          "collect",
-          "keyed"
+          "collect"
         ],
         "type": "string"
       },
@@ -4050,7 +4049,7 @@
         "name": "collection_get_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a store read operation, including merge metadata.\n\nAlso serves as the canonical `collection.get` result type — re-exported by\n`crate::operations::types::CollectionGetResult`. The merge strategy serializes\nas a snake_case string (`\"authoritative\"`, `\"collect\"`, `\"keyed\"`) thanks\nto the `#[serde(rename_all = \"snake_case\")]` derive on\n`MergeStrategy`.\nWire type for `collection.get` RPC response. The `entries` field is a\nconvenience flat map (key_field → value_field) derived from `data` at\nread time. It contains bare values only — no internal provenance metadata.\nThe internal entity cache with per-item provenance is built separately\nvia `build_entity_flat_map` in state.rs.",
+          "description": "Result of a store read operation, including merge metadata.\n\nAlso serves as the canonical `collection.get` result type — re-exported by\n`crate::operations::types::CollectionGetResult`. The merge strategy serializes\nas a snake_case string (`\"authoritative\"` or `\"collect\"`) thanks\nto the `#[serde(rename_all = \"snake_case\")]` derive on\n`MergeStrategy`.\nWire type for `collection.get` RPC response. The `entries` field is a\nconvenience flat map (key_field → value_field) derived from `data` at\nread time. It contains bare values only — no internal provenance metadata.\nThe internal entity cache with per-item provenance is built separately\nvia `build_entity_flat_map` in state.rs.",
           "properties": {
             "data": {},
             "entries": {
