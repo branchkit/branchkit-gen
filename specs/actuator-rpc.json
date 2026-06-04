@@ -3931,8 +3931,9 @@
       "params": [
         {
           "name": "ids",
-          "required": true,
+          "required": false,
           "schema": {
+            "default": [],
             "description": "Record ids to remove. Always an array; single-record callers wrap\none id. SDK helpers (`Delete` vs `DeleteMany`) hide the wrapping.",
             "items": {
               "type": "string"
@@ -4400,79 +4401,14 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "collection.push",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "data",
-          "required": true,
-          "schema": {
-            "description": "JSON data to store — array of entries for declared collections,\nor a flat key→value map for dynamic collections."
-          }
-        },
-        {
-          "name": "label",
-          "required": false,
-          "schema": {
-            "description": "Optional label for UI display (dynamic collections only).",
-            "type": "string"
-          }
-        },
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "description": "Collection name (e.g., 'alphabet', 'key_name').",
-            "type": "string"
-          }
-        },
-        {
-          "name": "roles",
-          "required": false,
-          "schema": {
-            "additionalProperties": {
-              "$ref": "#/$defs/FieldDisplay"
-            },
-            "description": "Optional display-role assignments for fields of this dynamic\ncollection. Map of field-name → role. Roles must be values\nfrom the `FieldDisplay` enum (serialized as snake_case).\nIgnored for manifest-declared collections — those declare\nroles in `provides.collections[name].fields[i].display`.\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md`.",
-            "type": "object"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_push_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "CollectionPushResult",
-          "type": "object"
-        }
-      },
-      "summary": "Write data to a shared store",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-branchkit-emits": [
-        "_platform.collection.updated"
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "collection.put",
       "paramStructure": "by-name",
       "params": [
         {
           "name": "entries",
-          "required": true,
+          "required": false,
           "schema": {
+            "default": [],
             "description": "Records to upsert. Always an array; single-record callers wrap one\nentry. The wire format is uniform across single and bulk callers;\nthe SDK helpers (`Put` vs `PutMany`) hide the wrapping for the\nsingle-record case. See notes/DESIGN_BROWSER_HINT_SILENT_EVICTION.md\nfor the rationale.",
             "items": {
               "$ref": "#/$defs/CollectionPutEntry"
@@ -26318,7 +26254,7 @@
         "prefix": "app."
       },
       "plugin": {
-        "description": "Plugin-owned state tags. Plugins set/clear via the state verbs (collection.put / collection.delete_record) on the gate-shape collection that owns the namespace. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
+        "description": "Plugin-owned state tags. Plugins set/clear via the state verbs (collection.put / collection.delete_records) on the gate-shape collection that owns the namespace. Declared in manifest tag_namespaces. Persistent across sessions until plugin clears them.",
         "prefix": "plugin."
       }
     }
