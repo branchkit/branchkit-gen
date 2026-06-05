@@ -564,12 +564,14 @@
         "type": "object"
       },
       "CollectionPutEntry": {
-        "description": "One record to upsert. Same shape as the older single-record wire form\n`{id, payload}`; bulk callers pass multiple entries in one call.",
+        "description": "One record to upsert. Same shape as the older single-record wire form\n`{id, payload}`; bulk callers pass multiple entries in one call.\n`payload` is optional on the wire (OpenRPC marks only `id` as\nrequired); a missing payload deserializes as `Value::Null` so\nschema-driven SDK codegen can omit it without tripping a\n`missing field` parse error here.",
         "properties": {
           "id": {
             "type": "string"
           },
-          "payload": {}
+          "payload": {
+            "default": null
+          }
         },
         "required": [
           "id"
