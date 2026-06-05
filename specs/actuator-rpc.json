@@ -714,6 +714,77 @@
         ],
         "type": "object"
       },
+      "CommandSpec": {
+        "description": "One Command in a `commands.push` payload — published purely for\ndiscoverability. Wire deserialization goes through\n`commands::parse_commands_with_templates` against the opaque JSON\nvalue, so adding/removing a field here doesn't change runtime\nbehavior. Edit `commands::PartialCommand` first; mirror here.",
+        "properties": {
+          "action": {
+            "description": "Action fired on match. Plugin-typed: `{\"type\":\"plugin\", \"action_type\":\"...\",\"params\":{...}}`\nor a built-in like `{\"type\":\"key\",\"code\":36}`."
+          },
+          "cancels_bridge": {
+            "description": "When true, this gated command is allowed to win during a\nmid-bridge restricted resolve. Default false: gated sibling\ncommands (`show_hints`, `dismiss`-style) are suppressed while\nthe user is mid-codeword. Set true on explicit cancel words\n(`dismiss`, `cancel`, `exit`) that should be able to abort an\nin-progress bridge. See\n`docs/in-progress/DESIGN_MULTI_CANDIDATE_BRIDGE.md`.",
+            "type": "boolean"
+          },
+          "category": {
+            "description": "Category shown in Settings UI command lists.",
+            "type": "string"
+          },
+          "clears_tags": {
+            "description": "Tags this command clears from active_gates on match.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": {
+            "description": "One-line help text. Surfaced in Settings UI.",
+            "type": "string"
+          },
+          "pattern": {
+            "description": "Spoken pattern, e.g. `[\"switch\", \"<apps>\"]`. Tokens are either\nliteral strings or capture references like `<name:collection>`.",
+            "items": {},
+            "type": "array"
+          },
+          "requires_tags": {
+            "description": "Tags that must ALL be active for this command to match. Empty\nmeans the command is ungated (a global).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_on_partial": {
+            "description": "Tags this command sets when it Partial-matches (mid-capture\nmode tag). Bound to the bridge's lifecycle; cleared on\ncompletion. See `docs/completed/DESIGN_SETS_ON_PARTIAL.md`.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_tags": {
+            "description": "Tags this command sets in active_gates on match.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "variants": {
+            "description": "Optional command-variant declarations (alternate phrasings).\nEach variant inherits the parent's tags/action unless overridden.",
+            "items": {},
+            "type": "array"
+          }
+        },
+        "required": [
+          "cancels_bridge",
+          "category",
+          "clears_tags",
+          "description",
+          "pattern",
+          "requires_tags",
+          "sets_on_partial",
+          "sets_tags",
+          "variants"
+        ],
+        "title": "CommandSpec",
+        "type": "object"
+      },
       "ContactInfo": {
         "properties": {
           "email": {
@@ -4672,7 +4743,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Array of `Command` JSON objects to push to the matching\nengine. Replaces the current commands contributed by the calling\nplugin."
+            "description": "Array of `CommandSpec` JSON objects to push to the matching\nengine. Replaces the current commands contributed by the\ncalling plugin. Wire-level type is opaque\n(`serde_json::Value`) to keep the deserializer flexible; see\n`CommandSpec` for the canonical field list including\n`cancels_bridge`."
           }
         }
       ],
