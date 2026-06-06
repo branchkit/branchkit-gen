@@ -8979,6 +8979,44 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.bundle_for_remote_port",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "remote_port",
+          "required": true,
+          "schema": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_bundle_for_remote_port_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "bundle_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "bundle_id"
+          ],
+          "title": "NativeBundleForRemotePortResult",
+          "type": "object"
+        }
+      },
+      "summary": "Resolve a loopback TCP connection's remote port to the owning process's app bundle ID",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "apps",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.calendar_events_range",
       "paramStructure": "by-name",
       "params": [
@@ -25504,7 +25542,7 @@
     {
       "description": "List and inspect running applications",
       "gated_event_prefixes": [],
-      "method_count": 28,
+      "method_count": 29,
       "methods": [
         "native.app_bundle_path",
         "native.app_focused_window_id",
@@ -25519,6 +25557,7 @@
         "native.app_version",
         "native.app_windows",
         "native.app_windows_count",
+        "native.bundle_for_remote_port",
         "native.cascade_windows",
         "native.default_app_for_uti",
         "native.default_email_client",
