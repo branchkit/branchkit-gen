@@ -239,6 +239,13 @@
           ],
           "description": "State policy slot — id strategy override."
         },
+        "label": {
+          "description": "Short human-readable name for this collection, shown in authoring UIs\nin place of the raw collection id (e.g. a gate offered as a command\ncontext reads \"Browser active\" instead of \"plugin.browser.active\").\nFalls back to the collection id when unset.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "lifecycle": {
           "anyOf": [
             {
