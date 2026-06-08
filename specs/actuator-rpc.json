@@ -2256,6 +2256,60 @@
         ],
         "type": "object"
       },
+      "TiedCandidate": {
+        "description": "One entry in `ResolveResult.tied_candidates` — the dispatchable subset of a\nresolved command, so a consumer can fire the chosen one directly after the\nuser picks. Mirrors the dispatch fields the single-winner envelope carries\n(`action` is template-resolved; `args` is empty unless resolution failed),\nplus a human-readable `label` for the disambiguation UI. See the tie-signal\nprotocol doc in branchkit-web.",
+        "properties": {
+          "action": {
+            "description": "Template-resolved action to dispatch if this candidate is chosen.\n`Action` is opaque to schemars (free-form JSON value), matching\n`ResolveResult.action`."
+          },
+          "args": {
+            "additionalProperties": true,
+            "description": "Named captures, keyed by binding name. Empty when `action` is a\nfully-resolved template; populated only when resolution failed.",
+            "type": "object"
+          },
+          "clears_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "consumed_count": {
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "label": {
+            "description": "Human-readable label for a disambiguation UI. Derived from the owning\nplugin + the action type; a consumer that needs richer display can\nresolve additional fields from the action itself.",
+            "type": "string"
+          },
+          "owner_plugin": {
+            "description": "The plugin that owns this command.",
+            "type": "string"
+          },
+          "requires_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "args",
+          "clears_tags",
+          "consumed_count",
+          "label",
+          "owner_plugin",
+          "requires_tags",
+          "sets_tags"
+        ],
+        "type": "object"
+      },
       "TileableEntry": {
         "properties": {
           "tileable": {
@@ -4965,6 +5019,13 @@
             },
             "telemetry": {
               "$ref": "#/$defs/ResolveTelemetry"
+            },
+            "tied_candidates": {
+              "description": "The genuinely-tied candidate set, populated only when resolution\nreduced to 2+ equally-eligible commands the matcher could not\nseparate (same gating + scope, same winning length). When non-empty,\n`matched` is `false`, NO tag writes were applied, and `command_no_match`\nwas suppressed: rather than arbitrarily pick an iteration-order winner,\nthe platform hands the consuming plugin the full set to disambiguate.\nThe signal is generic — any plugin can read it and resolve the tie\nhowever its surface allows. Additive — a non-tie-aware consumer sees an\nempty list and a normal single-winner response.",
+              "items": {
+                "$ref": "#/$defs/TiedCandidate"
+              },
+              "type": "array"
             },
             "title": {
               "type": "string"
