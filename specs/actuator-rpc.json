@@ -1645,7 +1645,7 @@
         "type": "object"
       },
       "MatchWinner": {
-        "description": "Which category the matcher's tiebreaker chose. Mirrors the four\nbranches of `find_match_at_start_impl`: gated Completes win over\nungated Completes (scoped beats unscoped within the gated set), an\nungated Complete loses if any gated command had a Partial in flight\n(`suppress_ungated`), and `NoMatch` is the fall-through.",
+        "description": "Which category the matcher's tiebreaker chose. Mirrors the four\nbranches of `find_match_at_start_with_telemetry`: gated Completes win over\nungated Completes (scoped beats unscoped within the gated set), an\nungated Complete loses if any gated command had a Partial in flight\n(`suppress_ungated`), and `NoMatch` is the fall-through.",
         "enum": [
           "gated_scoped",
           "gated_unscoped",
