@@ -2279,7 +2279,7 @@
             "type": "integer"
           },
           "label": {
-            "description": "Human-readable label for a disambiguation UI. Derived from the owning\nplugin + the action type; a consumer that needs richer display can\nresolve additional fields from the action itself.",
+            "description": "Human-readable label for a disambiguation UI — the command's\ndescription, falling back to a summary of its phrase pattern (and, when\nneither is set, to the owning plugin plus action type). Pair it with\n`owner_plugin` to render which command this candidate is.",
             "type": "string"
           },
           "owner_plugin": {
@@ -4894,6 +4894,14 @@
               "type": "string"
             },
             "type": "array"
+          }
+        },
+        {
+          "name": "prefer_owner",
+          "required": false,
+          "schema": {
+            "description": "Tiebreak hint for a genuine tie. When resolution reduces to 2+ equally-\neligible commands the matcher cannot separate, and exactly one of them\nis owned by this plugin, that candidate is dispatched as a normal single\nwinner instead of the tie being surfaced. It selects *only* among the\nalready-tied candidates — it never overrides normal precedence\n(longest-match, gated-over-ungated, scope) and has no effect when there\nis no tie or when zero/multiple tied candidates match. Transient and\nper-resolve; the caller supplies it for one call, it is not a stored\npreference.",
+            "type": "string"
           }
         },
         {
