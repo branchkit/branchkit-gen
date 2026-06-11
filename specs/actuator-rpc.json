@@ -584,10 +584,26 @@
           "id": {
             "type": "string"
           },
-          "payload": {}
+          "payload": {},
+          "revision": {
+            "default": 0,
+            "description": "Monotonic per-record write counter, backend-maintained. Increments\non every put/patch of the same id; starts at 1. Reserved as the\ncompare-and-swap anchor (`put` opt `if_version`) so optimistic\nconcurrency never needs a breaking envelope change. `0` = written\nbefore this field existed.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "timestamp_ms": {
+            "default": 0,
+            "description": "Unix-milliseconds write time, backend-maintained. Log-shaped\nrecords carry their append time (ULID-aligned); keyed records the\nlast write. `0` = written before this field existed.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
         },
         "required": [
-          "id"
+          "id",
+          "revision",
+          "timestamp_ms"
         ],
         "type": "object"
       },
@@ -3964,43 +3980,6 @@
         }
       },
       "summary": "Total record count for a collection",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "collection.delete",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "description": "Name of the list to delete.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_delete_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "ListsDeleteResult",
-          "type": "object"
-        }
-      },
-      "summary": "Delete a dynamic collection",
       "tags": [
         {
           "name": "collections"
