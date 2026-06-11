@@ -1519,7 +1519,7 @@
         "type": "object"
       },
       "ListOpts": {
-        "description": "Listing parameters for `list`. All fields optional — empty `ListOpts`\nmeans \"every record, default ordering.\"",
+        "description": "Listing parameters for `list`. All fields optional — empty `ListOpts`\nmeans \"every record, default ordering.\"\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
         "properties": {
           "cursor": {
             "description": "Opaque pagination cursor. Backends define the format; callers pass\nback the cursor value returned by a prior `list` call.",
@@ -1599,40 +1599,6 @@
         "required": [
           "id",
           "timestamp_ms"
-        ],
-        "type": "object"
-      },
-      "LogListOpts": {
-        "description": "Pagination + filter params for `list`.",
-        "properties": {
-          "cursor": {
-            "description": "Pagination cursor — return entries with id strictly less than this.\nPass the last id of the previous page.",
-            "type": "string"
-          },
-          "limit": {
-            "description": "Max entries returned.",
-            "format": "uint",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "since_ms": {
-            "description": "Lower bound on `timestamp_ms` (inclusive).",
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "until_ms": {
-            "description": "Upper bound on `timestamp_ms` (inclusive).",
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          }
-        },
-        "required": [
-          "cursor",
-          "limit",
-          "since_ms",
-          "until_ms"
         ],
         "type": "object"
       },
@@ -3988,50 +3954,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "collection.delete_log_entry",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_delete_log_entry_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "deleted": {
-              "description": "True if the entry existed and was deleted, false if it didn't exist.",
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "deleted"
-          ],
-          "title": "CollectionDeleteLogEntryResult",
-          "type": "object"
-        }
-      },
-      "summary": "Delete one entry from a log-kind collection by id",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "collection.delete_records",
       "paramStructure": "by-name",
       "params": [
@@ -4193,92 +4115,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "collection.get_log_entry",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "id",
-          "required": true,
-          "schema": {
-            "description": "Entry id (the ULID returned from `append`).",
-            "type": "string"
-          }
-        },
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_get_log_entry_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "entry": {
-              "anyOf": [
-                {
-                  "$ref": "#/$defs/LogEntry"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "The entry, or null if no entry with that id exists."
-            }
-          },
-          "title": "CollectionGetLogEntryResult",
-          "type": "object"
-        }
-      },
-      "summary": "Fetch one entry from a log-kind collection by id",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "collection.get_recording",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_get_recording_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "description": "Effective recording flag — the user override if set, otherwise the\nmanifest's `default_recording_enabled`.",
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "CollectionGetRecordingResult",
-          "type": "object"
-        }
-      },
-      "summary": "Read the effective recording flag for a log-kind collection",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "collection.list",
       "paramStructure": "by-name",
       "params": [
@@ -4329,127 +4165,6 @@
         {
           "name": "collections"
         }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "collection.list_log",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "description": "Collection name. Must be a `kind: \"log\"` collection.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "opts",
-          "required": false,
-          "schema": {
-            "$ref": "#/$defs/LogListOpts",
-            "default": {},
-            "description": "Filter and pagination options. All fields optional."
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_list_log_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "entries": {
-              "items": {
-                "$ref": "#/$defs/LogEntry"
-              },
-              "type": "array"
-            },
-            "total": {
-              "description": "Total entries in the collection (independent of filters/pagination).",
-              "format": "uint",
-              "minimum": 0,
-              "type": "integer"
-            }
-          },
-          "required": [
-            "entries",
-            "total"
-          ],
-          "title": "CollectionListLogResult",
-          "type": "object"
-        }
-      },
-      "summary": "List entries in a log-kind collection (paginated, newest first)",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "collection.override",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "action",
-          "required": true,
-          "schema": {
-            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", or \"patch\".",
-            "type": "string"
-          }
-        },
-        {
-          "name": "collection",
-          "required": true,
-          "schema": {
-            "description": "Collection name to override.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "fields",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Partial record fields for \"patch\", or complete record for \"add\"."
-          }
-        },
-        {
-          "name": "id",
-          "required": false,
-          "schema": {
-            "default": null,
-            "description": "Record ID (id_field value) for patch/remove/restore actions.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_override_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "CollectionOverrideResult",
-          "type": "object"
-        }
-      },
-      "summary": "Add, remove, restore, patch, or reset user overrides for a collection",
-      "tags": [
-        {
-          "name": "collections"
-        }
-      ],
-      "x-branchkit-emits": [
-        "_platform.collection.updated"
       ],
       "x-since": "0.1.0"
     },
@@ -4572,49 +4287,6 @@
       ],
       "x-branchkit-emits": [
         "_platform.collection.updated"
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "collection.set_recording",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "enabled",
-          "required": true,
-          "schema": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "collection_set_recording_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "CollectionSetRecordingResult",
-          "type": "object"
-        }
-      },
-      "summary": "Toggle the recording flag on a log-kind collection",
-      "tags": [
-        {
-          "name": "collections"
-        }
       ],
       "x-since": "0.1.0"
     },
@@ -24345,6 +24017,71 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "overrides.apply",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "action",
+          "required": true,
+          "schema": {
+            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", or \"patch\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "collection",
+          "required": true,
+          "schema": {
+            "description": "Collection name to override.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "fields",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Partial record fields for \"patch\", or complete record for \"add\"."
+          }
+        },
+        {
+          "name": "id",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Record ID (id_field value) for patch/remove/restore actions.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "overrides_apply_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CollectionOverrideResult",
+          "type": "object"
+        }
+      },
+      "summary": "Add, remove, restore, patch, or reset user overrides for a collection",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "pipelines.grammar",
       "paramStructure": "by-name",
       "params": [],
@@ -24617,6 +24354,86 @@
         }
       },
       "summary": "Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "privacy.get_recording",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "privacy_get_recording_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "description": "Effective recording flag — the user override if set, otherwise the\nmanifest's `default_recording_enabled`.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "CollectionGetRecordingResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read the effective recording flag for a log-kind collection (privacy control plane)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "privacy.set_recording",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "privacy_set_recording_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CollectionSetRecordingResult",
+          "type": "object"
+        }
+      },
+      "summary": "Toggle the recording flag on a log-kind collection (privacy control plane)",
       "tags": [
         {
           "name": "misc"
