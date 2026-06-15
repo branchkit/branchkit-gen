@@ -25010,6 +25010,10 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "conflict": {
+              "description": "Terminal-command-rule conflict report: a human-readable reason if this\ncandidate command would make another command unreachable (or be\nunreachable itself). **Advisory only** — the actuator does NOT block the\nsave; the caller decides what to do. Null when there's no conflict. With\n`check_only: true` in the request, the candidate is checked and reported\nbut NOT saved. See notes/DESIGN_COMMAND_FINALIZATION_RULE.md.",
+              "type": "string"
+            },
             "ok": {
               "type": "boolean"
             }
@@ -25119,6 +25123,10 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "conflict": {
+              "description": "See `SettingsRulesCreateResult::conflict` — advisory conflict report;\nthe actuator reports but never blocks.",
+              "type": "string"
+            },
             "ok": {
               "type": "boolean"
             }
