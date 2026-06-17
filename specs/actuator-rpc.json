@@ -1135,6 +1135,10 @@
       },
       "EnumeratedCommand": {
         "properties": {
+          "action": {
+            "description": "Dispatch action type, e.g. `\"browser.scroll\"` (template-resolved). The\nstable identity of what the command does — lets a companion correlate a\nspoken command with the action it triggers (the pattern is display text,\nnot an identifier).",
+            "type": "string"
+          },
           "dynamic": {
             "type": "boolean"
           },
@@ -1167,6 +1171,7 @@
           }
         },
         "required": [
+          "action",
           "dynamic",
           "dynamic_owner",
           "id",
