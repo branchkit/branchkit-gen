@@ -2005,11 +2005,16 @@
           },
           "winner": {
             "$ref": "#/$defs/MatchWinner"
+          },
+          "winning_pattern": {
+            "description": "The pattern that won (`None` when `winner == NoMatch`). Surfaces the\ninternal `MatchDecisionTelemetry.winning_pattern` so a consumer can\nconfirm *which* command resolved — e.g. calibration command-practice\ncompares this against the enumerated command it asked the user to say.",
+            "type": "string"
           }
         },
         "required": [
           "gated_partial_seen",
-          "winner"
+          "winner",
+          "winning_pattern"
         ],
         "type": "object"
       },
@@ -4558,6 +4563,15 @@
           "schema": {
             "description": "Tiebreak hint for a genuine tie. When resolution reduces to 2+ equally-\neligible commands the matcher cannot separate, and exactly one of them\nis owned by this plugin, that candidate is dispatched as a normal single\nwinner instead of the tie being surfaced. It selects *only* among the\nalready-tied candidates — it never overrides normal precedence\n(longest-match, gated-over-ungated, scope) and has no effect when there\nis no tie or when zero/multiple tied candidates match. Transient and\nper-resolve; the caller supplies it for one call, it is not a stored\npreference.",
             "type": "string"
+          }
+        },
+        {
+          "name": "preview",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Dry-run / verify-don't-execute mode. When true, the matcher computes\nthe full decision (winner, completions, telemetry) but commits\nnothing: no tag writes are applied, no `sets_on_partial` bridge is\nseeded, and no `command_matched`/`command_no_match` telemetry is\nemitted. The action is never dispatched by `resolve` in either mode —\n`preview` additionally suppresses the *side effects* of resolution so\na consumer (e.g. calibration command-practice) can score \"would this\nfire the right command?\" without mutating live state or polluting the\nno-match dashboards. Default false: normal resolve commits as before.",
+            "type": "boolean"
           }
         },
         {
