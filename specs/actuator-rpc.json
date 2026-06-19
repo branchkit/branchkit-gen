@@ -3678,25 +3678,34 @@
         "name": "calibration_apply_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Flat wire view of the context a trial entered. The actuator's internal\n`ContextSpec` is a discriminated union (which the SDK type emitters\ncan't materialize across the boundary), so the RPC result is this flat\nDTO — its fields map 1:1 onto the host-side `ContextSpec`\n(`kind`/`tags`/`fixture_handle`).",
           "properties": {
             "fixture_handle": {
-              "description": "Opaque handle the owning plugin returned. The actuator already\nregistered it under the trial — callers don't need a follow-up\n`register_fixture_handle`. Returned here so the caller can log /\nsurface it for debugging.",
+              "description": "Fixture handle returned by a dynamic command's owner; empty for\nstatic tiers. The actuator already registered it under the trial.",
               "type": "string"
             },
-            "owner_plugin": {
-              "description": "Owning plugin the fixture call was forwarded to.",
+            "kind": {
+              "description": "`\"static\"` (base / mode-gated / slotted) or `\"dynamic\"` (hints) —\nmatches the host-side `ContextSpec.Kind`.",
               "type": "string"
+            },
+            "tags": {
+              "description": "Active-tag set the matcher sees during the trial: a mode-gated\ncommand's `requires_tags` (empty for base/slotted). Empty for the\ndynamic tier, whose tags are written plugin-side by the fixture.\nThe actuator platform-wrote these and recorded them on the trial so\n`trial_end` clears them. The host passes them to\n`commands.resolve --preview` to compute the functional (Resolves)\nsignal.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
             }
           },
           "required": [
-            "fixture_handle",
-            "owner_plugin"
+            "kind",
+            "tags",
+            "fixture_handle"
           ],
-          "title": "ApplyFixtureResult",
+          "title": "ApplyContextResult",
           "type": "object"
         }
       },
-      "summary": "Forward calibration_apply_fixture to the command's owner plugin and register the returned handle under the named trial — one RPC instead of two for the host",
+      "summary": "Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards calibration_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)",
       "tags": [
         {
           "name": "misc"
