@@ -24067,7 +24067,7 @@
           "name": "action",
           "required": true,
           "schema": {
-            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", or \"patch\".",
+            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", \"patch\", or \"rename\".",
             "type": "string"
           }
         },
@@ -24092,7 +24092,16 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Record ID (id_field value) for patch/remove/restore actions.",
+            "description": "Record ID (id_field value) for patch/remove/restore actions. For\n\"rename\" it is the entry's *current* key (surface form) to replace.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_id",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "New key (id_field value) for the \"rename\" action — the entry is re-added\nunder this key with every other field (value, aliases) preserved.\nIgnored by other actions.",
             "type": "string"
           }
         }
@@ -24113,7 +24122,7 @@
           "type": "object"
         }
       },
-      "summary": "Add, remove, restore, patch, or reset user overrides for a collection",
+      "summary": "Add, remove, restore, patch, rename, or reset user overrides for a collection",
       "tags": [
         {
           "name": "misc"
