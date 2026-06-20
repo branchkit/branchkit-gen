@@ -24067,7 +24067,7 @@
           "name": "action",
           "required": true,
           "schema": {
-            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", \"patch\", or \"rename\".",
+            "description": "Action: \"add\", \"remove\", \"restore\", \"reset\", \"patch\", \"rename\", or\n\"revert\".",
             "type": "string"
           }
         },
@@ -24092,7 +24092,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Record ID (id_field value) for patch/remove/restore actions. For\n\"rename\" it is the entry's *current* key (surface form) to replace.",
+            "description": "Record ID (id_field value) for patch/remove/restore actions. For\n\"rename\" it is the entry's *current* key (surface form) to replace; for\n\"revert\" the current key of the entry to reset to its plugin default.",
             "type": "string"
           }
         },
@@ -24111,6 +24111,10 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "key": {
+              "description": "The entry's resulting key after the mutation, when the caller can't know\nit up front. Set by \"revert\" to the plugin-default key the entry fell\nback to (so a caller can re-point at it); None for other actions.",
+              "type": "string"
+            },
             "ok": {
               "type": "boolean"
             }
@@ -24122,7 +24126,7 @@
           "type": "object"
         }
       },
-      "summary": "Add, remove, restore, patch, rename, or reset user overrides for a collection",
+      "summary": "Add, remove, restore, patch, rename, revert (reset one entry to its plugin default), or reset user overrides for a collection",
       "tags": [
         {
           "name": "misc"
