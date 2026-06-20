@@ -683,6 +683,10 @@
             },
             "type": "array"
           },
+          "description": {
+            "description": "Optional \"what it does / use case\" text from the command definition —\nthe same field used as the HUD subtitle, shown in the command editor row.",
+            "type": "string"
+          },
           "is_user": {
             "type": "boolean"
           },
@@ -720,6 +724,7 @@
           "canonical",
           "category",
           "clears_tags",
+          "description",
           "is_user",
           "pattern",
           "plugin_name",
