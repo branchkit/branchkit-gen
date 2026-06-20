@@ -1139,6 +1139,14 @@
             "description": "Dispatch action type, e.g. `\"browser.scroll\"` (template-resolved). The\nstable identity of what the command does — lets a companion correlate a\nspoken command with the action it triggers (the pattern is display text,\nnot an identifier).",
             "type": "string"
           },
+          "category": {
+            "description": "Optional grouping label from the command definition (e.g. \"Navigation\").",
+            "type": "string"
+          },
+          "description": {
+            "description": "Optional human-readable \"what it does / use case\" text from the command\ndefinition — the same field used as the HUD subtitle.",
+            "type": "string"
+          },
           "dynamic": {
             "type": "boolean"
           },
@@ -1172,6 +1180,8 @@
         },
         "required": [
           "action",
+          "category",
+          "description",
           "dynamic",
           "dynamic_owner",
           "id",
