@@ -3771,6 +3771,47 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "calibration.resolve_samples",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_resolve_samples_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "prompts": {
+              "description": "Concrete prompts to walk for this command, supplied by its owning\nplugin's `calibration_samples` hook. Empty when the command's owner\ndoesn't implement the (optional) hook or declines — the calibration\nhost then falls back to its own default sample derivation (codewords\nfor dynamic commands, the generic filler for free-text slots).",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "prompts"
+          ],
+          "title": "SamplesResult",
+          "type": "object"
+        }
+      },
+      "summary": "Resolve the concrete calibration prompts for a command whose vocabulary the host can't derive — forwards calibration_samples to a dynamic command's owner (empty when the owner doesn't implement the optional hook; the host then falls back to its own default).",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "calibration.trial_begin",
       "paramStructure": "by-name",
       "params": [],
@@ -3897,6 +3938,47 @@
         }
       },
       "summary": "Reverse the state writes a previous calibration_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration_samples",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "The command being calibrated — `<owner_plugin>:<display_pattern>`,\nmatching `commands.enumerate`'s `id`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_samples_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "prompts": {
+              "description": "Concrete phrases the calibration host should walk for this command —\nthe owner's realistic sample of an otherwise un-derivable vocabulary\n(a runtime list, a dynamic hint cross-product, free-text examples).\nThe owner owns the count and how slots combine; the host walks them\nas-is. An empty list declines — the host falls back to its own default.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "prompts"
+          ],
+          "title": "CalibrationSamplesResult",
+          "type": "object"
+        }
+      },
+      "summary": "Return concrete calibration prompts for a command whose vocabulary the host can't derive itself — a runtime list, a dynamic hint cross-product, or free-text examples. Optional: implement it on a plugin that owns such a command; the calibration host falls back to its own default (codewords / filler) when the hook is absent or returns an empty list. The owner owns the count and how slots combine.",
       "tags": [
         {
           "name": "actuator-to-plugin"
