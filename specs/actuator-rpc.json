@@ -502,6 +502,26 @@
         ],
         "type": "object"
       },
+      "CaptureManifestRow": {
+        "description": "One dumper-manifest line — the engine's decode for a captured clip. Mirrors\nthe plugin-side `captureManifestLine`.",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "ts": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "file",
+          "text",
+          "ts"
+        ],
+        "type": "object"
+      },
       "ClipboardContents": {
         "description": "Clipboard contents read from the OS.",
         "properties": {
@@ -1948,6 +1968,80 @@
         ],
         "type": "object"
       },
+      "ProbeItem": {
+        "properties": {
+          "audio": {
+            "description": "Capture-root-relative WAV path (e.g. `<game>/seg_0.wav`). Confined to the\ncapture root.",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "noise": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ProbeNoise"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "words": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "audio",
+          "id",
+          "noise",
+          "words"
+        ],
+        "type": "object"
+      },
+      "ProbeLine": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "default": "",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error",
+          "id",
+          "text"
+        ],
+        "type": "object"
+      },
+      "ProbeNoise": {
+        "properties": {
+          "seed": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "snr_db": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "seed",
+          "snr_db"
+        ],
+        "type": "object"
+      },
       "ProcessInfo": {
         "properties": {
           "cpu_percent": {
@@ -1980,6 +2074,46 @@
           "path",
           "pid",
           "user"
+        ],
+        "type": "object"
+      },
+      "RecordingRow": {
+        "description": "One labeled clip — the corpus row, mirroring the plugin-side `CorpusEntry`.\n`file` is relative to the capture root (e.g. `<game>/seg_00007.wav`).",
+        "properties": {
+          "disposition": {
+            "description": "Human review verdict, set after listening to the clip: `\"\"` (unreviewed),\n`\"confirmed\"` (the recording faithfully says the prompt — a vetted example,\nand on a fragile clip a high-value hard case), or `\"misspoke\"` (the audio\ndoesn't say the prompt — excluded from fragility analysis + training).\nWhether the engine heard it right is the `matched` flag + the fragility\nverdict; this is the orthogonal human axis. Skipped on the wire when unset.",
+            "type": "string"
+          },
+          "engine": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "heard": {
+            "description": "What the engine decoded for this clip (from the per-game manifest).",
+            "type": "string"
+          },
+          "matched": {
+            "type": "boolean"
+          },
+          "target": {
+            "description": "Ground truth: the word shown (from the corpus index; empty for an\nunlabeled on-disk clip).",
+            "type": "string"
+          },
+          "ts": {
+            "description": "RFC3339, copied from the dump manifest.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "disposition",
+          "engine",
+          "file",
+          "heard",
+          "matched",
+          "target",
+          "ts"
         ],
         "type": "object"
       },
@@ -3721,6 +3855,449 @@
         }
       },
       "summary": "Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards calibration_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.capture.probe",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "items",
+          "required": true,
+          "schema": {
+            "items": {
+              "$ref": "#/$defs/ProbeItem"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "max_active",
+          "required": false,
+          "schema": {
+            "default": null,
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "model",
+          "required": true,
+          "schema": {
+            "description": "Model dir name under app-support `models/` (single component, no\ntraversal), e.g. `\"sherpa-offline-nemo\"`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "stage",
+          "required": true,
+          "schema": {
+            "description": "Registered stage id whose binary's `probe` subcommand runs the re-decode,\ne.g. `\"voice.sherpa_commands\"`. Validated against the stage registry.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_capture_probe_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "lines": {
+              "items": {
+                "$ref": "#/$defs/ProbeLine"
+              },
+              "type": "array"
+            },
+            "model_version": {
+              "description": "Stable content version of the acoustic model used for this re-decode — a\nhash of the model dir's `model.onnx`. Lets a per-clip fragility history\ndistinguish re-probes across a model swap (a constant engine id can't).\nEmpty when the model file is unreadable.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "lines"
+          ],
+          "title": "ProbeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Run a registered recognizer stage's `probe` re-decode over captured clips (the fragility ladder) — the actuator runs it because the sandboxed plugin can't reach the model/capture dirs",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.capture.read_corpus",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "calibration_capture_read_corpus_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "rows": {
+              "items": {
+                "$ref": "#/$defs/RecordingRow"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "rows"
+          ],
+          "title": "CaptureReadCorpusResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read the full corpus index (so the plugin can prune the bounded-retention set, which needs the accumulated index)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.capture.read_manifest",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "game",
+          "required": true,
+          "schema": {
+            "description": "Per-game capture subdir name (`<gameID>`). Confined to the capture root.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_capture_read_manifest_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "lines": {
+              "items": {
+                "$ref": "#/$defs/CaptureManifestRow"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "lines"
+          ],
+          "title": "CaptureReadManifestResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read a per-game capture manifest (the read-through that lets the plugin label clips + run fragility without raw file access)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.capture.write_corpus",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "mode",
+          "required": true,
+          "schema": {
+            "description": "`\"append\"` (add rows to the index) or `\"rewrite\"` (replace the index\nwith exactly these rows — used after a prune).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "rows",
+          "required": true,
+          "schema": {
+            "items": {
+              "$ref": "#/$defs/RecordingRow"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_capture_write_corpus_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "total": {
+              "description": "Total rows in the index after the write.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "total"
+          ],
+          "title": "CaptureWriteCorpusResult",
+          "type": "object"
+        }
+      },
+      "summary": "Append labeled rows to the corpus index, or rewrite it (after a prune) — the scoped corpus-write the plugin can't do directly",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.clear",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "calibration_recordings_clear_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "removed": {
+              "description": "Number of files removed (WAVs + manifests + the corpus index).",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "removed"
+          ],
+          "title": "RecordingsClearResult",
+          "type": "object"
+        }
+      },
+      "summary": "Wipe every captured calibration recording + the corpus index (privacy action)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.delete",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "file",
+          "required": true,
+          "schema": {
+            "description": "Capture-root-relative path of the clip to delete, e.g.\n`<game>/seg_00007.wav`. Must be a plain relative path — absolute paths\nand `..` traversal are rejected so the op stays confined to the capture\ndir.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_recordings_delete_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "deleted": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "deleted"
+          ],
+          "title": "RecordingsDeleteResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete one captured calibration clip, path-confined to the capture dir",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.export",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "confirmed_only",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "When true, export only clips the user confirmed (\"said it right\");\notherwise every usable clip (labeled, excluding \"said it wrong\" misspeaks).",
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_recordings_export_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "count": {
+              "description": "Number of clips bundled.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "path": {
+              "description": "Absolute path of the written archive.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "count"
+          ],
+          "title": "RecordingsExportResult",
+          "type": "object"
+        }
+      },
+      "summary": "Bundle kept calibration clips + a NeMo-format manifest into a tar.gz in Downloads (training / contribution)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.list",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "limit",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Cap on returned rows (newest first). `total` still reports the full\non-disk count so the caller can show \"showing N of M\". Omitted or 0 =\nno cap. Bounds the RPC response so a large library can't blow the\nplugin's stdio read limit.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_recordings_list_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "recordings": {
+              "description": "Labeled clip rows, newest first, capped to `limit`.",
+              "items": {
+                "$ref": "#/$defs/RecordingRow"
+              },
+              "type": "array"
+            },
+            "total": {
+              "description": "Full count of on-disk clips before the display cap.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "recordings",
+            "total"
+          ],
+          "title": "RecordingsListResult",
+          "type": "object"
+        }
+      },
+      "summary": "List captured calibration recordings (newest first, capped by limit) — the actuator-owned scan of the capture dir the plugin subprocess can't read",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.set_disposition",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "disposition",
+          "required": true,
+          "schema": {
+            "description": "One of `\"\"` (unreviewed), `\"confirmed\"` (said it right — keep), or\n`\"misspoke\"` (said it wrong — exclude).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "file",
+          "required": true,
+          "schema": {
+            "description": "Capture-root-relative clip path (must already be a labeled corpus row).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_recordings_set_disposition_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "RecordingsSetDispositionResult",
+          "type": "object"
+        }
+      },
+      "summary": "Stamp a review verdict (\"\", confirmed, or misspoke) on a captured clip's corpus row",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "calibration.recordings.sweep",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "game",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "When set, reclaim just this one (abandoned) game's clips: delete every\nfile in `<game>/` and the now-empty dir. When omitted, reclaim orphans\nacross all games — every on-disk WAV not referenced by the corpus index,\nplus emptied game dirs. The plugin drives the scoped form on game-abandon;\nthe global form is a maintenance primitive (NOT auto-run, so it can't\nsilently delete a pre-existing backlog).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_recordings_sweep_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "removed": {
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "removed"
+          ],
+          "title": "RecordingsSweepResult",
+          "type": "object"
+        }
+      },
+      "summary": "Reclaim orphaned capture clips — one abandoned game (scoped by `game`) or all orphans not in the corpus index (global)",
       "tags": [
         {
           "name": "misc"
