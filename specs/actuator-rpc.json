@@ -1970,9 +1970,20 @@
       },
       "ProbeItem": {
         "properties": {
+          "apply_bias": {
+            "default": false,
+            "description": "When set, the actuator stamps the live never-standalone Lever E penalty\n(`build_never_standalone_weights_inner`) onto this item so the re-decode\nreproduces the biased live behavior. The word set is the actuator's, not the\ncaller's — the plugin only opts in. Off = unbiased decode.",
+            "type": "boolean"
+          },
           "audio": {
             "description": "Capture-root-relative WAV path (e.g. `<game>/seg_0.wav`). Confined to the\ncapture root.",
             "type": "string"
+          },
+          "bias_strength": {
+            "default": null,
+            "description": "L2 strength sweep: when set, the actuator stamps the never-standalone word set\nat exactly this cost (instead of the configured live penalty), so the caller\ncan probe the same clip across a ladder of strengths and find its flip\nthreshold. The word set is still the actuator's — only the cost is requested.\nTakes precedence over `apply_bias`; <= 0 means unbiased.",
+            "format": "double",
+            "type": "number"
           },
           "id": {
             "type": "string"
@@ -1997,7 +2008,9 @@
           }
         },
         "required": [
+          "apply_bias",
           "audio",
+          "bias_strength",
           "id",
           "noise",
           "words"
@@ -2724,6 +2737,78 @@
         }
       ],
       "summary": "Active application changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.audio_devices.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "device_id",
+          "required": true,
+          "schema": {
+            "description": "CoreAudio device id.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "direction",
+          "required": false,
+          "schema": {
+            "description": "For kind=\"default_changed\": which default moved (\"input\" or \"output\").",
+            "type": "string"
+          }
+        },
+        {
+          "name": "is_input",
+          "required": false,
+          "schema": {
+            "description": "For kind=\"added\": whether the device has input streams.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "is_output",
+          "required": false,
+          "schema": {
+            "description": "For kind=\"added\": whether the device has output streams.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "kind",
+          "required": true,
+          "schema": {
+            "description": "What changed: \"added\", \"removed\", or \"default_changed\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Device name (e.g. \"External Headphones\").",
+            "type": "string"
+          }
+        },
+        {
+          "name": "uid",
+          "required": true,
+          "schema": {
+            "description": "CoreAudio device UID.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "An audio device was added or removed, or a default device changed",
       "tags": [
         {
           "name": "notifications"
@@ -25007,6 +25092,42 @@
         }
       },
       "summary": "Stop a running pipeline by name",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "pipelines.warm",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "pipelines_warm_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "warmed": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "warmed"
+          ],
+          "title": "PipelinesWarmResult",
+          "type": "object"
+        }
+      },
+      "summary": "Pre-spawn + pre-load a pipeline's recognizer stages (grammar built off the hold path)",
       "tags": [
         {
           "name": "misc"
