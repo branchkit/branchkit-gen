@@ -7210,7 +7210,7 @@
           "type": "object"
         }
       },
-      "summary": "Delete a speech model (Vosk: filesystem removal; WhisperKit: control message)",
+      "summary": "Delete a speech model",
       "tags": [
         {
           "name": "misc"
