@@ -1549,6 +1549,13 @@
       ],
       "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` privilege."
     },
+    "grammar_seeds": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Declared vocabulary sources for collections this plugin's commands\ncapture from. Maps a target collection name — or a dynamic-collection\nfamily, written with a trailing `*` (e.g. `\"browser_hints_*\"`) — to a\nsource collection whose spoken keys are unioned into the target's\ngrammar high-water mark at load time and on every rebuild of the\nsource. Pre-fills the engine grammar so it is converged at launch;\nthe HWM keeps learning on top (the seed is a floor, not a ceiling).\nCross-plugin sources are allowed. See DESIGN_GRAMMAR_ALPHABET_SEED.md.",
+      "type": "object"
+    },
     "hud_targets": {
       "description": "HUD targets this plugin provides (e.g. [\"alphabet\", \"calibrate\"]).",
       "items": {
