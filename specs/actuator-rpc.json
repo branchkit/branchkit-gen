@@ -5673,6 +5673,10 @@
               "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The displaced plugin should receive an\n`effect_displaced` notification (section 10.2). Notification path is\nstubbed in v1 — see registered handler.",
               "type": "string"
             },
+            "enforced": {
+              "description": "True when the platform actually delivers this effect's semantics\nwhile you hold ownership. Signal-shape effects (whose entire\nmeaning is the queryable ownership stack, e.g.\n`signal_recording_active`) are always enforced. False means the\nOS/platform handler for this effect is not implemented yet: you\nget ownership bookkeeping, displacement events, and `is_active`\nqueries, but the OS-level behavior (actual notification muting,\nfocus-steal blocking, …) does NOT happen. Always serialized —\nthis field is the honesty fence for the stub-handler era.",
+              "type": "boolean"
+            },
             "granted": {
               "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (fail-next-assertion semantics per section 10.3) or when the\neffect name is unknown.",
               "type": "boolean"
@@ -5680,7 +5684,8 @@
           },
           "required": [
             "granted",
-            "already_held"
+            "already_held",
+            "enforced"
           ],
           "title": "EffectsAssertResult",
           "type": "object"
