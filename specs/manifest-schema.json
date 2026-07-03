@@ -1609,6 +1609,13 @@
       "$ref": "#/$defs/Provides",
       "description": "What this plugin provides to the ecosystem."
     },
+    "publisher": {
+      "description": "Publisher identity anchored at a git provider, `<provider>:<identity>`\n(or `<provider>=<host>:<identity>` for self-hosted). This is the trust\nanchor — unlike `author` (free-text, anyone can set), a `publisher` is\nwhat the signing chain's author signature and the verified-publisher\nbadge resolve against. Optional; absent = no provenance claim (community\n/ unsigned posture). Parse with `parsed_publisher()`. See\nnotes/DESIGN_PLUGIN_SIGNING_CHAIN.md + DESIGN_PLUGIN_PUBLISHER_VERIFICATION.md.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "run": {
       "description": "Shell command to run the plugin process. When set, the actuator spawns + monitors this process.",
       "type": [
