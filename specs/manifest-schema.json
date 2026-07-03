@@ -117,6 +117,40 @@
       ],
       "type": "string"
     },
+    "CaptureMacro": {
+      "additionalProperties": false,
+      "description": "One `capture_macros` entry: a named capture group declared once and\nreferenced from command patterns by name. The manifest-facing twin of\n`crate::commands::MacroSpec`.",
+      "properties": {
+        "display": {
+          "description": "Human name surfaces render for the group (e.g. \"pair\" → \"stash [pair]…\").",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "fields": {
+          "description": "Per-instance projection template delivered to the action;\n`{name.field}` references resolve against the macro's own captures.\nOmitted = the raw instance object (inner capture name → value)."
+        },
+        "max_repeats": {
+          "default": 8,
+          "description": "Matcher cap on instances for a repeated (`+`) reference. The engine\ngrammar stays an open self-loop; the matcher rejects — not truncates —\nan utterance exceeding the cap. Default 8.",
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "slots": {
+          "description": "The group's slots in ordinary pattern syntax — literals,\n`<name:collection>` captures, `${...}` dependent references (which\nresolve instance-locally: each repetition binds its own captures\nbefore resolving its own dependents). Macros don't nest.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "slots"
+      ],
+      "type": "object"
+    },
     "Cardinality": {
       "description": "For the `tag` preset only — picks between singleton flag and multi-record.\nResolves `id_strategy` and `merge` at preset expansion. Other presets pin\nthese slots and ignore cardinality.",
       "oneOf": [
@@ -1501,6 +1535,13 @@
     "author": {
       "default": "",
       "type": "string"
+    },
+    "capture_macros": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CaptureMacro"
+      },
+      "description": "Named capture-group macros this plugin's command patterns can\nreference (`<targets:hint_pair>` / `<targets:hint_pair>+`). A macro\ndeclares a compound capture once — slots, per-instance projection,\ndisplay name, repeat cap — instead of every pattern restating the\ngroup. Resolution is macro-table-first at pattern compile time; a\nruntime collection later shadowing a macro name draws a validation\nwarning. See notes/DESIGN_MULTI_TARGET_COMMANDS.md (\"Phase 2 — the\nmacro form\").",
+      "type": "object"
     },
     "collection_data": {
       "additionalProperties": {
