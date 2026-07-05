@@ -11847,7 +11847,7 @@
           "type": "object"
         }
       },
-      "summary": "Get Do Not Disturb / Focus state",
+      "summary": "Get Do Not Disturb / Focus state (via the BranchKit Focus helper shortcut)",
       "tags": [
         {
           "name": "native"
@@ -20322,7 +20322,7 @@
           "type": "object"
         }
       },
-      "summary": "Toggle Do Not Disturb",
+      "summary": "Set Do Not Disturb on or off (idempotent; via the BranchKit Focus helper shortcut)",
       "tags": [
         {
           "name": "native"
