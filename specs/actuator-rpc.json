@@ -3948,6 +3948,58 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "calibration.bias.apply",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "force",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Overwrite a manually-set value. Without it, `manual` provenance refuses\n(`applied: false`) so the caller can confirm with the user first — a\ncalibration apply must never silently clobber a hand-set value.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "strength",
+          "required": true,
+          "schema": {
+            "description": "Strength to apply (> 0; the setting is also switched on).",
+            "format": "double",
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "calibration_bias_apply_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "applied": {
+              "type": "boolean"
+            },
+            "previous_provenance": {
+              "description": "Provenance of the value in place before this call\n(\"default\" | \"manual\" | \"calibration\").",
+              "type": "string"
+            }
+          },
+          "required": [
+            "applied",
+            "previous_provenance"
+          ],
+          "title": "BiasApplyResult",
+          "type": "object"
+        }
+      },
+      "summary": "Apply a calibration-measured strength to the never-standalone recognition bias (provenance: calibration); refuses over a manually-set value unless force",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "calibration.capture.probe",
       "paramStructure": "by-name",
       "params": [
