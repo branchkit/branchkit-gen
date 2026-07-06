@@ -683,6 +683,26 @@
         ],
         "type": "object"
       },
+      "CommandOverride": {
+        "description": "A user override of a command's *spoken phrase* — \"say `new_pattern` instead\nof `default_pattern` for `action`.\" A keyed delta on top of the contributed\ndefaults, owned by the platform and applied when the command union is built\n(`rebuild_commands_cache`), so it wins over the default and survives the\ncontributing plugin/extension re-contributing on reconnect.\n\nKeyed by the stable `(action, default_pattern)` identity, NOT by the phrase\n(which changes the instant you override it):\n - `action` — the full action id (`Action::type_label`, e.g.\n   `browser.scroll`), carrying the plugin prefix so the layer stays\n   plugin-agnostic across browser/tiling/system.\n - `default_pattern` — the default spoken form this replaces\n   (`Command::display_name`, the actuator's canonical `<capture>` notation).\n   Needed because one action can carry several patterns, each with its own\n   params; the key names which one.\n\nA stale override (default renamed/removed upstream) simply stops matching\nand the new default applies — single source + derived delta, no dual-sync.\nSee `notes/DESIGN_COMMAND_PHRASE_OVERRIDES.md`.",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "default_pattern": {
+            "type": "string"
+          },
+          "new_pattern": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "default_pattern",
+          "new_pattern"
+        ],
+        "type": "object"
+      },
       "CommandRowData": {
         "properties": {
           "action": {
@@ -5270,6 +5290,37 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "commands.list_overrides",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "commands_list_overrides_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "overrides": {
+              "items": {
+                "$ref": "#/$defs/CommandOverride"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "overrides"
+          ],
+          "title": "CommandsListOverridesResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the current user command-phrase overrides",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "commands.push",
       "paramStructure": "by-name",
       "params": [
@@ -5342,6 +5393,54 @@
         }
       },
       "summary": "Reset a command override to the plugin default",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.reset_override",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "action",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "default_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_reset_override_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "removed": {
+              "description": "Whether an override actually matched and was removed.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "removed"
+          ],
+          "title": "CommandsResetOverrideResult",
+          "type": "object"
+        }
+      },
+      "summary": "Remove a user command-phrase override (revert to the plugin default)",
       "tags": [
         {
           "name": "commands"
@@ -5554,6 +5653,56 @@
       "tags": [
         {
           "name": "matching"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.set_override",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "action",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "default_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_set_override_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CommandsSetOverrideResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set a user command-phrase override (replace a command's spoken form)",
+      "tags": [
+        {
+          "name": "commands"
         }
       ],
       "x-since": "0.1.0"
