@@ -5182,6 +5182,56 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "commands.add_alias",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "action",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "default_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_add_alias_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "CommandsAddAliasResult",
+          "type": "object"
+        }
+      },
+      "summary": "Add an extra spoken form (alias) for an existing command",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "commands.delete",
       "paramStructure": "by-name",
       "params": [
@@ -5290,6 +5340,37 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "commands.list_aliases",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "commands_list_aliases_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "aliases": {
+              "items": {
+                "$ref": "#/$defs/CommandOverride"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "aliases"
+          ],
+          "title": "CommandsListAliasesResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the current user command-phrase aliases (added spoken forms)",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "commands.list_overrides",
       "paramStructure": "by-name",
       "params": [],
@@ -5357,6 +5438,61 @@
         }
       },
       "summary": "Register commands with the matching engine to the matching engine",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.remove_alias",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "action",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "default_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_pattern",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_remove_alias_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            },
+            "removed": {
+              "description": "Whether an alias actually matched and was removed.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "removed"
+          ],
+          "title": "CommandsRemoveAliasResult",
+          "type": "object"
+        }
+      },
+      "summary": "Remove an added spoken form (alias) from a command",
       "tags": [
         {
           "name": "commands"
