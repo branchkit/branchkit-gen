@@ -5088,6 +5088,14 @@
           }
         },
         {
+          "name": "label",
+          "required": false,
+          "schema": {
+            "description": "Optional human-readable label for the collection as a whole — the\nfriendly category name shown on the Discovery HUD's tag badge and in\nthe Settings UI, in place of the raw collection id (`Badge` instead of\n`browser_hints_arch_strict`). This is the dynamic-collection counterpart\nto a manifest-declared collection's `schema.label`; a plugin creating a\ncollection at runtime declares its label here. Same persistence\nsemantics as `roles`: last-write-wins, and a put omitting `label`\nleaves the prior setting in place. See\n`notes/DESIGN_COLLECTION_FIELD_ROLES.md`.",
+            "type": "string"
+          }
+        },
+        {
           "name": "name",
           "required": true,
           "schema": {
