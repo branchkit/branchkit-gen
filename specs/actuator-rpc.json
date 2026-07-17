@@ -1895,6 +1895,14 @@
         ],
         "type": "string"
       },
+      "OnPointer": {
+        "description": "What a HUD window does when the pointer moves into its frame.",
+        "enum": [
+          "none",
+          "fade"
+        ],
+        "type": "string"
+      },
       "PipelineStatusEntry": {
         "properties": {
           "ephemeral": {
@@ -3857,50 +3865,6 @@
         }
       },
       "summary": "Return all action type schemas keyed by fully-qualified name",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "bridge.emit_observability_event",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "event_type",
-          "required": true,
-          "schema": {
-            "description": "Dotted event name from the closed vocabulary, e.g.\n`\"audio.session_started\"`, `\"hud.opened\"`. Must be in the\nSwift-emittable allowlist.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "params",
-          "required": true,
-          "schema": {
-            "description": "Variant-specific payload — the contents of the `*Params` struct\nfor `event_type`. Keys must match the registered schema."
-          }
-        }
-      ],
-      "result": {
-        "name": "bridge_emit_observability_event_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "BridgeEmitObservabilityEventResult",
-          "type": "object"
-        }
-      },
-      "summary": "Inject a Swift-originated observability event onto the actuator's bus.",
       "tags": [
         {
           "name": "misc"
@@ -6279,6 +6243,15 @@
           }
         },
         {
+          "name": "draggable",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Whether the shell lets the user drag this window and remembers its\nposition. Draggable windows should also set `follows_focus: false`.\nDefaults to false.",
+            "type": "boolean"
+          }
+        },
+        {
           "name": "follows_focus",
           "required": false,
           "schema": {
@@ -6296,6 +6269,24 @@
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        {
+          "name": "on_pointer",
+          "required": false,
+          "schema": {
+            "$ref": "#/$defs/OnPointer",
+            "default": "none",
+            "description": "Pointer-dodge behavior: \"none\" (default) or \"fade\" (dodge the mouse —\nfade to near-transparent while the pointer is inside the frame)."
+          }
+        },
+        {
+          "name": "transparent",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Fully transparent window — the shell skips its frosted vibrancy panel\nand window shadow, so only the plugin's own markup paints. Defaults\nto false (frosted).",
+            "type": "boolean"
           }
         },
         {
@@ -25234,12 +25225,25 @@
     {
       "name": "pipelines.grammar",
       "paramStructure": "by-name",
-      "params": [],
+      "params": [
+        {
+          "name": "full",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "When true, also return the full `vocabulary_update` payload a starting\nrecognition pipeline would be seeded with — words plus narrow_to,\nword_weights, and the structured grammar DAG. Read-only: exporting\ndoes not touch the committed-vocab accounting. Used by the\nvoice-regress harness to decode against the exact live grammar.",
+            "type": "boolean"
+          }
+        }
+      ],
       "result": {
         "name": "pipelines_grammar_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "vocabulary_update": {
+              "description": "Full seed payload (only with `full: true`)."
+            },
             "words": {
               "items": {
                 "type": "string"
@@ -25254,7 +25258,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the current command grammar word list for speech recognition",
+      "summary": "Get the current command grammar word list — or, with full=true, the complete vocabulary_update seed payload (words, narrow_to, weights, DAG)",
       "tags": [
         {
           "name": "misc"

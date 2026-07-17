@@ -229,6 +229,10 @@
             "null"
           ]
         },
+        "escape_exempt": {
+          "description": "Exempt this gate from the global escape command (\"over\"). Defaults\n`false`: transient sub-modes (snap directions, spelling, pickers) are\nescapable, so one word bails out of any of them. Set `true` for\nsession-level modes that have their own deliberate exit — the voice\ncontinuous mode opts out so \"over\" exits sub-modes without dropping\nthe continuous session (that's \"branch sleep\"). Only consulted for\n`exclusive` gates.",
+          "type": "boolean"
+        },
         "exclusive": {
           "description": "When true, the gate becomes an exclusive gate: while active, only\ncommands whose `requires_tags` includes this gate can match.\nAll other commands are suppressed. Used for sub-command modes\n(e.g. snap directions) where only the displayed options should work.",
           "type": "boolean"
@@ -798,6 +802,11 @@
           "default": "",
           "type": "string"
         },
+        "draggable": {
+          "default": false,
+          "description": "Whether the shell lets the user drag this window and remembers its\nposition. Draggable windows should also set `follows_focus: false` so\nthe actuator doesn't reposition them on focus changes.",
+          "type": "boolean"
+        },
         "follows_focus": {
           "default": true,
           "description": "Whether this channel follows the active display on focus changes.\nDefaults to `true`.",
@@ -808,6 +817,16 @@
           "format": "uint32",
           "minimum": 0,
           "type": "integer"
+        },
+        "on_pointer": {
+          "$ref": "#/$defs/OnPointer",
+          "default": "none",
+          "description": "Pointer-dodge behavior — see [`OnPointer`]. Defaults to `none`."
+        },
+        "transparent": {
+          "default": false,
+          "description": "Fully transparent window: the shell skips its frosted vibrancy panel\nand window shadow, so ONLY the plugin's own markup paints. For\ndisplay-only overlays (device visualizers, screen annotations) that\ndraw their own chrome or none at all. Defaults to false (frosted).",
+          "type": "boolean"
         },
         "width": {
           "default": 320,
@@ -1031,6 +1050,21 @@
         }
       ],
       "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
+    },
+    "OnPointer": {
+      "description": "What a HUD window does when the pointer moves into its frame.",
+      "oneOf": [
+        {
+          "const": "none",
+          "description": "Nothing — the window is inert to pointer position.",
+          "type": "string"
+        },
+        {
+          "const": "fade",
+          "description": "Dodge the mouse: fade to near-transparent while the pointer is inside\nthe window's frame, restore when it leaves. Pairs naturally with\nclick-through (`accepts_input: false`) overlays — the content beneath\nstays clickable AND becomes visible exactly when the pointer heads\nfor it.",
+          "type": "string"
+        }
+      ]
     },
     "Ordering": {
       "description": "Total ordering of records returned by `list()` and `subscribe()`.",
