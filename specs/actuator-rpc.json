@@ -2898,37 +2898,7 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "_platform.collection.updated",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "collection",
-          "required": true,
-          "schema": {
-            "description": "Name of the collection that was updated.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "writer",
-          "required": true,
-          "schema": {
-            "description": "Plugin ID or `_platform` that wrote the update.",
-            "type": "string"
-          }
-        }
-      ],
-      "summary": "A collection was modified",
-      "tags": [
-        {
-          "name": "notifications"
-        }
-      ],
-      "x-branchkit-delivery": "at-most-once",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "_platform.dependent_capture.progress",
+      "name": "_platform.capture.progress",
       "paramStructure": "by-name",
       "params": [
         {
@@ -2974,6 +2944,36 @@
         }
       ],
       "summary": "Partial command match reached a DependentCapture token whose deps are bound and whose resolved collection exists.",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.collection.updated",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "collection",
+          "required": true,
+          "schema": {
+            "description": "Name of the collection that was updated.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "writer",
+          "required": true,
+          "schema": {
+            "description": "Plugin ID or `_platform` that wrote the update.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A collection was modified",
       "tags": [
         {
           "name": "notifications"
@@ -5661,7 +5661,7 @@
               "type": "object"
             },
             "bridge_active": {
-              "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `dependent_capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
+              "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
               "type": "boolean"
             },
             "clears_tags": {
