@@ -222,6 +222,17 @@
           "description": "Human-readable description of this collection's purpose.",
           "type": "string"
         },
+        "display": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DisplayPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "State policy slot — Discovery-HUD display shaping\n(notes/DESIGN_CAPTURE_DISPLAY_FORMS.md). Structural only: how many\nentries to enumerate before collapsing to a placeholder, never what\nthey mean. Absent → the platform default threshold applies."
+        },
         "emits_on_change": {
           "description": "State policy slot — whether mutations emit collection.updated events.",
           "type": [
@@ -521,6 +532,28 @@
           "type": "string"
         }
       ]
+    },
+    "DisplayPolicy": {
+      "description": "Discovery-HUD display shaping for a collection\n(notes/DESIGN_CAPTURE_DISPLAY_FORMS.md, part B). A capture over a large\ncollection enumerates noise in the HUD (a 999-number list is not a menu);\npast the threshold, discovery rendering emits one placeholder item\ninstead. Denylist posture: the platform default collapses automatically,\n`collapse_above: 0` opts a collection out entirely, and nothing an author\nasked to show is hidden.",
+      "properties": {
+        "collapse_above": {
+          "description": "Enumerate up to this many (non-alias) entries; past it, render one\nplaceholder item. `0` disables collapsing for this collection.\nAbsent → the platform default (`DISPLAY_COLLAPSE_DEFAULT`).",
+          "format": "uint",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "placeholder": {
+          "description": "Placeholder title when collapsed. Absent → \"«N options»\".",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
     },
     "EffectAssertEntry": {
       "anyOf": [
@@ -1000,6 +1033,27 @@
         }
       ]
     },
+    "ListenSocket": {
+      "description": "One actuator-bound loopback listener.",
+      "properties": {
+        "id": {
+          "description": "Stable name for discovery surfaces (`BRANCHKIT_LISTEN_PORTS` uses\n`id=port` pairs).",
+          "type": "string"
+        },
+        "port": {
+          "default": 0,
+          "description": "Fixed port, or 0 (the default) for OS-assigned.",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
     "MergeStrategy": {
       "description": "How contributions to a shared store are merged when read.\n\n`Keyed` was removed in Phase 3d of the collection-primitive\nunification — it had no legitimate multi-contributor users in\npractice; the implicit `Preset::Data` default flipped to\n`Authoritative` (matches the dominant single-writer pattern).\n`Collect` remains for genuine multi-contributor pooling (keybinds,\n`Preset::Tag` multi-cardinality tag collections).",
       "oneOf": [
@@ -1351,6 +1405,19 @@
       "required": [
         "tag"
       ],
+      "type": "object"
+    },
+    "SocketsConfig": {
+      "description": "Actuator-bound sockets for a plugin (see the `sockets` manifest field).",
+      "properties": {
+        "listen": {
+          "description": "Loopback listeners, bound by the actuator pre-spawn and passed as\ninherited fds in declaration order (fd 3 = first entry).",
+          "items": {
+            "$ref": "#/$defs/ListenSocket"
+          },
+          "type": "array"
+        }
+      },
       "type": "object"
     },
     "StageDeclaration": {
@@ -1707,6 +1774,17 @@
           "type": "null"
         }
       ]
+    },
+    "sockets": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SocketsConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux. See notes/DESIGN_SANDBOX_LOOPBACK_FDPASS.md."
     },
     "version": {
       "default": "",

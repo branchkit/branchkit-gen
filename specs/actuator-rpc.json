@@ -800,6 +800,13 @@
             "description": "One-line help text. Surfaced in Settings UI.",
             "type": "string"
           },
+          "display_sources": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Discovery-HUD display override per capture binding name: when the\nHUD renders a capture slot of this command, enumerate the named\ncollection instead of the matching one. Matching is untouched — a\nsealed/static matching collection can pair with a live display menu.\nUnknown capture names are inert. See\n`notes/DESIGN_CAPTURE_DISPLAY_FORMS.md`.",
+            "type": "object"
+          },
           "pattern": {
             "description": "Spoken pattern, e.g. `[\"switch\", \"<apps>\"]`. Tokens are either\nliteral strings or capture references like `<name:collection>`.",
             "items": {},
@@ -837,6 +844,7 @@
           "category",
           "clears_tags",
           "description",
+          "display_sources",
           "pattern",
           "requires_tags",
           "sets_on_partial",
