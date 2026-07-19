@@ -3503,6 +3503,27 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.pipeline.warmed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "pipeline",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A pipeline's consumer stages were pre-warmed (models loaded, ready to run)",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.plugin.degraded",
       "paramStructure": "by-name",
       "params": [
@@ -25470,6 +25491,16 @@
           "required": true,
           "schema": {
             "type": "string"
+          }
+        },
+        {
+          "name": "param_overrides",
+          "required": false,
+          "schema": {
+            "additionalProperties": true,
+            "default": {},
+            "description": "Per-stage param overrides applied to the warmed consumer stages, mirroring\n`pipelines.run`. Lets a caller prewarm the model it will actually run (e.g.\na user-selected STT model) instead of only the pipeline's default.",
+            "type": "object"
           }
         }
       ],
