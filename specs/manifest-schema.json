@@ -222,6 +222,17 @@
           "description": "Human-readable description of this collection's purpose.",
           "type": "string"
         },
+        "dictation_profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DictationProfile"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Dictation shaping while this gate is active: the platform stamps the\neffective profile onto `_platform.pipeline.transcript`, and the plugin\nthat owns the dictation engine applies it. Absent → `prose` (the\ndefault: dictation is writing, and writing wants punctuation).\n\nStructural, like `exclusive` next door — a name, no content opinion.\nThe platform never learns what a profile means; it only carries the one\na mode declared. Declaring it on a GATE is what makes it safe: the\nprofile has no lifetime of its own, so every drain path that clears the\nmode clears it too, and no stale flag can hijack an unrelated\ndictation. See `notes/DESIGN_DICTATION_PROFILES.md`."
+        },
         "display": {
           "anyOf": [
             {
@@ -512,6 +523,25 @@
         "plugin"
       ],
       "type": "object"
+    },
+    "DictationProfile": {
+      "anyOf": [
+        {
+          "const": "prose",
+          "description": "Writing. Punctuation is intended and preserved. The default.",
+          "type": "string"
+        },
+        {
+          "const": "query",
+          "description": "A query or a name — a palette search, a find box, a form field. Prosody\npunctuation is noise here: the recognizer emits \"Gmail.\" for a word the\nuser meant as a search term.",
+          "type": "string"
+        },
+        {
+          "description": "Escape valve for a profile the platform doesn't ship.",
+          "type": "string"
+        }
+      ],
+      "description": "What a dictated utterance IS while a gate is active, so the engine owner\ncan shape the transcript accordingly. Closed on purpose: the vocabulary is\na structural opinion (there are two kinds of dictation), not a content one.\n`Custom` is the valve — consumers that don't know a name ignore it and fall\nback to `Prose`.\n\nThe platform's remit stops at FORM (punctuation, whitespace, case). Meaning\n— spelled numbers, spoken symbols, filler words — belongs to the consumer's\nmatching and to the user's own corrections list, which apply in both\nprofiles. See `notes/DESIGN_DICTATION_PROFILES.md`."
     },
     "DispatchVia": {
       "description": "How a plugin determines dispatch targets.",

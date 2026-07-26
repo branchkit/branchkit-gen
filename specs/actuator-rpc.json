@@ -800,17 +800,6 @@
             "description": "One-line help text. Surfaced in Settings UI.",
             "type": "string"
           },
-          "dictated_param": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/DictatedParamSpec"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "Dictated-argument descriptor: the action's named param is filled by\na post-verb free-text capture instead of immediate dispatch. The\nmatcher carries this to the resolve envelope untouched; the plugin\nthat owns the capture engine intercepts, arms, and dispatches the\naction with the param filled. See\n`notes/DESIGN_DICTATED_COMMAND_ARGUMENT.md`."
-          },
           "display_sources": {
             "additionalProperties": {
               "type": "string"
@@ -855,7 +844,6 @@
           "category",
           "clears_tags",
           "description",
-          "dictated_param",
           "display_sources",
           "pattern",
           "requires_tags",
@@ -947,35 +935,6 @@
           "delivered_at",
           "id",
           "title"
-        ],
-        "type": "object"
-      },
-      "DictatedParamSpec": {
-        "description": "Dictated-argument descriptor on a `CommandSpec` — published for\ndiscoverability like its parent; wire deserialization goes through\n`commands::DictatedParam`. Keep the two in sync.",
-        "properties": {
-          "arm_action": {
-            "description": "Optional action dispatched when the verb matches (arm time) — e.g.\n`{\"type\":\"browser.find_open\"}` opening a find box as the arm's cue."
-          },
-          "cue_body": {
-            "description": "Optional body for the armed-state cue card. A `{key}` placeholder is\nreplaced with the live capture-hold key label at arm time.",
-            "type": "string"
-          },
-          "cue_title": {
-            "description": "Optional title for the armed-state cue card.",
-            "type": "string"
-          },
-          "disarm_action": {
-            "description": "Optional action dispatched when the arm ends unconsumed (cancelled\nor expired) — e.g. closing the find box the arm opened."
-          },
-          "param": {
-            "description": "Name of the action param the captured transcript fills.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "cue_body",
-          "cue_title",
-          "param"
         ],
         "type": "object"
       },
@@ -2723,6 +2682,13 @@
             "default": "",
             "type": "string"
           },
+          "desk": {
+            "default": null,
+            "description": "Desk ordinal of the window's space: user spaces counted 1..N in\nmanaged-display order (on macOS, the Mission Control / Ctrl+N index —\nthe same convention as `windows.desk_switch`). Absent when the window\nis not on exactly one user space: minimized (no space), fullscreen\n(its space is not a user desk), or pinned to multiple spaces.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          },
           "h": {
             "default": 0,
             "format": "int32",
@@ -2736,6 +2702,16 @@
             "default": "observed",
             "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by actuator channel infrastructure.",
             "type": "string"
+          },
+          "space_ids": {
+            "default": [],
+            "description": "Space (virtual desktop) ids this window belongs to. Usually one;\nseveral when the window is pinned to multiple spaces; empty when the\nOS reports none (minimized windows) or the platform has no space\nsupport.",
+            "items": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "type": "array"
           },
           "title": {
             "default": "",
@@ -2760,9 +2736,11 @@
         "required": [
           "app_id",
           "app_name",
+          "desk",
           "h",
           "id",
           "source",
+          "space_ids",
           "title",
           "w",
           "x",
@@ -3510,6 +3488,14 @@
           "schema": {
             "format": "float",
             "type": "number"
+          }
+        },
+        {
+          "name": "dictation_profile",
+          "required": false,
+          "schema": {
+            "description": "What this utterance IS, per the modes active when it was emitted:\n`query` (a search box, a field name — prosody punctuation is noise) or\n`prose` (writing — punctuation is intended). Declared by a gate\ncollection, carried verbatim; the platform never interprets it. Absent\nmeans no active mode declared one, and the engine owner's default\n(prose) stands. See `notes/DESIGN_DICTATION_PROFILES.md`.",
+            "type": "string"
           }
         },
         {
@@ -5745,10 +5731,8 @@
               "minimum": 0,
               "type": "integer"
             },
-            "dictated_param": {
-              "description": "The winning command's dictated-argument descriptor, if declared: the\n`action` wants its named param filled by a post-verb free-text capture\ninstead of immediate dispatch. Additive — consumers that don't\nunderstand it see an absent field and dispatch normally. See\n`crate::commands::DictatedParam` and\n`notes/DESIGN_DICTATED_COMMAND_ARGUMENT.md`."
-            },
             "has_completions": {
+              "description": "The winning command's dictated-argument descriptor, if declared: the",
               "type": "boolean"
             },
             "items": {
@@ -7103,7 +7087,7 @@
           "name": "direction",
           "required": true,
           "schema": {
-            "description": "Direction: \"press\" or \"release\".",
+            "description": "Direction: \"press\", \"release\", or \"drag\". \"drag\" posts a\nzero-distance dragged event at the current cursor position — macOS\nonly treats a window as grabbed once a dragged event follows the\npress, so drag-based operations need it between press and release.",
             "type": "string"
           }
         }
@@ -7124,7 +7108,7 @@
           "type": "object"
         }
       },
-      "summary": "Press or release a mouse button (for drag operations, etc.)",
+      "summary": "Press, release, or drag-latch a mouse button (for drag operations, etc.)",
       "tags": [
         {
           "name": "input"
@@ -22921,7 +22905,7 @@
           "type": "object"
         }
       },
-      "summary": "Switch to a specific Mission Control space by ID",
+      "summary": "Switch to a Mission Control desktop by number (1-16) via the user's Switch-to-Desktop symbolic hotkey (respects remaps, auto-enables disabled shortcuts; falls back to default Ctrl+N)",
       "tags": [
         {
           "name": "native"
@@ -24757,48 +24741,6 @@
         }
       },
       "summary": "Get a window title by ID",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.windows_on_space",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "space_id",
-          "required": true,
-          "schema": {
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_windows_on_space_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "window_ids": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "window_ids"
-          ],
-          "title": "NativeWindowsOnSpaceResult",
-          "type": "object"
-        }
-      },
-      "summary": "List window IDs on a specific space",
       "tags": [
         {
           "name": "native"
@@ -27459,7 +27401,7 @@
     {
       "description": "Move, resize, and manage windows",
       "gated_event_prefixes": [],
-      "method_count": 39,
+      "method_count": 38,
       "methods": [
         "native.active_space",
         "native.all_window_ids",
@@ -27498,7 +27440,6 @@
         "native.window_layer",
         "native.window_subrole",
         "native.window_title",
-        "native.windows_on_space",
         "native.world_model"
       ],
       "name": "windows"
