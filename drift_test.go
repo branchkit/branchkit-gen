@@ -192,8 +192,9 @@ func TestParseSpec_realFixture(t *testing.T) {
 	if len(spec.Capabilities) == 0 {
 		t.Error("embedded spec has zero capabilities")
 	}
-	// Methods we know exist in the current spec.
-	for _, name := range []string{"collection.get", "collection.push", "events.emit"} {
+	// Methods we know exist in the current spec. (collection.push died in the
+	// unified collections API — put/append are the write verbs now.)
+	for _, name := range []string{"collection.get", "collection.put", "events.emit"} {
 		if _, ok := spec.Methods[name]; !ok {
 			t.Errorf("expected method %q in spec, not found", name)
 		}
