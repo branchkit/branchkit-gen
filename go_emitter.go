@@ -2,11 +2,15 @@ package main
 
 import (
 	"fmt"
+	"go/format"
 	"sort"
 	"strings"
 )
 
 // RenderGo produces the contents of actions_gen.go from a plugin manifest.
+// The output is gofmt-formatted: hand-aligned emission drifted from gofmt's
+// struct-tag alignment, leaving every generated file a permanent
+// `just fmt-check` failure that check-gen then pinned in place.
 func RenderGo(manifest *PluginManifest) string {
 	names := sortedActionNames(manifest.ActionTypes)
 
@@ -64,7 +68,14 @@ func RenderGo(manifest *PluginManifest) string {
 		b.WriteString("\n")
 	}
 
-	return b.String()
+	formatted, err := format.Source([]byte(b.String()))
+	if err != nil {
+		// The emitter produced invalid Go — a bug here, never a caller
+		// condition. Panic with the raw source so the test that trips this
+		// shows what was emitted.
+		panic(fmt.Sprintf("RenderGo emitted unparseable Go: %v\n---\n%s", err, b.String()))
+	}
+	return string(formatted)
 }
 
 func renderGoEnum(b *strings.Builder, typeName string, values []string) {

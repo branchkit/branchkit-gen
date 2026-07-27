@@ -77,13 +77,13 @@ func TestValidate_minAPIVersion(t *testing.T) {
 		val      string
 		wantHave bool
 	}{
-		{"", true},         // required — empty is an error
+		{"", true}, // required — empty is an error
 		{"0.1.0", false},
 		{"1.2.3", false},
-		{"0.1", true},      // not strict semver
-		{"v0.1.0", true},   // not strict semver
-		{"latest", true},   // not strict semver
-		{"0.0.0", false},   // valid semver, even if unusual
+		{"0.1", true},       // not strict semver
+		{"v0.1.0", true},    // not strict semver
+		{"latest", true},    // not strict semver
+		{"0.0.0", false},    // valid semver, even if unusual
 		{"99.99.99", false}, // valid semver
 	}
 	for _, c := range cases {
@@ -279,11 +279,11 @@ func TestValidate_actionTypes(t *testing.T) {
 func TestValidate_unknownTopLevel(t *testing.T) {
 	m := minimalValid()
 	raw := map[string]any{
-		"id":              "demo-plugin",
-		"name":            "Demo",
-		"version":         "0.1.0",
-		"made_up_field":   "oops",
-		"action_prefix":   "demo",
+		"id":            "demo-plugin",
+		"name":          "Demo",
+		"version":       "0.1.0",
+		"made_up_field": "oops",
+		"action_prefix": "demo",
 	}
 	got := Validate(m, raw)
 	found := false

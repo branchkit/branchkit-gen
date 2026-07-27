@@ -1,6 +1,7 @@
 package main
 
 import (
+	"regexp"
 	"strings"
 	"testing"
 )
@@ -46,7 +47,9 @@ func TestRenderGo_EnumField(t *testing.T) {
 	if !strings.Contains(out, "type FocusDirection string") {
 		t.Errorf("missing enum type:\n%s", out)
 	}
-	if !strings.Contains(out, `FocusDirectionLeft FocusDirection = "left"`) {
+	// gofmt aligns the const block, so the padding between name and type
+	// depends on the longest sibling — match with flexible whitespace.
+	if !regexp.MustCompile(`FocusDirectionLeft\s+FocusDirection = "left"`).MatchString(out) {
 		t.Errorf("missing enum constant:\n%s", out)
 	}
 	if !strings.Contains(out, "Direction FocusDirection") {
@@ -87,7 +90,8 @@ func TestRenderGo_IntVsNumber(t *testing.T) {
 		},
 	}
 	out := RenderGo(m)
-	if !strings.Contains(out, "Count int") {
+	// gofmt aligns struct columns, so the short name carries padding.
+	if !strings.Contains(out, "Count  int") {
 		t.Errorf("int field should be int:\n%s", out)
 	}
 	if !strings.Contains(out, "Weight float64") {

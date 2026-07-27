@@ -66,9 +66,9 @@ var (
 // reservedActionPrefixes are routing verbs the matching engine reserves;
 // a plugin can't claim them as its own action_prefix.
 var reservedActionPrefixes = map[string]bool{
-	"show": true,
-	"open": true,
-	"hide": true,
+	"show":  true,
+	"open":  true,
+	"hide":  true,
 	"close": true,
 }
 
