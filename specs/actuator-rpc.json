@@ -1281,10 +1281,11 @@
         "type": "object"
       },
       "FieldDisplay": {
-        "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `description`, `payload` are\nconsumed by `services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
+        "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
         "enum": [
           "primary",
           "secondary",
+          "group",
           "description",
           "payload",
           "summary"

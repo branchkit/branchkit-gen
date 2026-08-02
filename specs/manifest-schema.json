@@ -791,7 +791,7 @@
       ]
     },
     "FieldDisplay": {
-      "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `description`, `payload` are\nconsumed by `services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
+      "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
       "oneOf": [
         {
           "const": "primary",
@@ -801,6 +801,11 @@
         {
           "const": "secondary",
           "description": "The supporting detail shown next to the primary. Discovery HUD\nrenders as item subtitle.",
+          "type": "string"
+        },
+        {
+          "const": "group",
+          "description": "The field whose VALUE names the section an entry belongs to,\nsectioning one collection's entries in the Discovery HUD\n(e.g. palette rows carrying \"Tabs\" / \"Commands\" / \"Bookmarks\").\nEntries whose group field is absent or empty fall back to the\ncollection's own label. Like every role this is display-only:\nthe matcher never consults it for eligibility or binding.",
           "type": "string"
         },
         {
