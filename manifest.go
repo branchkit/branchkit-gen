@@ -111,6 +111,13 @@ type ActionFieldSchema struct {
 	Required    bool                `json:"required"`
 	EnumValues  []string            `json:"enum_values"`
 	Fields      []ActionFieldSchema `json:"fields"`
+	// Display is the field's display role (primary, secondary, group,
+	// description, payload, summary). Validated against the closed set:
+	// publish-time is the STRICT half of the platform's publish-strict /
+	// load-tolerant rule for display vocabulary — the host degrades an
+	// unknown role to no-role with a warning, so this validator is where
+	// typos actually get caught.
+	Display string `json:"display"`
 }
 
 // EffectiveFieldType returns the field type, defaulting to FieldTypeString

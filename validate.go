@@ -85,6 +85,23 @@ var validFieldTypes = map[FieldType]bool{
 	FieldTypeJson:        true,
 }
 
+// validDisplayRoles are the field display roles the platform recognizes
+// (the FieldDisplay enum). Publish-time validation is STRICT here on
+// purpose — the platform's rule for display vocabulary is publish-strict /
+// load-tolerant: the host degrades an unknown role to no-role with a
+// warning (display roles are display-only, so a plugin built against a
+// newer SDK must still load on an older host), which means this validator
+// is where a typo actually stops the author. A drift test pins this list
+// to the FieldDisplay enum in specs/manifest-schema.json.
+var validDisplayRoles = map[string]bool{
+	"primary":     true,
+	"secondary":   true,
+	"group":       true,
+	"description": true,
+	"payload":     true,
+	"summary":     true,
+}
+
 // knownTopLevelFields lists every top-level plugin.json key the platform
 // understands. Anything else gets an info-level note (typo guard).
 var knownTopLevelFields = map[string]bool{
@@ -223,6 +240,11 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 		validateActionType(actionName, schema, add)
 	}
 
+	// provides.collections field display roles. Collections aren't modeled
+	// as typed structs here, so walk the raw JSON. Same strict posture as
+	// action_types' display check — see validDisplayRoles.
+	validateCollectionDisplayRoles(raw, add)
+
 	// unknown top-level fields (range over nil map is a no-op)
 	for key := range raw {
 		if !knownTopLevelFields[key] {
@@ -232,6 +254,41 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	}
 
 	return issues
+}
+
+// validateCollectionDisplayRoles walks provides.collections.*.fields[*]
+// in the raw manifest (recursing into nested object fields) and errors on
+// any `display` value outside validDisplayRoles.
+func validateCollectionDisplayRoles(raw map[string]any, add func(Severity, string, string)) {
+	provides, _ := raw["provides"].(map[string]any)
+	collections, _ := provides["collections"].(map[string]any)
+	for name, decl := range collections {
+		declMap, _ := decl.(map[string]any)
+		fields, _ := declMap["fields"].([]any)
+		walkCollectionFields(fmt.Sprintf("provides.collections.%s", name), fields, add)
+	}
+}
+
+func walkCollectionFields(path string, fields []any, add func(Severity, string, string)) {
+	for i, field := range fields {
+		fieldMap, _ := field.(map[string]any)
+		if fieldMap == nil {
+			continue
+		}
+		fieldPath := fmt.Sprintf("%s.fields[%d]", path, i)
+		if display, ok := fieldMap["display"]; ok && display != nil {
+			role, isString := display.(string)
+			if !isString || !validDisplayRoles[role] {
+				add(SeverityError, fieldPath+".display", fmt.Sprintf(
+					"display role %v is not recognized (valid: primary, secondary, group, description, payload, summary). "+
+						"Hosts degrade unknown roles to no-role at load, so an unrecognized value here would silently render nothing",
+					display))
+			}
+		}
+		if nested, ok := fieldMap["fields"].([]any); ok {
+			walkCollectionFields(fieldPath, nested, add)
+		}
+	}
 }
 
 func validateActionType(actionName string, schema ActionTypeSchema, add func(Severity, string, string)) {
@@ -255,6 +312,12 @@ func validateActionField(fieldPath string, f ActionFieldSchema, add func(Severit
 	if ft != FieldTypeEnum && len(f.EnumValues) > 0 {
 		add(SeverityWarn, fieldPath+".enum_values",
 			"enum_values is only meaningful when field_type is 'enum'")
+	}
+	if f.Display != "" && !validDisplayRoles[f.Display] {
+		add(SeverityError, fieldPath+".display", fmt.Sprintf(
+			"display role %q is not recognized (valid: primary, secondary, group, description, payload, summary). "+
+				"Hosts degrade unknown roles to no-role at load, so an unrecognized value here would silently render nothing",
+			f.Display))
 	}
 	for i, sub := range f.Fields {
 		validateActionField(fmt.Sprintf("%s.fields[%d]", fieldPath, i), sub, add)

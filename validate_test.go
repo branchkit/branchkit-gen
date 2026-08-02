@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 )
@@ -322,5 +323,145 @@ func TestIssue_MarshalJSON(t *testing.T) {
 	want := `{"severity":"error","plugin_id":"demo","field":"id","message":"bad"}`
 	if string(b) != want {
 		t.Errorf("got %s, want %s", b, want)
+	}
+}
+
+// Publish-time is the STRICT half of the platform's publish-strict /
+// load-tolerant rule for display vocabulary: hosts degrade an unknown
+// display role to no-role (with a warning) so newer-SDK plugins still
+// load, which makes this validator the place a typo actually stops the
+// author.
+func TestValidate_unknownDisplayRoleInActionTypesIsError(t *testing.T) {
+	m := minimalValid()
+	m.ActionTypes = map[string]ActionTypeSchema{
+		"click": {Fields: []ActionFieldSchema{
+			{Key: "selector", Display: "sparkle"},
+		}},
+	}
+	got := Validate(m, nil)
+	found := false
+	for _, i := range got {
+		if i.Severity == SeverityError && strings.Contains(i.Field, "click") &&
+			strings.Contains(i.Message, "sparkle") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected error for unknown display role, got: %+v", got)
+	}
+}
+
+func TestValidate_knownDisplayRolesInActionTypesPass(t *testing.T) {
+	m := minimalValid()
+	m.ActionTypes = map[string]ActionTypeSchema{
+		"click": {Fields: []ActionFieldSchema{
+			{Key: "selector", Display: "primary"},
+			{Key: "note", Display: "secondary"},
+			{Key: "kind", Display: "group"},
+			{Key: "id", Display: "payload"},
+			{Key: "plain"}, // no role is fine
+		}},
+	}
+	got := Validate(m, nil)
+	if HasErrors(got) {
+		t.Errorf("known display roles should not error, got: %+v", got)
+	}
+}
+
+func TestValidate_unknownDisplayRoleInCollectionsIsError(t *testing.T) {
+	m := minimalValid()
+	raw := map[string]any{
+		"provides": map[string]any{
+			"collections": map[string]any{
+				"demo_rows": map[string]any{
+					"fields": []any{
+						map[string]any{"key": "spoken", "display": "primary"},
+						map[string]any{"key": "kind", "display": "hologram"},
+					},
+				},
+			},
+		},
+	}
+	got := Validate(m, raw)
+	found := false
+	for _, i := range got {
+		if i.Severity == SeverityError && strings.Contains(i.Field, "demo_rows") &&
+			strings.Contains(i.Message, "hologram") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected error for unknown collection display role, got: %+v", got)
+	}
+}
+
+func TestValidate_nestedCollectionFieldDisplayChecked(t *testing.T) {
+	m := minimalValid()
+	raw := map[string]any{
+		"provides": map[string]any{
+			"collections": map[string]any{
+				"demo_rows": map[string]any{
+					"fields": []any{
+						map[string]any{"key": "outer", "fields": []any{
+							map[string]any{"key": "inner", "display": "bogus"},
+						}},
+					},
+				},
+			},
+		},
+	}
+	got := Validate(m, raw)
+	found := false
+	for _, i := range got {
+		if i.Severity == SeverityError && strings.Contains(i.Message, "bogus") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected error for nested unknown display role, got: %+v", got)
+	}
+}
+
+// validDisplayRoles is a hand list; this drift test pins it to the
+// FieldDisplay enum in the synced manifest schema so a new role added
+// upstream (and synced via `just contracts`) fails here until the list
+// is updated.
+func TestValidDisplayRoles_matchesManifestSchema(t *testing.T) {
+	data, err := os.ReadFile("specs/manifest-schema.json")
+	if err != nil {
+		t.Fatalf("read schema: %v", err)
+	}
+	var schema struct {
+		Defs map[string]struct {
+			OneOf []struct {
+				Const string `json:"const"`
+			} `json:"oneOf"`
+		} `json:"$defs"`
+	}
+	if err := json.Unmarshal(data, &schema); err != nil {
+		t.Fatalf("parse schema: %v", err)
+	}
+	fd, ok := schema.Defs["FieldDisplay"]
+	if !ok {
+		t.Fatal("FieldDisplay not found in manifest schema $defs")
+	}
+	fromSchema := map[string]bool{}
+	for _, v := range fd.OneOf {
+		if v.Const != "" {
+			fromSchema[v.Const] = true
+		}
+	}
+	if len(fromSchema) == 0 {
+		t.Fatal("no FieldDisplay consts extracted from schema")
+	}
+	for role := range fromSchema {
+		if !validDisplayRoles[role] {
+			t.Errorf("schema role %q missing from validDisplayRoles", role)
+		}
+	}
+	for role := range validDisplayRoles {
+		if !fromSchema[role] {
+			t.Errorf("validDisplayRoles has %q not present in schema", role)
+		}
 	}
 }

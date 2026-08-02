@@ -164,7 +164,7 @@
                 "type": "null"
               }
             ],
-            "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary."
+            "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary.\n\nDeserialization is deliberately LENIENT: an unrecognized role string\ndegrades to `None` instead of failing the whole manifest parse.\nDisplay roles are guaranteed display-only (the matcher never reads\nthem), so a plugin built against a newer SDK that declares a role\nthis host predates must still load — strictness tracks blast\nradius. The typo-catching strictness lives at publish time\n(branchkit-gen validates against the schema's closed enum) and in\nthe load-time validator, which walks the raw JSON and emits a loud\nwarning for every unknown role it degraded. See\nnotes/DESIGN_COLLECTION_FIELD_ROLES.md, Decision 5."
           },
           "enum_values": {
             "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
@@ -5218,7 +5218,7 @@
             "additionalProperties": {
               "$ref": "#/$defs/FieldDisplay"
             },
-            "description": "Optional per-payload-field display roles. Used by the Settings\nUI / discovery HUD to know which payload field is the primary\nlabel, which is the subtitle, etc. Equivalent to the `roles`\nargument on `collection.push`. Mostly meaningful for\nauto-registered dynamic collections — manifest-declared\ncollections get their roles from the schema. On the first\n`collection.put` to a not-yet-registered name, the roles are\nstored alongside the auto-registered schema. Subsequent puts\nwith `roles` overwrite the prior setting; puts omitting\n`roles` leave roles unchanged.",
+            "description": "Optional per-payload-field display roles. Used by the Settings\nUI / discovery HUD to know which payload field is the primary\nlabel, which is the subtitle, etc. Equivalent to the `roles`\nargument on `collection.push`. Mostly meaningful for\nauto-registered dynamic collections — manifest-declared\ncollections get their roles from the schema. On the first\n`collection.put` to a not-yet-registered name, the roles are\nstored alongside the auto-registered schema. Subsequent puts\nwith `roles` overwrite the prior setting; puts omitting\n`roles` leave roles unchanged.\n\nWire-lenient: an entry whose role string this host doesn't know\nbinds nothing but does NOT fail the put — see `DisplayRoles`.",
             "type": "object"
           }
         }
