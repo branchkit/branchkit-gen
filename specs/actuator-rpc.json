@@ -17138,6 +17138,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.new_app_window",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "bundle_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_new_app_window_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeNewAppWindowResult",
+          "type": "object"
+        }
+      },
+      "summary": "Open a new window of an app on the current Space, without switching to an existing window on another Space",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "apps.control",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.night_shift",
       "paramStructure": "by-name",
       "params": [],
@@ -26756,12 +26793,13 @@
     {
       "description": "Launch, quit, activate, and hide applications",
       "gated_event_prefixes": [],
-      "method_count": 7,
+      "method_count": 8,
       "methods": [
         "native.activate_app",
         "native.force_quit_app",
         "native.hide_app",
         "native.launch_app",
+        "native.new_app_window",
         "native.quit_app",
         "native.unhide_app",
         "system.launch_app"
