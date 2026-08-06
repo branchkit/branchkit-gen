@@ -22944,6 +22944,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.status_indicator",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_status_indicator_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "available": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "available"
+          ],
+          "title": "NativeStatusIndicatorResult",
+          "type": "object"
+        }
+      },
+      "summary": "Whether a visible status-indicator surface (tray/status item) exists that can show recording state",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.indicator",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.sticky_keys",
       "paramStructure": "by-name",
       "params": [],
