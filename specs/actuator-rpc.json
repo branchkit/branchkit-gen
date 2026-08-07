@@ -6427,6 +6427,16 @@
           }
         },
         {
+          "name": "stack_order",
+          "required": false,
+          "schema": {
+            "default": 0,
+            "description": "Stack position among windows sharing this anchor: offsets ascend from the\nanchor edge, so the lowest pins at the corner (a persistent status window)\nand higher values stack away (transient toasts). Ties broken by channel\nname. Defaults to 0.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
           "name": "transparent",
           "required": false,
           "schema": {

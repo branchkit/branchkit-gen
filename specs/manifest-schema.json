@@ -891,6 +891,12 @@
           "default": "none",
           "description": "Pointer-dodge behavior — see [`OnPointer`]. Defaults to `none`."
         },
+        "stack_order": {
+          "default": 0,
+          "description": "Where this window sits when several share an anchor: offsets ascend from\nthe anchor edge. The LOWEST value stacks at the corner (pinned) — a\npersistent status window like a mode indicator wants a low order so it\nnever moves as others come and go — and HIGHER values stack away from it\n(transient toasts). Ties broken by channel id. Defaults to 0.",
+          "format": "int32",
+          "type": "integer"
+        },
         "transparent": {
           "default": false,
           "description": "Fully transparent window: the shell skips its frosted vibrancy panel\nand window shadow, so ONLY the plugin's own markup paints. For\ndisplay-only overlays (device visualizers, screen annotations) that\ndraw their own chrome or none at all. Defaults to false (frosted).",
