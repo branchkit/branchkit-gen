@@ -2138,6 +2138,14 @@
           "ts": {
             "description": "RFC3339, copied from the dump manifest.",
             "type": "string"
+          },
+          "word_scores": {
+            "description": "Per-word acoustic margins of the capture decode (the engine-posteriors\nsignal), aligned 1:1 with `heard`'s words — the clip's ground-truth score\nrecord. Positive = the audio backed the word, negative = the closed\ngrammar coerced it (notes/DESIGN_ENGINE_POSTERIORS.md). `None` for a clip\ncaptured before the signal existed, or a decode whose readout didn't\nalign. Feeds the genuine-margin distribution from labeled clips.",
+            "items": {
+              "format": "float",
+              "type": "number"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -2147,7 +2155,8 @@
           "heard",
           "matched",
           "target",
-          "ts"
+          "ts",
+          "word_scores"
         ],
         "type": "object"
       },
