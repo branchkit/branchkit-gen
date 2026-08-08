@@ -3480,7 +3480,7 @@
           "name": "confidence",
           "required": false,
           "schema": {
-            "description": "Scalar recognition confidence. On the sherpa CTC command path this is\nthe mean of `word_scores`; absent when the engine carries no\nconfidence signal.",
+            "description": "Coarse scalar confidence. On the sherpa CTC command path this is the\nMEAN of `word_scores`; absent when the engine carries no confidence\nsignal. A confidence gate must read `word_scores` (the min margin), not\nthis — the mean hides a single deeply-coerced word. Display/logging only.",
             "format": "float",
             "type": "number"
           }
