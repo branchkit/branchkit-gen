@@ -25602,6 +25602,17 @@
       "paramStructure": "by-name",
       "params": [
         {
+          "name": "audio_cutoff_ms",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Shared-clock position (the AudioChunk timestamp_ms timebase) after\nwhich buffered audio must not be processed — e.g. the onset of a\ndetected dictation stop phrase, from the transcript's word_onsets_ms.\nAbsent = process everything.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
           "name": "name",
           "required": true,
           "schema": {
