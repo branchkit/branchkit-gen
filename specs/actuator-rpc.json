@@ -3538,6 +3538,31 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "word_onsets_ms",
+          "required": false,
+          "schema": {
+            "description": "Shared-clock onset (ms, the audio chunk timebase) of each word of\n`text`, aligned 1:1 with its whitespace-split words. Emitted by\nengines with time alignment (sherpa's CTC path); converts a word\nposition into an audio position other pipelines understand — the\ndictation stop-phrase audio cutoff.",
+            "items": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "word_scores",
+          "required": false,
+          "schema": {
+            "description": "Per-word acoustic score, aligned 1:1 with `text`'s whitespace-split\nwords (same alignment contract as `word_onsets_ms`). Engine-defined\nscale; on the closed-grammar CTC command engine this is the word's\nmin token argmax-margin — positive means the audio supported the\nword, negative means the grammar coerced it. When present,\n`confidence` is the mean of these.",
+            "items": {
+              "format": "float",
+              "type": "number"
+            },
+            "type": "array"
+          }
         }
       ],
       "summary": "A pipeline produced a transcript from speech-to-text",
