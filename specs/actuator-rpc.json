@@ -1927,22 +1927,6 @@
         ],
         "type": "object"
       },
-      "PipelineTranscriptAlternative": {
-        "properties": {
-          "confidence": {
-            "format": "float",
-            "type": "number"
-          },
-          "text": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "confidence",
-          "text"
-        ],
-        "type": "object"
-      },
       "PluginLogLevel": {
         "oneOf": [
           {
@@ -3493,19 +3477,10 @@
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "alternatives",
-          "required": false,
-          "schema": {
-            "items": {
-              "$ref": "#/$defs/PipelineTranscriptAlternative"
-            },
-            "type": "array"
-          }
-        },
-        {
           "name": "confidence",
           "required": false,
           "schema": {
+            "description": "Scalar recognition confidence. On the sherpa CTC command path this is\nthe mean of `word_scores`; absent when the engine carries no\nconfidence signal.",
             "format": "float",
             "type": "number"
           }
