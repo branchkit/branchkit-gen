@@ -800,6 +800,10 @@
             "description": "One-line help text. Surfaced in Settings UI.",
             "type": "string"
           },
+          "discovery": {
+            "description": "Prefix-discovery affordance for a `literal-prefix + tail-capture`\ncommand (e.g. `[\"jump\", \"<browser_tabs>\"]`). Declaring it makes the\nbare prefix (\"jump\") speakable on its own: instead of firing, it opens\nthe Discovery HUD over the capture's entries. One of:\n`\"prefix\"` (non-exclusive — the capture's words stay live in free\ncontext) or `\"exclusive\"` (entering the prefix flips an auto-minted\nmode so the words only decode while it holds — for large/dynamic sets).\nOnly valid when the pattern is literal word(s) followed by a single\ntail capture; other shapes are rejected at load. See\n`notes/DESIGN_DISCOVERABLE_PREFIX.md`.",
+            "type": "string"
+          },
           "display_sources": {
             "additionalProperties": {
               "type": "string"
@@ -844,6 +848,7 @@
           "category",
           "clears_tags",
           "description",
+          "discovery",
           "display_sources",
           "pattern",
           "requires_tags",
@@ -1590,6 +1595,10 @@
       "ListOpts": {
         "description": "Listing parameters for `list`. All fields optional — empty `ListOpts`\nmeans \"every record, default ordering.\"\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
         "properties": {
+          "compacted": {
+            "description": "Shape-scoped to `by_field` log collections (the compacted-changelog\nprojection — see `notes/DESIGN_LOG_ANNOTATION_PROJECTION.md`, and\nDESIGN_PLATFORM_STATE.md §3.2). When true, a keyed log's raw appends\nare folded by their key field per the collection's `merge` and one\nrecord per key is returned (the record's current state) instead of the\nraw append history. Ignored by non-log backends; a validation error on\nan auto-ulid log (no key field to fold on). Absent/false = raw read.",
+            "type": "boolean"
+          },
           "cursor": {
             "description": "Opaque pagination cursor. Backends define the format; callers pass\nback the cursor value returned by a prior `list` call.",
             "type": "string"
@@ -1614,6 +1623,7 @@
           }
         },
         "required": [
+          "compacted",
           "cursor",
           "limit",
           "since_ms",
@@ -4881,6 +4891,65 @@
           "name": "collections"
         }
       ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.append_keyed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "key",
+          "required": true,
+          "schema": {
+            "description": "The fold key — stamped into the payload's key field. Appending another\nrecord with the same key annotates the first (compacted-changelog\nshape); a compacted read folds them into one record.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Collection name. Must be a keyed (`id_strategy: by_field`) `log`\ncollection.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "payload",
+          "required": true,
+          "schema": {
+            "description": "Entry payload — validated against the collection's `fields` schema (the\nkey field is supplied via `key`, not here)."
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_append_keyed_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "entry": {
+              "$ref": "#/$defs/LogEntry",
+              "description": "The newly-appended entry, including its assigned ULID and timestamp."
+            }
+          },
+          "required": [
+            "entry"
+          ],
+          "title": "CollectionAppendResult",
+          "type": "object"
+        }
+      },
+      "summary": "Append a keyed annotation to a keyed log (compacted-changelog shape)",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -5023,6 +5092,54 @@
         }
       },
       "summary": "Fetch a single record from a collection by id",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.fetch_compacted",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_fetch_compacted_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "record": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CollectionRecord"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The record, or null if no record with that id exists."
+            }
+          },
+          "title": "CollectionFetchResult",
+          "type": "object"
+        }
+      },
+      "summary": "Fetch a keyed log's folded current state for one key (compacted point-read)",
       "tags": [
         {
           "name": "collections"
