@@ -859,6 +859,38 @@
         "title": "CommandSpec",
         "type": "object"
       },
+      "ConfusabilityFinding": {
+        "description": "One acoustic collision: `target` (a candidate word) sounds like `confuser`\n(an existing command word) and the two compete in the candidate's context.",
+        "properties": {
+          "confuser": {
+            "type": "string"
+          },
+          "distance": {
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "example": {
+            "description": "That command's display phrase, to name it in the warning.",
+            "type": "string"
+          },
+          "owner": {
+            "description": "Owning plugin of a command that emits the confuser.",
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "confuser",
+          "distance",
+          "example",
+          "owner",
+          "target"
+        ],
+        "type": "object"
+      },
       "ContactInfo": {
         "properties": {
           "email": {
@@ -5467,6 +5499,62 @@
         }
       },
       "summary": "Add an extra spoken form (alias) for an existing command",
+      "tags": [
+        {
+          "name": "commands"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.confusability",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "requires_tags",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The command's context (its `requires_tags`); empty = free context. Used by\ntier-2 so a warning only fires when the confuser is co-eligible here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "words",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The literal spoken words of the phrase being authored.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_confusability_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "findings": {
+              "items": {
+                "$ref": "#/$defs/ConfusabilityFinding"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "findings"
+          ],
+          "title": "CommandsConfusabilityResult",
+          "type": "object"
+        }
+      },
+      "summary": "Author-time acoustic confusability for a phrase: existing command words it may be misheard as that are co-eligible in its context",
       "tags": [
         {
           "name": "commands"
