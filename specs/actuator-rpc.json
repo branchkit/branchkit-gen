@@ -5416,6 +5416,63 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "collections.create_user",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "description",
+          "required": false,
+          "schema": {
+            "default": "",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "Collection name (lowercase, underscores).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "words_text",
+          "required": false,
+          "schema": {
+            "default": "",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "collections_create_user_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "name": {
+              "description": "The created collection's name (echoed so callers can select it).",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "CollectionsCreateUserResult",
+          "type": "object"
+        }
+      },
+      "summary": "Create a simple user list of words (name + words_text, one entry per line, optional `word = value`) and seed its entries",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collections.list",
       "paramStructure": "by-name",
       "params": [
