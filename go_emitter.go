@@ -36,8 +36,18 @@ func RenderGo(manifest *PluginManifest) string {
 	b.WriteString("package main\n")
 	b.WriteString("\n")
 
-	if needsJSON {
+	// The SDK import backs the generated Handle<Action> registrars below.
+	// Only needed when there is at least one action to register.
+	needsSDK := len(names) > 0
+	switch {
+	case needsJSON && needsSDK:
+		b.WriteString("import (\n\t\"encoding/json\"\n\n\tshared \"github.com/branchkit/plugin-sdk-go\"\n)\n\n")
+	case needsJSON:
 		b.WriteString("import \"encoding/json\"\n\n")
+	case needsSDK:
+		b.WriteString("import shared \"github.com/branchkit/plugin-sdk-go\"\n\n")
+	}
+	if needsJSON {
 		b.WriteString("// Ensure json import is used even when no struct field references it.\n")
 		b.WriteString("var _ json.RawMessage\n\n")
 	}
@@ -65,6 +75,8 @@ func RenderGo(manifest *PluginManifest) string {
 		}
 
 		renderGoStruct(&b, structName, fullAction, &schema)
+		b.WriteString("\n")
+		renderGoActionHandler(&b, structName, fullAction, &schema)
 		b.WriteString("\n")
 	}
 
@@ -108,6 +120,44 @@ func renderGoStruct(b *strings.Builder, structName, fullAction string, schema *A
 		}
 		fmt.Fprintf(b, "\t%s %s `json:%q`\n", goName, goTy, jsonTag)
 	}
+	b.WriteString("}\n")
+}
+
+// renderGoActionHandler emits a typed registrar for one action.
+//
+// The SDK already had `HandleActionTyped[T]`, the generated params structs
+// already existed, and the demand was proven by `HandleTyped`'s 100+ callers —
+// yet across seven plugins there were 49 untyped `HandleAction` registrations
+// and zero typed ones. The 2026-08-11 platform gap audit read that as an
+// adoption failure with a specific shape: the untyped escape hatch is always
+// shorter at the call site, so it always wins.
+//
+//	// before — action string and params type are both hand-written, and
+//	// nothing checks either against plugin.json
+//	plugin.HandleAction("windows.snap", func(req *shared.OnActionRequest) (any, error) {
+//	    var p SnapParams
+//	    if err := req.UnmarshalParams(&p); err != nil { return nil, err }
+//	    ...
+//	})
+//
+//	// after
+//	HandleSnap(plugin, func(p SnapParams, req *shared.OnActionRequest) (any, error) { ... })
+//
+// Generating the registrar inverts the gradient rather than exhorting anyone:
+// the typed path is now the shortest one, and the action string and params
+// type both come from the manifest, so neither can drift from it.
+func renderGoActionHandler(b *strings.Builder, structName, fullAction string, schema *ActionTypeSchema) {
+	label := fullAction
+	if schema.Label != "" {
+		label = fmt.Sprintf("%s (%s)", fullAction, schema.Label)
+	}
+	fmt.Fprintf(b, "// Handle%s registers a typed handler for action %q.\n", structName, label)
+	fmt.Fprintf(
+		b,
+		"func Handle%s(p *shared.Plugin, fn func(%sParams, *shared.OnActionRequest) (any, error)) {\n",
+		structName, structName,
+	)
+	fmt.Fprintf(b, "\tshared.HandleActionTyped(p, %q, fn)\n", fullAction)
 	b.WriteString("}\n")
 }
 
