@@ -152,6 +152,24 @@ func renderGoActionHandler(b *strings.Builder, structName, fullAction string, sc
 		label = fmt.Sprintf("%s (%s)", fullAction, schema.Label)
 	}
 	fmt.Fprintf(b, "// Handle%s registers a typed handler for action %q.\n", structName, label)
+
+	// An action with no declared fields takes no params argument. Threading an
+	// always-empty struct through would make the generated registrar LONGER
+	// than the untyped HandleAction it replaces — reintroducing the very
+	// gradient this exists to invert, for 29 of the 67 first-party actions.
+	// It also means those handlers keep the exact signature they already have,
+	// so migrating one is a single line at the registration site.
+	if len(schema.Fields) == 0 {
+		fmt.Fprintf(
+			b,
+			"func Handle%s(p *shared.Plugin, fn shared.ActionHandlerFunc) {\n",
+			structName,
+		)
+		fmt.Fprintf(b, "\tp.HandleAction(%q, fn)\n", fullAction)
+		b.WriteString("}\n")
+		return
+	}
+
 	fmt.Fprintf(
 		b,
 		"func Handle%s(p *shared.Plugin, fn func(%sParams, *shared.OnActionRequest) (any, error)) {\n",
