@@ -601,6 +601,10 @@
       "CollectionRecord": {
         "description": "One record as returned by a backend. The `id` field is whatever the\ncollection's `id_strategy` resolves to (auto-ulid string, by-field value,\nkey/value composite, or \"singleton\" for singleton collections).\n\nThe wire / schema name is `CollectionRecord` to avoid colliding with\nTypeScript's builtin `Record<K, V>` utility type (the codegen emits\n`Record<string, T>` map shapes alongside our own types).",
         "properties": {
+          "group": {
+            "description": "Writer-chosen group label — which of the writer's named replace-sets\nthis record belongs to. `None` = ungrouped, the common case.\n\nGroups exist so one plugin can maintain several independent record sets\nin one collection, each replaced without touching the others — command\nsources are the motivating case (`commands.push`'s `group` stamps\nthis). Meaningful only WITHIN a writer: (writer, group) is the scope a\ngrouped replace computes its complement over, so two plugins using the\nsame group label never interact.\n\n**Last write, unlike `writer`.** Ownership is creation-stamped because\na record must not change hands by being touched; group is a placement,\nand re-putting a record under a different group MOVES it — the old\ngroup's next replace must not still count it.\n\nStorage support varies by backend shape: backends without a per-record\nenvelope (shared_overrides' contribution blobs) REFUSE writes carrying\na group rather than dropping it silently — see `backend_conformance`.",
+            "type": "string"
+          },
           "id": {
             "type": "string"
           },
@@ -626,6 +630,7 @@
           }
         },
         "required": [
+          "group",
           "id",
           "revision",
           "timestamp_ms",
@@ -2251,7 +2256,7 @@
         "description": "Which of the CALLER'S OWN records `collection.replace` may delete — the\n\"complement\" it is allowed to clear.\n\nThe complement is always computed over records whose `writer` is the caller,\nso no scope can reach another plugin's records or the user's. Scope chooses\namong the caller's own; the worst a wrong one can do is clear too much of\nwhat you yourself published.\n\nStill explicit and required, never inferred: \"everything I own here\" and\n\"the subset under this key space\" are different intentions, and guessing\nbetween them is how a refresh silently becomes a wipe. See\nnotes/DESIGN_RECORD_OWNERSHIP.md and notes/DESIGN_COLLECTION_REPLACE.md.",
         "oneOf": [
           {
-            "description": "Every other record the CALLER OWNS in this collection is the\ncomplement. Permitted for any writer the collection accepts, not only\nits introducer: a co-writer on a `writers: anyone_who_declares`\ncollection manages its own contribution this way, and cannot touch\nanyone else's.",
+            "description": "Every other record the CALLER OWNS in this collection is the\ncomplement — whatever group it carries, ungrouped included. Permitted\nfor any writer the collection accepts, not only its introducer: a\nco-writer on a `writers: anyone_who_declares` collection manages its\nown contribution this way, and cannot touch anyone else's.",
             "properties": {
               "kind": {
                 "const": "collection",
@@ -2264,10 +2269,10 @@
             "type": "object"
           },
           {
-            "description": "Narrows to the caller's own records whose id starts with `value`. Lets\none plugin maintain several independent replace-sets in one collection —\nbrowser's per-prefix hint sets are the motivating case, and the reason it\nhand-rolled a third copy of this logic rather than use the toolkit's flat\nper-collection shadow.",
+            "description": "Narrows to the caller's own records carrying this group label, and\nstamps `value` on every entry written. Lets one plugin maintain\nseveral independent replace-sets in one collection — command sources\nare the motivating case (`commands.push`'s `group` is exactly this).\n\nReplaces the earlier `prefix` scope, which expressed the same intent\nas an id-prefix convention — the id doing double duty as identity and\nscope, with an error class (\"entry outside the declared prefix\") that\nexisted only to police the convention. A group is a real envelope\nattribute, so none of that polices anything: entries in a grouped\nreplace are in its group by definition. (`prefix` shipped 2026-08-12\nand accumulated zero production callers before its removal.)",
             "properties": {
               "kind": {
-                "const": "prefix",
+                "const": "group",
                 "type": "string"
               },
               "value": {
@@ -5404,6 +5409,14 @@
               "$ref": "#/$defs/CollectionPutEntry"
             },
             "type": "array"
+          }
+        },
+        {
+          "name": "group",
+          "required": false,
+          "schema": {
+            "description": "Writer-chosen group label stamped on EVERY entry in this call — which\nof the caller's named replace-sets these records belong to. See the\nrecord envelope's `group`: last-write placement, meaningful only\nwithin a writer. Absent = ungrouped, the common case. Call-level\nrather than per-entry because a put that mixes groups is a caller\ncomposing two writes, not one write with two meanings.",
+            "type": "string"
           }
         },
         {
