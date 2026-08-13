@@ -1658,6 +1658,10 @@
             "format": "uint64",
             "minimum": 0,
             "type": "integer"
+          },
+          "writer": {
+            "description": "Shape-generic equality filter on `Record::writer` — return only records\nowned by this writer. Absent = every record, whoever owns it.\n\nThis is the ONE in-verb extension DESIGN_PLATFORM_STATE.md section 3.2\nreserved (\"the only in-verb extension we would entertain is equality\nfilters on list opts\"), spent here rather than on a general predicate\nlanguage: it is exact equality on one structural envelope field, so it\ncannot compose into a query engine every backend must reimplement.\n\nIt exists so a caller can ask for its OWN records — the read half of\nscoped writes. `collection.replace` computes its complement from this,\nwhich is what lets a replace be safe on a multi-writer collection\nwithout the introducer restriction. See notes/DESIGN_RECORD_OWNERSHIP.md.\n\nFiltering happens BEFORE `limit`, so a limited+filtered read returns up\nto `limit` MATCHING records rather than the matches within the first\n`limit` records. Backends are free to filter earlier as an optimization\n(skipping a whole non-matching contribution, say) as long as the\nobservable result is identical — `backend_conformance` pins that.",
+            "type": "string"
           }
         },
         "required": [
@@ -1665,7 +1669,8 @@
           "cursor",
           "limit",
           "since_ms",
-          "until_ms"
+          "until_ms",
+          "writer"
         ],
         "type": "object"
       },
