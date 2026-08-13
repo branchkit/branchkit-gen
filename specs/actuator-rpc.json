@@ -2248,10 +2248,10 @@
         "type": "object"
       },
       "ReplaceScope": {
-        "description": "Which records `collection.replace` may delete — the \"complement\" it is\nallowed to clear.\n\nExplicit and required, never inferred. Ownership today is per-COLLECTION (an\nintroducer stamped on the file), not per-record, and `writers:\nanyone_who_declares` explicitly permits multi-writer collections — so a\nreplace that assumed \"this whole collection is mine\" would let one plugin\nsilently wipe another's records. See notes/DESIGN_COLLECTION_REPLACE.md.",
+        "description": "Which of the CALLER'S OWN records `collection.replace` may delete — the\n\"complement\" it is allowed to clear.\n\nThe complement is always computed over records whose `writer` is the caller,\nso no scope can reach another plugin's records or the user's. Scope chooses\namong the caller's own; the worst a wrong one can do is clear too much of\nwhat you yourself published.\n\nStill explicit and required, never inferred: \"everything I own here\" and\n\"the subset under this key space\" are different intentions, and guessing\nbetween them is how a refresh silently becomes a wipe. See\nnotes/DESIGN_RECORD_OWNERSHIP.md and notes/DESIGN_COLLECTION_REPLACE.md.",
         "oneOf": [
           {
-            "description": "Every other record in the collection is the complement. Refused unless\nthe caller is the collection's declared introducer.",
+            "description": "Every other record the CALLER OWNS in this collection is the\ncomplement. Permitted for any writer the collection accepts, not only\nits introducer: a co-writer on a `writers: anyone_who_declares`\ncollection manages its own contribution this way, and cannot touch\nanyone else's.",
             "properties": {
               "kind": {
                 "const": "collection",
@@ -2264,7 +2264,7 @@
             "type": "object"
           },
           {
-            "description": "Every other record whose id starts with `value` is the complement. Lets\none plugin maintain several independent replace-sets in one collection —\nbrowser's per-prefix hint sets are the motivating case, and the reason it\nhand-rolled a third copy of this logic rather than use the toolkit's flat\nper-collection shadow.",
+            "description": "Narrows to the caller's own records whose id starts with `value`. Lets\none plugin maintain several independent replace-sets in one collection —\nbrowser's per-prefix hint sets are the motivating case, and the reason it\nhand-rolled a third copy of this logic rather than use the toolkit's flat\nper-collection shadow.",
             "properties": {
               "kind": {
                 "const": "prefix",
