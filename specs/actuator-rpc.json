@@ -2230,6 +2230,41 @@
         ],
         "type": "object"
       },
+      "ReplaceScope": {
+        "description": "Which records `collection.replace` may delete — the \"complement\" it is\nallowed to clear.\n\nExplicit and required, never inferred. Ownership today is per-COLLECTION (an\nintroducer stamped on the file), not per-record, and `writers:\nanyone_who_declares` explicitly permits multi-writer collections — so a\nreplace that assumed \"this whole collection is mine\" would let one plugin\nsilently wipe another's records. See notes/DESIGN_COLLECTION_REPLACE.md.",
+        "oneOf": [
+          {
+            "description": "Every other record in the collection is the complement. Refused unless\nthe caller is the collection's declared introducer.",
+            "properties": {
+              "kind": {
+                "const": "collection",
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind"
+            ],
+            "type": "object"
+          },
+          {
+            "description": "Every other record whose id starts with `value` is the complement. Lets\none plugin maintain several independent replace-sets in one collection —\nbrowser's per-prefix hint sets are the motivating case, and the reason it\nhand-rolled a third copy of this logic rather than use the toolkit's flat\nper-collection shadow.",
+            "properties": {
+              "kind": {
+                "const": "prefix",
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "value"
+            ],
+            "type": "object"
+          }
+        ]
+      },
       "ReportSummary": {
         "properties": {
           "modified": {
@@ -5405,6 +5440,102 @@
         }
       },
       "summary": "Upsert records by id (bulk). Auto-registers the target as a record-keyed dynamic collection on first plugin call to an unknown name.",
+      "tags": [
+        {
+          "name": "collections"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collection.replace",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "entries",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The desired set. After the call, the records in scope are exactly these.",
+            "items": {
+              "$ref": "#/$defs/CollectionPutEntry"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "label",
+          "required": false,
+          "schema": {
+            "description": "Same semantics as `collection.put`'s `label`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "roles",
+          "required": false,
+          "schema": {
+            "additionalProperties": {
+              "$ref": "#/$defs/FieldDisplay"
+            },
+            "description": "Same semantics as `collection.put`'s `roles`.",
+            "type": "object"
+          }
+        },
+        {
+          "name": "scope",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/ReplaceScope",
+            "description": "What the call is allowed to delete. Required — see `ReplaceScope`."
+          }
+        }
+      ],
+      "result": {
+        "name": "collection_replace_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Counts split three ways, for the same reason `CollectionDeleteRecordsResult`\nsplits its two: drift detection. A caller that expected a steady state and\nsees a nonzero `put`/`deleted` has diverged from the platform's view.",
+          "properties": {
+            "deleted": {
+              "description": "Records removed because they were in scope but not in `entries`.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "put": {
+              "description": "Records written — new, or whose payload differed.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "skipped": {
+              "description": "Records left untouched because their payload was byte-identical.\n\nLoad-bearing, not a statistic: skipping identical payloads is what keeps\na periodic refresh from re-firing `_platform.collection.updated` for\nevery record and waking every subscriber. It is the property that makes\nthis a real verb rather than sugar for put-then-delete.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "put",
+            "deleted",
+            "skipped"
+          ],
+          "title": "CollectionReplaceResult",
+          "type": "object"
+        }
+      },
+      "summary": "Make the records in scope exactly the given set: upsert changed, delete absent, skip byte-identical. Scope is required and bounds what may be deleted.",
       "tags": [
         {
           "name": "collections"
