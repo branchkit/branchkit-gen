@@ -1976,6 +1976,30 @@
         ],
         "type": "string"
       },
+      "OwnedCollection": {
+        "description": "One (collection, group) pair the caller owns records in.\n\n(collection, group) PAIRS rather than bare collection names because\n`(writer, group)` is already the ownership key everything else reasons in:\na plugin sweeping per-collection state wants the name, one managing named\nreplace-sets wants the group, and one surface serves both. A collection\nholding both grouped and ungrouped records of the same writer yields one\nrow per distinct group.",
+        "properties": {
+          "count": {
+            "description": "How many of the caller's records carry this (collection, group).\n\nA count rather than a bare existence flag because it distinguishes\n\"registered but empty\" from \"absent\", which is what the sweeps\nactually want — wiping an already-empty collection is a wasted\nreplace. Never zero: a group with no records yields no row.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "group": {
+            "description": "The writer-chosen group label, or null for the ungrouped records —\nsee `Record::group`. Null is the ungrouped bucket, not \"any group\".",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "count",
+          "group",
+          "name"
+        ],
+        "type": "object"
+      },
       "PipelineStatusEntry": {
         "properties": {
           "ephemeral": {
@@ -5667,6 +5691,37 @@
         }
       },
       "summary": "List collections with entries for display, optionally filtered by kind",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "collections.owned",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "collections_owned_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "owned": {
+              "items": {
+                "$ref": "#/$defs/OwnedCollection"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "owned"
+          ],
+          "title": "CollectionsOwnedResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the collections holding records the caller owns, with per-group counts — the enumeration half of per-record ownership",
       "tags": [
         {
           "name": "misc"
