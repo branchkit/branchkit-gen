@@ -5931,6 +5931,14 @@
             "default": null,
             "description": "Array of `CommandSpec` JSON objects to push to the matching\nengine. Replaces the current commands contributed by the\ncalling plugin. Wire-level type is opaque\n(`serde_json::Value`) to keep the deserializer flexible; see\n`CommandSpec` for the canonical field list including\n`cancels_bridge`."
           }
+        },
+        {
+          "name": "group",
+          "required": false,
+          "schema": {
+            "description": "Optional named group this push owns. Absent replaces the plugin's\nENTIRE command set (the original semantics, unchanged); present\nreplaces only the records in that group and leaves the plugin's other\ngroups intact.\n\nExists because the single implicit slot is a race whenever a plugin has\nmore than one command source. Browser has five (scroll, find,\nreferences, hint skeleton, palette) and each used to push\nindependently — whichever landed last was the only set the matcher saw,\nand the hint skeleton routinely lost. Its workaround is a mutex plus\nrebuilding the union from every builder on each call. With groups each\nsource owns its own, and dropping a source drops its group.\n\nSee notes/PRINCIPLE_PLUGIN_HELD_STATE.md — this is the same\n\"can two of these coexist?\" failure that `collection.replace`'s scope\nfixes for records.",
+            "type": "string"
+          }
         }
       ],
       "result": {
