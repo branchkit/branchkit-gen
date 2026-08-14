@@ -288,6 +288,13 @@
           ],
           "description": "`policy.forbids_tag` — write only commits while the named tag is\n*not* in the active gate set. Introducer + platform writes bypass;\nonly cross-plugin writes are gated."
         },
+        "held_by_writer": {
+          "description": "Whether records in this collection are HOLDS — assertions about the\nwriting process's own live state — rather than durable statements that\noutlive it. When true, the platform releases the writer's records in\n`cleanup_terminated_plugin` the moment that plugin's process\nterminates (crash, disable, uninstall, restart), through the same\ndelete path an explicit `collection.delete_records` takes, so gates\nclear, events fire, and the matcher renarrows uniformly.\n\nThe rule underneath: the side that survives the crash must own the\nrelease. Before this existed, every plugin holding an exclusive tag\nhad to hand-roll a boot-time reconcile (browser's boot_reconcile.go,\nvoice's clearOrphanedSpeakingTag) — and a third-party plugin that\ndidn't know to would brick voice control on its first crash, since a\nstranded exclusive tag suppresses every command and narrows the\nengine.\n\nDefaults by preset: `tag` → true (a tag is almost always \"my process\nis in this state right now\"), everything else → false (data,\nentities and logs are statements, not holds). Declare explicitly to\noverride either way — `plugin.voice.mode` opts OUT because continuous\nmode is durable user intent that a hot-reload restore deliberately\nreads back.\n\nMatcher-written gates (`writers: platform_only`, written under\n`_platform` authority) are unaffected regardless: reaping is keyed on\nthe record's writer, and the platform never dies. Those are held by\nthe user's session, not by a process, and their `clear_on_event`\nlifecycles already model that.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "id_strategy": {
           "anyOf": [
             {
