@@ -1508,7 +1508,7 @@
       "description": "Backend that holds the collection's records.",
       "oneOf": [
         {
-          "description": "Per-collection JSON file in app support dir. Default for `log`, `command_set`.",
+          "description": "Per-collection JSON file in app support dir. Default for `log`.\n(NOT `command_set` — that preset overrides to `memory_only`, which is\nwhat lets command groups round-trip at all; see\n`supports_record_groups`.)",
           "properties": {
             "type": {
               "const": "per_collection_disk",
