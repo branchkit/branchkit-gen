@@ -1976,6 +1976,44 @@
         ],
         "type": "string"
       },
+      "OverlayRow": {
+        "description": "One (tenant, collection) overlay entry with content.",
+        "properties": {
+          "added": {
+            "description": "User band only (plugin overlays cannot add or remove records).",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "collection": {
+            "type": "string"
+          },
+          "patched_ids": {
+            "description": "Record ids this tenant patches — INCLUDING dangling ones whose record\nno longer exists. Annotations key on identity, so a patch survives its\nrecord being unpublished (and resurrects if the id returns); this list\nis how a tenant finds strays to `restore`.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "removed": {
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "tenant": {
+            "description": "Whose overlay: `\"_user\"` or a plugin id.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "added",
+          "collection",
+          "patched_ids",
+          "removed",
+          "tenant"
+        ],
+        "type": "object"
+      },
       "OwnedCollection": {
         "description": "One (collection, group) pair the caller owns records in.\n\n(collection, group) PAIRS rather than bare collection names because\n`(writer, group)` is already the ownership key everything else reasons in:\na plugin sweeping per-collection state wants the name, one managing named\nreplace-sets wants the group, and one surface serves both. A collection\nholding both grouped and ungrouped records of the same writer yields one\nrow per distinct group.",
         "properties": {
@@ -25869,6 +25907,15 @@
             "description": "New key (id_field value) for the \"rename\" action — the entry is re-added\nunder this key with every other field (value, aliases) preserved.\nIgnored by other actions.",
             "type": "string"
           }
+        },
+        {
+          "name": "tenant",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Which overlay tenant this mutation targets — a writer-namespace value\n(`\"_user\"` or a plugin id). Defaults: a plugin caller targets its OWN\noverlay; a host caller targets `\"_user\"`. A plugin transporting a user\ngesture from its settings tab says `\"_user\"` explicitly; it may never\ntarget another plugin's overlay. Plugin overlays carry per-field\npatches only (`patch`/`restore`/`reset`) — annotation, not authorship\n(notes/DESIGN_WRITER_SCOPED_OVERLAY.md).",
+            "type": "string"
+          }
         }
       ],
       "result": {
@@ -25899,6 +25946,37 @@
       ],
       "x-branchkit-emits": [
         "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "overrides.list",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "overrides_list_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "overlays": {
+              "items": {
+                "$ref": "#/$defs/OverlayRow"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "overlays"
+          ],
+          "title": "OverridesListResult",
+          "type": "object"
+        }
+      },
+      "summary": "List overlay entries — a plugin sees which collections carry its annotations (including dangling ids to prune); the host sees every tenant",
+      "tags": [
+        {
+          "name": "misc"
+        }
       ],
       "x-since": "0.1.0"
     },
