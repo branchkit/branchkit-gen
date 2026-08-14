@@ -1991,12 +1991,17 @@
           },
           "name": {
             "type": "string"
+          },
+          "writer": {
+            "description": "Who owns these records. Redundant on `collections.owned` (always the\ncaller) but not on the unfiltered census the ownership diagnostics\nrun, which is the same walk — so the row is self-describing either way.",
+            "type": "string"
           }
         },
         "required": [
           "count",
           "group",
-          "name"
+          "name",
+          "writer"
         ],
         "type": "object"
       },
