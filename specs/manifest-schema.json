@@ -23,6 +23,9 @@
     "ActionFieldSchema": {
       "description": "Schema for a single field within an action type.",
       "properties": {
+        "default": {
+          "description": "Shipped default value. REQUIRED on every field of a\n`preset: settings` collection — the settings base record is\nmaterialized from these at read time, which is what makes default\nevolution work (an untouched field always reads the CURRENT shipped\ndefault, never a stale saved copy). Validated against `field_type`\nat manifest load. Advisory elsewhere (generic UIs may prefill)."
+        },
         "display": {
           "anyOf": [
             {
@@ -1291,6 +1294,11 @@
           "const": "data",
           "description": "Inter-plugin shared state with no special matching-engine processing.",
           "type": "string"
+        },
+        {
+          "const": "settings",
+          "description": "Plugin settings: a singleton of manifest-declared fields, each with a\nshipped `default`. The base record is VIRTUAL — materialized from the\nmanifest defaults at read time; only the user's changes are stored\n(the `_user` overlay band, composed last). `writers: platform_only`:\nplugins read the composed view, never write — settings are the user's\nchoices, and anything a plugin flips programmatically is domain state\nby definition. See notes/DESIGN_PLUGIN_SETTINGS_STORAGE.md\n(decisions D1-D3, approved 2026-08-15).",
+          "type": "string"
         }
       ]
     },
@@ -1640,6 +1648,11 @@
         {
           "const": "none",
           "description": "Hidden from the Collections tab. An explicit \"don't surface\"\nescape hatch — no preset defaults to this.",
+          "type": "string"
+        },
+        {
+          "const": "form",
+          "description": "Generic per-field settings form: current value, shipped default,\nchanged-indicator, per-field revert. Default for `settings` —\nrenderable because the preset requires every field declared with a\n`default`. A plugin wanting richer UI keeps `settings_tabs` as the\nescape hatch.",
           "type": "string"
         }
       ]

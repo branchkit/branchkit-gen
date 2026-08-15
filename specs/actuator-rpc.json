@@ -155,6 +155,9 @@
       "ActionFieldSchema": {
         "description": "Schema for a single field within an action type.",
         "properties": {
+          "default": {
+            "description": "Shipped default value. REQUIRED on every field of a\n`preset: settings` collection — the settings base record is\nmaterialized from these at read time, which is what makes default\nevolution work (an untouched field always reads the CURRENT shipped\ndefault, never a stale saved copy). Validated against `field_type`\nat manifest load. Advisory elsewhere (generic UIs may prefill)."
+          },
           "display": {
             "anyOf": [
               {
