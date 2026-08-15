@@ -1478,6 +1478,13 @@
             "null"
           ]
         },
+        "feeds": {
+          "description": "Bus event types this stage supplies as a spontaneous SOURCE —\n`ext.<vendor>.<name>` custom-event types or `ext.<vendor>.*` globs\n(see the pipeline contract's customEvents rule). Declaring feeds makes\nthe platform host the stage on demand: it is spawned while at least\none enabled plugin subscribes to something it feeds, and stopped when\nno subscriber remains. Omit for pipeline stages (STT, VAD, sources\nnamed by a pipeline), which are spawned by the pipelines that\nreference them.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "parameters": {
           "description": "Parameter schema for this stage. Reuses the existing\n`ActionFieldSchema` / `FieldType` machinery — same algebra applied\nto a new dimension. Empty if the stage takes no parameters.",
           "items": {
