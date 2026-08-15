@@ -25886,6 +25886,15 @@
           }
         },
         {
+          "name": "field",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Field key for the \"unpatch\" action — removes ONE field from the\ntenant's patch of `id` (the per-field inverse of \"patch\"; the patch\nentry is dropped when its last field goes). The settings form's\nper-field revert: sparse by construction, so the reverted field\nresumes tracking the shipped default. Ignored by other actions.",
+            "type": "string"
+          }
+        },
+        {
           "name": "fields",
           "required": false,
           "schema": {
