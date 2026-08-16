@@ -3762,6 +3762,32 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.system.did_wake",
+      "paramStructure": "by-name",
+      "params": [],
+      "summary": "The machine woke from sleep — re-acquire devices, resync state",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.system.will_sleep",
+      "paramStructure": "by-name",
+      "params": [],
+      "summary": "The machine is about to sleep — last chance to flush or release",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.window.closed",
       "paramStructure": "by-name",
       "params": [
