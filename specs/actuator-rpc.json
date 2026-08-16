@@ -2103,93 +2103,6 @@
         ],
         "type": "object"
       },
-      "ProbeItem": {
-        "properties": {
-          "apply_bias": {
-            "default": false,
-            "description": "When set, the actuator stamps the live never-standalone Lever E penalty\n(`build_never_standalone_weights_inner`) onto this item so the re-decode\nreproduces the biased live behavior. The word set is the actuator's, not the\ncaller's — the plugin only opts in. Off = unbiased decode.",
-            "type": "boolean"
-          },
-          "audio": {
-            "description": "WAV path relative to the CALLER's own data dir (e.g.\n`calibration-capture/<game>/seg_0.wav`). Confined to that root.",
-            "type": "string"
-          },
-          "bias_strength": {
-            "default": null,
-            "description": "L2 strength sweep: when set, the actuator stamps the never-standalone word set\nat exactly this cost (instead of the configured live penalty), so the caller\ncan probe the same clip across a ladder of strengths and find its flip\nthreshold. The word set is still the actuator's — only the cost is requested.\nTakes precedence over `apply_bias`; <= 0 means unbiased.",
-            "format": "double",
-            "type": "number"
-          },
-          "id": {
-            "type": "string"
-          },
-          "noise": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/ProbeNoise"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": null
-          },
-          "words": {
-            "default": [],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "apply_bias",
-          "audio",
-          "bias_strength",
-          "id",
-          "noise",
-          "words"
-        ],
-        "type": "object"
-      },
-      "ProbeLine": {
-        "properties": {
-          "error": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "text": {
-            "default": "",
-            "type": "string"
-          }
-        },
-        "required": [
-          "error",
-          "id",
-          "text"
-        ],
-        "type": "object"
-      },
-      "ProbeNoise": {
-        "properties": {
-          "seed": {
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "snr_db": {
-            "format": "double",
-            "type": "number"
-          }
-        },
-        "required": [
-          "seed",
-          "snr_db"
-        ],
-        "type": "object"
-      },
       "ProcessInfo": {
         "properties": {
           "cpu_percent": {
@@ -2222,6 +2135,93 @@
           "path",
           "pid",
           "user"
+        ],
+        "type": "object"
+      },
+      "RedecodeItem": {
+        "properties": {
+          "apply_bias": {
+            "default": false,
+            "description": "When set, the actuator stamps the live never-standalone Lever E penalty\n(`build_never_standalone_weights_inner`) onto this item so the re-decode\nreproduces the biased live behavior. The word set is the actuator's, not the\ncaller's — the plugin only opts in. Off = unbiased decode.",
+            "type": "boolean"
+          },
+          "audio": {
+            "description": "WAV path relative to the CALLER's own data dir (e.g.\n`calibration-capture/<game>/seg_0.wav`). Confined to that root.",
+            "type": "string"
+          },
+          "bias_strength": {
+            "default": null,
+            "description": "L2 strength sweep: when set, the actuator stamps the never-standalone word set\nat exactly this cost (instead of the configured live penalty), so the caller\ncan probe the same clip across a ladder of strengths and find its flip\nthreshold. The word set is still the actuator's — only the cost is requested.\nTakes precedence over `apply_bias`; <= 0 means unbiased.",
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "type": "string"
+          },
+          "noise": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RedecodeNoise"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "words": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "apply_bias",
+          "audio",
+          "bias_strength",
+          "id",
+          "noise",
+          "words"
+        ],
+        "type": "object"
+      },
+      "RedecodeLine": {
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "default": "",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error",
+          "id",
+          "text"
+        ],
+        "type": "object"
+      },
+      "RedecodeNoise": {
+        "properties": {
+          "seed": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "snr_db": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "seed",
+          "snr_db"
         ],
         "type": "object"
       },
@@ -4031,130 +4031,6 @@
         }
       },
       "summary": "Return all action type schemas keyed by fully-qualified name",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.bias.apply",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "force",
-          "required": false,
-          "schema": {
-            "default": false,
-            "description": "Overwrite a manually-set value. Without it, `manual` provenance refuses\n(`applied: false`) so the caller can confirm with the user first — a\ncalibration apply must never silently clobber a hand-set value.",
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "strength",
-          "required": true,
-          "schema": {
-            "description": "Strength to apply (> 0; the setting is also switched on).",
-            "format": "double",
-            "type": "number"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_bias_apply_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "applied": {
-              "type": "boolean"
-            },
-            "previous_provenance": {
-              "description": "Provenance of the value in place before this call\n(\"default\" | \"manual\" | \"calibration\").",
-              "type": "string"
-            }
-          },
-          "required": [
-            "applied",
-            "previous_provenance"
-          ],
-          "title": "BiasApplyResult",
-          "type": "object"
-        }
-      },
-      "summary": "Apply a calibration-measured strength to the never-standalone recognition bias (provenance: calibration); refuses over a manually-set value unless force",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.capture.probe",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "items",
-          "required": true,
-          "schema": {
-            "items": {
-              "$ref": "#/$defs/ProbeItem"
-            },
-            "type": "array"
-          }
-        },
-        {
-          "name": "max_active",
-          "required": false,
-          "schema": {
-            "default": null,
-            "format": "uint32",
-            "minimum": 0,
-            "type": "integer"
-          }
-        },
-        {
-          "name": "model",
-          "required": true,
-          "schema": {
-            "description": "Model dir name under app-support `models/` (single component, no\ntraversal), e.g. `\"sherpa-offline-nemo\"`.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "stage",
-          "required": true,
-          "schema": {
-            "description": "Registered stage id whose binary's `probe` subcommand runs the re-decode,\ne.g. `\"voice.sherpa_commands\"`. Validated against the stage registry.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_capture_probe_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "lines": {
-              "items": {
-                "$ref": "#/$defs/ProbeLine"
-              },
-              "type": "array"
-            },
-            "model_version": {
-              "description": "Stable content version of the acoustic model used for this re-decode — a\nhash of the model dir's `model.onnx`. Lets a per-clip fragility history\ndistinguish re-probes across a model swap (a constant engine id can't).\nEmpty when the model file is unreadable.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "lines"
-          ],
-          "title": "ProbeResult",
-          "type": "object"
-        }
-      },
-      "summary": "Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec",
       "tags": [
         {
           "name": "misc"
@@ -25623,6 +25499,130 @@
         }
       },
       "summary": "Toggle the recording flag on a log-kind collection (privacy control plane)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "recognition.bias.apply",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "force",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Overwrite a manually-set value. Without it, `manual` provenance refuses\n(`applied: false`) so the caller can confirm with the user first — a\ncalibration apply must never silently clobber a hand-set value.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "strength",
+          "required": true,
+          "schema": {
+            "description": "Strength to apply (> 0; the setting is also switched on).",
+            "format": "double",
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "recognition_bias_apply_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "applied": {
+              "type": "boolean"
+            },
+            "previous_provenance": {
+              "description": "Provenance of the value in place before this call\n(\"default\" | \"manual\" | \"calibration\").",
+              "type": "string"
+            }
+          },
+          "required": [
+            "applied",
+            "previous_provenance"
+          ],
+          "title": "BiasApplyResult",
+          "type": "object"
+        }
+      },
+      "summary": "Apply a calibration-measured strength to the never-standalone recognition bias (provenance: calibration); refuses over a manually-set value unless force",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "recognition.redecode",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "items",
+          "required": true,
+          "schema": {
+            "items": {
+              "$ref": "#/$defs/RedecodeItem"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "max_active",
+          "required": false,
+          "schema": {
+            "default": null,
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "model",
+          "required": true,
+          "schema": {
+            "description": "Model dir name under app-support `models/` (single component, no\ntraversal), e.g. `\"sherpa-offline-nemo\"`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "stage",
+          "required": true,
+          "schema": {
+            "description": "Registered stage id whose binary's `probe` subcommand runs the re-decode,\ne.g. `\"voice.sherpa_commands\"`. Validated against the stage registry.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "recognition_redecode_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "lines": {
+              "items": {
+                "$ref": "#/$defs/RedecodeLine"
+              },
+              "type": "array"
+            },
+            "model_version": {
+              "description": "Stable content version of the acoustic model used for this re-decode — a\nhash of the model dir's `model.onnx`. Lets a per-clip fragility history\ndistinguish re-probes across a model swap (a constant engine id can't).\nEmpty when the model file is unreadable.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "lines"
+          ],
+          "title": "RedecodeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec",
       "tags": [
         {
           "name": "misc"
