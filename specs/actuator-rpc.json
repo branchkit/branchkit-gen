@@ -28064,6 +28064,27 @@
       "name": "speech"
     },
     {
+      "description": "See and monitor audio devices from a pipeline stage",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.audio_devices"
+    },
+    {
+      "description": "See and monitor connected displays from a pipeline stage",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.displays"
+    },
+    {
+      "description": "Run machine-learning models on the Neural Engine (on-device acceleration; no network access, no file access)",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.neural_engine"
+    },
+    {
       "description": "Disk usage and volume information",
       "gated_event_prefixes": [],
       "method_count": 5,
