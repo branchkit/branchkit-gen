@@ -4039,65 +4039,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "calibration.apply",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "command_id",
-          "required": true,
-          "schema": {
-            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "trial_id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_apply_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Flat wire view of the context a trial entered. The actuator's internal\n`ContextSpec` is a discriminated union (which the SDK type emitters\ncan't materialize across the boundary), so the RPC result is this flat\nDTO — its fields map 1:1 onto the host-side `ContextSpec`\n(`kind`/`tags`/`fixture_handle`).",
-          "properties": {
-            "fixture_handle": {
-              "description": "Fixture handle returned by a dynamic command's owner; empty for\nstatic tiers. The actuator already registered it under the trial.",
-              "type": "string"
-            },
-            "kind": {
-              "description": "`\"static\"` (base / mode-gated / slotted) or `\"dynamic\"` (hints) —\nmatches the host-side `ContextSpec.Kind`.",
-              "type": "string"
-            },
-            "tags": {
-              "description": "Active-tag set the matcher sees during the trial: a mode-gated\ncommand's `requires_tags` (empty for base/slotted). Empty for the\ndynamic tier, whose tags are written plugin-side by the fixture.\nThe actuator platform-wrote these and recorded them on the trial so\n`trial_end` clears them. The host passes them to\n`commands.resolve --preview` to compute the functional (Resolves)\nsignal.",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "kind",
-            "tags",
-            "fixture_handle"
-          ],
-          "title": "ApplyContextResult",
-          "type": "object"
-        }
-      },
-      "summary": "Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards calibration_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "calibration.bias.apply",
       "paramStructure": "by-name",
       "params": [
@@ -4217,264 +4158,6 @@
       "tags": [
         {
           "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.register_fixture_handle",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "fixture_handle",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "owner_plugin_id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "trial_id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_register_fixture_handle_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "title": "RegisterFixtureHandleResult",
-          "type": "object"
-        }
-      },
-      "summary": "Register a fixture handle under an open trial so trial_end can release it",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.resolve_samples",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "command_id",
-          "required": true,
-          "schema": {
-            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_resolve_samples_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "prompts": {
-              "description": "Concrete prompts to walk for this command, supplied by its owning\nplugin's `calibration_samples` hook. Empty when the command's owner\ndoesn't implement the (optional) hook or declines — the calibration\nhost then falls back to its own default sample derivation (codewords\nfor dynamic commands, the generic filler for free-text slots).",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "prompts"
-          ],
-          "title": "SamplesResult",
-          "type": "object"
-        }
-      },
-      "summary": "Resolve the concrete calibration prompts for a command whose vocabulary the host can't derive — forwards calibration_samples to a dynamic command's owner (empty when the owner doesn't implement the optional hook; the host then falls back to its own default).",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.trial_begin",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "calibration_trial_begin_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "trial_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "trial_id"
-          ],
-          "title": "TrialBeginResult",
-          "type": "object"
-        }
-      },
-      "summary": "Open a calibration trial — writes _platform.calibration.active, returns a trial_id",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration.trial_end",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "trial_id",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_trial_end_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "released_handle_count": {
-              "description": "Number of fixture-release RPCs spawned. Caller doesn't await them\n— best-effort cleanup that runs in the background.",
-              "format": "uint",
-              "minimum": 0,
-              "type": "integer"
-            }
-          },
-          "required": [
-            "released_handle_count"
-          ],
-          "title": "TrialEndResult",
-          "type": "object"
-        }
-      },
-      "summary": "Close a calibration trial — clears the tag and spawns release RPCs to fixture owners",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration_apply_fixture",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "command_id",
-          "required": true,
-          "schema": {
-            "description": "The dynamic command being calibrated — formatted as\n`<owner_plugin>:<display_pattern>`, matching `commands.enumerate`'s\n`id` field. The plugin uses this to decide which fixture recipe to\nrun (most owners have one canonical fixture per command).",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_apply_fixture_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "fixture_handle": {
-              "description": "Opaque, plugin-chosen handle. The actuator hands it back via\n`calibration_release_fixture` so the plugin can reverse this\nspecific fixture's writes without keeping ambient state.",
-              "type": "string"
-            }
-          },
-          "required": [
-            "fixture_handle"
-          ],
-          "title": "CalibrationApplyFixtureResult",
-          "type": "object"
-        }
-      },
-      "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the actuator passes to calibration_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
-      "tags": [
-        {
-          "name": "actuator-to-plugin"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration_release_fixture",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "fixture_handle",
-          "required": true,
-          "schema": {
-            "description": "Handle previously returned by `calibration_apply_fixture`.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_release_fixture_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "title": "CalibrationReleaseFixtureResult",
-          "type": "object"
-        }
-      },
-      "summary": "Reverse the state writes a previous calibration_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
-      "tags": [
-        {
-          "name": "actuator-to-plugin"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "calibration_samples",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "command_id",
-          "required": true,
-          "schema": {
-            "description": "The command being calibrated — `<owner_plugin>:<display_pattern>`,\nmatching `commands.enumerate`'s `id`.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "calibration_samples_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "prompts": {
-              "description": "Concrete phrases the calibration host should walk for this command —\nthe owner's realistic sample of an otherwise un-derivable vocabulary\n(a runtime list, a dynamic hint cross-product, free-text examples).\nThe owner owns the count and how slots combine; the host walks them\nas-is. An empty list declines — the host falls back to its own default.",
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "prompts"
-          ],
-          "title": "CalibrationSamplesResult",
-          "type": "object"
-        }
-      },
-      "summary": "Return concrete calibration prompts for a command whose vocabulary the host can't derive itself — a runtime list, a dynamic hint cross-product, or free-text examples. Optional: implement it on a plugin that owns such a command; the calibration host falls back to its own default (codewords / filler) when the hook is absent or returns an empty list. The owner owns the count and how slots combine.",
-      "tags": [
-        {
-          "name": "actuator-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -26792,6 +26475,323 @@
         }
       ],
       "x-branchkit-privilege": "shell",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial.begin",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "trial_begin_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "trial_id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "trial_id"
+          ],
+          "title": "TrialBeginResult",
+          "type": "object"
+        }
+      },
+      "summary": "Open a calibration trial — writes _platform.calibration.active, returns a trial_id",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial.end",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "trial_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_end_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "released_handle_count": {
+              "description": "Number of fixture-release RPCs spawned. Caller doesn't await them\n— best-effort cleanup that runs in the background.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "released_handle_count"
+          ],
+          "title": "TrialEndResult",
+          "type": "object"
+        }
+      },
+      "summary": "Close a calibration trial — clears the tag and spawns release RPCs to fixture owners",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial.enter_context",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "trial_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_enter_context_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Flat wire view of the context a trial entered. The actuator's internal\n`ContextSpec` is a discriminated union (which the SDK type emitters\ncan't materialize across the boundary), so the RPC result is this flat\nDTO — its fields map 1:1 onto the host-side `ContextSpec`\n(`kind`/`tags`/`fixture_handle`).",
+          "properties": {
+            "fixture_handle": {
+              "description": "Fixture handle returned by a dynamic command's owner; empty for\nstatic tiers. The actuator already registered it under the trial.",
+              "type": "string"
+            },
+            "kind": {
+              "description": "`\"static\"` (base / mode-gated / slotted) or `\"dynamic\"` (hints) —\nmatches the host-side `ContextSpec.Kind`.",
+              "type": "string"
+            },
+            "tags": {
+              "description": "Active-tag set the matcher sees during the trial: a mode-gated\ncommand's `requires_tags` (empty for base/slotted). Empty for the\ndynamic tier, whose tags are written plugin-side by the fixture.\nThe actuator platform-wrote these and recorded them on the trial so\n`trial_end` clears them. The host passes them to\n`commands.resolve --preview` to compute the functional (Resolves)\nsignal.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "kind",
+            "tags",
+            "fixture_handle"
+          ],
+          "title": "ApplyContextResult",
+          "type": "object"
+        }
+      },
+      "summary": "Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards trial_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial.register_fixture",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "fixture_handle",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "trial_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_register_fixture_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "RegisterFixtureHandleResult",
+          "type": "object"
+        }
+      },
+      "summary": "Register a fixture handle under an open trial so trial_end can release it",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial.resolve_samples",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_resolve_samples_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "prompts": {
+              "description": "Concrete prompts to walk for this command, supplied by its owning\nplugin's `trial_samples` hook. Empty when the command's owner\ndoesn't implement the (optional) hook or declines — the calibration\nhost then falls back to its own default sample derivation (codewords\nfor dynamic commands, the generic filler for free-text slots).",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "prompts"
+          ],
+          "title": "SamplesResult",
+          "type": "object"
+        }
+      },
+      "summary": "Resolve concrete prompt phrases for a command whose vocabulary the caller can't derive — forwards trial_samples to a dynamic command's owner (empty when the owner doesn't implement the optional hook; the host then falls back to its own default).",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial_apply_fixture",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "The dynamic command being calibrated — formatted as\n`<owner_plugin>:<display_pattern>`, matching `commands.enumerate`'s\n`id` field. The plugin uses this to decide which fixture recipe to\nrun (most owners have one canonical fixture per command).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_apply_fixture_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "fixture_handle": {
+              "description": "Opaque, plugin-chosen handle. The actuator hands it back via\n`trial_release_fixture` so the plugin can reverse this\nspecific fixture's writes without keeping ambient state.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "fixture_handle"
+          ],
+          "title": "TrialApplyFixtureResult",
+          "type": "object"
+        }
+      },
+      "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the actuator passes to trial_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial_release_fixture",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "fixture_handle",
+          "required": true,
+          "schema": {
+            "description": "Handle previously returned by `trial_apply_fixture`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_release_fixture_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "TrialReleaseFixtureResult",
+          "type": "object"
+        }
+      },
+      "summary": "Reverse the state writes a previous trial_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "trial_samples",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "command_id",
+          "required": true,
+          "schema": {
+            "description": "The command being calibrated — `<owner_plugin>:<display_pattern>`,\nmatching `commands.enumerate`'s `id`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "trial_samples_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "prompts": {
+              "description": "Concrete phrases the calibration host should walk for this command —\nthe owner's realistic sample of an otherwise un-derivable vocabulary\n(a runtime list, a dynamic hint cross-product, free-text examples).\nThe owner owns the count and how slots combine; the host walks them\nas-is. An empty list declines — the host falls back to its own default.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "prompts"
+          ],
+          "title": "TrialSamplesResult",
+          "type": "object"
+        }
+      },
+      "summary": "Return concrete calibration prompts for a command whose vocabulary the host can't derive itself — a runtime list, a dynamic hint cross-product, or free-text examples. Optional: implement it on a plugin that owns such a command; the calibration host falls back to its own default (codewords / filler) when the hook is absent or returns an empty list. The owner owns the count and how slots combine.",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
       "x-since": "0.1.0"
     },
     {
