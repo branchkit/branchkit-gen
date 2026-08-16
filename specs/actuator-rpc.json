@@ -3485,6 +3485,52 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.network.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "constrained",
+          "required": true,
+          "schema": {
+            "description": "The user asked for reduced data use (Low Data Mode).",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "expensive",
+          "required": true,
+          "schema": {
+            "description": "The path costs money or battery (cellular, personal hotspot).",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "interface",
+          "required": true,
+          "schema": {
+            "description": "Interface carrying the path: \"wifi\", \"ethernet\", \"cellular\", \"loopback\",\n\"other\", or \"none\" when unreachable.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "reachable",
+          "required": true,
+          "schema": {
+            "description": "Whether a usable network path exists right now.",
+            "type": "boolean"
+          }
+        }
+      ],
+      "summary": "Network path changed — connectivity gained or lost, or the interface behind it changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.pipeline.error",
       "paramStructure": "by-name",
       "params": [
