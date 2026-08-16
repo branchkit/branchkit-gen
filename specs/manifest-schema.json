@@ -1132,6 +1132,196 @@
       ],
       "description": "A method declaration: `true` (simple opt-in) or an object (method with metadata)."
     },
+    "ModelDeclaration": {
+      "description": "One model a plugin's engine can load.\n\nThe platform never fetches these — `branchkit-cli` does, because it is the\nonly component with network access and the plugin itself runs\nnetwork-denied. What the manifest supplies is a recipe the CLI can execute\nwith no plugin code running: a list of content-pinned parts, each landing at\na declared path under the model directory.",
+      "properties": {
+        "description": {
+          "description": "One line for the model picker (\"Best quality, slowest\").",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parts": {
+          "description": "How to assemble the model directory, in order.",
+          "items": {
+            "$ref": "#/$defs/ModelPart"
+          },
+          "type": "array"
+        },
+        "requires": {
+          "description": "Files that must exist under the model dir once every part has been\napplied. The completeness gate: without it a source that quietly stops\nserving one file leaves a model directory that looks provisioned and\nfails at load. Paths are relative to the model dir.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "size_bytes": {
+          "description": "Total on-disk size. Shown in the install-time disclosure and used as a\ndownload ceiling, so it is required rather than nice-to-have.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "size_bytes",
+        "parts"
+      ],
+      "type": "object"
+    },
+    "ModelPart": {
+      "description": "One step in assembling a model directory.\n\nFive kinds, each with a first-party consumer today — deliberately not a\ngeneral fetch language. The rule that keeps it from becoming one: a part is\ncontent-pinned, lands at a declared relative path, and needs no plugin code\nto execute. Anything that needs more is not a model.\n\nThe pins are REQUIRED FIELDS rather than validated options, so the type\ncannot represent an unpinned remote fetch at all. `plugin_file` carries no\npin because those bytes ship inside the plugin and are already covered by\nits signature chain.",
+      "oneOf": [
+        {
+          "description": "Recursive snapshot of a Hugging Face repo subfolder (a CoreML model\nfolder is tens of files, not one archive).",
+          "properties": {
+            "dest": {
+              "description": "Subdirectory of the model dir to land in. Omitted = the root.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "hf_folder",
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "repo": {
+              "type": "string"
+            },
+            "revision": {
+              "description": "Commit sha. Hugging Face addresses files by commit, so pinning the\nrevision pins the bytes; a rewritten or deleted commit 404s rather\nthan silently serving something else.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "repo",
+            "path",
+            "revision"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Named files from a Hugging Face repo — the tokenizer case, where the\nfiles live in a different repo from the weights.",
+          "properties": {
+            "dest": {
+              "description": "Subdirectory of the model dir to land in. Omitted = the root.",
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "files": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "kind": {
+              "const": "hf_files",
+              "type": "string"
+            },
+            "repo": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "repo",
+            "revision",
+            "files"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "A `.tar.bz2` from which named members are extracted, flattened.",
+          "properties": {
+            "dest": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "kind": {
+              "const": "http_archive",
+              "type": "string"
+            },
+            "members": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "url",
+            "sha256",
+            "members"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "A single downloaded file.",
+          "properties": {
+            "dest": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "http_file",
+              "type": "string"
+            },
+            "sha256": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "url",
+            "sha256",
+            "dest"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "A file copied from the declaring plugin's own directory — small assets\na plugin ships rather than fetches (sherpa's BPE tokenizer files).",
+          "properties": {
+            "dest": {
+              "type": "string"
+            },
+            "kind": {
+              "const": "plugin_file",
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "kind",
+            "path",
+            "dest"
+          ],
+          "type": "object"
+        }
+      ]
+    },
     "NetworkConfig": {
       "anyOf": [
         {
@@ -1380,6 +1570,13 @@
             "$ref": "#/$defs/EventSchemaDecl"
           },
           "description": "Event types this plugin emits, keyed by event type name.",
+          "type": "object"
+        },
+        "models": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ModelDeclaration"
+          },
+          "description": "Models this plugin's stages can load, keyed by the name a pipeline\npasses as the stage's `model` param. Provisioned by `branchkit-cli`\ninto `<app_support>/models/<plugin_id>/<model_name>`, which is the\nroot the platform hands the stage as `BRANCHKIT_MODELS_DIR` and the\nroot its sandbox grant is confined to — so a stage sees a flat\nnamespace it owns and nothing else.\nSee `notes/DESIGN_PLUGIN_MODEL_DECLARATION.md`.",
           "type": "object"
         },
         "stages": {
