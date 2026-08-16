@@ -3732,6 +3732,63 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.power.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "battery_level",
+          "required": false,
+          "schema": {
+            "description": "Battery charge percentage (0-100). Absent on machines with no battery.",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        {
+          "name": "is_charging",
+          "required": true,
+          "schema": {
+            "description": "Whether the battery is currently charging.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "source",
+          "required": true,
+          "schema": {
+            "description": "Power source: \"battery\", \"ac\", or \"ups\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "time_to_empty",
+          "required": false,
+          "schema": {
+            "description": "Estimated minutes until empty. Absent when unknown or on AC.",
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        {
+          "name": "time_to_full",
+          "required": false,
+          "schema": {
+            "description": "Estimated minutes until full. Absent when unknown or not charging.",
+            "format": "int64",
+            "type": "integer"
+          }
+        }
+      ],
+      "summary": "Power source, charging state, or battery level changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.selection.picked",
       "paramStructure": "by-name",
       "params": [
