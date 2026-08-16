@@ -2288,25 +2288,6 @@
           }
         ]
       },
-      "ReportSummary": {
-        "properties": {
-          "modified": {
-            "description": "File mtime as Unix seconds — display ordering only.",
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "slot": {
-            "description": "Slot name (report file stem), e.g. `alphabet.b`.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "modified",
-          "slot"
-        ],
-        "type": "object"
-      },
       "ResolveTelemetry": {
         "description": "Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The\ninternal type can't derive `Serialize`/`JsonSchema` because it lives in\nthe matching crate alongside non-serializable internals — this struct\nis the wire shape exposed through `commands.resolve`.",
         "properties": {
@@ -4494,75 +4475,6 @@
       "tags": [
         {
           "name": "actuator-to-plugin"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "codeword_lab.reports.list",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "codeword_lab_reports_list_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "reports": {
-              "description": "One entry per report on disk, newest first.",
-              "items": {
-                "$ref": "#/$defs/ReportSummary"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "reports"
-          ],
-          "title": "ReportsListResult",
-          "type": "object"
-        }
-      },
-      "summary": "List codeword-lab candidate reports (one per slot, newest first) — the actuator-owned scan of the reports dir the plugin subprocess can't read",
-      "tags": [
-        {
-          "name": "misc"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "codeword_lab.reports.read",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "slot",
-          "required": true,
-          "schema": {
-            "description": "Slot whose report to read, e.g. `alphabet.b`. Validated to the slot\ncharacter set so the op stays confined to the reports dir.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "codeword_lab_reports_read_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "report": {
-              "description": "The report document as the harness wrote it (schema owned by the\nharness; the plugin treats unknown fields as opaque)."
-            }
-          },
-          "required": [
-            "report"
-          ],
-          "title": "ReportsReadResult",
-          "type": "object"
-        }
-      },
-      "summary": "Read one slot's codeword-lab candidate report, slot-confined to the reports dir",
-      "tags": [
-        {
-          "name": "misc"
         }
       ],
       "x-since": "0.1.0"
