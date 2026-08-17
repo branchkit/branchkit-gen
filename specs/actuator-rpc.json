@@ -1742,6 +1742,38 @@
         ],
         "type": "object"
       },
+      "ManagedFieldRow": {
+        "description": "One `(record, field)` a tenant set, with the provenance of the decision.",
+        "properties": {
+          "actor": {
+            "description": "Who applied it: a plugin id, or `_host` for the Settings UI.",
+            "type": "string"
+          },
+          "at_unix_ms": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "field": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "origin": {
+            "description": "`user` | `relayed` | `plugin` — whose intent this represents. `relayed`\nis a plugin's unverified claim to be carrying a user gesture.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "actor",
+          "at_unix_ms",
+          "field",
+          "id",
+          "origin"
+        ],
+        "type": "object"
+      },
       "MatchWinner": {
         "description": "Which category the matcher's tiebreaker chose. Mirrors the four\nbranches of `find_match_at_start_with_telemetry`: gated Completes win over\nungated Completes (scoped beats unscoped within the gated set), an\nungated Complete loses if any gated command had a Partial in flight\n(`suppress_ungated`), and `NoMatch` is the fall-through.",
         "enum": [
@@ -1971,6 +2003,13 @@
           "collection": {
             "type": "string"
           },
+          "managed_fields": {
+            "description": "Which field of which record this tenant currently manages, and the\ndecision that set it. Named for Kubernetes Server-Side Apply's\n`managedFields`, whose SHAPE this is — per-field ownership records —\nbut deliberately not its vocabulary: SSA's `conflict` and `force` are\nanswers to two managers claiming one field, and annotations are\nnamespaced per tenant, so that situation does not arise here. Importing\nthose names would name behaviour this platform does not have.",
+            "items": {
+              "$ref": "#/$defs/ManagedFieldRow"
+            },
+            "type": "array"
+          },
           "patched_ids": {
             "description": "Record ids this tenant patches — INCLUDING dangling ones whose record\nno longer exists. Annotations key on identity, so a patch survives its\nrecord being unpublished (and resurrects if the id returns); this list\nis how a tenant finds strays to `restore`.",
             "items": {
@@ -1991,6 +2030,7 @@
         "required": [
           "added",
           "collection",
+          "managed_fields",
           "patched_ids",
           "removed",
           "tenant"
@@ -3074,6 +3114,41 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.clipboard.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "change_count",
+          "required": true,
+          "schema": {
+            "description": "`NSPasteboard.changeCount` after the change. Monotonic per session;\nuseful for deduping and for detecting missed changes.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "types",
+          "required": true,
+          "schema": {
+            "description": "Pasteboard type identifiers now available (e.g.\n`public.utf8-plain-text`, `public.png`). Enough to filter on without\nreading anything.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "summary": "Clipboard contents changed (carries type identifiers, never content)",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.collection.updated",
       "paramStructure": "by-name",
       "params": [
@@ -3522,6 +3597,36 @@
         }
       ],
       "summary": "Network path changed — connectivity gained or lost, or the interface behind it changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.permission.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "granted",
+          "required": true,
+          "schema": {
+            "description": "Its state after the change.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "permission",
+          "required": true,
+          "schema": {
+            "description": "Which permission moved: \"accessibility\", \"microphone\", \"camera\",\n\"full_disk_access\", \"automation\".",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A TCC permission was granted or revoked while the app was running",
       "tags": [
         {
           "name": "notifications"
