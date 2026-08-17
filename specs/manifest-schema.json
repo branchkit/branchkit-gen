@@ -26,6 +26,10 @@
         "default": {
           "description": "Shipped default value. REQUIRED on every field of a\n`preset: settings` collection — the settings base record is\nmaterialized from these at read time, which is what makes default\nevolution work (an untouched field always reads the CURRENT shipped\ndefault, never a stale saved copy). Validated against `field_type`\nat manifest load. Advisory elsewhere (generic UIs may prefill)."
         },
+        "description": {
+          "description": "One line saying what this setting DOES, rendered under the label by the\ngeneric settings form.\n\nAdded because every hand-written settings tab in this repo has that\nline (\"Auto-correct when Whisper outputs entirely in UPPERCASE\") and the\nplatform's form had no way to carry it — so mounting a platform-drawn\ncontrol in place of a plugin's own row silently dropped the sentence\nexplaining it. A label names a setting; this says why you would touch\nit. See `notes/DESIGN_POWERBOX.md`.",
+          "type": "string"
+        },
         "display": {
           "anyOf": [
             {
@@ -1423,7 +1427,7 @@
       "description": "A settings tab declared in the plugin manifest.",
       "properties": {
         "embeds": {
-          "description": "Collections whose PLATFORM editor is mounted in this tab, above the\nplugin's own frame. The markup, the click and the write are all the\nhost's: the editor renders in the settings page itself (port A, outside\nanything the plugin's document can reach), so an edit made there is\nrecorded `Origin::User` rather than as a relayed claim.\nSee `notes/DESIGN_POWERBOX.md`.\n\nDeclared, not requested — a plugin cannot summon one at runtime, so\nthere is nothing to rate-limit and nothing to spoof. Each name is gated\nat render time by the same read authorization the plugin would need to\nfetch the data itself; an unauthorized or unknown collection renders\nnothing.",
+          "description": "Collections whose PLATFORM editor is mounted in this tab, above the\nplugin's own frame. The markup, the click and the write are all the\nhost's: the editor renders in the settings page itself (port A, outside\nanything the plugin's document can reach), so an edit made there is\nrecorded `Origin::User` rather than as a relayed claim.\nSee `notes/DESIGN_POWERBOX.md`.\n\nDeclared, not requested — a plugin cannot summon one at runtime, so\nthere is nothing to rate-limit and nothing to spoof. Each name is gated\nat render time by the same read authorization the plugin would need to\nfetch the data itself; an unauthorized or unknown collection renders\nnothing.\n\n`\"<collection>\"` mounts the whole editor.\n`\"<collection>#field,field\"` mounts only those rows of a settings form,\nbecause settings are grouped by TOPIC across a plugin's tabs — voice\nkeeps its capture toggles beside the calibration walk — and a\nwhole-collection mount would drag every unrelated field onto whichever\ntab declared it. A subset on a records collection names nothing that\nexists and mounts nothing, with a validation warning: answering a\nsubset request with the whole table is the one thing the author\ncertainly did not ask for.",
           "items": {
             "type": "string"
           },
