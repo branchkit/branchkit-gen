@@ -1422,6 +1422,13 @@
     "PluginSettingsTabDecl": {
       "description": "A settings tab declared in the plugin manifest.",
       "properties": {
+        "embeds": {
+          "description": "Collections whose PLATFORM editor is mounted in this tab, above the\nplugin's own frame. The markup, the click and the write are all the\nhost's: the editor renders in the settings page itself (port A, outside\nanything the plugin's document can reach), so an edit made there is\nrecorded `Origin::User` rather than as a relayed claim.\nSee `notes/DESIGN_POWERBOX.md`.\n\nDeclared, not requested — a plugin cannot summon one at runtime, so\nthere is nothing to rate-limit and nothing to spoof. Each name is gated\nat render time by the same read authorization the plugin would need to\nfetch the data itself; an unauthorized or unknown collection renders\nnothing.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "key": {
           "type": "string"
         },
