@@ -913,41 +913,6 @@
         ],
         "type": "object"
       },
-      "ControlRow": {
-        "description": "One `(record, field)` a user-band decision currently holds.\n\nA field with no current setter has no row: `not_set` is the answer to a\nlookup that misses, not a row on the wire. This is a batch answer on\npurpose — a consumer renders a page of fields, and a per-field accessor\nwould re-read the history once per rendered row.",
-        "properties": {
-          "actor": {
-            "type": "string"
-          },
-          "at_unix_ms": {
-            "format": "uint64",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "collection": {
-            "type": "string"
-          },
-          "field": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "level": {
-            "description": "`set_by_you` — the last decision was relayed through the calling\nplugin. `set_by_user` — made on a surface BranchKit itself drew, so it\nis the person's own act. `set_by_other` — someone else's relay; `actor`\nnames them.\n\nNaming the other party diverges from Chrome, which says only\n\"controlled by other extensions\": there, extensions are mutually\nadversarial by default. Here `consumes` declarations and the read gate\nalready decide who may see a collection at all, and a plugin that\ncannot name the controller cannot render a useful sentence about it.",
-            "type": "string"
-          }
-        },
-        "required": [
-          "actor",
-          "at_unix_ms",
-          "collection",
-          "field",
-          "id",
-          "level"
-        ],
-        "type": "object"
-      },
       "CpuInfo": {
         "properties": {
           "architecture": {
@@ -25307,47 +25272,6 @@
       ],
       "x-branchkit-emits": [
         "_platform.collection.updated"
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "overrides.control",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "collection",
-          "required": false,
-          "schema": {
-            "description": "Restrict the answer to one collection. Omitted, it covers every\ncollection the caller may read.",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "overrides_control_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "control": {
-              "description": "The read a plugin needs once the platform, not the plugin, performs the\nwrite (notes/DESIGN_POWERBOX.md). Chrome's\n`ChromeSetting.levelOfControl`, which exists for the same reason: an\nextension whose UI shows a value it may not be the author of has to be\nable to say so.\n\nThe user band only. Plugin bands compose under `_annotations.<tenant>`\nand cannot reach a record's own fields, so they never contend for one —\na tenant's own annotations are in `overrides.list`'s `managed_fields`.",
-              "items": {
-                "$ref": "#/$defs/ControlRow"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "control"
-          ],
-          "title": "OverridesControlResult",
-          "type": "object"
-        }
-      },
-      "summary": "Who currently controls each user-band field — whether a field was set through the calling plugin, by another plugin relaying, or by the user on BranchKit's own surface. The read a plugin needs to render a value it no longer writes",
-      "tags": [
-        {
-          "name": "misc"
-        }
       ],
       "x-since": "0.1.0"
     },
