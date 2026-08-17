@@ -1419,21 +1419,6 @@
       },
       "type": "object"
     },
-    "PluginSettingsTab": {
-      "properties": {
-        "label": {
-          "type": "string"
-        },
-        "template": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "label",
-        "template"
-      ],
-      "type": "object"
-    },
     "PluginSettingsTabDecl": {
       "description": "A settings tab declared in the plugin manifest.",
       "properties": {
@@ -2028,16 +2013,6 @@
       "type": [
         "string",
         "null"
-      ]
-    },
-    "settings_tab": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/PluginSettingsTab"
-        },
-        {
-          "type": "null"
-        }
       ]
     },
     "sockets": {

@@ -3560,6 +3560,28 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.memory_pressure.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "level",
+          "required": true,
+          "schema": {
+            "description": "\"nominal\", \"warn\", or \"critical\".",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "System memory pressure changed (nominal/warn/critical)",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.network.changed",
       "paramStructure": "by-name",
       "params": [
@@ -3987,6 +4009,28 @@
       "paramStructure": "by-name",
       "params": [],
       "summary": "The machine is about to sleep — last chance to flush or release",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.thermal.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "state",
+          "required": true,
+          "schema": {
+            "description": "\"nominal\", \"fair\", \"serious\", or \"critical\" — `ProcessInfo.ThermalState`\nin ascending severity.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "System thermal state changed (nominal/fair/serious/critical)",
       "tags": [
         {
           "name": "notifications"
@@ -23358,7 +23402,7 @@
           "type": "object"
         }
       },
-      "summary": "Get system thermal state (nominal/fair/serious/critical)",
+      "summary": "Get coarse CPU throttling state (nominal/throttled) from `pmset -g therm`. NOT ProcessInfo.thermalState — for the four-level nominal/fair/serious/critical reading, subscribe to _platform.thermal.changed.",
       "tags": [
         {
           "name": "native"
