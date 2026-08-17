@@ -7986,7 +7986,7 @@
           "type": "object"
         }
       },
-      "summary": "List APFS snapshots as JSON",
+      "summary": "List APFS local snapshots as `tmutil listlocalsnapshots` prints them — a header line followed by one snapshot name per line, NOT JSON",
       "tags": [
         {
           "name": "native"
@@ -10859,7 +10859,7 @@
           "type": "integer"
         }
       },
-      "summary": "Get computer sleep timeout in minutes",
+      "summary": "Get computer sleep timeout in minutes, for the power source the machine is currently on",
       "tags": [
         {
           "name": "native"
@@ -10987,7 +10987,7 @@
           "type": "number"
         }
       },
-      "summary": "Get CPU temperature in Celsius",
+      "summary": "Get CPU temperature in Celsius. Requires the third-party `osx-cpu-temp`; a reading without an explicit scale marker is rejected rather than assumed",
       "tags": [
         {
           "name": "native"
@@ -12157,7 +12157,7 @@
           "type": "integer"
         }
       },
-      "summary": "Get display sleep timeout in minutes",
+      "summary": "Get display sleep timeout in minutes, for the power source the machine is currently on",
       "tags": [
         {
           "name": "native"
@@ -12343,7 +12343,7 @@
           "type": "object"
         }
       },
-      "summary": "Get Dock minimize animation (genie/scale)",
+      "summary": "Get Dock minimize animation. Returns one of: genie, scale, suck",
       "tags": [
         {
           "name": "native"
@@ -12795,7 +12795,7 @@
           "type": "object"
         }
       },
-      "summary": "Get fan speeds as JSON",
+      "summary": "Get raw SMC fan lines as reported by powermetrics or ioreg — free-form text, NOT JSON, and unavailable unless a fan source can be read",
       "tags": [
         {
           "name": "native"
@@ -13741,7 +13741,7 @@
           "type": "object"
         }
       },
-      "summary": "Get configured Focus modes as JSON",
+      "summary": "Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON",
       "tags": [
         {
           "name": "native"
@@ -16131,7 +16131,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the measurement system (metric/us)",
+      "summary": "Get the measurement system. Returns one of: metric, us",
       "tags": [
         {
           "name": "native"
@@ -16280,7 +16280,7 @@
           "type": "object"
         }
       },
-      "summary": "Get memory pressure level (nominal/warn/critical)",
+      "summary": "Get memory pressure level. Unavailable when `memory_pressure -Q` names no level, which is the stock macOS 15 case — it reports only a free-percentage summary. Returns one of: nominal, warn, critical",
       "tags": [
         {
           "name": "native"
@@ -18072,7 +18072,7 @@
           "type": "object"
         }
       },
-      "summary": "Get current power source type (battery, AC, UPS)",
+      "summary": "Get current power source type. Returns one of: AC, Battery, UPS, Unknown",
       "tags": [
         {
           "name": "native"
@@ -22268,7 +22268,7 @@
           "type": "object"
         }
       },
-      "summary": "Get sidebar icon size (small/medium/large)",
+      "summary": "Get sidebar icon size. Returns one of: small, medium, large",
       "tags": [
         {
           "name": "native"
@@ -23408,7 +23408,7 @@
           "type": "object"
         }
       },
-      "summary": "Get user text replacements as JSON",
+      "summary": "Get user text replacements as the raw `NSUserDictionaryReplacementItems` preference value — macOS plist text, NOT JSON",
       "tags": [
         {
           "name": "native"
@@ -23437,7 +23437,7 @@
           "type": "object"
         }
       },
-      "summary": "Get coarse CPU throttling state (nominal/throttled) from `pmset -g therm`. NOT ProcessInfo.thermalState — for the four-level nominal/fair/serious/critical reading, subscribe to _platform.thermal.changed.",
+      "summary": "Get coarse CPU throttling state from `pmset -g therm`. NOT ProcessInfo.thermalState — for the four-level nominal/fair/serious/critical reading, subscribe to _platform.thermal.changed. Returns one of: nominal, throttled",
       "tags": [
         {
           "name": "native"
@@ -23891,7 +23891,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if True Tone is enabled",
+      "summary": "Check if True Tone is enabled. KNOWN LIMITATION: the `corebrightnessdiag` probe this depends on is absent from macOS 15, where this always reports false",
       "tags": [
         {
           "name": "native"
