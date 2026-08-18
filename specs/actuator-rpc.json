@@ -27145,6 +27145,59 @@
       "name": "sequence"
     }
   ],
+  "x-branchkit-closed-vocabularies": {
+    "effects": [
+      "disable_screen_dim",
+      "mute_audio_to_other_apps",
+      "pause_microphone_indicator",
+      "prevent_focus_steal",
+      "signal_recording_active",
+      "suppress_huds",
+      "suppress_keybinds",
+      "suppress_notifications"
+    ],
+    "error_kinds": [
+      {
+        "json_rpc_code": -32002,
+        "name": "not_permitted"
+      },
+      {
+        "json_rpc_code": -32006,
+        "name": "recording_disabled"
+      },
+      {
+        "json_rpc_code": -32001,
+        "name": "not_found"
+      },
+      {
+        "json_rpc_code": -32004,
+        "name": "validation"
+      },
+      {
+        "json_rpc_code": -32003,
+        "name": "forbidden"
+      },
+      {
+        "json_rpc_code": -32005,
+        "name": "storage"
+      },
+      {
+        "json_rpc_code": -32601,
+        "name": "method_not_found"
+      },
+      {
+        "json_rpc_code": -32602,
+        "name": "invalid_params"
+      },
+      {
+        "json_rpc_code": -32603,
+        "name": "internal"
+      }
+    ],
+    "input_directives": [
+      "lift_keys_on_dispatch"
+    ]
+  },
   "x-branchkit-limits": {
     "event_max_payload_bytes": 65536,
     "event_rate_limit_per_sec": 100,
@@ -28163,5 +28216,8 @@
         "prefix": "plugin."
       }
     }
-  }
+  },
+  "x-branchkit-wire-notifications": [
+    "plugin.initialized"
+  ]
 }
