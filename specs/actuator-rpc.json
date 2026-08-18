@@ -159,7 +159,7 @@
             "description": "Shipped default value. REQUIRED on every field of a\n`preset: settings` collection — the settings base record is\nmaterialized from these at read time, which is what makes default\nevolution work (an untouched field always reads the CURRENT shipped\ndefault, never a stale saved copy). Validated against `field_type`\nat manifest load. Advisory elsewhere (generic UIs may prefill)."
           },
           "description": {
-            "description": "One line saying what this setting DOES, rendered under the label by the\ngeneric settings form.\n\nAdded because every hand-written settings tab in this repo has that\nline (\"Auto-correct when Whisper outputs entirely in UPPERCASE\") and the\nplatform's form had no way to carry it — so mounting a platform-drawn\ncontrol in place of a plugin's own row silently dropped the sentence\nexplaining it. A label names a setting; this says why you would touch\nit. See `notes/DESIGN_POWERBOX.md`.",
+            "description": "One line saying what this setting DOES, rendered under the label\nwherever the platform draws the field — the Collections view, and any\ngeneric form.\n\nA label names a setting; this says why you would touch it. Every\nhand-written settings tab in this repo carries such a line\n(\"Auto-correct when Whisper outputs entirely in UPPERCASE\"), and a\nfield described here is described identically in every surface that\nrenders it, including your own.",
             "type": "string"
           },
           "display": {
