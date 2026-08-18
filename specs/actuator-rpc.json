@@ -27151,6 +27151,116 @@
     "plugin_call_timeout_ms": 5000,
     "request_timeout_ms": 15000
   },
+  "x-branchkit-platform-collections": [
+    {
+      "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
+      "name": "_platform.actuator_log_level",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Platform-managed tag — set when a calibration trial is in progress, cleared on trial end. Plugins opt into defensive blocking during calibration by adding a `forbids_tag: _platform.calibration.active` policy on their own collections.",
+      "name": "_platform.calibration.active",
+      "preset": "tag",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Set of plugin:collection keys whose writes are frozen by the user.",
+      "name": "_platform.frozen_writers",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Active input sessions, ONE RECORD PER INPUT PLUGIN — `active` is a fact about that plugin's world (true while it is capturing), `source` is the writing plugin id (also the record id), `directives` is a closed-vocabulary bag of platform-defined behavior flags. The platform reads the FOLD: the session is active if any writer's record says so, and a directive applies if any ACTIVE writer asserts it (`ActuatorState::input_state`). Records are writer-held, so a crashed input plugin's assertion drops instead of wedging every dispatch. This was a singleton — meaning the second input plugin ever written (foot pedal, eye tracker, MIDI…) would have silently clobbered voice's session and vice versa; per-writer records are what make input plugins a CATEGORY rather than a slot. The platform owns the schema; plugins write via `consumes.writes` (preferred) or `consumes.collections` (backwards compat) + the `anyone_who_declares` writers slot.",
+      "name": "_platform.input",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    {
+      "description": "Per-sink archive retention overrides for the dated-gzip archiving sinks (audit_log, show_all, dev_mutation_stream, verbose). One record per overridden sink `{sink, days}`; a sink with no record keeps its env-seeded default (90/30/30/7). Set from the Debug tab; applied live.",
+      "name": "_platform.log_retention",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "In-flight model download progress from the platform shell (which runs the downloader). Single record at id='_platform'.",
+      "name": "_platform.model_download",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Lever E never-standalone decoding penalty (command recognition accuracy). One record `{penalty}`; 0/absent = off. Applied to words that can never start a command (numbers, app names, ...) so codewords win the decode.",
+      "name": "_platform.never_standalone_penalty",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Pipeline records — typed streaming compositions of stages. Each record describes how signals flow through stage implementations contributed by plugins until a decision-maker emits an action call. The platform owns the schema; plugins contribute records via `consumes.collections`.",
+      "name": "_platform.pipelines",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    {
+      "description": "Per-plugin log-level threshold for the plugin.debug RPC. Lines below the threshold are dropped at the handler. Default is `info`.",
+      "name": "_platform.plugin_log_thresholds",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Uninstall markers: what collections a removed plugin owned and when it was removed, read by the boot-time orphan sweep.",
+      "name": "_platform.plugins.data_disposition",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Set of plugin IDs the user has explicitly disabled.",
+      "name": "_platform.plugins.disabled",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Per-plugin interaction grants (dispatch, event subscription, collection read).",
+      "name": "_platform.plugins.interaction_grants",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Privileges the user has approved per plugin.",
+      "name": "_platform.plugins.privilege_grants",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Authors the user has bulk-trusted for cross-plugin interaction.",
+      "name": "_platform.plugins.trusted_authors",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Set of bundled plugin IDs the user has explicitly uninstalled.",
+      "name": "_platform.plugins.uninstalled",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Per-stage log-level threshold for pipeline-stage diagnostics. Structured lines below the threshold are dropped before emission. Default is `info`.",
+      "name": "_platform.stage_log_thresholds",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "User-created collection schema definitions.",
+      "name": "_platform.user_collection_schemas",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "User-created voice commands (CRUD via Settings UI).",
+      "name": "_platform.user_commands",
+      "preset": "data",
+      "writers": "platform_only"
+    }
+  ],
   "x-branchkit-privileges": [
     {
       "description": "Inspect and manipulate the UI element tree",
