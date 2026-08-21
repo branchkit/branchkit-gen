@@ -28056,6 +28056,13 @@
       "name": "stage.neural_engine"
     },
     {
+      "description": "See and monitor power source and battery state from a pipeline stage",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.power"
+    },
+    {
       "description": "Disk usage and volume information",
       "gated_event_prefixes": [],
       "method_count": 5,
