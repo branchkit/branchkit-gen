@@ -1673,7 +1673,7 @@
           ]
         },
         "feeds": {
-          "description": "Bus event types this stage supplies as a spontaneous SOURCE —\n`ext.<vendor>.<name>` custom-event types or `ext.<vendor>.*` globs\n(see the pipeline contract's customEvents rule). Declaring feeds makes\nthe platform host the stage on demand: it is spawned while at least\none enabled plugin subscribes to something it feeds, and stopped when\nno subscriber remains. Omit for pipeline stages (STT, VAD, sources\nnamed by a pipeline), which are spawned by the pipelines that\nreference them.",
+          "description": "Bus event types this stage supplies as a spontaneous SOURCE. Two\nvocabularies are accepted:\n\n- `ext.<vendor>.<name>` custom-event types, or `ext.<vendor>.*` globs\n  (see the pipeline contract's customEvents rule) — a stage's own\n  vocabulary, which it may always supply.\n- a `_platform.*` event classified `delivery: signal`, IF this plugin\n  holds the privilege that event names. A signal is a doorbell whose\n  payload is advisory, so ringing one costs a consumer a redundant\n  re-pull rather than telling it a lie — which is why a plugin's stage\n  may ring one where it may not produce `delivery: data`. See\n  `notes/DESIGN_EVENT_SIGNAL_VS_DATA.md`.\n\nDeclaring feeds makes\nthe platform host the stage on demand: it is spawned while at least\none enabled plugin subscribes to something it feeds, and stopped when\nno subscriber remains. Omit for pipeline stages (STT, VAD, sources\nnamed by a pipeline), which are spawned by the pipelines that\nreference them.",
           "items": {
             "type": "string"
           },
