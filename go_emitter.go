@@ -41,11 +41,11 @@ func RenderGo(manifest *PluginManifest) string {
 	needsSDK := len(names) > 0
 	switch {
 	case needsJSON && needsSDK:
-		b.WriteString("import (\n\t\"encoding/json\"\n\n\tshared \"github.com/branchkit/plugin-sdk-go\"\n)\n\n")
+		b.WriteString("import (\n\t\"encoding/json\"\n\n\t\"github.com/branchkit/plugin-sdk-go\"\n)\n\n")
 	case needsJSON:
 		b.WriteString("import \"encoding/json\"\n\n")
 	case needsSDK:
-		b.WriteString("import shared \"github.com/branchkit/plugin-sdk-go\"\n\n")
+		b.WriteString("import \"github.com/branchkit/plugin-sdk-go\"\n\n")
 	}
 	if needsJSON {
 		b.WriteString("// Ensure json import is used even when no struct field references it.\n")
@@ -134,14 +134,14 @@ func renderGoStruct(b *strings.Builder, structName, fullAction string, schema *A
 //
 //	// before — action string and params type are both hand-written, and
 //	// nothing checks either against plugin.json
-//	plugin.HandleAction("windows.snap", func(req *shared.OnActionRequest) (any, error) {
+//	plugin.HandleAction("windows.snap", func(req *branchkit.OnActionRequest) (any, error) {
 //	    var p SnapParams
 //	    if err := req.UnmarshalParams(&p); err != nil { return nil, err }
 //	    ...
 //	})
 //
 //	// after
-//	HandleSnap(plugin, func(p SnapParams, req *shared.OnActionRequest) (any, error) { ... })
+//	HandleSnap(plugin, func(p SnapParams, req *branchkit.OnActionRequest) (any, error) { ... })
 //
 // Generating the registrar inverts the gradient rather than exhorting anyone:
 // the typed path is now the shortest one, and the action string and params
@@ -162,7 +162,7 @@ func renderGoActionHandler(b *strings.Builder, structName, fullAction string, sc
 	if len(schema.Fields) == 0 {
 		fmt.Fprintf(
 			b,
-			"func Handle%s(p *shared.Plugin, fn shared.ActionHandlerFunc) {\n",
+			"func Handle%s(p *branchkit.Plugin, fn branchkit.ActionHandlerFunc) {\n",
 			structName,
 		)
 		fmt.Fprintf(b, "\tp.HandleAction(%q, fn)\n", fullAction)
@@ -172,10 +172,10 @@ func renderGoActionHandler(b *strings.Builder, structName, fullAction string, sc
 
 	fmt.Fprintf(
 		b,
-		"func Handle%s(p *shared.Plugin, fn func(%sParams, *shared.OnActionRequest) (any, error)) {\n",
+		"func Handle%s(p *branchkit.Plugin, fn func(%sParams, *branchkit.OnActionRequest) (any, error)) {\n",
 		structName, structName,
 	)
-	fmt.Fprintf(b, "\tshared.HandleActionTyped(p, %q, fn)\n", fullAction)
+	fmt.Fprintf(b, "\tbranchkit.HandleActionTyped(p, %q, fn)\n", fullAction)
 	b.WriteString("}\n")
 }
 
