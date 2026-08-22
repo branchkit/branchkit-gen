@@ -8470,6 +8470,46 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.apps_for_path",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_apps_for_path_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "apps": {
+              "items": {
+                "$ref": "#/$defs/InstalledApp"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "apps"
+          ],
+          "title": "NativeAppsForPathResult",
+          "type": "object"
+        }
+      },
+      "summary": "Applications the OS registers as able to open a given file (Launch Services)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "apps",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.audio_device_volume",
       "paramStructure": "by-name",
       "params": [
@@ -27367,7 +27407,7 @@
     {
       "description": "List and inspect running applications",
       "gated_event_prefixes": [],
-      "method_count": 29,
+      "method_count": 30,
       "methods": [
         "native.app_bundle_path",
         "native.app_focused_window_id",
@@ -27382,6 +27422,7 @@
         "native.app_version",
         "native.app_windows",
         "native.app_windows_count",
+        "native.apps_for_path",
         "native.bundle_for_remote_port",
         "native.cascade_windows",
         "native.default_app_for_uti",
