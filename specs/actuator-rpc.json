@@ -26359,7 +26359,7 @@
           "type": "object"
         }
       },
-      "summary": "Push Datastar signal patches to all active settings SSE streams",
+      "summary": "Push Datastar signal patches to the calling plugin's active settings SSE streams",
       "tags": [
         {
           "name": "settings"
