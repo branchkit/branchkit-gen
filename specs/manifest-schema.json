@@ -2019,6 +2019,13 @@
         "null"
       ]
     },
+    "runtimes": {
+      "description": "Managed language runtimes this plugin's processes may execute, by name\n(e.g. `[\"python\"]`). Each name resolves to\n`<app_support>/runtimes/<name>/`, granted read+exec in the sandbox\npolicy. The actuator only grants the paths — provisioning is\n`branchkit-cli runtime install <name>` (the plugin itself runs\nnetwork-denied, same split as declared models), and a runtime absent\nfrom disk is the plugin's own error to surface, never a sandbox\nviolation.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
     "sockets": {
       "anyOf": [
         {
