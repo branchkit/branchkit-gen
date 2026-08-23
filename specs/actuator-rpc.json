@@ -28191,6 +28191,15 @@
       "name": "system.control"
     },
     {
+      "description": "Status indicator — whether a menu bar item exists to show recording state",
+      "gated_event_prefixes": [],
+      "method_count": 1,
+      "methods": [
+        "native.status_indicator"
+      ],
+      "name": "system.indicator"
+    },
+    {
       "description": "User session — current user, default browser, login items",
       "gated_event_prefixes": [],
       "method_count": 7,
