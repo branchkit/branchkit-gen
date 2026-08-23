@@ -130,6 +130,16 @@ var knownTopLevelFields = map[string]bool{
 	"bridge":               true,
 	"network":              true,
 	"hud_windows":          true,
+	// This list had drifted behind the platform manifest, so real fields
+	// were being reported to plugin authors as unrecognized. Cross-checked
+	// against contracts/manifest-schema.json.
+	"privileges":     true,
+	"publisher":      true,
+	"sockets":        true,
+	"runtimes":       true,
+	"grammar_seeds":  true,
+	"capture_macros": true,
+	"dev":            true,
 }
 
 // Validate runs single-manifest checks against m. raw is the original
