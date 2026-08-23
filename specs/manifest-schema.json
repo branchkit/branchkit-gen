@@ -1581,7 +1581,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/EventSchemaDecl"
           },
-          "description": "Event types this plugin emits, keyed by event type name.",
+          "description": "Event types this plugin emits, keyed by event type name — or by a\nPATTERN, using the same language `consumes.events` accepts: `*`\nstands for exactly one dot-separated segment.\n\nA pattern is how a plugin declares a namespace whose names it only\nlearns at runtime. A scripting host emitting `scripts.<script>.<event>`\ndeclares `scripts.*.*`; an ambassador emitting per connected app, or\nthe browser plugin emitting per tab, has the same shape. Enumerating\nthose in a static manifest is impossible, which is why exact-string\nmatching here used to make host-shaped plugins undeliverable.\n\nTwo limits keep the widening bounded, both enforced at load\n(`validate::cross_plugin`): the first segment must be a literal, so a\ndeclaration stays anchored to a namespace its author can be held to;\nand `_platform.*` / `ext.*` are refused outright, matching the\nreserved-namespace check the emit path applies regardless.",
           "type": "object"
         },
         "models": {

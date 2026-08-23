@@ -596,6 +596,10 @@
           "id": {
             "type": "string"
           },
+          "on_behalf_of": {
+            "description": "Actor label of the writer that CREATED this record — which hosted\nthing the `writer` plugin was acting for. `None` for the ordinary\ncase: a plugin acting only for itself.\n\nCreation-stamped, exactly like `writer` and for the same reason: it\nis the finer-grained half of the same answer (\"whose record is\nthis\"), so touching a record must not relabel it. Last-touch\nattribution is the audit log's job, and it carries the label too.\n\n**Not an ownership axis.** `collection.replace` scopes its\ncomplement by `writer` alone; two scripts hosted by one plugin share\none owner, because the platform grants and enforces at the plugin.\nMaking this a scoping key would turn an observability label into a\nsub-principal, which `notes/DESIGN_HOST_PLUGINS.md` forbids. Per-\nhosted-thing separation is the host's job — one host-owned\ncollection namespaced by script, not a platform ownership rule.",
+            "type": "string"
+          },
           "payload": {},
           "revision": {
             "default": 0,
@@ -620,6 +624,7 @@
         "required": [
           "group",
           "id",
+          "on_behalf_of",
           "revision",
           "timestamp_ms",
           "writer"
@@ -1701,6 +1706,10 @@
             "description": "ULID — Crockford base32, sortable by creation time. Acts as the\nentry's primary key for `get(id)` and `delete(id)` calls.",
             "type": "string"
           },
+          "on_behalf_of": {
+            "description": "Actor label of the writer that appended this entry — see\n`Record::on_behalf_of`. `None` for entries whose writer was acting\nonly for itself, and for anything written before the field existed.\n\nFollows `writer` through the fold: the INTRODUCING entry's label\nstays on a folded record, so an annotation by another script does not\nrelabel the record it annotates.",
+            "type": "string"
+          },
           "payload": {
             "description": "Plugin-defined entry payload. Validated against the collection's\n`fields` schema at append time by the service layer (not here)."
           },
@@ -1718,6 +1727,7 @@
         },
         "required": [
           "id",
+          "on_behalf_of",
           "timestamp_ms",
           "writer"
         ],
