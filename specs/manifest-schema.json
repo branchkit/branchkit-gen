@@ -2028,8 +2028,15 @@
       ],
       "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
     },
+    "optional_privileges": {
+      "description": "Privileges this plugin can carry but function WITHOUT — the ceiling\nof on-demand grants. Ungranted optional privileges never block the\nspawn; they are simply absent from the effective set and per-call\nauth denies them, which the plugin surfaces as a teaching error.\nAuthor-declared degradable. Design: notes/DESIGN_OPTIONAL_PRIVILEGES.md.",
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
     "privileges": {
-      "description": "Platform-defined privileges this plugin requires.",
+      "description": "Platform-defined privileges this plugin REQUIRES — ungranted means\nthe plugin does not spawn (refuse-don't-degrade).",
       "items": {
         "type": "string"
       },

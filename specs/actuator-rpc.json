@@ -2148,6 +2148,38 @@
         ],
         "type": "object"
       },
+      "PrivilegeStatusEntry": {
+        "description": "One privilege the caller declared, with its live state — what a plugin\nneeds to adapt its own UI (\"this feature is pending your approval\")\nwithout waiting to hit a -32003.",
+        "properties": {
+          "denied": {
+            "description": "The user dismissed a request for it; a grant clears this.",
+            "type": "boolean"
+          },
+          "granted": {
+            "description": "In the caller's effective set right now — calls gated on it succeed.",
+            "type": "boolean"
+          },
+          "pending": {
+            "description": "A privileges.request for it is awaiting the user.",
+            "type": "boolean"
+          },
+          "privilege": {
+            "type": "string"
+          },
+          "required": {
+            "description": "Declared in `privileges` (true) vs `optional_privileges` (false).",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "denied",
+          "granted",
+          "pending",
+          "privilege",
+          "required"
+        ],
+        "type": "object"
+      },
       "ProcessInfo": {
         "properties": {
           "cpu_percent": {
@@ -3958,6 +3990,36 @@
         }
       ],
       "summary": "Power source, charging state, or battery level changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.privilege.granted",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "plugin_id",
+          "required": true,
+          "schema": {
+            "description": "The plugin the grant landed on — consumers filter to their own id.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "privilege",
+          "required": true,
+          "schema": {
+            "description": "The privilege name that is now effective.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "The user granted a plugin one of its optional privileges (pending-request approval or a manual toggle)",
       "tags": [
         {
           "name": "notifications"
@@ -25822,6 +25884,123 @@
         }
       },
       "summary": "Toggle the recording flag on a log-kind collection (privacy control plane)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "privileges.list",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "privileges_list_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "privileges": {
+              "description": "Required first, then optional, manifest order within each.",
+              "items": {
+                "$ref": "#/$defs/PrivilegeStatusEntry"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "privileges"
+          ],
+          "title": "PrivilegesListResult",
+          "type": "object"
+        }
+      },
+      "summary": "The caller's own declared privileges with live granted/pending/denied state",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "privileges.relinquish",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "privilege",
+          "required": true,
+          "schema": {
+            "description": "Privilege name — must appear in the calling plugin's\n`optional_privileges`.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "privileges_relinquish_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "status": {
+              "description": "\"released\" — a live grant was returned (effective + persisted).\n\"withdrawn\" — only a pending request existed; it was cleared.\n\"noop\" — neither granted nor pending.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "title": "PrivilegesRelinquishResult",
+          "type": "object"
+        }
+      },
+      "summary": "Give back one of the caller's optional privileges: returns a live grant and/or withdraws a pending request; de-escalation, no consent needed",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "privileges.request",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "privilege",
+          "required": true,
+          "schema": {
+            "description": "Privilege name — must appear in the calling plugin's\n`optional_privileges`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "Short attributed reason shown to the user next to the Approve\nbutton (e.g. \"script 'headphones' uses query:power\"). Untrusted\ntext; capped server-side.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "privileges_request_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "status": {
+              "description": "\"granted\" — already effective, proceed (treat as a race won).\n\"pending\" — recorded as a to-do awaiting the user.\n\"denied\" — the user dismissed this request earlier; not re-asked.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "title": "PrivilegesRequestResult",
+          "type": "object"
+        }
+      },
+      "summary": "Request one of the caller's declared optional privileges; lands as an Approve/Dismiss to-do on the Plugins page",
       "tags": [
         {
           "name": "misc"
