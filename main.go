@@ -20,6 +20,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 )
 
 func main() {
@@ -116,7 +117,7 @@ func runValidate(args []string) int {
 }
 
 func run(dirs []string) {
-	totalGo, totalTS, skipped := 0, 0, 0
+	totalGo, totalTS, totalPy, skipped := 0, 0, 0, 0
 
 	for _, dir := range dirs {
 		manifest, err := LoadManifest(dir)
@@ -155,10 +156,31 @@ func run(dirs []string) {
 			fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
 			totalTS++
 		}
+
+		// Emit Python if the plugin runs under Python (manifest `run`
+		// starts with python) or ships a main.py. Lands next to the
+		// entrypoint: src/ when the source lives there, plugin root
+		// otherwise.
+		if strings.HasPrefix(manifest.Run, "python") ||
+			fileExists(filepath.Join(dir, "main.py")) ||
+			fileExists(filepath.Join(srcDir, "main.py")) {
+			out := dir
+			if fileExists(filepath.Join(srcDir, "main.py")) {
+				out = srcDir
+			}
+			contents := RenderPy(manifest)
+			path := filepath.Join(out, "actions_gen.py")
+			if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
+				fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
+				os.Exit(1)
+			}
+			fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+			totalPy++
+		}
 	}
 
-	fmt.Fprintf(os.Stderr, "[branchkit-gen] summary: %d plugins, %d go, %d ts, %d skipped\n",
-		len(dirs), totalGo, totalTS, skipped)
+	fmt.Fprintf(os.Stderr, "[branchkit-gen] summary: %d plugins, %d go, %d ts, %d py, %d skipped\n",
+		len(dirs), totalGo, totalTS, totalPy, skipped)
 }
 
 // enumeratePluginDirs lists subdirectories of root that contain a plugin.json.
