@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 )
@@ -15,7 +16,7 @@ func testSpec() *Spec {
 			"removed.thing":      {Name: "removed.thing", Since: "0.1.0", RemovedIn: "0.5.0"},
 			"deprecated.removed": {Name: "deprecated.removed", Since: "0.1.0", DeprecatedIn: "0.3.0", RemovedIn: "0.5.0"},
 		},
-		Capabilities: map[string]bool{
+		Privileges: map[string]bool{
 			"dispatch":      true,
 			"accessibility": true,
 		},
@@ -27,19 +28,65 @@ func driftIssues(t *testing.T, m *PluginManifest, called []CalledMethod) []Issue
 	return CheckDrift(m, called, testSpec())
 }
 
-func TestDrift_unknownCapability(t *testing.T) {
+// The bug this guards: the manifest struct read a `capabilities` JSON key
+// the platform had renamed to `privileges`, so Privileges was always empty
+// once a real file was parsed. Every test set the Go field directly, which
+// never exercises the tag — so the drift check silently validated nothing
+// for however long, and dispatch_via reported a false error on every plugin
+// that used it. Parse from JSON, the way production does.
+func TestManifest_privilegesParseFromJSON(t *testing.T) {
+	raw := []byte(`{
+		"id": "demo-plugin",
+		"min_api_version": "0.1.0",
+		"privileges": ["dispatch", "apps"]
+	}`)
+	var m PluginManifest
+	if err := json.Unmarshal(raw, &m); err != nil {
+		t.Fatalf("unmarshal: %v", err)
+	}
+	if len(m.Privileges) != 2 || m.Privileges[0] != "dispatch" {
+		t.Fatalf("privileges did not parse from JSON: %+v", m.Privileges)
+	}
+
+	// dispatch_via is satisfied by a privilege that came off the wire.
+	m.DispatchVia = "direct"
+	m.DispatchPrefixes = []string{"demo."}
+	for _, i := range Validate(&m, nil) {
+		if i.Field == "dispatch_via" && i.Severity == SeverityError {
+			t.Errorf("dispatch_via rejected despite the dispatch privilege: %s", i.Message)
+		}
+	}
+}
+
+// `capabilities` is the dead name. A manifest still using it must not pass
+// the typo guard in silence, or the rename above is invisible to authors.
+func TestValidate_deadCapabilitiesKeyIsFlagged(t *testing.T) {
+	raw := map[string]any{"capabilities": []any{"dispatch"}}
 	m := minimalValid()
-	m.Capabilities = []string{"dispatch", "made-up-capability"}
-	issues := driftIssues(t, m, nil)
 	found := false
-	for _, i := range issues {
-		if strings.HasPrefix(i.Field, "capabilities[") && i.Severity == SeverityError &&
-			strings.Contains(i.Message, "made-up-capability") {
+	for _, i := range Validate(m, raw) {
+		if i.Field == "capabilities" {
 			found = true
 		}
 	}
 	if !found {
-		t.Errorf("expected error for unknown capability, got %+v", issues)
+		t.Error("a manifest using the old `capabilities` key should be flagged as unrecognized")
+	}
+}
+
+func TestDrift_unknownPrivilege(t *testing.T) {
+	m := minimalValid()
+	m.Privileges = []string{"dispatch", "made-up-privilege"}
+	issues := driftIssues(t, m, nil)
+	found := false
+	for _, i := range issues {
+		if strings.HasPrefix(i.Field, "privileges[") && i.Severity == SeverityError &&
+			strings.Contains(i.Message, "made-up-privilege") {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("expected error for unknown privilege, got %+v", issues)
 	}
 }
 
@@ -150,7 +197,7 @@ func TestDrift_dedupesByName(t *testing.T) {
 
 func TestDrift_nilSpecReturnsNothing(t *testing.T) {
 	m := minimalValid()
-	m.Capabilities = []string{"made-up"}
+	m.Privileges = []string{"made-up"}
 	if got := CheckDrift(m, nil, nil); got != nil {
 		t.Errorf("expected nil with nil spec, got %+v", got)
 	}
@@ -189,8 +236,8 @@ func TestParseSpec_realFixture(t *testing.T) {
 	if len(spec.Methods) == 0 {
 		t.Error("embedded spec has zero methods")
 	}
-	if len(spec.Capabilities) == 0 {
-		t.Error("embedded spec has zero capabilities")
+	if len(spec.Privileges) == 0 {
+		t.Error("embedded spec has zero privileges")
 	}
 	// Methods we know exist in the current spec. (collection.push died in the
 	// unified collections API — put/append are the write verbs now.)

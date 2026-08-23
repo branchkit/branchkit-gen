@@ -46,7 +46,7 @@ type PluginManifest struct {
 	ActionPrefixAccess string                      `json:"action_prefix_access"`
 	SettingsTab        *string                     `json:"settings_tab"`
 	Implements         PluginImplements            `json:"implements"`
-	Capabilities       []string                    `json:"capabilities"`
+	Privileges         []string                    `json:"privileges"`
 	DispatchVia        string                      `json:"dispatch_via"`
 	DispatchPrefixes   []string                    `json:"dispatch_prefixes"`
 	ActionTypes        map[string]ActionTypeSchema `json:"action_types"`

@@ -124,7 +124,6 @@ var knownTopLevelFields = map[string]bool{
 	"action_types":         true,
 	"hud_targets":          true,
 	"default_footer":       true,
-	"capabilities":         true,
 	"provides":             true,
 	"consumes":             true,
 	"bridge":               true,
@@ -209,10 +208,10 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 			"action_prefix_access has no effect without action_prefix")
 	}
 
-	// dispatch_via requires the dispatch capability
-	if m.DispatchVia != "" && !slices.Contains(m.Capabilities, "dispatch") {
+	// dispatch_via requires the dispatch privilege
+	if m.DispatchVia != "" && !slices.Contains(m.Privileges, "dispatch") {
 		add(SeverityError, "dispatch_via",
-			"dispatch_via requires 'dispatch' in capabilities")
+			"dispatch_via requires 'dispatch' in privileges")
 	}
 
 	// dispatch_via "direct" requires non-empty dispatch_prefixes

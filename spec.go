@@ -15,9 +15,9 @@ var embeddedSpec []byte
 // Justfile and committed into branchkit-gen so `go install` users get
 // a known-good copy.
 type Spec struct {
-	APIVersion   string
-	Methods      map[string]*SpecMethod
-	Capabilities map[string]bool
+	APIVersion string
+	Methods    map[string]*SpecMethod
+	Privileges map[string]bool
 }
 
 // SpecMethod is the version metadata for one RPC method. Other fields
@@ -62,9 +62,9 @@ func parseSpec(data []byte) (*Spec, error) {
 		return nil, fmt.Errorf("parse embedded spec: %w", err)
 	}
 	s := &Spec{
-		APIVersion:   raw.Info.Version,
-		Methods:      make(map[string]*SpecMethod, len(raw.Methods)),
-		Capabilities: make(map[string]bool, len(raw.XCaps)),
+		APIVersion: raw.Info.Version,
+		Methods:    make(map[string]*SpecMethod, len(raw.Methods)),
+		Privileges: make(map[string]bool, len(raw.XCaps)),
 	}
 	for _, m := range raw.Methods {
 		s.Methods[m.Name] = &SpecMethod{
@@ -75,7 +75,7 @@ func parseSpec(data []byte) (*Spec, error) {
 		}
 	}
 	for _, c := range raw.XCaps {
-		s.Capabilities[c.Name] = true
+		s.Privileges[c.Name] = true
 	}
 	return s, nil
 }

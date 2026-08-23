@@ -22,13 +22,13 @@ func CheckDrift(m *PluginManifest, called []CalledMethod, spec *Spec) []Issue {
 		issues = append(issues, Issue{Severity: sev, PluginID: id, Field: field, Message: msg})
 	}
 
-	// 1. Capabilities the plugin declares must exist in the spec's
-	//    capability list. Typos here are common and only surface at
+	// 1. Privileges the plugin declares must exist in the spec's
+	//    privilege list. Typos here are common and only surface at
 	//    install time today.
-	for i, cap := range m.Capabilities {
-		if !spec.Capabilities[cap] {
-			add(SeverityError, fmt.Sprintf("capabilities[%d]", i), fmt.Sprintf(
-				"capability %q is not a recognized capability — check spelling against the public spec", cap))
+	for i, priv := range m.Privileges {
+		if !spec.Privileges[priv] {
+			add(SeverityError, fmt.Sprintf("privileges[%d]", i), fmt.Sprintf(
+				"privilege %q is not a recognized privilege — check spelling against the public spec", priv))
 		}
 	}
 

@@ -197,14 +197,14 @@ func TestValidate_dispatchVia(t *testing.T) {
 	got := Validate(m, nil)
 	fields := issuesByField(got)
 	if fields["dispatch_via"] != SeverityError {
-		t.Errorf("expected dispatch_via error without 'dispatch' capability, got: %+v", got)
+		t.Errorf("expected dispatch_via error without 'dispatch' privilege, got: %+v", got)
 	}
 	if fields["dispatch_prefixes"] != SeverityError {
 		t.Errorf("expected dispatch_prefixes error for direct mode without prefixes, got: %+v", got)
 	}
 
 	m2 := minimalValid()
-	m2.Capabilities = []string{"dispatch"}
+	m2.Privileges = []string{"dispatch"}
 	m2.DispatchPrefixes = []string{"foo."}
 	got2 := Validate(m2, nil)
 	if HasErrors(got2) {
