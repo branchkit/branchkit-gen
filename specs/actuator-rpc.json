@@ -27722,6 +27722,13 @@
       "name": "clipboard"
     },
     {
+      "description": "Turn recognized speech into commands — lets this plugin's dispatches run as the user's own",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "command_routing"
+    },
+    {
       "description": "Read contact information",
       "gated_event_prefixes": [],
       "method_count": 1,
