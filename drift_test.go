@@ -10,11 +10,11 @@ func testSpec() *Spec {
 	return &Spec{
 		APIVersion: "0.5.0",
 		Methods: map[string]*SpecMethod{
-			"collection.get":     {Name: "collection.get", Since: "0.1.0"},
-			"collection.put":     {Name: "collection.put", Since: "0.3.0"},
-			"old.thing":          {Name: "old.thing", Since: "0.1.0", DeprecatedIn: "0.4.0"},
-			"removed.thing":      {Name: "removed.thing", Since: "0.1.0", RemovedIn: "0.5.0"},
-			"deprecated.removed": {Name: "deprecated.removed", Since: "0.1.0", DeprecatedIn: "0.3.0", RemovedIn: "0.5.0"},
+			"collection.get":     {Since: "0.1.0"},
+			"collection.put":     {Since: "0.3.0"},
+			"old.thing":          {Since: "0.1.0", DeprecatedIn: "0.4.0"},
+			"removed.thing":      {Since: "0.1.0", RemovedIn: "0.5.0"},
+			"deprecated.removed": {Since: "0.1.0", DeprecatedIn: "0.3.0", RemovedIn: "0.5.0"},
 		},
 		Privileges: map[string]bool{
 			"dispatch":      true,

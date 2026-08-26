@@ -23,7 +23,6 @@ type Spec struct {
 // SpecMethod is the version metadata for one RPC method. Other fields
 // (params, result, etc.) aren't relevant to drift detection.
 type SpecMethod struct {
-	Name         string
 	Since        string
 	DeprecatedIn string
 	RemovedIn    string
@@ -68,7 +67,6 @@ func parseSpec(data []byte) (*Spec, error) {
 	}
 	for _, m := range raw.Methods {
 		s.Methods[m.Name] = &SpecMethod{
-			Name:         m.Name,
 			Since:        m.Since,
 			DeprecatedIn: m.DeprecatedIn,
 			RemovedIn:    m.RemovedIn,
