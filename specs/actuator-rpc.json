@@ -5966,22 +5966,6 @@
           "schema": {
             "description": "Typed `Action` variant to dispatch. Schema is loose\n(`serde_json::Value`) — see module-level docs for the rationale.\nThe runtime closure still deserializes the typed\n`crate::actions::Action` from this field."
           }
-        },
-        {
-          "name": "session_id",
-          "required": false,
-          "schema": {
-            "description": "Speech-session identifier carried from the originating `commands.resolve`.\nRe-derived into the same session-rooted correlation id here, so the\n`on_action` envelope this dispatch stamps shares the resolve's `tr_`\ntrace.",
-            "type": "string"
-          }
-        },
-        {
-          "name": "trace_id",
-          "required": false,
-          "schema": {
-            "description": "Trace ID echoed from `commands.resolve` response. Links dispatch\nevents to the originating command match.",
-            "type": "string"
-          }
         }
       ],
       "result": {
@@ -27832,13 +27816,6 @@
         "native.clipboard_types"
       ],
       "name": "clipboard"
-    },
-    {
-      "description": "Turn recognized speech into commands — lets this plugin's dispatches run as the user's own",
-      "gated_event_prefixes": [],
-      "method_count": 0,
-      "methods": [],
-      "name": "command_routing"
     },
     {
       "description": "Read contact information",
