@@ -25292,6 +25292,118 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "on_transcript",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "active_tags",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Tags active when the transcript was received. Advisory: the matcher\nconsults authoritative state during `commands.resolve`, so a tag\nabsent here can still gate matching.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "confidence",
+          "required": false,
+          "schema": {
+            "description": "Mean per-word acoustic margin, when the stage carried one.",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        {
+          "name": "dictation_profile",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "What the active gates declare this utterance IS, if any declared one.\nEmpty means none did, and the consumer's default stands.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "is_final",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Whether the recognition stage marked this segment final.\n\nDo not read this as \"the utterance is over\". Command recognizers\nfinalize per utterance and emit their recognitions NON-final,\nsignalling end-of-hold only by stopping the pipeline — so on the\ncommand path `is_final` marks an empty end-of-stream marker, not the\ncontent. The platform does not deliver empty-text transcripts here.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "pipeline",
+          "required": true,
+          "schema": {
+            "description": "Pipeline that produced this transcript. A plugin may own several.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "text",
+          "required": true,
+          "schema": {
+            "description": "Recognized text.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "word_onsets_ms",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Shared-clock onset of each word, aligned 1:1 with `text`'s words.",
+            "items": {
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "word_scores",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Per-word acoustic margin, aligned 1:1 with `text`'s words: positive =\nthe audio supported the word, negative = the closed grammar coerced it.",
+            "items": {
+              "format": "float",
+              "type": "number"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "on_transcript_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `on_transcript`: the actions the platform should execute, in\norder, as itself.\n\nThe platform executes these and nothing else. Anything else the plugin\nwants to do with the transcript — HUD, its own state, diagnostics — it\ndoes inside the handler, before answering. Keeping the response to\nactions alone is what stops this contract from accreting one plugin's\nvocabulary.\n\nAn empty list is the ordinary answer for a transcript that matched\nnothing, and is not an error.",
+          "properties": {
+            "actions": {
+              "default": [],
+              "description": "Typed `Action` values. Loose in the schema for the same reason\n`dispatch`'s `action` is: the Action enum's wire shape is the\ndispatch contract, documented there rather than duplicated per\nmethod.",
+              "items": {},
+              "type": "array"
+            }
+          },
+          "title": "OnTranscriptResult",
+          "type": "object"
+        }
+      },
+      "summary": "Decide what a transcript from a pipeline you own means, and return the actions the platform should execute. Called only for pipelines declaring `dispatch: \"delegated\"`; the platform executes the response itself, so the plugin never dispatches for routing.",
+      "tags": [
+        {
+          "name": "actuator-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "overrides.apply",
       "paramStructure": "by-name",
       "params": [
