@@ -433,16 +433,6 @@
       },
       "type": "object"
     },
-    "ConflictResolution": {
-      "description": "Conflict-resolution mode declared on an `EffectDeclaration`. v1\nships only `ExclusiveLastWriter`; future variants (first-writer,\ncomposable) join when concrete demand surfaces, per the design\ndoc's algebra-not-taxonomy principle.",
-      "oneOf": [
-        {
-          "const": "exclusive_last_writer",
-          "description": "Most-recent assertion holds top-of-stack ownership. When the top\nretracts, the previous asserter auto-restores. Matches the\nmode-shaped first-wave consumers (Focus, Meeting, Presentation,\nRecording Mode).",
-          "type": "string"
-        }
-      ]
-    },
     "Consumes": {
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
@@ -450,6 +440,13 @@
           "description": "Collection names this plugin reads (declares read-dependency on the introducer).",
           "items": {
             "type": "string"
+          },
+          "type": "array"
+        },
+        "effects": {
+          "description": "Exclusivity-shape effects this plugin ASSERTS during its session,\nplus the user-facing branding for the install-time consent prompt.\n\nUnder `consumes`, not `provides`, because that is what asserting is:\nthe platform provides the effect — the name, the ownership stack,\nthe arbitration — and the plugin uses it. This field lived under\n`provides` until 2026-08-27, an inversion fossilised from v1, where\nnothing but the platform COULD provide one and the key had no\ncontrast to be wrong against. Renamed before launch precisely so\n`provides.effects` is free to mean what it says when plugin-defined\neffects land (`notes/DESIGN_PLUGIN_DEFINED_EFFECTS.md`).\n\nEffect names are validated against the closed\n`effects::REGISTERED_EFFECTS` registry at manifest load time.\nSee `notes/DESIGN_CAPABILITY_MECHANISM.md`.",
+          "items": {
+            "$ref": "#/$defs/EffectDeclaration"
           },
           "type": "array"
         },
@@ -654,15 +651,11 @@
       "description": "One exclusivity-shape effect declaration. A plugin may declare\nmultiple entries when its experience surfaces have independent\nlifecycles; each entry is one consent unit at install time.",
       "properties": {
         "asserts": {
-          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (section 10.4 wire-forward-compat).",
+          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (section 10.4 wire-forward-compat).\n\nThis block used to carry `conflict_resolution` too. Dropped\n2026-08-27: how contention over a resource is arbitrated is a\nproperty of the RESOURCE, not of one party claiming it — two\nasserters declaring different modes for one effect was expressible\nand meaningless. The registry's `default_mode`/`allowed_modes`\ngovern; when plugin-defined effects land, the field reappears on\nthe DEFINITION side, where it belongs.",
           "items": {
             "$ref": "#/$defs/EffectAssertEntry"
           },
           "type": "array"
-        },
-        "conflict_resolution": {
-          "$ref": "#/$defs/ConflictResolution",
-          "description": "How concurrent assertions of these effects are arbitrated. v1\nships only `exclusive_last_writer`; the per-effect registry\ngates which modes are allowed for each effect name."
         },
         "user_visible_description": {
           "description": "One- or two-sentence description shown in the install-time\nconsent prompt under `user_visible_name`. Same v1 localization\nposture as `user_visible_name`.",
@@ -675,7 +668,6 @@
       },
       "required": [
         "asserts",
-        "conflict_resolution",
         "user_visible_name",
         "user_visible_description"
       ],
@@ -1567,13 +1559,6 @@
           "description": "Friendly context names this plugin owns. The context engine's\n`name_for(tag_set, partial_prefix)` lookup walks every plugin's\n`context_names`; the first pattern whose `tags` are a subset of\nthe live active-tag set and whose `prefix_shape` matches the\ncaptured prefix positionally wins. See\n`notes/DESIGN_CALIBRATION_CONTEXTS.md` §8.",
           "items": {
             "$ref": "#/$defs/ContextNamePattern"
-          },
-          "type": "array"
-        },
-        "effects": {
-          "description": "Exclusivity-shape platform effects this plugin participates in.\nEach entry declares a set of registered effect names the plugin\nwill assert during its session, plus the user-facing branding for\nthe install-time consent prompt. Effect names are validated\nagainst the closed `effects::REGISTERED_EFFECTS` registry at\nmanifest load time. See `notes/DESIGN_CAPABILITY_MECHANISM.md`.",
-          "items": {
-            "$ref": "#/$defs/EffectDeclaration"
           },
           "type": "array"
         },
