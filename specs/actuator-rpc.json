@@ -5973,7 +5973,7 @@
           "name": "name",
           "required": true,
           "schema": {
-            "description": "Registered effect name (e.g. `suppress_notifications`). Must be\ndeclared in the plugin's manifest `provides.effects.asserts` and\nmatch an entry in the closed `effects::REGISTERED_EFFECTS` registry.",
+            "description": "Registered effect name (e.g. `suppress_notifications`). Must be\ndeclared in the plugin's manifest `consumes.effects.asserts` and\nmatch an entry in the closed `effects::REGISTERED_EFFECTS` registry.",
             "type": "string"
           }
         }
