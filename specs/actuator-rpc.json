@@ -1581,7 +1581,7 @@
         "type": "object"
       },
       "ListOpts": {
-        "description": "Listing parameters for `list`. All fields optional — empty `ListOpts`\nmeans \"every record, default ordering.\"\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
+        "description": "Listing parameters for `list`. All fields optional — an empty `ListOpts`\nasks a BACKEND for every record in default ordering. That is not what an\nRPC caller gets: `StateService::list` substitutes\n`StateService::DEFAULT_LIST_LIMIT` when the caller passed no `limit`, so\n\"every record\" is the backend contract and never the plugin-visible one.\nSee notes/DESIGN_PLATFORM_LOAD_SAFEGUARDS.md.\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
         "properties": {
           "compacted": {
             "description": "Shape-scoped to `by_field` log collections (the compacted-changelog\nprojection — see `notes/DESIGN_LOG_ANNOTATION_PROJECTION.md`, and\nDESIGN_PLATFORM_STATE.md §3.2). When true, a keyed log's raw appends\nare folded by their key field per the collection's `merge` and one\nrecord per key is returned (the record's current state) instead of the\nraw append history. Ignored by non-log backends; a validation error on\nan auto-ulid log (no key field to fold on). Absent/false = raw read.",
@@ -1592,7 +1592,7 @@
             "type": "string"
           },
           "limit": {
-            "description": "Maximum records to return. None = no limit.",
+            "description": "Maximum records to return. None = no limit AT THE BACKEND; over RPC,\n`StateService::list` substitutes `StateService::DEFAULT_LIST_LIMIT`\nfor a caller that passed none, and emits a `LIST_TRUNCATED` diagnostic\nif that bound actually cut the result short. An explicit limit is\nhonored either way, above or below the default.",
             "format": "uint",
             "minimum": 0,
             "type": "integer"
