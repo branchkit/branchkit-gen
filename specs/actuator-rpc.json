@@ -1743,13 +1743,21 @@
       },
       "MatchWinner": {
         "description": "Which category the matcher's tiebreaker chose. Mirrors the four\nbranches of `find_match_at_start_with_telemetry`: gated Completes win over\nungated Completes (scoped beats unscoped within the gated set), an\nungated Complete loses if any gated command had a Partial in flight\n(`suppress_ungated`), and `NoMatch` is the fall-through.",
-        "enum": [
-          "gated_scoped",
-          "gated_unscoped",
-          "ungated",
-          "no_match"
-        ],
-        "type": "string"
+        "oneOf": [
+          {
+            "enum": [
+              "gated_scoped",
+              "gated_unscoped",
+              "ungated"
+            ],
+            "type": "string"
+          },
+          {
+            "const": "no_match",
+            "description": "The fall-through, and the `Default` — a zero-valued decision is\n\"nothing matched\", never a phantom win.",
+            "type": "string"
+          }
+        ]
       },
       "MemoryInfo": {
         "properties": {
@@ -5705,7 +5713,6 @@
         "name": "commands_resolve_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Unified result of `commands.resolve` — dispatch decision, partial-match\nfeedback, and tiebreaker telemetry in a single envelope. Consolidates\nthe prior `commands.match` + `commands.completions` response shapes; see\n`docs/completed/DESIGN_MATCHER_DECISION_CONSOLIDATION.md`.",
           "properties": {
             "action": {
               "description": "Opaque to schemars: `Action` is a large enum whose schema is treated\nas a free-form JSON value in OpenAPI. The inventory closure still\nproduces a fully-typed Action."
@@ -27385,9 +27392,6 @@
   "x-branchkit-closed-vocabularies": {
     "effects": [
       "disable_screen_dim",
-      "mute_audio_to_other_apps",
-      "pause_microphone_indicator",
-      "prevent_focus_steal",
       "prevent_system_sleep",
       "signal_clipboard_in_use",
       "signal_recording_active",
