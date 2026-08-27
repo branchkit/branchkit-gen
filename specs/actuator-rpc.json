@@ -3253,6 +3253,44 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.effect.ownership_changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "effect",
+          "required": true,
+          "schema": {
+            "description": "The effect whose effective owner changed — a bare platform name or\na qualified `<plugin_id>.<name>`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner",
+          "required": false,
+          "schema": {
+            "description": "Plugin now holding the top of the stack. `None` means the effect\nwent free — the transition a behaviour-applying provider unapplies\non.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "previous",
+          "required": false,
+          "schema": {
+            "description": "Plugin that held the top before this change. `None` means the\neffect was previously free.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "An effect's effective owner changed (including held→free) — the provider-facing twin of effect.displaced; see notes/DESIGN_PLUGIN_DEFINED_EFFECTS.md",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.hid.connected",
       "paramStructure": "by-name",
       "params": [
@@ -6016,7 +6054,8 @@
         }
       ],
       "x-branchkit-emits": [
-        "_platform.effect.displaced"
+        "_platform.effect.displaced",
+        "_platform.effect.ownership_changed"
       ],
       "x-since": "0.1.0"
     },
@@ -6101,6 +6140,9 @@
         {
           "name": "misc"
         }
+      ],
+      "x-branchkit-emits": [
+        "_platform.effect.ownership_changed"
       ],
       "x-since": "0.1.0"
     },

@@ -673,6 +673,24 @@
       ],
       "type": "object"
     },
+    "EffectDefinition": {
+      "description": "One effect a plugin defines: a coordination name others may assert.\n\nDeliberately thin. No `conflict_resolution` — one mode ships, and the\nfield joins when a second mode exists rather than sitting unread. No\n`enforcement` — plugin-defined effects are SignalOnly by construction,\nbecause the platform cannot implement behaviour it has never heard of.",
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/AccessLevel",
+          "default": "open",
+          "description": "Who may assert it. `Open` (default): any declared consumer, with a\nuser grant. `SameAuthor`: plugins sharing this manifest's author,\nauto-granted. `Private`: only the defining plugin itself."
+        },
+        "description": {
+          "description": "What holding this effect means. Shown on the Effects tab and in\nconsent copy for plugins that assert it. Plugin-authored text:\nrendered as data in platform chrome, never as markup.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "type": "object"
+    },
     "EventSchemaDecl": {
       "description": "Schema declaration for an emitted event type.",
       "properties": {
@@ -1561,6 +1579,13 @@
             "$ref": "#/$defs/ContextNamePattern"
           },
           "type": "array"
+        },
+        "effects": {
+          "additionalProperties": {
+            "$ref": "#/$defs/EffectDefinition"
+          },
+          "description": "Effects this plugin DEFINES — coordination names it introduces for\nothers (and itself) to assert, keyed by plugin-local name. The\nfully-qualified name on the wire is `<plugin_id>.<name>`, exactly\nas stages qualify.\n\nThis is what `provides.effects` always should have meant, and the\nkey was freed for it by the 2026-08-27 rename (asserting moved to\n`consumes.effects`). Plugin-defined effects are SignalOnly from\nthe platform's side: the platform owns the name, the ownership\nstack, displacement and the crash release — the coordination — and\ndelivers no OS behaviour. A provider that wants its effect to DO\nsomething does it in its own process, driven by\n`_platform.effect.ownership_changed`.\nDesign: `notes/DESIGN_PLUGIN_DEFINED_EFFECTS.md`.\n\nThe key `\"*\"` declares a runtime-minted namespace: any\nsingle-segment name under `<plugin_id>.*` resolves against it.\nThis is the host projection — a scripting host cannot enumerate in\na static manifest the names its scripts will coordinate under, the\nsame shape (and the same solution) as `provides.events` patterns.",
+          "type": "object"
         },
         "events": {
           "additionalProperties": {
