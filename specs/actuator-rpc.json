@@ -27388,10 +27388,13 @@
       "mute_audio_to_other_apps",
       "pause_microphone_indicator",
       "prevent_focus_steal",
+      "prevent_system_sleep",
+      "signal_clipboard_in_use",
       "signal_recording_active",
       "suppress_huds",
       "suppress_keybinds",
-      "suppress_notifications"
+      "suppress_notifications",
+      "suppress_voice_commands"
     ],
     "error_kinds": [
       {
