@@ -1233,6 +1233,9 @@
             "description": "Dispatch action type, e.g. `\"browser.scroll\"` (template-resolved). The\nstable identity of what the command does — lets a companion correlate a\nspoken command with the action it triggers (the pattern is display text,\nnot an identifier).",
             "type": "string"
           },
+          "binding": {
+            "description": "The ready-to-store keybind value (`{\"action\": \"<dotted.type>\",\n\"params\": {…}}`) when the command's action is statically bindable —\na concrete plugin action with no capture template, no sequence, and\nno intrinsic phase. Absent otherwise. This is what the Keybinds\ntab's bind-a-command flow copies."
+          },
           "category": {
             "description": "Optional grouping label from the command definition (e.g. \"Navigation\").",
             "type": "string"
