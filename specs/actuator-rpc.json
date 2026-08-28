@@ -25158,7 +25158,7 @@
           "name": "action",
           "required": true,
           "schema": {
-            "description": "Action name (e.g., 'voice dictation', 'wm left').",
+            "description": "Fully qualified action type (e.g., 'voice.dictation', 'windows.snap').",
             "type": "string"
           }
         },
