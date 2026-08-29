@@ -27587,7 +27587,8 @@
         "native.voiceover_enabled",
         "native.zoom_enabled"
       ],
-      "name": "accessibility"
+      "name": "accessibility",
+      "risk": "dangerous"
     },
     {
       "description": "Read and set system appearance — accent color, highlight color",
@@ -27609,7 +27610,8 @@
         "native.system_appearance",
         "native.true_tone"
       ],
-      "name": "appearance"
+      "name": "appearance",
+      "risk": "low"
     },
     {
       "description": "List and inspect running applications",
@@ -27647,7 +27649,8 @@
         "native.url_scheme_handler",
         "native.write_app_preference"
       ],
-      "name": "apps"
+      "name": "apps",
+      "risk": "moderate"
     },
     {
       "description": "Launch, quit, activate, and hide applications",
@@ -27663,7 +27666,8 @@
         "native.unhide_app",
         "system.launch_app"
       ],
-      "name": "apps.control"
+      "name": "apps.control",
+      "risk": "moderate"
     },
     {
       "description": "Audio devices, volume, sound playback, and text-to-speech",
@@ -27690,7 +27694,8 @@
         "native.tts_voices",
         "native.volume"
       ],
-      "name": "audio"
+      "name": "audio",
+      "risk": "moderate"
     },
     {
       "description": "Discover services and write to paired Bluetooth LE devices",
@@ -27702,7 +27707,8 @@
         "native.ble_subscribe_all_then_write",
         "native.ble_write"
       ],
-      "name": "ble"
+      "name": "ble",
+      "risk": "moderate"
     },
     {
       "description": "Read calendar events and reminders",
@@ -27713,7 +27719,8 @@
         "native.calendar_events_today",
         "native.reminders_incomplete"
       ],
-      "name": "calendar"
+      "name": "calendar",
+      "risk": "moderate"
     },
     {
       "description": "Read and write clipboard contents",
@@ -27737,7 +27744,8 @@
         "native.clipboard_set_text",
         "native.clipboard_types"
       ],
-      "name": "clipboard"
+      "name": "clipboard",
+      "risk": "dangerous"
     },
     {
       "description": "Read contact information",
@@ -27746,7 +27754,8 @@
       "methods": [
         "native.search_contacts"
       ],
-      "name": "contacts"
+      "name": "contacts",
+      "risk": "moderate"
     },
     {
       "description": "Dispatch typed actions to plugins on behalf of the user",
@@ -27755,7 +27764,8 @@
       "methods": [
         "dispatch"
       ],
-      "name": "dispatch"
+      "name": "dispatch",
+      "risk": "dangerous"
     },
     {
       "description": "Display info, brightness, and cursor position",
@@ -27782,7 +27792,8 @@
         "native.screen_resolution",
         "native.set_brightness"
       ],
-      "name": "display"
+      "name": "display",
+      "risk": "low"
     },
     {
       "description": "Dock configuration — position, size, auto-hide, items",
@@ -27805,7 +27816,8 @@
         "native.set_dock_size",
         "native.stage_manager_enabled"
       ],
-      "name": "dock"
+      "name": "dock",
+      "risk": "low"
     },
     {
       "description": "Receive all platform events",
@@ -27814,7 +27826,8 @@
       ],
       "method_count": 0,
       "methods": [],
-      "name": "events.*"
+      "name": "events.*",
+      "risk": "low"
     },
     {
       "description": "Receive speech recognition events",
@@ -27823,7 +27836,8 @@
       ],
       "method_count": 0,
       "methods": [],
-      "name": "events.speech"
+      "name": "events.speech",
+      "risk": "low"
     },
     {
       "description": "Receive window title and world model events",
@@ -27833,7 +27847,8 @@
       ],
       "method_count": 0,
       "methods": [],
-      "name": "events.world"
+      "name": "events.world",
+      "risk": "low"
     },
     {
       "description": "File operations — trash, search, tags, reveal",
@@ -27894,7 +27909,8 @@
         "native.write_file",
         "native.zip"
       ],
-      "name": "filesystem"
+      "name": "filesystem",
+      "risk": "dangerous"
     },
     {
       "description": "Finder operations — desktop items, sidebar, Finder windows",
@@ -27913,7 +27929,8 @@
         "native.set_finder_show_extensions",
         "native.set_finder_show_hidden"
       ],
-      "name": "finder"
+      "name": "finder",
+      "risk": "low"
     },
     {
       "description": "Hardware info — CPU, memory, model, serial number",
@@ -27935,7 +27952,8 @@
         "native.rosetta_installed",
         "native.thunderbolt_devices"
       ],
-      "name": "hardware"
+      "name": "hardware",
+      "risk": "low"
     },
     {
       "description": "Send reports to connected HID devices",
@@ -27947,7 +27965,8 @@
         "native.hid_release",
         "native.hid_send_report"
       ],
-      "name": "hid"
+      "name": "hid",
+      "risk": "moderate"
     },
     {
       "description": "iCloud account status and storage info",
@@ -27957,7 +27976,8 @@
         "native.icloud_desktop_sync",
         "native.icloud_signed_in"
       ],
-      "name": "icloud"
+      "name": "icloud",
+      "risk": "low"
     },
     {
       "description": "Simulate keyboard and mouse events",
@@ -28010,7 +28030,8 @@
         "native.trackpad_speed",
         "native.warp_cursor"
       ],
-      "name": "input"
+      "name": "input",
+      "risk": "dangerous"
     },
     {
       "description": "System locale, timezone, and language settings",
@@ -28031,7 +28052,8 @@
         "native.timezone",
         "native.twenty_four_hour_clock"
       ],
-      "name": "locale"
+      "name": "locale",
+      "risk": "low"
     },
     {
       "description": "Application menu bar — read structure, click items",
@@ -28042,7 +28064,8 @@
         "native.menu_bar",
         "native.menu_bar_auto_hide"
       ],
-      "name": "menu"
+      "name": "menu",
+      "risk": "low"
     },
     {
       "description": "Menu bar extras — clock, control center items",
@@ -28053,14 +28076,16 @@
         "native.menu_bar_clock_format",
         "native.set_menu_bar_auto_hide"
       ],
-      "name": "menubar"
+      "name": "menubar",
+      "risk": "low"
     },
     {
       "description": "Capture microphone audio through a platform pipeline",
       "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
-      "name": "microphone"
+      "name": "microphone",
+      "risk": "dangerous"
     },
     {
       "description": "Network interfaces, wifi state, and connections",
@@ -28089,7 +28114,8 @@
         "native.toggle_wifi",
         "native.vpn_status"
       ],
-      "name": "network"
+      "name": "network",
+      "risk": "low"
     },
     {
       "description": "Post, list, and dismiss notifications",
@@ -28104,7 +28130,8 @@
         "native.notify",
         "system.notify"
       ],
-      "name": "notifications"
+      "name": "notifications",
+      "risk": "moderate"
     },
     {
       "description": "Battery state, power source, and charging status",
@@ -28123,7 +28150,8 @@
         "native.power_source",
         "native.time_on_battery"
       ],
-      "name": "power"
+      "name": "power",
+      "risk": "low"
     },
     {
       "description": "Privacy settings — permissions status for camera, mic, location",
@@ -28143,7 +28171,8 @@
         "native.secure_input_enabled",
         "native.transparency_consent"
       ],
-      "name": "privacy"
+      "name": "privacy",
+      "risk": "low"
     },
     {
       "description": "List and inspect running processes",
@@ -28162,7 +28191,8 @@
         "native.process_path",
         "native.process_start_time"
       ],
-      "name": "process"
+      "name": "process",
+      "risk": "low"
     },
     {
       "description": "Capture screen content as images",
@@ -28186,7 +28216,8 @@
         "native.set_screenshot_include_shadow",
         "native.window_screenshot"
       ],
-      "name": "screenshot"
+      "name": "screenshot",
+      "risk": "dangerous"
     },
     {
       "description": "Security settings — firewall, FileVault, Gatekeeper",
@@ -28207,7 +28238,8 @@
         "native.time_machine_status",
         "native.touch_id_available"
       ],
-      "name": "security"
+      "name": "security",
+      "risk": "dangerous"
     },
     {
       "description": "Login session — screen lock, screensaver, idle time",
@@ -28221,7 +28253,8 @@
         "native.screen_locked",
         "native.screen_saver_status"
       ],
-      "name": "session"
+      "name": "session",
+      "risk": "low"
     },
     {
       "description": "Sharing settings — computer name, remote login, file sharing",
@@ -28236,7 +28269,8 @@
         "native.screen_sharing_enabled",
         "native.sharing_name"
       ],
-      "name": "sharing"
+      "name": "sharing",
+      "risk": "low"
     },
     {
       "description": "Run shell commands and scripts",
@@ -28246,7 +28280,8 @@
         "native.run_applescript",
         "system.run_shell"
       ],
-      "name": "shell"
+      "name": "shell",
+      "risk": "dangerous"
     },
     {
       "description": "System sound settings — alert sounds, UI sound effects",
@@ -28258,7 +28293,8 @@
         "native.startup_sound_enabled",
         "native.system_sounds"
       ],
-      "name": "sound"
+      "name": "sound",
+      "risk": "low"
     },
     {
       "description": "Mission Control spaces and desktop management",
@@ -28274,7 +28310,8 @@
         "native.spaces_span_displays",
         "native.switch_space_when_switching_app"
       ],
-      "name": "spaces"
+      "name": "spaces",
+      "risk": "low"
     },
     {
       "description": "Text-to-speech synthesis",
@@ -28287,35 +28324,40 @@
         "native.speech_recognition_available",
         "native.speech_recognize_file"
       ],
-      "name": "speech"
+      "name": "speech",
+      "risk": "moderate"
     },
     {
       "description": "See and monitor audio devices from a pipeline stage",
       "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
-      "name": "stage.audio_devices"
+      "name": "stage.audio_devices",
+      "risk": "low"
     },
     {
       "description": "See and monitor connected displays from a pipeline stage",
       "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
-      "name": "stage.displays"
+      "name": "stage.displays",
+      "risk": "low"
     },
     {
       "description": "Run machine-learning models on the Neural Engine (on-device acceleration; no network access, no file access)",
       "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
-      "name": "stage.neural_engine"
+      "name": "stage.neural_engine",
+      "risk": "low"
     },
     {
       "description": "See and monitor power source and battery state from a pipeline stage",
       "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
-      "name": "stage.power"
+      "name": "stage.power",
+      "risk": "low"
     },
     {
       "description": "Disk usage and volume information",
@@ -28328,7 +28370,8 @@
         "native.xcode_path",
         "native.xcode_version"
       ],
-      "name": "storage"
+      "name": "storage",
+      "risk": "low"
     },
     {
       "description": "System state — battery, wifi, bluetooth, dark mode",
@@ -28376,7 +28419,8 @@
         "native.wifi",
         "native.wifi_networks"
       ],
-      "name": "system"
+      "name": "system",
+      "risk": "low"
     },
     {
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
@@ -28402,7 +28446,8 @@
         "native.set_wallpaper",
         "native.sleep_now"
       ],
-      "name": "system.control"
+      "name": "system.control",
+      "risk": "low"
     },
     {
       "description": "Status indicator — whether a menu bar item exists to show recording state",
@@ -28411,7 +28456,8 @@
       "methods": [
         "native.status_indicator"
       ],
-      "name": "system.indicator"
+      "name": "system.indicator",
+      "risk": "low"
     },
     {
       "description": "User session — current user, default browser, login items",
@@ -28426,7 +28472,8 @@
         "native.user_name",
         "native.user_shell"
       ],
-      "name": "user"
+      "name": "user",
+      "risk": "low"
     },
     {
       "description": "Move, resize, and manage windows",
@@ -28472,7 +28519,8 @@
         "native.window_title",
         "native.world_model"
       ],
-      "name": "windows"
+      "name": "windows",
+      "risk": "moderate"
     }
   ],
   "x-branchkit-tags": {
