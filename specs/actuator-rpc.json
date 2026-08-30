@@ -2132,6 +2132,11 @@
             "description": "In the caller's effective set right now — calls gated on it succeed.",
             "type": "boolean"
           },
+          "one_shot": {
+            "default": false,
+            "description": "An allow-once grant is waiting: the next call gated on this\nprivilege succeeds, then the grant is spent. Never reported in\n`granted` — a one-shot is not a standing grant.",
+            "type": "boolean"
+          },
           "pending": {
             "description": "A privileges.request for it is awaiting the user.",
             "type": "boolean"
@@ -2147,6 +2152,7 @@
         "required": [
           "denied",
           "granted",
+          "one_shot",
           "pending",
           "privilege",
           "required"
