@@ -27432,6 +27432,12 @@
       "writers": "anyone_who_declares"
     },
     {
+      "description": "Key name → keycode for this platform. The NAME REGISTRY behind `input.press_key` with a `name`, and behind hotkey registration: whichever surface turns a spoken or written key name into an OS event resolves it here, so the four paths cannot disagree about which keys exist or how they are spelled. Platform-owned and platform-SEEDED (see `collection_data` below): named keys work on a bare install with no plugins, which is the point — this used to be a plugin-introduced collection called `keycodes`, and the platform's ability to press `return` was hostage to the keyboard plugin being installed. That made key naming a SLOT; per the same reasoning as `_platform.input`, it should be a category. `writers: anyone_who_declares` is what makes it one: a remapper, an alternative-layout plugin, or hardware support can extend or correct the baseline, and users edit it like any other collection. `code` is authoritative where the OS injects by numeric keycode (macOS virtual keycodes). Off macOS the actuator resolves names through enigo's and global_hotkey's own vocabularies, and `code` carries that platform's native value for reference; see docs/design/DESIGN_SHAPED_CONSUMPTION.md for why those two encodings are not interchangeable.",
+      "name": "_platform.key_names",
+      "preset": "named_entities",
+      "writers": "anyone_who_declares"
+    },
+    {
       "description": "Per-sink archive retention overrides for the dated-gzip archiving sinks (audit_log, show_all, dev_mutation_stream, verbose). One record per overridden sink `{sink, days}`; a sink with no record keeps its env-seeded default (90/30/30/7). Set from the Debug tab; applied live.",
       "name": "_platform.log_retention",
       "preset": "data",
