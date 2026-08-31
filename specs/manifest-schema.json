@@ -433,13 +433,41 @@
       },
       "type": "object"
     },
+    "ConsumedCollection": {
+      "anyOf": [
+        {
+          "description": "Bare string — name only, no shape declared and none checked.",
+          "type": "string"
+        },
+        {
+          "description": "Structured form declaring the fields this plugin reads.",
+          "properties": {
+            "fields": {
+              "description": "Record field keys this plugin reads. Checked against the\nintroducer's declared field schema at load.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "One entry in `consumes.collections`. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form additionally declares the\nFIELDS this plugin reads from the collection's records.\n\nDeclaring fields buys a load-time compatibility check against the\nintroducer's `provides.collections[name].fields`: a field the provider\ndoes not declare is reported at load instead of silently reading as\nabsent forever. That is the whole point — a consumer binds to a SHAPE,\nand the platform can only verify a shape it was told about\n(docs/design/DESIGN_SHAPED_CONSUMPTION.md)."
+    },
     "Consumes": {
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
         "collections": {
-          "description": "Collection names this plugin reads (declares read-dependency on the introducer).",
+          "description": "Collections this plugin reads (declares read-dependency on the\nintroducer). Each entry is a bare name, or a name plus the fields\nread — see `ConsumedCollection`.",
           "items": {
-            "type": "string"
+            "$ref": "#/$defs/ConsumedCollection"
           },
           "type": "array"
         },
