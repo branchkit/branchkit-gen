@@ -10256,7 +10256,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "windows",
       "x-since": "0.1.0"
     },
     {
@@ -16242,7 +16242,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system",
+      "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
     },
     {
@@ -16271,7 +16271,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system",
+      "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
     },
     {
@@ -16300,7 +16300,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system",
+      "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
     },
     {
@@ -17606,7 +17606,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
     },
     {
@@ -17755,7 +17755,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
     },
     {
@@ -17799,7 +17799,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
     },
     {
@@ -20421,7 +20421,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
     },
     {
@@ -20781,7 +20781,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system",
+      "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
     },
     {
@@ -20818,7 +20818,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system",
+      "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
     },
     {
@@ -24981,7 +24981,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
     },
     {
@@ -27622,7 +27622,7 @@
     {
       "description": "List and inspect running applications",
       "gated_event_prefixes": [],
-      "method_count": 30,
+      "method_count": 24,
       "methods": [
         "native.app_bundle_path",
         "native.app_focused_window_id",
@@ -27639,21 +27639,15 @@
         "native.app_windows_count",
         "native.apps_for_path",
         "native.bundle_for_remote_port",
-        "native.cascade_windows",
         "native.default_app_for_uti",
         "native.default_email_client",
         "native.frontmost_app",
         "native.installed_apps",
         "native.is_app_hidden",
-        "native.open_app_settings",
-        "native.open_url",
-        "native.open_with_app",
         "native.read_app_preference",
         "native.recent_documents",
         "native.running_apps",
-        "native.set_app_hidden",
-        "native.url_scheme_handler",
-        "native.write_app_preference"
+        "native.url_scheme_handler"
       ],
       "name": "apps",
       "risk": "moderate"
@@ -27661,15 +27655,20 @@
     {
       "description": "Launch, quit, activate, and hide applications",
       "gated_event_prefixes": [],
-      "method_count": 8,
+      "method_count": 13,
       "methods": [
         "native.activate_app",
         "native.force_quit_app",
         "native.hide_app",
         "native.launch_app",
         "native.new_app_window",
+        "native.open_app_settings",
+        "native.open_url",
+        "native.open_with_app",
         "native.quit_app",
+        "native.set_app_hidden",
         "native.unhide_app",
+        "native.write_app_preference",
         "system.launch_app"
       ],
       "name": "apps.control",
@@ -28382,7 +28381,7 @@
     {
       "description": "System state — battery, wifi, bluetooth, dark mode",
       "gated_event_prefixes": [],
-      "method_count": 40,
+      "method_count": 35,
       "methods": [
         "native.active_ports",
         "native.battery",
@@ -28400,9 +28399,6 @@
         "native.gatekeeper_status",
         "native.hostname_resolve",
         "native.kernel_version",
-        "native.media_next_track",
-        "native.media_play_pause",
-        "native.media_previous_track",
         "native.network_interfaces",
         "native.night_shift",
         "native.now_playing",
@@ -28414,8 +28410,6 @@
         "native.random_uuid",
         "native.resource_usage",
         "native.serial_number",
-        "native.set_dark_mode",
-        "native.set_dnd",
         "native.sip_status",
         "native.system_info",
         "native.system_uptime",
@@ -28431,10 +28425,13 @@
     {
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
       "gated_event_prefixes": [],
-      "method_count": 18,
+      "method_count": 23,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
+        "native.media_next_track",
+        "native.media_play_pause",
+        "native.media_previous_track",
         "native.open_system_settings",
         "native.prevent_sleep",
         "native.restart_app",
@@ -28445,6 +28442,8 @@
         "native.set_airport_power",
         "native.set_bluetooth_power",
         "native.set_computer_name",
+        "native.set_dark_mode",
+        "native.set_dnd",
         "native.set_dock_position",
         "native.set_night_shift",
         "native.set_screenshot_location",
@@ -28484,7 +28483,7 @@
     {
       "description": "Move, resize, and manage windows",
       "gated_event_prefixes": [],
-      "method_count": 38,
+      "method_count": 39,
       "methods": [
         "native.active_space",
         "native.all_window_ids",
@@ -28492,6 +28491,7 @@
         "native.batch_set_frames",
         "native.borders",
         "native.capture_window",
+        "native.cascade_windows",
         "native.center_window",
         "native.close_window",
         "native.focused_window_id",
