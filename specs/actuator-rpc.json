@@ -7507,57 +7507,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "key_names.set",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "names",
-          "required": false,
-          "schema": {
-            "additionalProperties": {
-              "format": "uint16",
-              "maximum": 65535,
-              "minimum": 0,
-              "type": "integer"
-            },
-            "default": {},
-            "description": "Map of named key (e.g. \"return\", \"tab\") → raw macOS keycode.\nReplaces the entire key-name cache used by keyboard input\nsimulation.",
-            "type": "object"
-          }
-        }
-      ],
-      "result": {
-        "name": "key_names_set_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "count": {
-              "description": "Number of entries in the resulting cache.",
-              "format": "uint",
-              "minimum": 0,
-              "type": "integer"
-            },
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok",
-            "count"
-          ],
-          "title": "KeyNamesSetResult",
-          "type": "object"
-        }
-      },
-      "summary": "Set the key name → keycode mapping for keyboard input simulation",
-      "tags": [
-        {
-          "name": "key_names"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "keybinds.register",
       "paramStructure": "by-name",
       "params": [
