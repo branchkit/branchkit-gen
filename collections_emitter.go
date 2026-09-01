@@ -150,6 +150,22 @@ func RenderGoCollections(manifest *PluginManifest, providers providerFields) str
 	b.WriteString("// each provider's declared schema. Run: just gen-plugins\n\n")
 	b.WriteString("package main\n\n")
 
+	// Opaque field types render as json.RawMessage and need the import. The
+	// action emitter pre-scans for the same reason; omitting it here emitted a
+	// file that did not compile, and only for plugins reading an object- or
+	// json-typed field.
+	needsJSON := false
+	for _, sh := range shapes {
+		for i := range sh.Fields {
+			if sh.Fields[i].EffectiveFieldType().NeedsJSONImport() {
+				needsJSON = true
+			}
+		}
+	}
+	if needsJSON {
+		b.WriteString("import \"encoding/json\"\n\n")
+	}
+
 	for _, s := range shapes {
 		name := collectionRecordName(s.Collection)
 		fmt.Fprintf(&b, "// %s is the shape this plugin declared it reads from the\n", name)
