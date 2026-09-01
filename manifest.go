@@ -48,8 +48,40 @@ type PluginManifest struct {
 	Implements         PluginImplements            `json:"implements"`
 	Privileges         []string                    `json:"privileges"`
 	DispatchVia        string                      `json:"dispatch_via"`
-	DispatchPrefixes   []string                    `json:"dispatch_prefixes"`
+	Consumes           Consumes                    `json:"consumes"`
 	ActionTypes        map[string]ActionTypeSchema `json:"action_types"`
+}
+
+// Consumes is the consumption block. Only the parts this validator
+// reasons about are modelled; the rest is checked against the manifest
+// schema, which is generated and embedded.
+type Consumes struct {
+	Dispatch []ConsumedDispatch `json:"dispatch"`
+}
+
+// ConsumedDispatch is a bare prefix string or an object naming the action
+// types dispatched under it. Same untagged shape the platform uses, so a
+// manifest that is valid here is valid there.
+type ConsumedDispatch struct {
+	Prefix  string
+	Actions []string
+}
+
+func (c *ConsumedDispatch) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err == nil {
+		c.Prefix, c.Actions = s, nil
+		return nil
+	}
+	var o struct {
+		Prefix  string   `json:"prefix"`
+		Actions []string `json:"actions"`
+	}
+	if err := json.Unmarshal(b, &o); err != nil {
+		return err
+	}
+	c.Prefix, c.Actions = o.Prefix, o.Actions
+	return nil
 }
 
 // PluginImplements parses the "implements" block. settings_tabs is the

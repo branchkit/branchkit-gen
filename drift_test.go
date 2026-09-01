@@ -50,7 +50,7 @@ func TestManifest_privilegesParseFromJSON(t *testing.T) {
 
 	// dispatch_via is satisfied by a privilege that came off the wire.
 	m.DispatchVia = "direct"
-	m.DispatchPrefixes = []string{"demo."}
+	m.Consumes.Dispatch = []ConsumedDispatch{{Prefix: "demo."}}
 	for _, i := range Validate(&m, nil) {
 		if i.Field == "dispatch_via" && i.Severity == SeverityError {
 			t.Errorf("dispatch_via rejected despite the dispatch privilege: %s", i.Message)

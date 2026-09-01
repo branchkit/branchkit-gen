@@ -468,6 +468,33 @@
       ],
       "description": "One entry in `consumes.collections`. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form additionally declares the\nFIELDS this plugin reads from the collection's records.\n\nDeclaring fields buys a load-time compatibility check against the\nintroducer's `provides.collections[name].fields`: a field the provider\ndoes not declare is reported at load instead of silently reading as\nabsent forever. That is the whole point — a consumer binds to a SHAPE,\nand the platform can only verify a shape it was told about\n(docs/design/DESIGN_SHAPED_CONSUMPTION.md)."
     },
+    "ConsumedDispatch": {
+      "anyOf": [
+        {
+          "description": "Bare prefix — every action under it.",
+          "type": "string"
+        },
+        {
+          "description": "Prefix plus the action types actually dispatched.",
+          "properties": {
+            "actions": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "prefix": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "prefix"
+          ],
+          "type": "object"
+        }
+      ],
+      "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — and this was the last one declared at manifest top level, as\n`dispatch_prefixes`, next to `dispatch_via`. `dispatch_via` is a MODE and\nstays where it is; the targets are what a user consents to, and they\nbelong under `consumes` with the rest.\n\n`actions` narrows the DECLARATION, not the grant. Decision (a) of\n`DESIGN_COORDINATION_CONSOLIDATION.md`: expanding the grant to\n(caller, target, action) took the two declaring plugins from 5 consent\nrows to 39, and a consent list long enough to scroll is one people click\nthrough. So the user still decides per prefix while the platform can hold\nthe plugin to the narrower thing it said."
+    },
     "Consumes": {
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
@@ -475,6 +502,13 @@
           "description": "Collections this plugin reads (declares read-dependency on the\nintroducer). Each entry is a bare name, or a name plus the fields\nread — see `ConsumedCollection`.",
           "items": {
             "$ref": "#/$defs/ConsumedCollection"
+          },
+          "type": "array"
+        },
+        "dispatch": {
+          "description": "Action prefixes this plugin dispatches to, when `dispatch_via` is\n`direct`. Was the top-level `dispatch_prefixes`.",
+          "items": {
+            "$ref": "#/$defs/ConsumedDispatch"
           },
           "type": "array"
         },
@@ -2012,13 +2046,6 @@
         }
       ],
       "description": "Development-loop settings. Dev-mode only, and never consulted by a\nshipped build — see [`DevConfig`]."
-    },
-    "dispatch_prefixes": {
-      "description": "When `dispatch_via` is `direct`, the action prefixes this plugin targets.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
     },
     "dispatch_via": {
       "anyOf": [

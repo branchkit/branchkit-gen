@@ -204,16 +204,16 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 			"dispatch_via requires 'dispatch' in privileges")
 	}
 
-	// dispatch_via "direct" requires non-empty dispatch_prefixes
-	if m.DispatchVia == "direct" && len(m.DispatchPrefixes) == 0 {
-		add(SeverityError, "dispatch_prefixes",
-			"dispatch_via 'direct' requires non-empty dispatch_prefixes")
+	// dispatch_via "direct" requires non-empty consumes.dispatch
+	if m.DispatchVia == "direct" && len(m.Consumes.Dispatch) == 0 {
+		add(SeverityError, "consumes.dispatch",
+			"dispatch_via 'direct' requires non-empty consumes.dispatch")
 	}
 
-	// dispatch_prefixes only used when dispatch_via is "direct"
-	if len(m.DispatchPrefixes) > 0 && m.DispatchVia != "direct" {
-		add(SeverityWarn, "dispatch_prefixes",
-			"dispatch_prefixes is only used when dispatch_via is 'direct'")
+	// consumes.dispatch only used when dispatch_via is "direct"
+	if len(m.Consumes.Dispatch) > 0 && m.DispatchVia != "direct" {
+		add(SeverityWarn, "consumes.dispatch",
+			"consumes.dispatch is only used when dispatch_via is 'direct'")
 	}
 
 	// settings_tab (singular) is deprecated
