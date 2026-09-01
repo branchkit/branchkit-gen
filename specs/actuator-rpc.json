@@ -7193,6 +7193,106 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "input.parse_key_event",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "alt",
+          "required": false,
+          "schema": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "code",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "`KeyboardEvent.code` — the physical key, layout-independent.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "ctrl",
+          "required": false,
+          "schema": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "key",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "`KeyboardEvent.key` — used only to spot a bare modifier press.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "meta",
+          "required": false,
+          "schema": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "shift",
+          "required": false,
+          "schema": {
+            "default": false,
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "input_parse_key_event_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The parsed form of a key event: a combo string plus the flags a capture UI\nneeds to decide what to do with it.",
+          "properties": {
+            "combo": {
+              "description": "`cmd+shift+k`, or the bare key name when no modifier is held. Empty\nwhen the event is not a binding (a bare modifier, escape, or a physical\nkey the platform has no name for).",
+              "type": "string"
+            },
+            "has_modifiers": {
+              "type": "boolean"
+            },
+            "is_bare_modifier": {
+              "description": "A modifier pressed on its own. A capture UI waits rather than binding.",
+              "type": "boolean"
+            },
+            "is_escape": {
+              "description": "Escape, which capture UIs conventionally treat as cancel.",
+              "type": "boolean"
+            },
+            "key_name": {
+              "description": "The key name alone, resolvable through `_platform.key_names`.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "combo",
+            "key_name",
+            "has_modifiers",
+            "is_bare_modifier",
+            "is_escape"
+          ],
+          "title": "ParseKeyEventResult",
+          "type": "object"
+        }
+      },
+      "summary": "Parse a browser key event into a BranchKit combo string",
+      "tags": [
+        {
+          "name": "input"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "input.press_key",
       "paramStructure": "by-name",
       "params": [
