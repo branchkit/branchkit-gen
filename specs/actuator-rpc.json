@@ -2897,6 +2897,59 @@
           "y"
         ],
         "type": "object"
+      },
+      "WiringCollection": {
+        "description": "One collection in the resolved wiring graph.",
+        "properties": {
+          "access": {
+            "type": "string"
+          },
+          "deny_reason": {
+            "description": "Why the caller cannot reach it, when it cannot.\n\nScoped to the caller's OWN denials, which is what keeps this method\nunprivileged. Reporting why some OTHER pair is denied would expose\nthat pair's grant state, and no plugin-facing surface leaks that; the\ncaller's own grant state is not a disclosure to the caller. So the\nteaching case is served and nothing else is.",
+            "type": "string"
+          },
+          "fields": {
+            "description": "Declared field keys, in declaration order. Empty when the introducer\npublishes no field schema — which is itself the answer to \"can I bind\na shape to this\".",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "introducer": {
+            "description": "Plugin id, `_platform`, or `_user`.",
+            "type": "string"
+          },
+          "merge": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "readable": {
+            "description": "Whether the CALLER can read it right now.",
+            "type": "boolean"
+          },
+          "writable": {
+            "description": "Whether the CALLER can write it right now.",
+            "type": "boolean"
+          },
+          "writers": {
+            "description": "Resolved, not declared: the preset's expansion is what actually\ngoverns, and a consumer reasoning about the declared value would be\nreasoning about the wrong thing.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access",
+          "deny_reason",
+          "fields",
+          "introducer",
+          "merge",
+          "name",
+          "readable",
+          "writable",
+          "writers"
+        ],
+        "type": "object"
       }
     }
   },
@@ -27300,6 +27353,38 @@
         }
       },
       "summary": "Commit pending vocabulary additions to the recognition pipeline",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "wiring.describe",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "wiring_describe_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `wiring.describe`: the resolved collection graph, as the\ncalling plugin can see it.\n\nThe machine-readable twin of the Wiring settings page. `actions.list`\nalready answers this shape of question for action types; collections had\nonly `collections.list`, which returns display strings — so a plugin, the\nCLI, and `dev test` could not ask what shape a collection has, even though\nthe registry holds fields, writers, access and merge for every one.",
+          "properties": {
+            "collections": {
+              "items": {
+                "$ref": "#/$defs/WiringCollection"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "collections"
+          ],
+          "title": "WiringDescribeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Describe the resolved collection graph as the caller can see it",
       "tags": [
         {
           "name": "misc"
