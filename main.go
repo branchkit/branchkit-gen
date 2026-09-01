@@ -118,6 +118,12 @@ func runValidate(args []string) int {
 
 func run(dirs []string) {
 	totalGo, totalTS, totalPy, skipped := 0, 0, 0, 0
+	totalColl := 0
+
+	// Built once for the whole run: every consumer's field claim is typed
+	// against the same provider index, so two plugins reading one collection
+	// cannot generate disagreeing structs for it.
+	providers := resolveProviders(".")
 
 	for _, dir := range dirs {
 		manifest, err := LoadManifest(dir)
@@ -126,12 +132,51 @@ func run(dirs []string) {
 			os.Exit(1)
 		}
 
+		srcDir := filepath.Join(dir, "src")
+
+		// Collections are emitted independently of action types: a plugin
+		// that reads another's data but declares no actions of its own is a
+		// perfectly ordinary plugin, and skipping it here would have made the
+		// generated shapes quietly incomplete.
+		if fileExists(filepath.Join(srcDir, "go.mod")) {
+			if contents := RenderGoCollections(manifest, providers); contents != "" {
+				path := filepath.Join(srcDir, "collections_gen.go")
+				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
+					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
+					os.Exit(1)
+				}
+				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				totalColl++
+			}
+		}
+
+		if fileExists(filepath.Join(srcDir, "package.json")) {
+			if contents := RenderTSCollections(manifest, providers); contents != "" {
+				path := filepath.Join(srcDir, "collections_gen.ts")
+				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
+					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
+					os.Exit(1)
+				}
+				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				totalColl++
+			}
+		}
+		if fileExists(filepath.Join(srcDir, "pyproject.toml")) {
+			if contents := RenderPyCollections(manifest, providers); contents != "" {
+				path := filepath.Join(srcDir, "collections_gen.py")
+				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
+					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
+					os.Exit(1)
+				}
+				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				totalColl++
+			}
+		}
+
 		if len(manifest.ActionTypes) == 0 {
 			skipped++
 			continue
 		}
-
-		srcDir := filepath.Join(dir, "src")
 
 		// Emit Go if src/go.mod exists.
 		if fileExists(filepath.Join(srcDir, "go.mod")) {
@@ -179,8 +224,9 @@ func run(dirs []string) {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "[branchkit-gen] summary: %d plugins, %d go, %d ts, %d py, %d skipped\n",
-		len(dirs), totalGo, totalTS, totalPy, skipped)
+	fmt.Fprintf(os.Stderr,
+		"[branchkit-gen] summary: %d plugins, %d go, %d ts, %d py, %d collections, %d skipped\n",
+		len(dirs), totalGo, totalTS, totalPy, totalColl, skipped)
 }
 
 // enumeratePluginDirs lists subdirectories of root that contain a plugin.json.

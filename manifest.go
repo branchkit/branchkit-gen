@@ -56,7 +56,35 @@ type PluginManifest struct {
 // reasons about are modelled; the rest is checked against the manifest
 // schema, which is generated and embedded.
 type Consumes struct {
-	Dispatch []ConsumedDispatch `json:"dispatch"`
+	Collections []ConsumedCollection `json:"collections"`
+	Dispatch    []ConsumedDispatch   `json:"dispatch"`
+}
+
+// ConsumedCollection is a bare collection name or an object naming the
+// fields this plugin reads (and, for a seed source, the grammar targets its
+// keys feed). Same untagged shape the platform uses.
+type ConsumedCollection struct {
+	Name   string
+	Fields []string
+	Seeds  []string
+}
+
+func (c *ConsumedCollection) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err == nil {
+		c.Name, c.Fields, c.Seeds = s, nil, nil
+		return nil
+	}
+	var o struct {
+		Name   string   `json:"name"`
+		Fields []string `json:"fields"`
+		Seeds  []string `json:"seeds"`
+	}
+	if err := json.Unmarshal(b, &o); err != nil {
+		return err
+	}
+	c.Name, c.Fields, c.Seeds = o.Name, o.Fields, o.Seeds
+	return nil
 }
 
 // ConsumedDispatch is a bare prefix string or an object naming the action
