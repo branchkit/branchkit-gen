@@ -1930,6 +1930,13 @@
   "additionalProperties": false,
   "description": "Declares what a plugin does. BranchKit reads plugin.json at startup to configure routing, dependency graphs, store ownership, and UI.",
   "properties": {
+    "$schema": {
+      "description": "The hosted JSON Schema this manifest validates against, carried purely\nso editors resolve completion and hover docs from\n`https://branchkit.dev/schemas/manifest.json` (served by branchkit-web\nwith CORS). The actuator ignores the value; it exists so\n`deny_unknown_fields` doesn't reject the one line the manifest\nreference tells authors to write.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "action_prefix": {
       "description": "Action routing prefix claimed by this plugin (e.g. \"voice\", \"wm\").",
       "type": [

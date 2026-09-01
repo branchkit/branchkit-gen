@@ -104,41 +104,31 @@ var validDisplayRoles = map[string]bool{
 
 // knownTopLevelFields lists every top-level plugin.json key the platform
 // understands. Anything else gets an info-level note (typo guard).
-var knownTopLevelFields = map[string]bool{
-	"$schema":              true,
-	"id":                   true,
-	"name":                 true,
-	"version":              true,
-	"description":          true,
-	"author":               true,
-	"implements":           true,
-	"run":                  true,
-	"min_api_version":      true,
-	"settings_tab":         true,
-	"collection_data":      true,
-	"depends_on":           true,
-	"action_prefix":        true,
-	"action_prefix_access": true,
-	"dispatch_via":         true,
-	"dispatch_prefixes":    true,
-	"action_types":         true,
-	"hud_targets":          true,
-	"default_footer":       true,
-	"provides":             true,
-	"consumes":             true,
-	"bridge":               true,
-	"network":              true,
-	"hud_windows":          true,
-	// This list had drifted behind the platform manifest, so real fields
-	// were being reported to plugin authors as unrecognized. Cross-checked
-	// against contracts/manifest-schema.json.
-	"privileges":     true,
-	"publisher":      true,
-	"sockets":        true,
-	"runtimes":       true,
-	"grammar_seeds":  true,
-	"capture_macros": true,
-	"dev":            true,
+//
+// DERIVED, not hand-maintained. The list used to be a hand-written mirror
+// of the manifest schema and drifted behind it twice — real fields were
+// reported to plugin authors as unrecognized, which is the exact opposite
+// of what a typo guard is for. `specs/manifest-schema.json` is synced from
+// `contracts/` by the parent Justfile and already embedded here, so the
+// schema's own property set is the answer; reading it removes the mirror
+// rather than adding another drift test to police it.
+var knownTopLevelFields = mustKnownTopLevelFields()
+
+func mustKnownTopLevelFields() map[string]bool {
+	var schema struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(embeddedManifestSchema, &schema); err != nil {
+		panic(fmt.Sprintf("branchkit-gen: embedded manifest schema is malformed: %v", err))
+	}
+	if len(schema.Properties) == 0 {
+		panic("branchkit-gen: embedded manifest schema declares no top-level properties")
+	}
+	fields := make(map[string]bool, len(schema.Properties))
+	for name := range schema.Properties {
+		fields[name] = true
+	}
+	return fields
 }
 
 // Validate runs single-manifest checks against m. raw is the original

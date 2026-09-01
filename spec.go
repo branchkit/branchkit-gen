@@ -9,6 +9,14 @@ import (
 //go:embed specs/actuator-rpc.json
 var embeddedSpec []byte
 
+// embeddedManifestSchema is the generated plugin manifest JSON Schema,
+// synced from `contracts/manifest-schema.json`. It is the source the
+// top-level field allowlist in validate.go derives from, so the validator
+// cannot fall behind the platform's manifest.
+//
+//go:embed specs/manifest-schema.json
+var embeddedManifestSchema []byte
+
 // Spec is the parsed subset of the public OpenRPC spec the validator
 // uses. The spec ships embedded in the binary; users never need to
 // download it. Sync from `contracts/` is automated by the parent
