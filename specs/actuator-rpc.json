@@ -153,6 +153,7 @@
         "type": "object"
       },
       "ActionFieldSchema": {
+        "additionalProperties": false,
         "description": "Schema for a single field within an action type.",
         "properties": {
           "default": {
@@ -225,6 +226,7 @@
         "type": "object"
       },
       "ActionTypeSchema": {
+        "additionalProperties": false,
         "description": "Schema declaration for a plugin-defined action type.\nEnables generic UI rendering (structured editor fields) for any plugin's actions.",
         "properties": {
           "fields": {

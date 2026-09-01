@@ -21,6 +21,7 @@
       ]
     },
     "ActionFieldSchema": {
+      "additionalProperties": false,
       "description": "Schema for a single field within an action type.",
       "properties": {
         "default": {
@@ -88,6 +89,7 @@
       "type": "object"
     },
     "ActionTypeSchema": {
+      "additionalProperties": false,
       "description": "Schema declaration for a plugin-defined action type.\nEnables generic UI rendering (structured editor fields) for any plugin's actions.",
       "properties": {
         "fields": {
@@ -186,6 +188,7 @@
       "description": "Data source for a collection contribution. A string is a file path relative to the plugin\ndirectory; anything else (object, array) is inline JSON data."
     },
     "CollectionSchema": {
+      "additionalProperties": false,
       "description": "Unified schema for a collection.\n\nPhase F: legacy `kind` enum + `key_field`/`value_field`/`id_field`/\n`default_recording_enabled`/`retention_days` fields removed. Every\ndeclaration uses the state shape: `preset` + slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
       "properties": {
         "access": {
@@ -496,6 +499,7 @@
       "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — and this was the last one declared at manifest top level, as\n`dispatch_prefixes`, next to `dispatch_via`. `dispatch_via` is a MODE and\nstays where it is; the targets are what a user consents to, and they\nbelong under `consumes` with the rest.\n\n`actions` narrows the DECLARATION, not the grant. Decision (a) of\n`DESIGN_COORDINATION_CONSOLIDATION.md`: expanding the grant to\n(caller, target, action) took the two declaring plugins from 5 consent\nrows to 39, and a consent list long enough to scroll is one people click\nthrough. So the user still decides per prefix while the platform can hold\nthe plugin to the narrower thing it said."
     },
     "Consumes": {
+      "additionalProperties": false,
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
         "collections": {
@@ -537,6 +541,7 @@
       "type": "object"
     },
     "ContextNamePattern": {
+      "additionalProperties": false,
       "description": "One `provides.context_names` entry. The pattern matches when both:\n- every tag in `tags` is present in the live active-tag set\n  (subset semantics — the live set may carry additional tags)\n- `prefix_shape` matches the captured prefix positionally: literal\n  strings match the corresponding token verbatim; `<collection_name>`\n  placeholders match any token drawn from the named collection\n\nTiebreaking when multiple patterns match: longest `tags` wins;\nties break to the longer/more-specific `prefix_shape`; remaining\nties break lexicographically on `name` for determinism.",
       "properties": {
         "name": {
@@ -605,6 +610,7 @@
       "type": "object"
     },
     "DevConfig": {
+      "additionalProperties": false,
       "description": "Development-loop settings (the `dev` manifest field).\n\nA compiled plugin has to be rebuilt before it can be restarted, and only\nthe plugin knows how — `go build`, `cargo build`, `tsc`, nothing. Naming\nit here is what lets the actuator stay out of the business of knowing\nwhat `templ` or `go` are; previously `settings/dev.rs` hardcoded a Go\ntoolchain and every other language was simply unsupported.\n\nAn INTERPRETED plugin needs none of this. Its source is its artifact, so\nthe file watcher restarts it on save and there is nothing to build.\n\n# Trust\n\n`build` is a command the actuator runs **unsandboxed**, so its reach is\ndeliberately narrow:\n\n- Dev builds only. `/dev/plugins/{id}/rebuild` 404s unless\n  `BRANCHKIT_DEV=1`, which is set only under the Swift shell's\n  `#if DEVELOPMENT` — a shipped build never defines it, so this field is\n  inert in a released app.\n- Symlinked plugin directories only. A symlink means \"a working tree I\n  deliberately linked in from my own filesystem\"; a plugin installed by\n  the CLI or unpacked from the registry is a real directory and never\n  builds. The hostile case is a plugin you downloaded, and it is excluded.\n- Argv arrays, never a shell string. No quoting rules to get wrong, and\n  `sh -c` has to be spelled out to exist at all — which makes it visible\n  in review and in the lifecycle log, where the exact argv is recorded\n  before it runs.\n\nThis is narrower than the Go path it replaces, which never checked the\nsymlink signal: a copied-in plugin carrying `src/go.mod` used to build.",
       "properties": {
         "build": {
@@ -667,6 +673,7 @@
       ]
     },
     "DisplayPolicy": {
+      "additionalProperties": false,
       "description": "Discovery-HUD display shaping for a collection\n(docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md, part B). A capture over a large\ncollection enumerates noise in the HUD (a 999-number list is not a menu);\npast the threshold, discovery rendering emits one placeholder item\ninstead. Denylist posture: the platform default collapses automatically,\n`collapse_above: 0` opts a collection out entirely, and nothing an author\nasked to show is hidden.",
       "properties": {
         "collapse_above": {
@@ -717,6 +724,7 @@
       "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters (section 10.4 wire-forward-compat).\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
     },
     "EffectDeclaration": {
+      "additionalProperties": false,
       "description": "One exclusivity-shape effect declaration. A plugin may declare\nmultiple entries when its experience surfaces have independent\nlifecycles; each entry is one consent unit at install time.",
       "properties": {
         "asserts": {
@@ -743,6 +751,7 @@
       "type": "object"
     },
     "EffectDefinition": {
+      "additionalProperties": false,
       "description": "One effect a plugin defines: a coordination name others may assert.\n\nDeliberately thin. No `conflict_resolution` — one mode ships, and the\nfield joins when a second mode exists rather than sitting unread. No\n`enforcement` — plugin-defined effects are SignalOnly by construction,\nbecause the platform cannot implement behaviour it has never heard of.",
       "properties": {
         "access": {
@@ -761,6 +770,7 @@
       "type": "object"
     },
     "EventSchemaDecl": {
+      "additionalProperties": false,
       "description": "Schema declaration for an emitted event type.",
       "properties": {
         "access": {
@@ -1191,6 +1201,7 @@
       ]
     },
     "ListenSocket": {
+      "additionalProperties": false,
       "description": "One actuator-bound loopback listener.",
       "properties": {
         "id": {
@@ -1239,6 +1250,7 @@
       "description": "A method declaration: `true` (simple opt-in) or an object (method with metadata)."
     },
     "ModelDeclaration": {
+      "additionalProperties": false,
       "description": "One model a plugin's engine can load.\n\nThe platform never fetches these — `branchkit-cli` does, because it is the\nonly component with network access and the plugin itself runs\nnetwork-denied. What the manifest supplies is a recipe the CLI can execute\nwith no plugin code running: a list of content-pinned parts, each landing at\na declared path under the model directory.",
       "properties": {
         "description": {
@@ -1526,6 +1538,7 @@
       "type": "object"
     },
     "PluginSettingsTabDecl": {
+      "additionalProperties": false,
       "description": "A settings tab declared in the plugin manifest.",
       "properties": {
         "key": {
@@ -1584,6 +1597,7 @@
       ]
     },
     "Privacy": {
+      "additionalProperties": false,
       "description": "Privacy posture declarations. Retention enforcement lives on\n`Lifecycle::Retention` — this struct carries policy declarations only.",
       "properties": {
         "access_level": {
@@ -1633,6 +1647,7 @@
       "type": "object"
     },
     "Provides": {
+      "additionalProperties": false,
       "description": "What a plugin provides to the ecosystem.",
       "properties": {
         "collections": {
@@ -1752,6 +1767,7 @@
       "type": "object"
     },
     "SocketsConfig": {
+      "additionalProperties": false,
       "description": "Actuator-bound sockets for a plugin (see the `sockets` manifest field).",
       "properties": {
         "listen": {
@@ -1765,6 +1781,7 @@
       "type": "object"
     },
     "StageDeclaration": {
+      "additionalProperties": false,
       "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (step 15.4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
       "properties": {
         "binary": {
@@ -1878,6 +1895,7 @@
       ]
     },
     "Subscription": {
+      "additionalProperties": false,
       "description": "A subscription pattern for consuming events.",
       "properties": {
         "optional": {
