@@ -451,6 +451,13 @@
             },
             "name": {
               "type": "string"
+            },
+            "seeds": {
+              "description": "Grammar targets this collection's spoken keys are unioned into.\n\nA seed is a READ of this collection: the platform takes the\nsource's keys and merges them into the declaring plugin's grammar\nhigh-water mark. It lived in a top-level `grammar_seeds` map until\nit moved here, which made it a cross-plugin read that traversed no\ngate, derived no dep-graph edge, and required no declaration from\nthe consumer — the platform pushed it from the SOURCE's rebuild and\nnever asked. Expressing it as an attribute of the read is what\nmakes it one: same declaration, same grant, same edge.\n\nA trailing `*` declares a family (`grid_cells_*`), matching the\nsyntax the top-level map used. See DESIGN_GRAMMAR_ALPHABET_SEED.md.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
             }
           },
           "required": [
@@ -2023,13 +2030,6 @@
         }
       ],
       "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` privilege."
-    },
-    "grammar_seeds": {
-      "additionalProperties": {
-        "type": "string"
-      },
-      "description": "Declared vocabulary sources for collections this plugin's commands\ncapture from. Maps a target collection name — or a dynamic-collection\nfamily, written with a trailing `*` (e.g. `\"grid_cells_*\"`) — to a\nsource collection whose spoken keys are unioned into the target's\ngrammar high-water mark at load time and on every rebuild of the\nsource. Pre-fills the engine grammar so it is converged at launch;\nthe HWM keeps learning on top (the seed is a floor, not a ceiling).\nCross-plugin sources are allowed. See DESIGN_GRAMMAR_ALPHABET_SEED.md.",
-      "type": "object"
     },
     "hud_targets": {
       "description": "HUD targets this plugin provides (e.g. [\"alphabet\", \"calibrate\"]).",
