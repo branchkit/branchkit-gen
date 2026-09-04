@@ -27588,9 +27588,11 @@
     ]
   },
   "x-branchkit-limits": {
+    "collection_writer_max_bytes": 8388608,
     "event_max_payload_bytes": 65536,
     "event_rate_limit_per_sec": 100,
     "plugin_call_timeout_ms": 5000,
+    "record_max_payload_bytes": 65536,
     "request_timeout_ms": 15000
   },
   "x-branchkit-platform-collections": [
