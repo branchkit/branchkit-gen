@@ -25692,6 +25692,7 @@
           "name": "event_type",
           "required": true,
           "schema": {
+            "description": "Must be a custom event type — `ext.<vendor>.<name>`. The typed families\n(`audio_*`, `transcript`, `vocabulary_update`) are the platform's to\nsend; a plugin forging one into its own pipeline was previously\nunchecked here.",
             "type": "string"
           }
         },
@@ -25699,6 +25700,15 @@
           "name": "name",
           "required": true,
           "schema": {
+            "description": "Pipeline to configure. The caller must have introduced it.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "stage",
+          "required": true,
+          "schema": {
+            "description": "Stage within that pipeline, spelled as the pipeline definition spells\nit — a role like `_platform.stt` or a qualified stage name. Required:\nbefore per-stage channels existed this operation could only ever reach\nthe terminal stage, and silently did nothing for any other.",
             "type": "string"
           }
         }
@@ -25719,7 +25729,7 @@
           "type": "object"
         }
       },
-      "summary": "Inject an event into a running pipeline",
+      "summary": "Send a custom configuration event to one stage of a running pipeline",
       "tags": [
         {
           "name": "misc"
