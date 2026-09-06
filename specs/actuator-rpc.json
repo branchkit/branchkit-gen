@@ -1015,6 +1015,10 @@
           "id": {
             "type": "string"
           },
+          "speakable": {
+            "description": "The subtitle is itself a matchable spoken form — the entry has an\nalias equal to its display name (e.g. a promoted selection record).\nBrowse surfaces may mark the row so the user knows the name works.",
+            "type": "boolean"
+          },
           "subtitle": {
             "type": "string"
           },
@@ -1027,6 +1031,7 @@
         },
         "required": [
           "id",
+          "speakable",
           "subtitle",
           "tag",
           "title"
