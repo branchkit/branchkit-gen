@@ -1773,6 +1773,27 @@
       ],
       "type": "object"
     },
+    "SelectionSurfaceSchema": {
+      "additionalProperties": false,
+      "description": "One external selection surface's declaration\n(docs/design/DESIGN_SELECTION_SURFACES.md). Everything else about the\nsurface — its tag, its minted collections, its assignments collection —\nis derived from the plugin id and the surface name.",
+      "properties": {
+        "reserved_letters": {
+          "description": "Deck letters (by the deck word's leading character) withheld from\nassignment — for surfaces that also use letters as typed\nnavigation, where a letter that moves the selection cannot also\nlabel a row. Subtraction is the ONLY per-surface deck variation\n(ratified: no per-surface decks).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rows": {
+          "description": "The collection the surface's rows live in. Pushing rows opens the\nsurface (tag set, codewords assigned); draining them closes it. The\nrows' record ids are the surface's own identifiers (opaque to the\nplatform); a `primary` display role names the human label field.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rows"
+      ],
+      "type": "object"
+    },
     "SocketsConfig": {
       "additionalProperties": false,
       "description": "Actuator-bound sockets for a plugin (see the `sockets` manifest field).",
@@ -2163,6 +2184,13 @@
         "type": "string"
       },
       "type": "array"
+    },
+    "selection_surfaces": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SelectionSurfaceSchema"
+      },
+      "description": "External selection surfaces (docs/design/DESIGN_SELECTION_SURFACES.md):\nviews this plugin (or its remote client) renders itself — a command\npalette, a window picker — whose ADDRESSING the platform owns. The\nsurface's lifecycle is its rows collection's contents: rows present ⇒\nthe platform sets the surface's exclusive `_surface.<plugin>.<name>`\ntag, assigns pointing-deck codewords, and mints the matchable\ncollections; rows drained ⇒ everything clears. Assignments flow back\nthrough the platform-owned `…_assign` collection the client\nsubscribes to. Commands bind the surface with a `<row:@name>` tail\ncapture.",
+      "type": "object"
     },
     "sockets": {
       "anyOf": [
