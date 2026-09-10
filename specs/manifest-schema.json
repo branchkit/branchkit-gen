@@ -2136,6 +2136,13 @@
       },
       "type": "array"
     },
+    "icon": {
+      "description": "Sidebar glyph, by NAME from the platform's predefined set (see\n`settings::glyphs::GLYPHS`). A name, never a file: the settings\nsidebar is platform chrome outside the plugin's iframe, and\nplugin-shipped bytes do not render there. Unknown or absent names\nfall back to the plugin's monogram, so the set can grow without\nbreaking older manifests.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "id": {
       "type": "string"
     },
