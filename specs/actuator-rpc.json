@@ -26296,6 +26296,102 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "recognition.bias.get",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "recognition_bias_get_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "provenance": {
+              "description": "\"default\" | \"manual\" | \"calibration\"",
+              "type": "string"
+            },
+            "strength": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          "required": [
+            "enabled",
+            "strength",
+            "provenance"
+          ],
+          "title": "BiasGetResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read the never-standalone recognition bias (enabled, strength, provenance)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "recognition.bias.set",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Omitted = leave the on/off half unchanged.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "strength",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Omitted = leave the stored strength unchanged. Negative → 0.",
+            "format": "double",
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "recognition_bias_set_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "provenance": {
+              "description": "\"default\" | \"manual\" | \"calibration\"",
+              "type": "string"
+            },
+            "strength": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          "required": [
+            "enabled",
+            "strength",
+            "provenance"
+          ],
+          "title": "BiasGetResult",
+          "type": "object"
+        }
+      },
+      "summary": "Manually set the never-standalone recognition bias (provenance: manual); the write path behind the Recordings tab's control",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "recognition.redecode",
       "paramStructure": "by-name",
       "params": [
