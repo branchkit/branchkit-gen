@@ -26072,7 +26072,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "One user-facing sentence saying what is wrong and, where possible, what\nto do about it — \"Chrome — extension disconnected; reload it at\nchrome://extensions\". The plugin owns this text; the platform invents\nno copy for a plugin's failure.\n\nRequired when `degraded` is true and ignored otherwise. Capped at\n`crate::plugins::MAX_HEALTH_REASON` and rendered as data, never markup.",
+            "description": "One user-facing sentence saying what is wrong and, where possible, what\nto do about it — \"Chrome — extension disconnected; reload it at\nchrome://extensions\". The plugin owns this text; the platform invents\nno copy for a plugin's failure.\n\nRequired when `degraded` is true and ignored otherwise. Truncated to\n200 characters (one status line; a plugin with more to say has\n`plugin.debug`) and rendered as data, never markup.",
             "type": "string"
           }
         }
