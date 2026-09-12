@@ -3955,6 +3955,7 @@
           "name": "consecutive_timeouts",
           "required": true,
           "schema": {
+            "description": "How many consecutive RPC timeouts drove this. `0` when the plugin\nreported itself degraded — accurate, not a placeholder: nothing timed\nout.",
             "format": "int64",
             "type": "integer"
           }
@@ -3965,9 +3966,17 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "description": "The plugin's own sentence, present IFF this came from\n`plugin.report_health` rather than the timeout ladder — the\ndiscriminator between a plugin that stopped answering and one that\nanswers fine but cannot reach something it needs.",
+            "type": "string"
+          }
         }
       ],
-      "summary": "A plugin's RPC channel hit the consecutive-timeout threshold and was marked degraded",
+      "summary": "A plugin is running but not fully working — either its RPC channel hit the consecutive-timeout threshold (reason absent), or the plugin reported the fault itself via plugin.report_health (reason present)",
       "tags": [
         {
           "name": "notifications"
