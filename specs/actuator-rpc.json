@@ -26047,6 +26047,52 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "plugin.report_health",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "degraded",
+          "required": true,
+          "schema": {
+            "description": "`true` when the plugin is running but cannot do its job — an external\ndependency it needs is gone, a device it drives is unplugged, a\ncompanion it talks to has disconnected. `false` clears the report.\n\nThis is NOT for \"something failed once\": a failed call is a failed\ncall. It is for a standing condition the user can act on and would\notherwise have to guess at.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "One user-facing sentence saying what is wrong and, where possible, what\nto do about it — \"Chrome — extension disconnected; reload it at\nchrome://extensions\". The plugin owns this text; the platform invents\nno copy for a plugin's failure.\n\nRequired when `degraded` is true and ignored otherwise. Capped at\n`crate::plugins::MAX_HEALTH_REASON` and rendered as data, never markup.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "plugin_report_health_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "PluginReportHealthResult",
+          "type": "object"
+        }
+      },
+      "summary": "Report whether this plugin can do its job. For a standing condition the platform cannot see from outside — a companion app disconnected, a device unplugged — not for a call that failed once.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "privacy.get_recording",
       "paramStructure": "by-name",
       "params": [
