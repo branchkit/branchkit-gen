@@ -462,12 +462,23 @@
             "name": {
               "type": "string"
             },
+            "required": {
+              "description": "This plugin provably cannot do its job without a provider of\nthis collection (DESIGN_PLUGIN_DEPENDENCIES.md). A requirement\nis on the RESOURCE: any plugin introducing it satisfies this.\nDefault false — ordinary consumption degrades to dead paths.",
+              "type": "boolean"
+            },
             "seeds": {
               "description": "Grammar targets this collection's spoken keys are unioned into.\n\nA seed is a READ of this collection: the platform takes the\nsource's keys and merges them into the declaring plugin's grammar\nhigh-water mark. It lived in a top-level `grammar_seeds` map until\nit moved here, which made it a cross-plugin read that traversed no\ngate, derived no dep-graph edge, and required no declaration from\nthe consumer — the platform pushed it from the SOURCE's rebuild and\nnever asked. Expressing it as an attribute of the read is what\nmakes it one: same declaration, same grant, same edge.\n\nA trailing `*` declares a family (`grid_cells_*`), matching the\nsyntax the top-level map used. See DESIGN_GRAMMAR_ALPHABET_SEED.md.",
               "items": {
                 "type": "string"
               },
               "type": "array"
+            },
+            "suggested_provider": {
+              "description": "Install-resolution hint when no provider is installed — a\nsuggestion, never a contract. A replacement provider satisfies\nthe requirement identically.",
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
@@ -495,6 +506,17 @@
             },
             "prefix": {
               "type": "string"
+            },
+            "required": {
+              "description": "This plugin provably cannot do its job without a claimant of\nthis prefix (DESIGN_PLUGIN_DEPENDENCIES.md). On the resource,\nnot a plugin name: any claimant satisfies it.",
+              "type": "boolean"
+            },
+            "suggested_provider": {
+              "description": "Install-resolution hint; a suggestion, never a contract.",
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "required": [
