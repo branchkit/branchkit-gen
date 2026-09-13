@@ -2014,7 +2014,7 @@
         },
         {
           "const": "anyone_who_declares",
-          "description": "Any plugin that declares the collection in `consumes` (and contributes\nvia `collection_data`). Default for `named_entities`, `command_set`,\n`data`.",
+          "description": "Any plugin that declares the collection in `consumes` (and contributes\nvia `collection_data`). Default for `command_set` and `data` — the\nPOOLED presets, where many providers is the design. `named_entities`\nis NOT one of them: it defaults to `IntroducerOnly` (see `expand`),\nwhich makes it published-not-pooled.",
           "type": "string"
         },
         {
