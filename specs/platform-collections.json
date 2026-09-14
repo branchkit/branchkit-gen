@@ -106,6 +106,10 @@
           "required": true
         }
       ],
+      "id_strategy": {
+        "field": "name",
+        "type": "by_field"
+      },
       "merge": "collect",
       "preset": "named_entities",
       "writers": "anyone_who_declares"
