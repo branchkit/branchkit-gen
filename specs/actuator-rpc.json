@@ -3757,12 +3757,12 @@
           "name": "permission",
           "required": true,
           "schema": {
-            "description": "Which permission moved: \"accessibility\", \"microphone\", \"camera\",\n\"full_disk_access\", \"automation\".",
+            "description": "Which permission moved: \"accessibility\", \"microphone\", \"camera\",\n\"full_disk_access\", \"automation\", \"post_event\" (the WindowServer\naccepts this process's synthesized keystrokes), \"secure_input\" (the\nkeyboard is free of secure-input fields; `granted: true` = free).\nThe shell reports every state once shortly after boot, then on change.",
             "type": "string"
           }
         }
       ],
-      "summary": "A TCC permission was granted or revoked while the app was running",
+      "summary": "A permission state the platform polls: reported once shortly after boot, then whenever it changes (TCC grants, keystroke posting, secure input)",
       "tags": [
         {
           "name": "notifications"
