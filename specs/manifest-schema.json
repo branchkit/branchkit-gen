@@ -1442,6 +1442,34 @@
         }
       ]
     },
+    "NativeMessagingCompanion": {
+      "additionalProperties": false,
+      "description": "A plugin's declaration that a browser extension reaches one of its listen\nsockets through the OS native-messaging host. The pairing host, spawned\nby the browser, reads the plugin's `connect.json` and hands the socket's\nport and token to the extension — no HTTP, no pairing token in any URL.",
+      "properties": {
+        "chrome_extension_ids": {
+          "description": "Chrome/Chromium extension ids allowed to connect (the 32-char store\nid). Written into each Chromium browser's `allowed_origins`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "firefox_extension_ids": {
+          "description": "Firefox extension ids allowed to connect (the gecko id). Written into\nFirefox's `allowed_extensions`.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "host_name": {
+          "description": "The native-messaging host name the extension asks the browser for,\ne.g. `com.branchkit.pairing`. Reverse-DNS, the manifests' `name`.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "host_name"
+      ],
+      "type": "object"
+    },
     "NetworkConfig": {
       "anyOf": [
         {
@@ -1686,6 +1714,17 @@
           },
           "description": "Models this plugin's stages can load, keyed by the name a pipeline\npasses as the stage's `model` param. Provisioned by `branchkit-cli`\ninto `<app_support>/models/<plugin_id>/<model_name>`, which is the\nroot the platform hands the stage as `BRANCHKIT_MODELS_DIR` and the\nroot its sandbox grant is confined to — so a stage sees a flat\nnamespace it owns and nothing else.\nSee `docs/design/DESIGN_PLUGIN_MODEL_DECLARATION.md`.",
           "type": "object"
+        },
+        "native_messaging": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NativeMessagingCompanion"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "A browser extension that pairs with one of this plugin's listen\nsockets over the OS native-messaging channel. The platform writes the\nper-browser host manifests naming the shared pairing host and these\nextension ids; nothing about a specific plugin or extension lives in\nthe actuator (docs/design/DESIGN_EXTENSION_PAIRING_AND_LOCAL_SURFACE.md)."
         },
         "stages": {
           "additionalProperties": {
