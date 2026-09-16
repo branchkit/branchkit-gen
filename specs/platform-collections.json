@@ -435,6 +435,68 @@
       "preset": "data",
       "writers": "platform_only"
     },
+    "_platform.triggers": {
+      "cardinality": "multi",
+      "description": "Dispatcher trigger declarations — one record per way a dispatching plugin can run an action, shown on the Actions page beside the action's phrases. `action` is the dotted action type, `label` the dispatcher's own words for the trigger (a key combo, a script name), `form` one of the platform's chip forms (keycap, script, generic — closed, validated at write time), `params` the exact params when the trigger targets one variant, `when` optional context text, `home` the declaring plugin's settings tab where the trigger is edited. Records are writer-held: a dead dispatcher's triggers vanish with it, as its bindings stop firing. A declaration is a label, not a capability: nothing dispatches from it.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "string",
+          "key": "id",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "action",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "label",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "form",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "json",
+          "key": "params",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "string",
+          "key": "when",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "string",
+          "key": "home",
+          "label": "",
+          "required": false
+        }
+      ],
+      "held_by_writer": true,
+      "id_strategy": {
+        "field": "id",
+        "type": "by_field"
+      },
+      "merge": "collect",
+      "preset": "data",
+      "storage": {
+        "type": "memory_only"
+      },
+      "writers": "anyone_who_declares"
+    },
     "_platform.user_collection_schemas": {
       "description": "User-created collection schema definitions.",
       "feeds_matching": {

@@ -27865,6 +27865,12 @@
       "writers": "platform_only"
     },
     {
+      "description": "Dispatcher trigger declarations — one record per way a dispatching plugin can run an action, shown on the Actions page beside the action's phrases. `action` is the dotted action type, `label` the dispatcher's own words for the trigger (a key combo, a script name), `form` one of the platform's chip forms (keycap, script, generic — closed, validated at write time), `params` the exact params when the trigger targets one variant, `when` optional context text, `home` the declaring plugin's settings tab where the trigger is edited. Records are writer-held: a dead dispatcher's triggers vanish with it, as its bindings stop firing. A declaration is a label, not a capability: nothing dispatches from it.",
+      "name": "_platform.triggers",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    {
       "description": "User-created collection schema definitions.",
       "name": "_platform.user_collection_schemas",
       "preset": "data",
