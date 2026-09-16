@@ -1577,6 +1577,17 @@
         "label": {
           "type": "string"
         },
+        "layout": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SettingsTabLayout"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "How the shell frames this tab. Absent = the ordinary page: rail,\nthe Plugins sidebar, the pane. `\"workbench\"` = the tab is a place you\ngo into and come back from: the sidebar collapses at every width and\na \"‹ Plugins\" back button sits atop the pane, the treatment the shell\nalready gives every page at window widths. For dense two-pane tabs\n(a command editor, a calibration bench) that need the room. The\nplatform owns the vocabulary; a plugin picks from it\n(DESIGN_SETTINGS_APP_SHELL.md, \"Workbench tabs\")."
+        },
         "reads": {
           "description": "Shared store names this tab needs for rendering (e.g. [\"commands\", \"corrections\"]).",
           "items": {
@@ -1845,6 +1856,13 @@
         "rows"
       ],
       "type": "object"
+    },
+    "SettingsTabLayout": {
+      "description": "The shell layouts a settings tab may declare. Closed: plugins choose,\nthe platform draws.",
+      "enum": [
+        "workbench"
+      ],
+      "type": "string"
     },
     "SocketsConfig": {
       "additionalProperties": false,
