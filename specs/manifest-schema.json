@@ -1269,6 +1269,17 @@
           },
           "type": "array"
         },
+        "platform": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PlatformConstraint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Which OSes this model is for — the same constraint a stage carries.\nA dictation engine differs by OS (WhisperKit on macOS, whisper.cpp\nelsewhere) and so do its model files; without this every catalog\nshowed every OS's models and a Linux user was offered three that its\nengine could not load (2026-09-18). Absent = every platform. The CLI\nrefuses to download a model not for this OS, and a plugin's catalog\nshould show only what matches."
+        },
         "requires": {
           "description": "Files that must exist under the model dir once every part has been\napplied. The completeness gate: without it a source that quietly stops\nserving one file leaves a model directory that looks provisioned and\nfails at load. Paths are relative to the model dir.",
           "items": {
