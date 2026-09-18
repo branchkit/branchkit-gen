@@ -4470,6 +4470,42 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "artifact.delete",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "ref",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "artifact_delete_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "ArtifactDeleteResult",
+          "type": "object"
+        }
+      },
+      "summary": "Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "collection.append",
       "paramStructure": "by-name",
       "params": [
@@ -7714,42 +7750,6 @@
       "tags": [
         {
           "name": "keybinds"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "model.delete",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "ref",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "model_delete_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "ModelDeleteResult",
-          "type": "object"
-        }
-      },
-      "summary": "Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)",
-      "tags": [
-        {
-          "name": "misc"
         }
       ],
       "x-since": "0.1.0"
