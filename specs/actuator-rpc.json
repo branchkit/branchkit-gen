@@ -27532,6 +27532,122 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "speech.announce",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "text",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "speech_announce_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `speech.announce`.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "SpeechAnnounceResult",
+          "type": "object"
+        }
+      },
+      "summary": "Post a VoiceOver announcement (spoken in the person's VoiceOver voice when VoiceOver is running; ignored otherwise)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "speech",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "speech.say",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "priority",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "`\"normal\"` queues behind whatever is playing; `\"high\"` cuts it off\nand speaks now. Defaults to normal.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "text",
+          "required": true,
+          "schema": {
+            "description": "The words. Plain language, no markup; the system voice reads it as is.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "speech_say_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `speech.say`.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "SpeechSayResult",
+          "type": "object"
+        }
+      },
+      "summary": "Speak words through the system voice (a primitive: the platform makes the sound and reports the span for echo suppression; what to say is the caller's policy)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "speech",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "speech.stop",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "speech_stop_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `speech.stop`.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "SpeechStopResult",
+          "type": "object"
+        }
+      },
+      "summary": "Stop the system voice now and drop anything queued behind it",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "speech",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "system.launch_app",
       "paramStructure": "by-name",
       "params": [
@@ -28197,12 +28313,6 @@
     {
       "description": "Lever E never-standalone decoding penalty (command recognition accuracy). One record `{penalty}`; 0/absent = off. Applied to words that can never start a command (numbers, app names, ...) so codewords win the decode.",
       "name": "_platform.never_standalone_penalty",
-      "preset": "data",
-      "writers": "platform_only"
-    },
-    {
-      "description": "Preferences for the platform's speech renderer of `output.state` documents (DESIGN_SEMANTIC_OUTPUT_CHANNEL.md, step 2). One record `{enabled, choices_limit}`: `enabled` is off by default; `choices_limit` is how many item phrases a `choices` document reads aloud before \"and N more\". Set from the Debug tab; pushed to the shell live.",
-      "name": "_platform.output.speech",
       "preset": "data",
       "writers": "platform_only"
     },
@@ -29033,16 +29143,36 @@
     {
       "description": "Text-to-speech synthesis",
       "gated_event_prefixes": [],
-      "method_count": 5,
+      "method_count": 8,
       "methods": [
         "native.dictation_enabled",
         "native.siri_enabled",
         "native.speech_locales",
         "native.speech_recognition_available",
-        "native.speech_recognize_file"
+        "native.speech_recognize_file",
+        "speech.announce",
+        "speech.say",
+        "speech.stop"
       ],
       "name": "speech",
       "risk": "moderate"
+    },
+    {
+      "description": "Speak through the system voice and post VoiceOver announcements (the platform makes the sound; what to say is the plugin's)",
+      "gated_event_prefixes": [],
+      "method_count": 8,
+      "methods": [
+        "native.dictation_enabled",
+        "native.siri_enabled",
+        "native.speech_locales",
+        "native.speech_recognition_available",
+        "native.speech_recognize_file",
+        "speech.announce",
+        "speech.say",
+        "speech.stop"
+      ],
+      "name": "speech",
+      "risk": "low"
     },
     {
       "description": "See and monitor audio devices from a pipeline stage",

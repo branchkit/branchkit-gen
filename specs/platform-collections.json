@@ -186,28 +186,6 @@
       "preset": "data",
       "writers": "platform_only"
     },
-    "_platform.output.speech": {
-      "description": "Preferences for the platform's speech renderer of `output.state` documents (DESIGN_SEMANTIC_OUTPUT_CHANNEL.md, step 2). One record `{enabled, choices_limit}`: `enabled` is off by default; `choices_limit` is how many item phrases a `choices` document reads aloud before \"and N more\". Set from the Debug tab; pushed to the shell live.",
-      "feeds_matching": {
-        "type": "none"
-      },
-      "fields": [
-        {
-          "field_type": "boolean",
-          "key": "enabled",
-          "label": "",
-          "required": true
-        },
-        {
-          "field_type": "int",
-          "key": "choices_limit",
-          "label": "",
-          "required": true
-        }
-      ],
-      "preset": "data",
-      "writers": "platform_only"
-    },
     "_platform.pipelines": {
       "description": "Pipeline records — typed streaming compositions of stages. Each record describes how signals flow through stage implementations contributed by plugins until a decision-maker emits an action call. The platform owns the schema; plugins contribute records via `consumes.collections`.",
       "feeds_matching": {
