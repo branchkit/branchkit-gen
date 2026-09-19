@@ -152,6 +152,57 @@
         ],
         "type": "object"
       },
+      "Action": {
+        "oneOf": [
+          {
+            "description": "Dispatch a structured action to a plugin by dotted type prefix. The prefix before the dot matches the plugin's action_prefix.",
+            "properties": {
+              "action_type": {
+                "description": "Fully qualified action type (e.g. `\"browser.click\"`).",
+                "type": "string"
+              },
+              "params": {
+                "default": null,
+                "description": "Parameters passed to the plugin's `on_action` handler.\n\nOpen by design: the shape is per-plugin, so the platform cannot\nname it. `branchkit-gen` types it for the author from the\nreceiving plugin's own `action_types` declaration — that is where\nthese params get checked, not here."
+              },
+              "phase": {
+                "description": "Optional phase: `\"start\"` or `\"stop\"`. Absent for non-phased actions.",
+                "type": "string"
+              },
+              "type": {
+                "const": "plugin",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "action_type"
+            ],
+            "type": "object"
+          },
+          {
+            "description": "Execute multiple actions in order. Each action completes before the next starts.",
+            "properties": {
+              "actions": {
+                "description": "Ordered list of actions to execute.",
+                "items": {
+                  "$ref": "#/$defs/Action"
+                },
+                "type": "array"
+              },
+              "type": {
+                "const": "sequence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "type",
+              "actions"
+            ],
+            "type": "object"
+          }
+        ]
+      },
       "ActionFieldSchema": {
         "additionalProperties": false,
         "description": "Schema for a single field within an action type.",
@@ -715,7 +766,7 @@
             "type": "string"
           },
           "action_json": {
-            "description": "Raw action JSON for editor decomposition (complements the display `action` string)."
+            "description": "Raw action JSON for editor decomposition (complements the display\n`action` string).\n\nOPEN BY DESIGN — do not declare this `Option<Action>`. It is built by\n`crate::actions::action_to_json`, which is NOT `serde::to_value`: for\na parameterized command (`Action::Template` / `CompiledTemplate`, the\nshape every command with captures carries) it deliberately emits the\nAUTHORED dialect — a flat `{\"type\": \"browser.scroll\", …}` whose `type`\nis the dotted plugin action type, not the `Action` tag. That is the\nright thing for an editor, which decomposes and round-trips what the\nauthor wrote, but it is a superset of the `Action` wire shape and one\ngenerated type would lie about it. Same verdict, same reason, as\n`CommandSpec.action`. See the ledger in\ndocs/design/DESIGN_SDK_GENERATION_FIDELITY.md."
           },
           "canonical": {
             "type": "string"
@@ -785,7 +836,7 @@
         "description": "One Command in a `commands.push` payload — published purely for\ndiscoverability. Wire deserialization goes through\n`commands::parse_commands_with_templates` against the opaque JSON\nvalue, so adding/removing a field here doesn't change runtime\nbehavior. Edit `commands::PartialCommand` first; mirror here.",
         "properties": {
           "action": {
-            "description": "Action fired on match. Plugin-typed: `{\"type\":\"plugin\", \"action_type\":\"...\",\"params\":{...}}`\nor a built-in like `{\"type\":\"key\",\"code\":36}`."
+            "description": "Action fired on match.\n\nOPEN BY DESIGN — deliberately NOT declared `crate::actions::Action`,\nunlike `dispatch`'s `action` and `commands.resolve`'s, which are\ntyped. What `commands.push` accepts is the AUTHORED dialect, and\n`crate::actions::parse_action_or_template` shows it is a strict\nsuperset of the `Action` wire shape: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), the sequence\nenvelope (`{\"type\":\"sequence\",\"actions\":[…]}`) whose entries are\nthemselves authored-dialect, AND the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` carries a dotted plugin\naction type and the remaining keys are the params. Commands whose\npattern has captures additionally carry `{N}` placeholders, which\n`templateify_commands` later turns into `Action::Template`.\n\nOne generated type would have to lie about at least two of those, so\nthis stays `Value` and is defended in the ledger in\ndocs/design/DESIGN_SDK_GENERATION_FIDELITY.md rather than counted as\na gap. `branchkit-gen` types the params per plugin from the plugin's\nown `action_types`, which is where an author actually gets checked."
           },
           "cancels_bridge": {
             "description": "When true, this gated command is allowed to win during a\nmid-bridge restricted resolve. Default false: gated sibling\ncommands (`show_hints`, `dismiss`-style) are suppressed while\nthe user is mid-codeword. Set true on explicit cancel words\n(`dismiss`, `cancel`, `exit`) that should be able to abort an\nin-progress bridge. See\n`docs/design/DESIGN_MULTI_CANDIDATE_BRIDGE.md`.",
@@ -2800,7 +2851,15 @@
         "description": "One entry in `ResolveResult.tied_candidates` — the dispatchable subset of a\nresolved command, so a consumer can fire the chosen one directly after the\nuser picks. Mirrors the dispatch fields the single-winner envelope carries\n(`action` is template-resolved; `args` is empty unless resolution failed),\nplus a human-readable `label` for the disambiguation UI. See the tie-signal\nprotocol doc in branchkit-web.",
         "properties": {
           "action": {
-            "description": "Template-resolved action to dispatch if this candidate is chosen.\n`Action` is opaque to schemars (free-form JSON value), matching\n`ResolveResult.action`."
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Action"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Template-resolved action to dispatch if this candidate is chosen.\nTyped, matching `ResolveResult.action`."
           },
           "args": {
             "additionalProperties": true,
@@ -2840,6 +2899,7 @@
           }
         },
         "required": [
+          "action",
           "args",
           "clears_tags",
           "consumed_count",
@@ -6118,7 +6178,15 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "action": {
-              "description": "Opaque to schemars: `Action` is a large enum whose schema is treated\nas a free-form JSON value in OpenAPI. The inventory closure still\nproduces a fully-typed Action."
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Action"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The winning command's action, template-resolved. Typed in the schema\nsince 2026-09-19 — it is the same `Action` `dispatch` takes, which is\nwhat a consumer does with it."
             },
             "active_plugin_gates": {
               "description": "All currently-active gates from `plugin.<X>.*` namespaces other than\nthe resolving caller's own (`plugin.<caller>.*`). Lets the caller\nmake session-end cleanup decisions (\"is any other plugin's mode\nactive?\") without maintaining a parallel local view of state. Host\ncallers see all plugin gates.",
@@ -6364,7 +6432,8 @@
           "name": "action",
           "required": true,
           "schema": {
-            "description": "Typed `Action` variant to dispatch. Schema is loose\n(`serde_json::Value`) — see module-level docs for the rationale.\nThe runtime closure still deserializes the typed\n`crate::actions::Action` from this field."
+            "$ref": "#/$defs/Action",
+            "description": "The action to dispatch."
           }
         }
       ],
@@ -25787,8 +25856,10 @@
           "properties": {
             "actions": {
               "default": [],
-              "description": "Typed `Action` values. Loose in the schema for the same reason\n`dispatch`'s `action` is: the Action enum's wire shape is the\ndispatch contract, documented there rather than duplicated per\nmethod.",
-              "items": {},
+              "description": "The actions to run, in order. Same typed `Action` the `dispatch`\nop takes — a plugin that answers here and a plugin that calls\n`dispatch` are building the same value.\n\nTyped since 2026-09-19. Note the consequence: a reply carrying one\naction this build cannot parse now fails the whole reply rather than\nskipping that one entry, and the utterance is dropped with the parse\nerror in the diagnostic. That is the honest reading of a typed\ncontract, and the SDKs construct `Action` values, so it can only\ncome from a hand-rolled wire implementation.",
+              "items": {
+                "$ref": "#/$defs/Action"
+              },
               "type": "array"
             }
           },
@@ -28179,7 +28250,7 @@
           "type": "string"
         },
         {
-          "description": "Parameters passed to the plugin's `on_action` handler.",
+          "description": "Parameters passed to the plugin's `on_action` handler.\n\nOpen by design: the shape is per-plugin, so the platform cannot\nname it. `branchkit-gen` types it for the author from the\nreceiving plugin's own `action_types` declaration — that is where\nthese params get checked, not here.",
           "name": "params",
           "required": false,
           "type": "object"
