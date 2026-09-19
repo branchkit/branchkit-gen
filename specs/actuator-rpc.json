@@ -329,6 +329,18 @@
         ],
         "type": "object"
       },
+      "Anchor": {
+        "description": "Anchor position for a HUD window on screen.",
+        "enum": [
+          "top-left",
+          "top-right",
+          "bottom-left",
+          "bottom-right",
+          "bottom-center",
+          "center"
+        ],
+        "type": "string"
+      },
       "AudioDevice": {
         "description": "An audio input/output device.",
         "properties": {
@@ -1292,7 +1304,15 @@
             "type": "string"
           },
           "binding": {
-            "description": "The ready-to-store keybind value (`{\"action\": \"<dotted.type>\",\n\"params\": {…}}`) when the command's action is statically bindable —\na concrete plugin action with no capture template, no sequence, and\nno intrinsic phase. Absent otherwise. This is what the Keybinds\ntab's bind-a-command flow copies."
+            "anyOf": [
+              {
+                "$ref": "#/$defs/KeybindBinding"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The ready-to-store keybind value when the command's action is\nstatically bindable — a concrete plugin action with no capture\ntemplate, no sequence, and no intrinsic phase. Absent otherwise.\nThis is what the Keybinds tab's bind-a-command flow copies.\n\nDeclared 2026-09-19 (census). It was built here as a two-key\n`serde_json::Map` and described in this comment; `KeybindBinding`\nis that shape, and `RegistryEntry` is it plus combo and source."
           },
           "category": {
             "description": "Optional grouping label from the command definition (e.g. \"Navigation\").",
@@ -1335,6 +1355,7 @@
         },
         "required": [
           "action",
+          "binding",
           "category",
           "description",
           "dynamic",
@@ -1433,6 +1454,33 @@
           "w",
           "x",
           "y"
+        ],
+        "type": "object"
+      },
+      "HUDItem": {
+        "properties": {
+          "icon": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "icon",
+          "id",
+          "subtitle",
+          "tag",
+          "title"
         ],
         "type": "object"
       },
@@ -1551,6 +1599,27 @@
         ],
         "type": "object"
       },
+      "HudFragment": {
+        "description": "An HTML fragment pushed to a HUD channel. The `target_id` is the DOM element\nID to patch (e.g. \"content\", \"title\"); `html` is the innerHTML replacement.\nWhen `raw` is true, `html` is sent as-is (multiple elements, Datastar patches each by ID).",
+        "properties": {
+          "html": {
+            "type": "string"
+          },
+          "raw": {
+            "default": false,
+            "type": "boolean"
+          },
+          "target_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "html",
+          "raw",
+          "target_id"
+        ],
+        "type": "object"
+      },
       "InputSource": {
         "description": "An available keyboard input source.",
         "properties": {
@@ -1587,6 +1656,22 @@
         "required": [
           "bundle_id",
           "name"
+        ],
+        "type": "object"
+      },
+      "KeybindBinding": {
+        "description": "The stored value of one keybind: which action it fires and with what.\n\nThis is what a `keybinds` collection record holds, and what the Keybinds\ntab's bind-a-command flow copies out of `commands.enumerate`\n(`EnumeratedCommand.binding`). A `RegistryEntry` is this plus the combo\nand where it came from.",
+        "properties": {
+          "action": {
+            "description": "Exact dotted action type, e.g. `\"voice.dictation\"`.",
+            "type": "string"
+          },
+          "params": {
+            "description": "Params for the dispatch; absent means `{}`.\n\nOpen by design: the receiving plugin's shape, typed per-plugin by\n`branchkit-gen` from that plugin's `action_types`, exactly like\n`Action::Plugin.params`."
+          }
+        },
+        "required": [
+          "action"
         ],
         "type": "object"
       },
@@ -2529,6 +2614,49 @@
         "required": [
           "seed",
           "snr_db"
+        ],
+        "type": "object"
+      },
+      "RegistryEntry": {
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "combo": {
+            "type": "string"
+          },
+          "params": {
+            "description": "Params for the dispatch; absent means `{}`. Every fired bind\nexecutes `Action::Plugin { action_type, params, phase }` through the\nshared executor — the string-routing dialect is gone (2026-08-28).\n\nOpen by design, and the only open field in this shape: it is the\nreceiving plugin's params, typed per-plugin by `branchkit-gen` from\nthat plugin's `action_types`, exactly like `Action::Plugin.params`."
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "combo",
+          "source"
+        ],
+        "type": "object"
+      },
+      "RegistrySnapshot": {
+        "properties": {
+          "entries": {
+            "items": {
+              "$ref": "#/$defs/RegistryEntry"
+            },
+            "type": "array"
+          },
+          "listen_up": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "entries",
+          "listen_up"
         ],
         "type": "object"
       },
@@ -6751,8 +6879,9 @@
           "name": "anchor",
           "required": false,
           "schema": {
-            "default": null,
-            "description": "Anchor position on screen (`Anchor` enum, kebab-case strings:\n`\"top-left\"`, `\"top-right\"`, `\"bottom-left\"`, `\"bottom-right\"`,\n`\"bottom-center\"`, `\"center\"`). Defaults to `\"top-right\"`."
+            "$ref": "#/$defs/Anchor",
+            "default": "top-right",
+            "description": "Anchor position on screen. Defaults to `\"top-right\"`.\n\nDeclared 2026-09-19 (census) — the enum has existed all along and\nthe doc comment was spelling out its variants by hand. Note the\nbehaviour change that comes with it: an unrecognised anchor used to\nfall back to the default SILENTLY (`unwrap_or_else`), putting the\nwindow somewhere the caller did not ask for with nothing said; it\nnow fails the call by name. Absent still means the default."
           }
         },
         {
@@ -6916,9 +7045,14 @@
         },
         {
           "name": "fragments",
-          "required": true,
+          "required": false,
           "schema": {
-            "description": "Array of `HudFragment` objects: `{ target_id, html, raw? }`."
+            "default": [],
+            "description": "The fragments to patch into the channel, in order.\n\nDeclared 2026-09-19 (census). The handler already deserialized\nexactly `Vec<HudFragment>` and failed the call otherwise, so the\nopaque schema described nothing the platform actually accepted.",
+            "items": {
+              "$ref": "#/$defs/HudFragment"
+            },
+            "type": "array"
           }
         }
       ],
@@ -8077,7 +8211,8 @@
           "name": "snapshot",
           "required": true,
           "schema": {
-            "description": "`RegistrySnapshot` JSON: `{ entries: [...], listen_up: [...] }`.\nEach entry is `{ combo, action, source }`."
+            "$ref": "#/$defs/RegistrySnapshot",
+            "description": "The full keybind registry to install, replacing what is there.\n\nDeclared 2026-09-19 (census). The handler already deserialized\nexactly `RegistrySnapshot` and refused anything else; the doc\ncomment was transcribing the shape by hand, and had gone stale —\nan entry is `{ combo, action, source, params? }`."
           }
         }
       ],
@@ -27165,8 +27300,12 @@
           "name": "items",
           "required": false,
           "schema": {
-            "default": null,
-            "description": "Array of `HUDItem` objects: `{ id, tag?, title, subtitle?, icon? }`."
+            "default": [],
+            "description": "The selectable items, in display order.\n\nDeclared 2026-09-19 (census). The handler already deserialized\nexactly `Vec<HUDItem>`; the doc comment was listing the fields a\ngenerated type can list itself.",
+            "items": {
+              "$ref": "#/$defs/HUDItem"
+            },
+            "type": "array"
           }
         },
         {
