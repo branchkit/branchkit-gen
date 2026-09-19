@@ -28269,6 +28269,12 @@
   },
   "x-branchkit-platform-collections": [
     {
+      "description": "One platform fact the shell keeps true: `{voice_over}` — whether VoiceOver is running (`accessibility.report`). Read it and watch `_platform.collection.updated` to follow it; the platform attaches no meaning to it. The Feedback plugin follows it by default for \"can you see the screen\".",
+      "name": "_platform.accessibility",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
       "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
       "name": "_platform.actuator_log_level",
       "preset": "data",
