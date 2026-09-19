@@ -2011,6 +2011,13 @@
             ],
             "description": "What confirming this item does. Absent means information only."
           },
+          "alt_phrases": {
+            "description": "Other phrases that also confirm this item — a subtitle that is itself\nsayable, an alias. Meaning, not presentation: a renderer that shows\nthe subtitle may mark it as a way in when it appears here; a speech\nrenderer may accept any of them. Promoted into core 2026-09-19 from\nvoice's `extra.voice.speakable_subtitles` — the first extension the\nplatform's own renderer needed, which is the promotion rule in\n`DESIGN_SEMANTIC_OUTPUT_CHANNEL.md` (\"The shape\") working as written.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "extra": {
             "additionalProperties": true,
             "description": "Open extension, namespaced by plugin id — see [`OutputState::extra`].",
@@ -2035,6 +2042,7 @@
         },
         "required": [
           "action",
+          "alt_phrases",
           "extra",
           "id",
           "phrase",
@@ -2125,7 +2133,7 @@
           },
           "sections": {
             "default": [],
-            "description": "Grouped items, when the state has parts — the commands open to the\nperson, the entries in a selection. Empty for a state with none.",
+            "description": "Grouped items, when the state has parts — the commands open to the\nperson, the entries in a selection. Empty for a state with none.\n`null` is accepted as empty: a Go producer's nil slice marshals to\n`null` (`operations::types::serde_compat`).",
             "items": {
               "$ref": "#/$defs/OutputSection"
             },
@@ -3927,6 +3935,46 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.output.cleared",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "channel",
+          "required": true,
+          "schema": {
+            "description": "The channel that was cleared.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "generation",
+          "required": true,
+          "schema": {
+            "description": "Monotonic, shared with `_platform.output.state` — newer than any\nstate the renderer holds for the channel.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "plugin_id",
+          "required": true,
+          "schema": {
+            "description": "The plugin that owns the channel and cleared it.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A HUD channel's semantic output state was cleared (output.clear): nothing is true on it now; renderers cancel what they were conveying",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "_platform.output.state",
       "paramStructure": "by-name",
       "params": [
@@ -3942,10 +3990,18 @@
           "name": "generation",
           "required": true,
           "schema": {
-            "description": "Monotonic across the actuator process. A renderer mid-utterance\nabandons what it is conveying when a newer generation arrives.",
+            "description": "Monotonic across the actuator process. A renderer mid-utterance\nabandons what it is conveying when a newer generation arrives —\nbut see `meaning_changed`.",
             "format": "uint64",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        {
+          "name": "meaning_changed",
+          "required": true,
+          "schema": {
+            "description": "Whether this push changed what the state MEANS — kind, title, phrase,\nthe items and their actions — as opposed to only its progress,\nfooter or urgency. A producer that re-pushes a countdown has not said\nanything new; a renderer mid-utterance keeps going when this is false\nand abandons the utterance when it is true. Computed by the platform\nso every renderer applies the same test.",
+            "type": "boolean"
           }
         },
         {
@@ -25749,6 +25805,54 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "output.clear",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "channel",
+          "required": true,
+          "schema": {
+            "description": "The channel on which nothing is true now. Must be owned by the\ncalling plugin.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "output_clear_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `output.clear`.",
+          "properties": {
+            "generation": {
+              "description": "The generation stamped on the clear — newer than any state a renderer\nholds for the channel.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "generation"
+          ],
+          "title": "OutputClearResult",
+          "type": "object"
+        }
+      },
+      "summary": "Nothing is true on one of your HUD channels now: clears its semantic state so every renderer stops conveying it; visibility stays yours (hud.hide)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.output.cleared"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "output.state",
       "paramStructure": "by-name",
       "params": [
@@ -25773,13 +25877,18 @@
               "minimum": 0,
               "type": "integer"
             },
+            "meaning_changed": {
+              "description": "Whether the push changed what the channel's state means (kind, title,\nphrase, items) rather than only its progress, footer or urgency.",
+              "type": "boolean"
+            },
             "ok": {
               "type": "boolean"
             }
           },
           "required": [
             "ok",
-            "generation"
+            "generation",
+            "meaning_changed"
           ],
           "title": "OutputStateResult",
           "type": "object"
@@ -28088,6 +28197,12 @@
     {
       "description": "Lever E never-standalone decoding penalty (command recognition accuracy). One record `{penalty}`; 0/absent = off. Applied to words that can never start a command (numbers, app names, ...) so codewords win the decode.",
       "name": "_platform.never_standalone_penalty",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Preferences for the platform's speech renderer of `output.state` documents (DESIGN_SEMANTIC_OUTPUT_CHANNEL.md, step 2). One record `{enabled, choices_limit}`: `enabled` is off by default; `choices_limit` is how many item phrases a `choices` document reads aloud before \"and N more\". Set from the Debug tab; pushed to the shell live.",
+      "name": "_platform.output.speech",
       "preset": "data",
       "writers": "platform_only"
     },
