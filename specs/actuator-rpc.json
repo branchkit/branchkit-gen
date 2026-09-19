@@ -844,6 +844,35 @@
         ],
         "type": "object"
       },
+      "CommandSnapshot": {
+        "description": "Snapshot of a command for sending to plugins (e.g. plugin command processing).",
+        "properties": {
+          "canonical": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "keycode": {
+            "description": "Only set for key-type commands (input.key action type).",
+            "format": "uint16",
+            "maximum": 65535,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "word": {
+            "description": "The actual word (from phrase slots). May differ from canonical for user overrides.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "canonical",
+          "category",
+          "keycode",
+          "word"
+        ],
+        "type": "object"
+      },
       "CommandSpec": {
         "description": "One Command in a `commands.push` payload — published purely for\ndiscoverability. Wire deserialization goes through\n`commands::parse_commands_with_templates` against the opaque JSON\nvalue, so adding/removing a field here doesn't change runtime\nbehavior. Edit `commands::PartialCommand` first; mirror here.",
         "properties": {
@@ -925,7 +954,6 @@
           "sets_tags",
           "variants"
         ],
-        "title": "CommandSpec",
         "type": "object"
       },
       "ConfusabilityFinding": {
@@ -6035,7 +6063,11 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Array of `CommandSpec` JSON objects to push to the matching\nengine. Replaces the current commands contributed by the\ncalling plugin. Wire-level type is opaque\n(`serde_json::Value`) to keep the deserializer flexible; see\n`CommandSpec` for the canonical field list including\n`cancels_bridge`."
+            "description": "The commands to push. Replaces the commands contributed by the\ncalling plugin (the whole set, or one `group`).\n\nThe RUNTIME type stays `serde_json::Value` deliberately: each entry\nis parsed individually into `commands::PartialCommand` further in,\nso one malformed command is reported as one malformed command\nrather than failing the caller's whole push. The SCHEMA says what\nthe entries are (2026-09-19 census) — this is the one place\n`#[schemars(with = ...)]` earns its keep, making the schema MORE\nprecise than the declaration rather than less, which is the exact\nopposite of every other use of it this census deleted.\n\nUntil now the generated wrapper took raw JSON, which is why all\nthree SDKs hand-wrote a typed push beside it (Go's\n`PushCommandSpecs`).",
+            "items": {
+              "$ref": "#/$defs/CommandSpec"
+            },
+            "type": "array"
           }
         },
         {
@@ -25858,7 +25890,26 @@
           "name": "commands_by_plugin",
           "required": true,
           "schema": {
-            "description": "All commands grouped by plugin ID."
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/$defs/CommandSnapshot"
+              },
+              "type": "array"
+            },
+            "description": "Every plugin's commands, keyed by plugin id.",
+            "type": "object"
+          }
+        },
+        {
+          "name": "disabled_plugins",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Plugins that are installed but disabled, so a consumer can leave\ntheir words out of whatever it builds.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         {
@@ -25866,7 +25917,10 @@
           "required": false,
           "schema": {
             "default": [],
-            "items": {},
+            "description": "The user's own commands — the matcher's second input.",
+            "items": {
+              "$ref": "#/$defs/CommandSnapshot"
+            },
             "type": "array"
           }
         }
