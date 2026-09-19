@@ -1976,6 +1976,191 @@
         ],
         "type": "string"
       },
+      "OutputAction": {
+        "description": "What confirming an item does — EXACTLY ONE of `say` or `dispatch`.\n\n`say` is the common case for commands: the words are routed through the\nsame matcher the person's voice would reach, so confirming an item is\nindistinguishable from speaking it. `dispatch` names an action type\ndirectly, for items that are not commands.",
+        "properties": {
+          "dispatch": {
+            "description": "An action type to dispatch — `windows.desk`.",
+            "type": "string"
+          },
+          "params": {
+            "description": "Parameters for `dispatch`. Meaningless with `say`."
+          },
+          "say": {
+            "description": "Words to inject as if spoken.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dispatch",
+          "say"
+        ],
+        "type": "object"
+      },
+      "OutputItem": {
+        "description": "One thing the person can know about or act on.\n\nEvery item has a `phrase`; an item with an `action` can be confirmed, and\nconfirming it does what the action says. Without an action, an item is\ninformation, and a renderer that offers items in turn skips it.",
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/OutputAction"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What confirming this item does. Absent means information only."
+          },
+          "extra": {
+            "additionalProperties": true,
+            "description": "Open extension, namespaced by plugin id — see [`OutputState::extra`].",
+            "type": "object"
+          },
+          "id": {
+            "description": "Stable within the document — what a renderer reports back as chosen.",
+            "type": "string"
+          },
+          "phrase": {
+            "description": "The item in human words — \"snap left\", \"desk two\". The utterance, the\ncells, the text — and the words injected when the item is confirmed\nthrough the same matcher a voice would use.",
+            "type": "string"
+          },
+          "subtitle": {
+            "description": "A second line — \"move the window to the left half\".",
+            "type": "string"
+          },
+          "title": {
+            "description": "The item as a label — \"snap left\".",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "extra",
+          "id",
+          "phrase",
+          "subtitle",
+          "title"
+        ],
+        "type": "object"
+      },
+      "OutputProgress": {
+        "description": "How far along something measurable is, in time.",
+        "properties": {
+          "remaining_ms": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "total_ms": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "remaining_ms",
+          "total_ms"
+        ],
+        "type": "object"
+      },
+      "OutputSection": {
+        "description": "A titled group of items.",
+        "properties": {
+          "items": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/OutputItem"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "The group's name — \"Windows\". May be empty for an ungrouped list.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items",
+          "title"
+        ],
+        "type": "object"
+      },
+      "OutputState": {
+        "description": "A superseding statement of what is true for the person on one channel.\n\nA push REPLACES the channel's current state; it is never appended. The\nperson needs what is true now, never a transcript of what was true, and a\nrenderer mid-utterance abandons it when the next state arrives.\n\nCore (every renderer must understand): `kind`, `title`, `phrase`, each\nitem's `phrase` and `action`, `urgency`, `locale`, `v`. Beside it, `extra`\nis open and namespaced by plugin id for what the shape did not\nanticipate; a renderer ignores what it does not understand, so an\nextension never breaks a modality.",
+        "properties": {
+          "channel": {
+            "description": "The HUD channel this state belongs to. Declared by the calling plugin\nin its manifest (`hud_windows`) or created at runtime; the platform\nverifies ownership exactly as it does for `hud.push`.",
+            "type": "string"
+          },
+          "extra": {
+            "additionalProperties": true,
+            "description": "Open extension, namespaced by plugin id (`{\"voice\": {...}}`). Nothing\nin core may depend on it; the platform promotes what gets used into\ncore deliberately, as a versioned addition.",
+            "type": "object"
+          },
+          "footer": {
+            "description": "A trailing line — \"say a command, or wait\".",
+            "type": "string"
+          },
+          "kind": {
+            "description": "One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,\n`outcome`, `problem`, `progress`. Carried as a string so a kind this\nplatform does not know degrades to `outcome` instead of failing.",
+            "type": "string"
+          },
+          "locale": {
+            "description": "BCP 47 language tag of every phrase in this document — \"en\", \"pt-BR\".",
+            "type": "string"
+          },
+          "phrase": {
+            "description": "The state in human words — \"twelve commands\", \"snapped left\". The\ncarrier of meaning for every receiver, named after none of them.",
+            "type": "string"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/OutputProgress"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "How far along something measurable is. Usually with `kind: progress`."
+          },
+          "sections": {
+            "default": [],
+            "description": "Grouped items, when the state has parts — the commands open to the\nperson, the entries in a selection. Empty for a state with none.",
+            "items": {
+              "$ref": "#/$defs/OutputSection"
+            },
+            "type": "array"
+          },
+          "title": {
+            "description": "The state in a few words — what a screen shows as the heading.",
+            "type": "string"
+          },
+          "urgency": {
+            "description": "One of the closed [`OutputUrgency`] vocabulary: `ambient`, `notable`,\n`interrupt`. A string for the same reason `kind` is; unknown degrades\nto `ambient`.",
+            "type": "string"
+          },
+          "v": {
+            "description": "The contract version this document was written against\n([`OUTPUT_STATE_V`]). Information for a renderer, never a gate.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "channel",
+          "extra",
+          "footer",
+          "kind",
+          "locale",
+          "phrase",
+          "progress",
+          "sections",
+          "title",
+          "urgency",
+          "v"
+        ],
+        "type": "object"
+      },
       "OverlayRow": {
         "description": "One (tenant, collection) overlay entry with content.",
         "properties": {
@@ -3733,6 +3918,54 @@
         }
       ],
       "summary": "Network path changed — connectivity gained or lost, or the interface behind it changed",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.output.state",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "channel",
+          "required": true,
+          "schema": {
+            "description": "The channel whose state changed.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "generation",
+          "required": true,
+          "schema": {
+            "description": "Monotonic across the actuator process. A renderer mid-utterance\nabandons what it is conveying when a newer generation arrives.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "plugin_id",
+          "required": true,
+          "schema": {
+            "description": "The plugin that owns the channel and produced the state.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "state",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/OutputState",
+            "description": "The new current state — the previous one is gone."
+          }
+        }
+      ],
+      "summary": "A plugin superseded a HUD channel's current semantic output state (output.state) — the document every renderer consumes",
       "tags": [
         {
           "name": "notifications"
@@ -25512,6 +25745,54 @@
         {
           "name": "actuator-to-plugin"
         }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "output.state",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "state",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/OutputState",
+            "description": "The document that becomes the channel's current state. Its `channel`\nmust be owned by the calling plugin."
+          }
+        }
+      ],
+      "result": {
+        "name": "output_state_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `output.state`.",
+          "properties": {
+            "generation": {
+              "description": "The generation the platform stamped on this state — monotonic, so a\nrenderer can tell which of two states is newer.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "generation"
+          ],
+          "title": "OutputStateResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set a HUD channel's current semantic output state — a document of what is true for the person, in human language, consumed by every renderer; supersedes the previous state",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.output.state"
       ],
       "x-since": "0.1.0"
     },
