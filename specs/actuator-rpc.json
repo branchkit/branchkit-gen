@@ -705,6 +705,10 @@
             "description": "Plugin ID that contributed this item.",
             "type": "string"
           },
+          "speakable": {
+            "description": "The subtitle is itself a matchable spoken form — the cache holds an\nalias equal to it resolving to this row's value (a promoted selection\nrecord). Browse surfaces mark the row so the user knows the name\nworks. Same derivation as `expand_collections_to_items`; derived per\ncall rather than stored, because the flat map already holds both\nhalves.\n\n`commands.list` has no counterpart by construction: its subtitle is a\nvariation count (\"3 variations\"), never a spoken alias.",
+            "type": "boolean"
+          },
           "subtitle": {
             "type": "string"
           },
@@ -715,6 +719,7 @@
         "required": [
           "id",
           "source",
+          "speakable",
           "subtitle",
           "title"
         ],
