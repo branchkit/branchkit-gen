@@ -645,6 +645,19 @@
       },
       "type": "object"
     },
+    "CollectionSchemaSource": {
+      "anyOf": [
+        {
+          "description": "Path to a JSON file, relative to the plugin directory, whose contents\nare this collection's schema object (e.g. `\"collections/alphabet.json\"`).\nThe path may not be absolute and may not escape the plugin directory.",
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/CollectionSchema",
+          "description": "The schema, written inline."
+        }
+      ],
+      "description": "How one entry of `provides.collections` may be written: the declaration\ninline, or the path of a JSON file holding the same object.\n\nA path is a value, not a template — nothing is substituted or evaluated,\nand the file contains exactly what would otherwise sit inline. This is\nthe same choice `collection_data` gives you for records. Reach for a file\nwhen one feature's collections are getting in another's way; inline stays\nthe right answer for a small plugin."
+    },
     "ConsumedCollection": {
       "anyOf": [
         {
@@ -1711,9 +1724,9 @@
         },
         "collections": {
           "additionalProperties": {
-            "$ref": "#/$defs/CollectionSchema"
+            "$ref": "#/$defs/CollectionSchemaSource"
           },
-          "description": "Collections this plugin introduces, keyed by collection name.\nEach entry declares schema, merge strategy, access, and optional resolution fields.",
+          "description": "Collections this plugin introduces, keyed by collection name.\nEach entry declares schema, merge strategy, access, and optional\nresolution fields — written inline, or as the path of a JSON file\nholding the same object, relative to your plugin directory.\n\nA referenced file that is missing or malformed stops the plugin, with\nthe file named: a declaration never quietly becomes an empty\ncollection. Saving one is a manifest change, so the platform reloads\nthe plugin exactly as if you had edited `plugin.json`.",
           "type": "object"
         },
         "context_names": {

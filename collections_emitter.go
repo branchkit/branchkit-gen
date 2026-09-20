@@ -53,6 +53,21 @@ func resolveProviders(root string) providerFields {
 		if err != nil {
 			continue
 		}
+		// Resolve path-valued declarations first. Without this a referenced
+		// collection is a JSON string where an object is expected, the
+		// unmarshal below fails, and the plugin drops out of the index
+		// entirely — silently. `validate` is where a bad reference is
+		// reported; here we only need the resolved bytes.
+		var obj map[string]any
+		if json.Unmarshal(raw, &obj) != nil {
+			continue
+		}
+		if resolveCollectionRefs(dir, obj) != nil {
+			continue
+		}
+		if resolved, err := json.Marshal(obj); err == nil {
+			raw = resolved
+		}
 		var m struct {
 			Provides struct {
 				Collections map[string]struct {

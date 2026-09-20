@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // FieldType is the declared type of an action field. Deserializes directly
@@ -190,6 +191,57 @@ func (f *ActionFieldSchema) EffectiveFieldType() FieldType {
 }
 
 // LoadManifest reads and parses a plugin.json from the given plugin directory.
+// resolveCollectionRefs replaces every path-valued `provides.collections`
+// entry in a raw manifest object with the contents of the file it names.
+//
+// The manifest schema allows a collection's declaration to be written either
+// inline or as a path relative to the plugin directory — the same shorthand
+// `collection_data` has always had for records. A path is a VALUE, not an
+// expression: nothing is evaluated, and the file holds the same static
+// object that would otherwise sit inline.
+//
+// Mirrors `resolve_collection_refs` in the actuator, including its
+// containment rules. The two must agree: this tool and the runtime read the
+// same manifests, and a disagreement about what a declaration says is the
+// kind of split that only shows up in production.
+func resolveCollectionRefs(pluginDir string, raw map[string]any) error {
+	provides, ok := raw["provides"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	collections, ok := provides["collections"].(map[string]any)
+	if !ok {
+		return nil
+	}
+	base, err := filepath.Abs(pluginDir)
+	if err != nil {
+		return err
+	}
+	for name, value := range collections {
+		rel, isPath := value.(string)
+		if !isPath {
+			continue
+		}
+		if filepath.IsAbs(rel) || strings.Contains(filepath.ToSlash(rel), "../") || rel == ".." {
+			return fmt.Errorf("provides.collections.%s: %q must be a relative path inside the plugin directory", name, rel)
+		}
+		full := filepath.Join(base, filepath.FromSlash(rel))
+		if !strings.HasPrefix(full, base+string(filepath.Separator)) {
+			return fmt.Errorf("provides.collections.%s: %q resolves outside the plugin directory", name, rel)
+		}
+		body, err := os.ReadFile(full)
+		if err != nil {
+			return fmt.Errorf("provides.collections.%s: cannot read %s: %w", name, rel, err)
+		}
+		var schema map[string]any
+		if err := json.Unmarshal(body, &schema); err != nil {
+			return fmt.Errorf("provides.collections.%s: %s: %w", name, rel, err)
+		}
+		collections[name] = schema
+	}
+	return nil
+}
+
 func LoadManifest(pluginDir string) (*PluginManifest, error) {
 	m, _, err := LoadManifestRaw(pluginDir)
 	return m, err
@@ -211,6 +263,11 @@ func LoadManifestRaw(pluginDir string) (*PluginManifest, map[string]any, error) 
 	var raw map[string]any
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, nil, fmt.Errorf("parse %s: %w", path, err)
+	}
+	// Pull in any declaration the manifest referenced by path, so every
+	// caller downstream sees one fully-resolved object.
+	if err := resolveCollectionRefs(pluginDir, raw); err != nil {
+		return nil, nil, fmt.Errorf("%s: %w", path, err)
 	}
 	return &m, raw, nil
 }
