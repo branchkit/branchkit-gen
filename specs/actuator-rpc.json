@@ -10519,7 +10519,19 @@
     {
       "name": "native.borders",
       "paramStructure": "by-name",
-      "params": [],
+      "params": [
+        {
+          "name": "frames",
+          "required": false,
+          "schema": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/WindowFrame"
+            },
+            "type": "array"
+          }
+        }
+      ],
       "result": {
         "name": "native_borders_result",
         "schema": {
