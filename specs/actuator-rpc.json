@@ -3549,6 +3549,92 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.blob.updated",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "content_type",
+          "required": true,
+          "schema": {
+            "description": "As the provider declared it. The platform stores and forwards it,\nnever interprets it.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "from",
+          "required": true,
+          "schema": {
+            "description": "Start of the newly published range — where the previous publish\nended, or zero when this publish opened a new generation.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "generation",
+          "required": true,
+          "schema": {
+            "description": "Which backing file these offsets are in. A consumer that sees this\nchange must reopen and read from zero: its handle and every offset it\nholds refer to a file being retired (D4).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "hash",
+          "required": false,
+          "schema": {
+            "description": "Of the appended range only, not of the whole blob. Absent when the\nprovider declared `hash: provider` and supplied none — the version\nrecord is then a claim rather than a fact, which is disclosed on the\nplugin's card at install (`BlobHashBy`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "The blob's name within that provider. With `provider`, this is the\n`<provider>/<name>` a consumer names in `consumes.blobs`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "provider",
+          "required": true,
+          "schema": {
+            "description": "The plugin that provides the blob.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "to",
+          "required": true,
+          "schema": {
+            "description": "End of it, which is the blob's length within this generation.\nEviction retires whole OLD generations and never truncates the one\nbeing written, so this cannot move backwards.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "version",
+          "required": true,
+          "schema": {
+            "description": "Monotonic per blob, across generations. A consumer holding version N\nreads only the tail.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      ],
+      "summary": "A provider published a new byte range on one of its blobs",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "_platform.capture.progress",
       "paramStructure": "by-name",
       "params": [
@@ -5014,6 +5100,101 @@
         }
       ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "blob.publish",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "hash",
+          "required": false,
+          "schema": {
+            "description": "The hash of the appended range, when the provider declared\n`hash: provider` and is supplying one itself. Ignored otherwise —\nthe platform hashes by default so a published length is unfakeable.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "length",
+          "required": true,
+          "schema": {
+            "description": "Total bytes now complete in the backing file, WITHIN the current\ngeneration. Must be `>= ` the previous publish's: the channel is\nappend-only and a shrinking length would invalidate ranges consumers\nalready hold. The platform refuses otherwise (D4).",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "The blob's name, as declared in this plugin's `provides.blobs`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "new_generation",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Start a new generation instead of appending to the current one — the\nway a provider shrinks. A new generation is a NEW backing file, so\noffsets restart at zero and consumers reopen; `length` is then the\nlength of the new file. Compaction is an announced event rather than\na race (D4).",
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "blob_publish_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "from": {
+              "description": "Start of the range this publish announced — where the previous one\nended, or zero when this publish opened a new generation.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "generation": {
+              "description": "Which backing file these offsets are in. A consumer that sees this\nchange must reopen and read from zero — its previous handle and every\noffset it holds refer to a file that is being retired.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "hash": {
+              "description": "Of the appended range only. `None` when the provider declared\n`hash: provider` and supplied none, which is the disclosed case where\nthe version record is a claim rather than a fact.",
+              "type": "string"
+            },
+            "to": {
+              "description": "End of it, which is the blob's length within this generation. Always\nequal to the requested `length`: eviction under\n`on_full: evict_oldest` retires whole OLD generations and never\ntruncates the one being written, so the end of an appended range\ncannot move.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "version": {
+              "description": "Monotonic per blob, across generations. A consumer holding version N\nreads only the tail.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "from",
+            "to",
+            "generation",
+            "version"
+          ],
+          "title": "BlobPublishResult",
+          "type": "object"
+        }
+      },
+      "summary": "Announce that bytes up to `length` are complete on one of this plugin's declared blobs. Carries a length, never bytes.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.blob.updated"
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "collection.append",

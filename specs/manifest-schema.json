@@ -328,9 +328,97 @@
         }
       ]
     },
+    "BlobDeclaration": {
+      "additionalProperties": false,
+      "description": "One entry of `provides.blobs`: a byte channel this plugin produces and\nother plugins may read.\n\nThe platform carries the bytes and never parses them. It enforces who may\nread (`Channel::BlobRead`), where they live (the sandbox policy), and how\nlarge they may grow — nothing about their meaning. Design:\n`docs/design/DESIGN_BLOB_CHANNEL.md`.\n\nThis is `provides.artifacts` made writable at runtime and readable by\ndeclared consumers, using the same per-plugin filesystem confinement.",
+      "properties": {
+        "content_type": {
+          "description": "What the bytes are, as a media type (`image/x-rgba-frames`,\n`application/x-gaze-samples`). The platform never interprets it; it is\ncarried so a consumer can refuse a stream it does not understand.",
+          "type": "string"
+        },
+        "description": {
+          "description": "One line for the install disclosure and the plugin's card.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hash": {
+          "$ref": "#/$defs/BlobHashBy",
+          "default": "platform",
+          "description": "Who computes the content hash on publish."
+        },
+        "lifetime": {
+          "$ref": "#/$defs/BlobLifetime",
+          "default": "session",
+          "description": "How long the bytes outlive the plugin that wrote them."
+        },
+        "max_bytes": {
+          "description": "Ceiling on the backing file. Required rather than optional, as\n`size_bytes` is on an artifact: a consumer's disk budget is the\nuser's, and it is shown before they agree to it.",
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "on_full": {
+          "$ref": "#/$defs/BlobFullPolicy",
+          "default": "refuse",
+          "description": "What happens at the ceiling."
+        }
+      },
+      "required": [
+        "content_type",
+        "max_bytes"
+      ],
+      "type": "object"
+    },
+    "BlobFullPolicy": {
+      "description": "What a publish does once a blob has reached `max_bytes`.\n\nTwo behaviours because two shapes of data want opposite ends shed. A\ndocument or a corpus loses a bug when it drops the newest write; a sample\nring loses its design when it does. Decided against a single refuse rule\n(Y3) after checking it against a gaze stream, which cannot pause reality\nwhile its provider compacts.",
+      "oneOf": [
+        {
+          "const": "refuse",
+          "description": "Refuse the publish. For data where losing the newest write is a bug.",
+          "type": "string"
+        },
+        {
+          "const": "evict_oldest",
+          "description": "Drop whole generations from the oldest end to make room. For rings,\nwhere losing the oldest sample is the design.",
+          "type": "string"
+        }
+      ]
+    },
+    "BlobHashBy": {
+      "description": "Who computes the content hash a publish records.",
+      "oneOf": [
+        {
+          "const": "platform",
+          "description": "The platform hashes the appended range on publish, so a published\nlength is unfakeable. Costs a read the consumer was going to do.",
+          "type": "string"
+        },
+        {
+          "const": "provider",
+          "description": "The provider supplies the hash and the version record becomes a claim\nrather than a fact. Disclosed at install like any other declaration.\n\nExists for the highest-rate producers: a 60 fps by 4 MB frame ring is\nroughly 240 MB/s hashed continuously, which is a meaningful fraction\nof a core forever, for a guarantee that consumer never asked for.",
+          "type": "string"
+        }
+      ]
+    },
+    "BlobLifetime": {
+      "description": "How long a blob's bytes survive.",
+      "oneOf": [
+        {
+          "const": "session",
+          "description": "Cleared when the provider stops. The default because it is the only\nvalue with no cleanup question.",
+          "type": "string"
+        },
+        {
+          "const": "persistent",
+          "description": "Survives a restart; cleared on uninstall, like a plugin's data\ndirectory.",
+          "type": "string"
+        }
+      ]
+    },
     "CaptureMacro": {
       "additionalProperties": false,
-      "description": "One `capture_macros` entry: a named capture group declared once and\nreferenced from command patterns by name. The manifest-facing twin of\n`crate::commands::MacroSpec`.",
+      "description": "One `capture_macros` entry: a named capture group declared once and\nreferenced from command patterns by name.",
       "properties": {
         "display": {
           "description": "Human name surfaces render for the group (e.g. \"pair\" → \"stash [pair]…\").",
@@ -746,6 +834,13 @@
       "additionalProperties": false,
       "description": "What a plugin consumes from the ecosystem.",
       "properties": {
+        "blobs": {
+          "description": "Byte channels this plugin reads, each named `<provider>/<name>`.\n\nReading another plugin's blob is a capability, not wiring: it is\ngrant-checked through `Channel::BlobRead` and revocable per item on\nthe plugin's card, the same as every other consent axis. Cross-plugin\nWRITES are deliberately absent — the collections history says to\ndecide that axis explicitly rather than ship it implicitly.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "collections": {
           "description": "Collections this plugin reads (declares read-dependency on the\nintroducer). Each entry is a bare name, or a name plus the fields\nread — see `ConsumedCollection`.",
           "items": {
@@ -1232,7 +1327,7 @@
         "on_pointer": {
           "$ref": "#/$defs/OnPointer",
           "default": "none",
-          "description": "Pointer-dodge behavior — see [`OnPointer`]. Defaults to `none`."
+          "description": "Pointer-dodge behavior: what this window does when the pointer\nreaches it. Defaults to `none`."
         },
         "stack_order": {
           "default": 0,
@@ -1720,6 +1815,13 @@
             "$ref": "#/$defs/ArtifactDeclaration"
           },
           "description": "Artifacts this plugin's stages can load — named bundles of large\nrun-time files (ML weights, a font pack, a dictionary, an OCR engine),\nkeyed by the name a pipeline passes as the stage's artifact param.\nProvisioned by `branchkit-cli` into\n`<app_support>/artifacts/<plugin_id>/<name>`, which is the root the\nplatform hands the stage as `BRANCHKIT_ARTIFACTS_DIR` and the root its\nsandbox grant is confined to — so a stage sees a flat namespace it owns\nand nothing else. Was `provides.models` (accepted as an alias for one\nrelease); see `docs/design/DESIGN_ARTIFACTS_RENAME.md` and\n`docs/design/DESIGN_PLUGIN_MODEL_DECLARATION.md`.",
+          "type": "object"
+        },
+        "blobs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/BlobDeclaration"
+          },
+          "description": "Byte channels this plugin produces, keyed by blob name. Namespaced by\nprovider id, so `<this plugin>/<name>` is unique by construction and\ntwo plugins declaring the same name are two different blobs.",
           "type": "object"
         },
         "collections": {
@@ -2228,7 +2330,7 @@
           "type": "null"
         }
       ],
-      "description": "Development-loop settings. Dev-mode only, and never consulted by a\nshipped build — see [`DevConfig`]."
+      "description": "Development-loop settings. Dev-mode only, and never consulted by a\nshipped build."
     },
     "dispatch_via": {
       "anyOf": [
