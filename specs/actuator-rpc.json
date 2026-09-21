@@ -11333,122 +11333,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.clipboard_file_urls",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_clipboard_file_urls_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "value": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "title": "NativeClipboardFileUrlsResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get file URLs from clipboard as JSON array",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_has_image",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_clipboard_has_image_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "has_image": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "has_image"
-          ],
-          "title": "NativeClipboardHasImageResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if clipboard contains an image",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_has_text",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_clipboard_has_text_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "has_text": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "has_text"
-          ],
-          "title": "NativeClipboardHasTextResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if clipboard contains text",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_html",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_clipboard_html_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "value": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "title": "NativeClipboardHtmlResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get HTML content from clipboard",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.clipboard_image_dimensions",
       "paramStructure": "by-name",
       "params": [],
@@ -11469,150 +11353,6 @@
         }
       },
       "summary": "Get dimensions of clipboard image as WxH",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_rich_text",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_clipboard_rich_text_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "value": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "value"
-          ],
-          "title": "NativeClipboardRichTextResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get rich text (RTF) from clipboard",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_set_html",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "html",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_clipboard_set_html_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "NativeClipboardSetHtmlResult",
-          "type": "object"
-        }
-      },
-      "summary": "Set HTML content on clipboard",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_set_text",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "text",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_clipboard_set_text_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "NativeClipboardSetTextResult",
-          "type": "object"
-        }
-      },
-      "summary": "Set clipboard text content",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.clipboard_types",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "pasteboard",
-          "required": false,
-          "schema": {
-            "default": "",
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_clipboard_types_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "types": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "types"
-          ],
-          "title": "NativeClipboardTypesResult",
-          "type": "object"
-        }
-      },
-      "summary": "List available pasteboard types on the clipboard",
       "tags": [
         {
           "name": "native"
@@ -28999,7 +28739,7 @@
     {
       "description": "Read and write clipboard contents",
       "gated_event_prefixes": [],
-      "method_count": 16,
+      "method_count": 8,
       "methods": [
         "input.clipboard_history",
         "input.clipboard_read",
@@ -29008,15 +28748,7 @@
         "input.clipboard_write",
         "input.clipboard_write_items",
         "native.clipboard_change_count",
-        "native.clipboard_file_urls",
-        "native.clipboard_has_image",
-        "native.clipboard_has_text",
-        "native.clipboard_html",
-        "native.clipboard_image_dimensions",
-        "native.clipboard_rich_text",
-        "native.clipboard_set_html",
-        "native.clipboard_set_text",
-        "native.clipboard_types"
+        "native.clipboard_image_dimensions"
       ],
       "name": "clipboard",
       "risk": "dangerous"
