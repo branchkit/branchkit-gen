@@ -2794,6 +2794,7 @@
             "type": "string"
           },
           "pid": {
+            "description": "The process that runs this application, when the system can say.\n\nAbsent rather than zero when it cannot, because zero is itself a\nvalid-looking process id and would read as an answer. macOS always\nreports one. On Linux and Windows the running list is built from\nthe windows on screen, and a window need not carry its process id:\non X11 the application sets it voluntarily, and a Wayland session\nmay expose none at all.",
             "format": "int32",
             "type": "integer"
           }
