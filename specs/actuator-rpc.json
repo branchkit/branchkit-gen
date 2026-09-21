@@ -27320,6 +27320,14 @@
       "paramStructure": "by-name",
       "params": [
         {
+          "name": "host",
+          "required": false,
+          "schema": {
+            "description": "The host this credential may be sent to, such as\n`api.openweathermap.org`.\n\nRecorded with the value and checked when the platform substitutes it\ninto a request. A caller that declares two hosts cannot get a secret\nbound to one of them into a request to the other, which is what makes\nstoring a reference safer than holding the value: without it, a\ncredential that can never be read can still be sent to the wrong\nplace.\n\nOptional today because substitution is not built yet, and a store\nwritten before bindings existed holds none. An unbound secret is\nrefused at substitution rather than treated as usable anywhere.",
+            "type": "string"
+          }
+        },
+        {
           "name": "name",
           "required": true,
           "schema": {
