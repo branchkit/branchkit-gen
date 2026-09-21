@@ -204,7 +204,7 @@ func TestValidate_dispatchVia(t *testing.T) {
 	}
 
 	m2 := minimalValid()
-	m2.Privileges = []string{"dispatch"}
+	m2.Requires.Privileges = []string{"dispatch"}
 	m2.Consumes.Dispatch = []ConsumedDispatch{{Prefix: "foo."}}
 	got2 := Validate(m2, nil)
 	if HasErrors(got2) {

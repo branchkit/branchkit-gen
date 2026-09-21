@@ -47,10 +47,18 @@ type PluginManifest struct {
 	ActionPrefixAccess string                      `json:"action_prefix_access"`
 	SettingsTab        *string                     `json:"settings_tab"`
 	Implements         PluginImplements            `json:"implements"`
-	Privileges         []string                    `json:"privileges"`
+	Requires           RequiresBlock               `json:"requires"`
 	DispatchVia        string                      `json:"dispatch_via"`
 	Consumes           Consumes                    `json:"consumes"`
 	ActionTypes        map[string]ActionTypeSchema `json:"action_types"`
+}
+
+// RequiresBlock is the manifest's request — what the user approves at
+// install. Only `privileges` is modelled here; the rest of the block is
+// checked against the embedded manifest schema, same as everything else
+// this validator does not reason about directly.
+type RequiresBlock struct {
+	Privileges []string `json:"privileges"`
 }
 
 // Consumes is the consumption block. Only the parts this validator

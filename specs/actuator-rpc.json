@@ -3377,7 +3377,7 @@
   "info": {
     "description": "Complete BranchKit protocol surface: actuator-side methods (called by plugins via JSON-RPC over stdio), plugin-side methods (called by the actuator on managed plugins), and platform notification events. Auto-generated from the `crate::operations::registered::*` and `crate::operations::plugin_protocol` inventory registries.",
     "title": "BranchKit RPC",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "methods": [
     {

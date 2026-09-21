@@ -1829,6 +1829,56 @@
         }
       ]
     },
+    "Requires": {
+      "additionalProperties": false,
+      "description": "The plugin's ask: everything a person is shown and accepts at install.\n\nMembership test, deliberately not \"is it security-relevant\": **the user\nmust see this before accepting, because there is no later moment, or the\nlater moment is not enough.** `sockets` and `runtimes` are disclosed and\nnever granted — the install panel is the only place they are ever seen.\n`privileges` and `network` do have later moments on the plugin's card,\nbut the first acceptance is still here.\n\nThings that look like they belong and do not: `run` (the sandbox confines\nthe process whatever it names), `collection_data.keybinds` (a real\ncapability, but grant-checked through `Channel::CollectionWrite` and\nrevocable on the card, so its later moment is enough), and\n`consumes.effects` (coordination, not capability —\n`DESIGN_SANDBOX_CONSENT_SURFACE.md`). The reasoning for all 29 top-level\nfields is in `DESIGN_MANIFEST_REQUEST_BLOCK.md`.",
+      "properties": {
+        "network": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/NetworkConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
+        },
+        "optional_privileges": {
+          "description": "Privileges this plugin can carry but function WITHOUT — the ceiling\nof on-demand grants. Ungranted optional privileges never block the\nspawn; they are simply absent from the effective set and per-call\nauth denies them, which the plugin surfaces as a teaching error.\nAuthor-declared degradable. Design: docs/design/DESIGN_OPTIONAL_PRIVILEGES.md.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "privileges": {
+          "description": "Platform-defined privileges this plugin REQUIRES — ungranted means\nthe plugin does not spawn (refuse-don't-degrade).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "runtimes": {
+          "description": "Managed language runtimes this plugin's processes may execute, by name\n(e.g. `[\"python\"]`). Each name resolves to\n`<app_support>/runtimes/<name>/`, granted read+exec in the sandbox\npolicy. The actuator only grants the paths — provisioning is\n`branchkit-cli runtime install <name>` (the plugin itself runs\nnetwork-denied, same split as declared models), and a runtime absent\nfrom disk is the plugin's own error to surface, never a sandbox\nviolation.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "sockets": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SocketsConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux. See docs/design/DESIGN_SANDBOX_LOOPBACK_FDPASS.md."
+        }
+      },
+      "type": "object"
+    },
     "RequiresTagPolicy": {
       "description": "`policy.requires_tag` — gate-tag declaration.\n\nSpecifies a tag name that must be active at write time. Different\nfrom `feeds_matching: AsGates` (which describes how *this* collection\nproduces gates) — this is the inverse: what gate is required to write\nhere. Avoid declaring `requires_tag` on a collection whose own writes\nset/clear the named tag (self-referential gate).",
       "properties": {
@@ -2465,31 +2515,6 @@
       "default": "",
       "type": "string"
     },
-    "network": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/NetworkConfig"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
-    },
-    "optional_privileges": {
-      "description": "Privileges this plugin can carry but function WITHOUT — the ceiling\nof on-demand grants. Ungranted optional privileges never block the\nspawn; they are simply absent from the effective set and per-call\nauth denies them, which the plugin surfaces as a teaching error.\nAuthor-declared degradable. Design: docs/design/DESIGN_OPTIONAL_PRIVILEGES.md.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
-    "privileges": {
-      "description": "Platform-defined privileges this plugin REQUIRES — ungranted means\nthe plugin does not spawn (refuse-don't-degrade).",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
     "provides": {
       "$ref": "#/$defs/Provides",
       "description": "What this plugin provides to the ecosystem."
@@ -2501,6 +2526,10 @@
         "null"
       ]
     },
+    "requires": {
+      "$ref": "#/$defs/Requires",
+      "description": "What this plugin asks the user to allow.\n\nThe one part of a manifest a person approves. It is a block rather\nthan five loose fields so that the install prompt, the sandbox\ncompiler and the signing chain read the same subtree instead of each\nrebuilding the list — and so a new capability field has to choose a\nside rather than defaulting to invisible.\n\nDesign: docs/design/DESIGN_MANIFEST_REQUEST_BLOCK.md."
+    },
     "run": {
       "description": "Shell command to run the plugin process. When set, the actuator spawns + monitors this process.",
       "type": [
@@ -2508,30 +2537,12 @@
         "null"
       ]
     },
-    "runtimes": {
-      "description": "Managed language runtimes this plugin's processes may execute, by name\n(e.g. `[\"python\"]`). Each name resolves to\n`<app_support>/runtimes/<name>/`, granted read+exec in the sandbox\npolicy. The actuator only grants the paths — provisioning is\n`branchkit-cli runtime install <name>` (the plugin itself runs\nnetwork-denied, same split as declared models), and a runtime absent\nfrom disk is the plugin's own error to surface, never a sandbox\nviolation.",
-      "items": {
-        "type": "string"
-      },
-      "type": "array"
-    },
     "selection_surfaces": {
       "additionalProperties": {
         "$ref": "#/$defs/SelectionSurfaceSchema"
       },
       "description": "External selection surfaces (docs/design/DESIGN_SELECTION_SURFACES.md):\nviews this plugin (or its remote client) renders itself — a command\npalette, a window picker — whose ADDRESSING the platform owns. The\nsurface's lifecycle is its rows collection's contents: rows present ⇒\nthe platform sets the surface's exclusive `_surface.<plugin>.<name>`\ntag, assigns pointing-deck codewords, and mints the matchable\ncollections; rows drained ⇒ everything clears. Assignments flow back\nthrough the platform-owned `…_assign` collection the client\nsubscribes to. Commands bind the surface with a `<row:@name>` tail\ncapture.",
       "type": "object"
-    },
-    "sockets": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/SocketsConfig"
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux. See docs/design/DESIGN_SANDBOX_LOOPBACK_FDPASS.md."
     },
     "version": {
       "default": "",

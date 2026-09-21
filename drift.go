@@ -25,9 +25,9 @@ func CheckDrift(m *PluginManifest, called []CalledMethod, spec *Spec) []Issue {
 	// 1. Privileges the plugin declares must exist in the spec's
 	//    privilege list. Typos here are common and only surface at
 	//    install time today.
-	for i, priv := range m.Privileges {
+	for i, priv := range m.Requires.Privileges {
 		if !spec.Privileges[priv] {
-			add(SeverityError, fmt.Sprintf("privileges[%d]", i), fmt.Sprintf(
+			add(SeverityError, fmt.Sprintf("requires.privileges[%d]", i), fmt.Sprintf(
 				"privilege %q is not a recognized privilege — check spelling against the public spec", priv))
 		}
 	}

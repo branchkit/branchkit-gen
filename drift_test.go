@@ -38,14 +38,14 @@ func TestManifest_privilegesParseFromJSON(t *testing.T) {
 	raw := []byte(`{
 		"id": "demo-plugin",
 		"min_api_version": "0.1.0",
-		"privileges": ["dispatch", "apps"]
+		"requires": { "privileges": ["dispatch", "apps"] }
 	}`)
 	var m PluginManifest
 	if err := json.Unmarshal(raw, &m); err != nil {
 		t.Fatalf("unmarshal: %v", err)
 	}
-	if len(m.Privileges) != 2 || m.Privileges[0] != "dispatch" {
-		t.Fatalf("privileges did not parse from JSON: %+v", m.Privileges)
+	if len(m.Requires.Privileges) != 2 || m.Requires.Privileges[0] != "dispatch" {
+		t.Fatalf("privileges did not parse from JSON: %+v", m.Requires.Privileges)
 	}
 
 	// dispatch_via is satisfied by a privilege that came off the wire.
@@ -76,11 +76,11 @@ func TestValidate_deadCapabilitiesKeyIsFlagged(t *testing.T) {
 
 func TestDrift_unknownPrivilege(t *testing.T) {
 	m := minimalValid()
-	m.Privileges = []string{"dispatch", "made-up-privilege"}
+	m.Requires.Privileges = []string{"dispatch", "made-up-privilege"}
 	issues := driftIssues(t, m, nil)
 	found := false
 	for _, i := range issues {
-		if strings.HasPrefix(i.Field, "privileges[") && i.Severity == SeverityError &&
+		if strings.HasPrefix(i.Field, "requires.privileges[") && i.Severity == SeverityError &&
 			strings.Contains(i.Message, "made-up-privilege") {
 			found = true
 		}
@@ -197,7 +197,7 @@ func TestDrift_dedupesByName(t *testing.T) {
 
 func TestDrift_nilSpecReturnsNothing(t *testing.T) {
 	m := minimalValid()
-	m.Privileges = []string{"made-up"}
+	m.Requires.Privileges = []string{"made-up"}
 	if got := CheckDrift(m, nil, nil); got != nil {
 		t.Errorf("expected nil with nil spec, got %+v", got)
 	}

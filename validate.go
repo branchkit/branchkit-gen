@@ -199,7 +199,7 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	}
 
 	// dispatch_via requires the dispatch privilege
-	if m.DispatchVia != "" && !slices.Contains(m.Privileges, "dispatch") {
+	if m.DispatchVia != "" && !slices.Contains(m.Requires.Privileges, "dispatch") {
 		add(SeverityError, "dispatch_via",
 			"dispatch_via requires 'dispatch' in privileges")
 	}
@@ -244,8 +244,33 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	// action_types' display check — see validDisplayRoles.
 	validateCollectionDisplayRoles(raw, add)
 
+	// The pre-`requires` flat shape, called out before the generic unknown
+	// -field pass below would soften it to info.
+	//
+	// These five moved into `requires` (DESIGN_MANIFEST_REQUEST_BLOCK.md).
+	// Reported as info, an author migrating sees validation pass while the
+	// actuator loads their plugin with no privileges, no network and no
+	// declared sockets. This tool is the first thing an author runs, so it
+	// has to say the same thing the runtime will.
+	movedToRequires := []string{"privileges", "optional_privileges", "network", "sockets", "runtimes"}
+	flat := []string{}
+	for _, key := range movedToRequires {
+		if _, ok := raw[key]; ok {
+			flat = append(flat, key)
+		}
+	}
+	if len(flat) > 0 {
+		add(SeverityError, "requires", fmt.Sprintf(
+			"%s moved into `requires` — wrap them: \"requires\": { … }. "+
+				"Left at the top level they are ignored, and the plugin runs "+
+				"with none of what it asked for.", strings.Join(flat, ", ")))
+	}
+
 	// unknown top-level fields (range over nil map is a no-op)
 	for key := range raw {
+		if slices.Contains(movedToRequires, key) {
+			continue // already reported above, with the fix
+		}
 		if !knownTopLevelFields[key] {
 			add(SeverityInfo, key, fmt.Sprintf(
 				"unrecognized top-level field %q — this version does not understand it", key))
