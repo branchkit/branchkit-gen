@@ -16218,13 +16218,6 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "service",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
       ],
       "result": {
@@ -16243,7 +16236,7 @@
           "type": "object"
         }
       },
-      "summary": "Delete a keychain item by service and account",
+      "summary": "Delete a password from this plugin's keychain drawer",
       "tags": [
         {
           "name": "native"
@@ -16258,13 +16251,6 @@
       "params": [
         {
           "name": "account",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "service",
           "required": true,
           "schema": {
             "type": "string"
@@ -16287,7 +16273,7 @@
           "type": "object"
         }
       },
-      "summary": "Read a password from the keychain by service and account",
+      "summary": "Read a password from this plugin's keychain drawer",
       "tags": [
         {
           "name": "native"
@@ -16313,13 +16299,6 @@
           "schema": {
             "type": "string"
           }
-        },
-        {
-          "name": "service",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
         }
       ],
       "result": {
@@ -16338,7 +16317,7 @@
           "type": "object"
         }
       },
-      "summary": "Store a password in the keychain for a service and account",
+      "summary": "Store a password in this plugin's keychain drawer",
       "tags": [
         {
           "name": "native"
@@ -29607,23 +29586,6 @@
       ],
       "name": "spaces",
       "risk": "low"
-    },
-    {
-      "description": "Text-to-speech synthesis",
-      "gated_event_prefixes": [],
-      "method_count": 8,
-      "methods": [
-        "native.dictation_enabled",
-        "native.siri_enabled",
-        "native.speech_locales",
-        "native.speech_recognition_available",
-        "native.speech_recognize_file",
-        "speech.announce",
-        "speech.say",
-        "speech.stop"
-      ],
-      "name": "speech",
-      "risk": "moderate"
     },
     {
       "description": "Speak through the system voice and post VoiceOver announcements (the platform makes the sound; what to say is the plugin's)",
