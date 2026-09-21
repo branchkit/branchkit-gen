@@ -3269,6 +3269,11 @@
             "default": "",
             "type": "string"
           },
+          "pid": {
+            "description": "The process that owns this window, where the platform can say.\n\nAdvisory and often absent: on X11 it comes from `_NET_WM_PID`, which\nthe client sets voluntarily. `None` rather than 0, because 0 is a\nreal pid-shaped value that would read as an answer.",
+            "format": "int32",
+            "type": "integer"
+          },
           "source": {
             "default": "observed",
             "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by actuator channel infrastructure.",
@@ -3310,6 +3315,7 @@
           "desk",
           "h",
           "id",
+          "pid",
           "source",
           "space_ids",
           "title",
