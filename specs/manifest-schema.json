@@ -1265,17 +1265,26 @@
     },
     "FieldType": {
       "description": "The declared shape of a single action-type field. See `ActionFieldSchema`.\n\nWire format uses snake_case strings (`\"string\"`, `\"int\"`, `\"enum\"`, …).\nUnknown values fail deserialization — that's deliberate: a typo in\n`plugin.json` should surface at load time, not at dispatch. The `Json`\nvariant is the documented escape hatch for shapes too dynamic to\ndeclare statically.",
-      "enum": [
-        "string",
-        "int",
-        "number",
-        "boolean",
-        "string[]",
-        "enum",
-        "object",
-        "json"
-      ],
-      "type": "string"
+      "oneOf": [
+        {
+          "enum": [
+            "string",
+            "int",
+            "number",
+            "boolean",
+            "string[]",
+            "enum",
+            "object",
+            "json"
+          ],
+          "type": "string"
+        },
+        {
+          "const": "secret_ref",
+          "description": "A NAME in the secret store, not a credential.\n\nThe record holds the name; the value lives encrypted in the store and\nis written straight there by the settings UI, never through the\ncollection. Defaults to the field's own key when the record has no\nvalue, so the common case declares nothing.\n\n**Why this is not a `secret` field type that masks its input.**\nCollection records are plaintext JSON on disk\n(`plugin-data/<id>/*.json`). A masked field would store the\ncredential in the clear and label it safe — a declaration promising a\nproperty the mechanism does not have, which is worse than no field\ntype at all. Holding a reference means plaintext-on-disk is not a\nleak, and nothing needs masking because nothing sensitive is there.",
+          "type": "string"
+        }
+      ]
     },
     "ForbidsTagPolicy": {
       "description": "`policy.forbids_tag` — defensive negation of `requires_tag`.\n\nWrite only commits while the named tag is *not* active. Introducer\nand platform writes always pass — only cross-plugin writes are gated.\nIntended for plugins that want to defer external writes while a\nplatform-managed mode is in progress (e.g.\n`_platform.calibration.active`).",
