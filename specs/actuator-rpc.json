@@ -5107,6 +5107,7 @@
         "name": "artifact_delete_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -5115,7 +5116,7 @@
           "required": [
             "ok"
           ],
-          "title": "ArtifactDeleteResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -5657,6 +5658,7 @@
         "name": "collection_patch_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -5665,7 +5667,7 @@
           "required": [
             "ok"
           ],
-          "title": "CollectionPatchResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6020,6 +6022,7 @@
         "name": "commands_add_alias_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6028,7 +6031,7 @@
           "required": [
             "ok"
           ],
-          "title": "CommandsAddAliasResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6112,6 +6115,7 @@
         "name": "commands_delete_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6120,7 +6124,7 @@
           "required": [
             "ok"
           ],
-          "title": "CommandsDeleteResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6393,6 +6397,7 @@
         "name": "commands_reset_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6401,7 +6406,7 @@
           "required": [
             "ok"
           ],
-          "title": "CommandsResetResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6708,6 +6713,7 @@
         "name": "commands_set_override_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6716,7 +6722,7 @@
           "required": [
             "ok"
           ],
-          "title": "CommandsSetOverrideResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6745,6 +6751,7 @@
         "name": "control_signal_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6753,7 +6760,7 @@
           "required": [
             "ok"
           ],
-          "title": "ControlSignalResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -6773,6 +6780,7 @@
         "name": "discovery_closed_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -6781,7 +6789,7 @@
           "required": [
             "ok"
           ],
-          "title": "DiscoveryClosedResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7031,6 +7039,7 @@
         "name": "events_append_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7039,7 +7048,7 @@
           "required": [
             "ok"
           ],
-          "title": "EventsAppendResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7086,6 +7095,7 @@
         "name": "events_emit_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7094,7 +7104,7 @@
           "required": [
             "ok"
           ],
-          "title": "EventsEmitResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7218,6 +7228,7 @@
         "name": "hud_create_channel_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7226,7 +7237,7 @@
           "required": [
             "ok"
           ],
-          "title": "HudCreateChannelResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7255,6 +7266,7 @@
         "name": "hud_hide_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7263,7 +7275,7 @@
           "required": [
             "ok"
           ],
-          "title": "HudHideResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7304,6 +7316,7 @@
         "name": "hud_push_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7312,7 +7325,7 @@
           "required": [
             "ok"
           ],
-          "title": "HudPushResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7393,6 +7406,7 @@
         "name": "hud_set_size_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7401,7 +7415,7 @@
           "required": [
             "ok"
           ],
-          "title": "HudSetSizeResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7430,6 +7444,7 @@
         "name": "hud_show_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7438,7 +7453,7 @@
           "required": [
             "ok"
           ],
-          "title": "HudShowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7468,6 +7483,7 @@
         "name": "input_click_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7476,7 +7492,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputClickResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7515,6 +7531,7 @@
         "name": "input_clipboard_action_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7523,7 +7540,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputClipboardActionResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7806,6 +7823,7 @@
         "name": "input_double_click_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7814,7 +7832,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputDoubleClickResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7878,6 +7896,7 @@
         "name": "input_drag_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7886,7 +7905,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputDragResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -7957,6 +7976,7 @@
         "name": "input_mouse_button_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -7965,7 +7985,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputMouseButtonResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8120,6 +8140,7 @@
         "name": "input_press_key_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8128,7 +8149,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputPressKeyResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8169,6 +8190,7 @@
         "name": "input_raw_key_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8177,7 +8199,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputRawKeyResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8217,6 +8239,7 @@
         "name": "input_right_click_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8225,7 +8248,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputRightClickResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8274,6 +8297,7 @@
         "name": "input_scroll_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8282,7 +8306,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputScrollResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8303,6 +8327,7 @@
         "name": "input_select_all_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8311,7 +8336,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputSelectAllResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8388,6 +8413,7 @@
         "name": "input_triple_click_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8396,7 +8422,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputTripleClickResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8426,6 +8452,7 @@
         "name": "input_type_text_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8434,7 +8461,7 @@
           "required": [
             "ok"
           ],
-          "title": "InputTypeTextResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -8602,6 +8629,7 @@
         "name": "native_activate_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -8610,7 +8638,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeActivateAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -10748,6 +10776,7 @@
         "name": "native_borders_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -10756,7 +10785,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeBordersResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -11142,6 +11171,7 @@
         "name": "native_center_window_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -11150,7 +11180,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeCenterWindowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -12566,6 +12596,7 @@
         "name": "native_dismiss_notification_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -12574,7 +12605,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeDismissNotificationResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -15283,6 +15314,7 @@
         "name": "native_hide_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -15291,7 +15323,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeHideAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -15990,6 +16022,7 @@
         "name": "native_keychain_delete_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -15998,7 +16031,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeKeychainDeleteResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16071,6 +16104,7 @@
         "name": "native_keychain_write_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16079,7 +16113,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeKeychainWriteResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16192,6 +16226,7 @@
         "name": "native_launch_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16200,7 +16235,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeLaunchAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16561,6 +16596,7 @@
         "name": "native_log_out_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16569,7 +16605,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeLogOutResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16810,6 +16846,7 @@
         "name": "native_media_next_track_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16818,7 +16855,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMediaNextTrackResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16839,6 +16876,7 @@
         "name": "native_media_play_pause_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16847,7 +16885,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMediaPlayPauseResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -16868,6 +16906,7 @@
         "name": "native_media_previous_track_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -16876,7 +16915,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMediaPreviousTrackResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -17124,6 +17163,7 @@
         "name": "native_minimize_window_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -17132,7 +17172,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMinimizeWindowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -17242,6 +17282,7 @@
         "name": "native_mouse_button_click_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -17250,7 +17291,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMouseButtonClickResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -17354,6 +17395,7 @@
         "name": "native_move_window_to_display_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -17362,7 +17404,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMoveWindowToDisplayResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -17437,6 +17479,7 @@
         "name": "native_mute_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -17445,7 +17488,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeMuteResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18174,6 +18217,7 @@
         "name": "native_open_app_settings_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18182,7 +18226,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenAppSettingsResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18211,6 +18255,7 @@
         "name": "native_open_finder_window_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18219,7 +18264,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenFinderWindowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18249,6 +18294,7 @@
         "name": "native_open_system_settings_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18257,7 +18303,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenSystemSettingsResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18286,6 +18332,7 @@
         "name": "native_open_target_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18294,7 +18341,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenTargetResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18323,6 +18370,7 @@
         "name": "native_open_url_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18331,7 +18379,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenUrlResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18367,6 +18415,7 @@
         "name": "native_open_with_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18375,7 +18424,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeOpenWithAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18510,6 +18559,7 @@
         "name": "native_pin_window_above_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18518,7 +18568,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativePinWindowAboveResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18635,6 +18685,7 @@
         "name": "native_play_sound_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18643,7 +18694,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativePlaySoundResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -18664,6 +18715,7 @@
         "name": "native_poll_burst_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -18672,7 +18724,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativePollBurstResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -19502,6 +19554,7 @@
         "name": "native_raise_window_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -19510,7 +19563,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeRaiseWindowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -20031,6 +20084,7 @@
         "name": "native_reveal_in_finder_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -20039,7 +20093,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeRevealInFinderResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -20310,6 +20364,7 @@
         "name": "native_screen_lock_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -20318,7 +20373,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeScreenLockResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -20449,6 +20504,7 @@
         "name": "native_screen_saver_start_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -20457,7 +20513,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeScreenSaverStartResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -21034,6 +21090,7 @@
         "name": "native_set_audio_device_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -21042,7 +21099,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetAudioDeviceResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -21079,6 +21136,7 @@
         "name": "native_set_audio_device_volume_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -21087,7 +21145,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetAudioDeviceVolumeResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -21275,6 +21333,7 @@
         "name": "native_set_brightness_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -21283,7 +21342,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetBrightnessResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -21349,6 +21408,7 @@
         "name": "native_set_dark_mode_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -21357,7 +21417,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetDarkModeResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -21386,6 +21446,7 @@
         "name": "native_set_dnd_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -21394,7 +21455,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetDndResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22130,6 +22191,7 @@
         "name": "native_set_night_shift_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22138,7 +22200,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetNightShiftResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22511,6 +22573,7 @@
         "name": "native_set_volume_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22519,7 +22582,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetVolumeResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22593,6 +22656,7 @@
         "name": "native_set_window_alpha_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22601,7 +22665,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetWindowAlphaResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22690,6 +22754,7 @@
         "name": "native_set_window_position_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22698,7 +22763,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetWindowPositionResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22734,6 +22799,7 @@
         "name": "native_set_window_shadow_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22742,7 +22808,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetWindowShadowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22787,6 +22853,7 @@
         "name": "native_set_window_size_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22795,7 +22862,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetWindowSizeResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -22831,6 +22898,7 @@
         "name": "native_set_window_sticky_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -22839,7 +22907,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSetWindowStickyResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -23005,6 +23073,7 @@
         "name": "native_sleep_now_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -23013,7 +23082,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSleepNowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -23204,6 +23273,7 @@
         "name": "native_speak_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -23212,7 +23282,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSpeakResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -23605,6 +23675,7 @@
         "name": "native_switch_space_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -23613,7 +23684,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeSwitchSpaceResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -24358,6 +24429,7 @@
         "name": "native_toggle_fullscreen_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -24366,7 +24438,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeToggleFullscreenResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -24639,6 +24711,7 @@
         "name": "native_unhide_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -24647,7 +24720,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeUnhideAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -24676,6 +24749,7 @@
         "name": "native_unminimize_window_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -24684,7 +24758,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeUnminimizeWindowResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -25052,6 +25126,7 @@
         "name": "native_warp_cursor_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -25060,7 +25135,7 @@
           "required": [
             "ok"
           ],
-          "title": "NativeWarpCursorResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -26612,6 +26687,7 @@
         "name": "plugin_debug_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -26620,7 +26696,7 @@
           "required": [
             "ok"
           ],
-          "title": "PluginDebugResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -26658,6 +26734,7 @@
         "name": "plugin_report_health_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -26666,7 +26743,7 @@
           "required": [
             "ok"
           ],
-          "title": "PluginReportHealthResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -26738,6 +26815,7 @@
         "name": "privacy_set_recording_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -26746,7 +26824,7 @@
           "required": [
             "ok"
           ],
-          "title": "CollectionSetRecordingResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27468,6 +27546,7 @@
         "name": "selection_set_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27476,7 +27555,7 @@
           "required": [
             "ok"
           ],
-          "title": "SelectionSetResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27496,6 +27575,7 @@
         "name": "session_boundary_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27504,7 +27584,7 @@
           "required": [
             "ok"
           ],
-          "title": "SessionBoundaryResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27576,6 +27656,7 @@
         "name": "settings_patch_signals_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27584,7 +27665,7 @@
           "required": [
             "ok"
           ],
-          "title": "SettingsPatchSignalsResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27612,6 +27693,7 @@
         "name": "settings_redirect_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27620,7 +27702,7 @@
           "required": [
             "ok"
           ],
-          "title": "SettingsRedirectResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27640,6 +27722,7 @@
         "name": "settings_refresh_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27648,7 +27731,7 @@
           "required": [
             "ok"
           ],
-          "title": "SettingsRefreshResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27903,7 +27986,7 @@
         "name": "speech_announce_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of `speech.announce`.",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27912,7 +27995,7 @@
           "required": [
             "ok"
           ],
-          "title": "SpeechAnnounceResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27951,7 +28034,7 @@
         "name": "speech_say_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of `speech.say`.",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27960,7 +28043,7 @@
           "required": [
             "ok"
           ],
-          "title": "SpeechSayResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -27981,7 +28064,7 @@
         "name": "speech_stop_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of `speech.stop`.",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27990,7 +28073,7 @@
           "required": [
             "ok"
           ],
-          "title": "SpeechStopResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -28029,6 +28112,7 @@
         "name": "system_launch_app_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -28037,7 +28121,7 @@
           "required": [
             "ok"
           ],
-          "title": "SystemLaunchAppResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -28086,6 +28170,7 @@
         "name": "system_notify_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -28094,7 +28179,7 @@
           "required": [
             "ok"
           ],
-          "title": "SystemNotifyResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -28124,6 +28209,7 @@
         "name": "system_run_shell_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -28132,7 +28218,7 @@
           "required": [
             "ok"
           ],
-          "title": "SystemRunShellResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
@@ -28470,6 +28556,7 @@
         "name": "vocabulary_commit_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -28478,7 +28565,7 @@
           "required": [
             "ok"
           ],
-          "title": "VocabularyCommitResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
