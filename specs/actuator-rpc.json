@@ -12098,15 +12098,36 @@
         "name": "native_date_format_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "A locale's date or time format, with the platform's own answer intact.\n\n**Why this is a struct rather than a string.** `date_format` returned a\nbare pattern, and the platform normalised it to CLDR before handing it\nover — which destroyed information for locales whose format asks for\nsomething CLDR patterns cannot express. Measured across 306 locale\ndefinitions: 9 date formats and 6 time formats, every one of them Lao,\nOdia, Shan, Mon, Azerbaijani or Literary Chinese. Those users got\nnothing where they had previously had a usable string.\n\nThe shape follows the platforms that have already solved this. ECMA-402's\n`Intl.DateTimeFormat.resolvedOptions()` deliberately returns NO pattern\nat all — it returns `locale`, `calendar`, `numberingSystem` and per-field\nwidths — and CLDR's own guidance (UTS #35) prefers skeletons to patterns\nfor the same reason: a pattern string is not a lossless container for\nwhat a locale is asking for.\n\nSo: normalise for portability AND preserve for fidelity. `value` is the\nportable answer most callers want; `source` and `dialect` are what the OS\nactually said, for the caller who needs it; the flags carry the requests\nno pattern can hold.",
           "properties": {
+            "dialect": {
+              "description": "The vocabulary `source` is written in: `posix_strftime` or\n`unicode_cldr`. Without this, `source` is an uninterpretable string.",
+              "type": "string"
+            },
+            "era": {
+              "description": "The locale asked for an era — the Lao Buddhist calendar, Japanese\nimperial eras (POSIX `%E`). Same reasoning as `native_digits`.",
+              "type": "boolean"
+            },
+            "native_digits": {
+              "description": "The locale asked for its OWN digits rather than 0-9 — Lao, Myanmar,\nOdia, Eastern Arabic numerals (POSIX `%O`).\n\nA separate field because it cannot be part of a pattern: CLDR carries\nthe numbering system in the locale identifier, which is why\n`resolvedOptions()` reports `numberingSystem` at the top level.",
+              "type": "boolean"
+            },
+            "source": {
+              "description": "Exactly what the operating system returned, unmodified.",
+              "type": "string"
+            },
             "value": {
+              "description": "The format as a Unicode CLDR pattern (UTS #35) — the portable\nanswer, identical in vocabulary on every platform.\n\n`None` when the platform's own format cannot be expressed in CLDR.\nThat is not a failure: `source` is still here, and a caller that\nunderstands `dialect` can use it. Half-converting instead would\nproduce a pattern that parses and is wrong.",
               "type": "string"
             }
           },
           "required": [
-            "value"
+            "source",
+            "dialect",
+            "native_digits",
+            "era"
           ],
-          "title": "NativeDateFormatResult",
+          "title": "LocaleFormat",
           "type": "object"
         }
       },
@@ -24245,15 +24266,36 @@
         "name": "native_time_format_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "A locale's date or time format, with the platform's own answer intact.\n\n**Why this is a struct rather than a string.** `date_format` returned a\nbare pattern, and the platform normalised it to CLDR before handing it\nover — which destroyed information for locales whose format asks for\nsomething CLDR patterns cannot express. Measured across 306 locale\ndefinitions: 9 date formats and 6 time formats, every one of them Lao,\nOdia, Shan, Mon, Azerbaijani or Literary Chinese. Those users got\nnothing where they had previously had a usable string.\n\nThe shape follows the platforms that have already solved this. ECMA-402's\n`Intl.DateTimeFormat.resolvedOptions()` deliberately returns NO pattern\nat all — it returns `locale`, `calendar`, `numberingSystem` and per-field\nwidths — and CLDR's own guidance (UTS #35) prefers skeletons to patterns\nfor the same reason: a pattern string is not a lossless container for\nwhat a locale is asking for.\n\nSo: normalise for portability AND preserve for fidelity. `value` is the\nportable answer most callers want; `source` and `dialect` are what the OS\nactually said, for the caller who needs it; the flags carry the requests\nno pattern can hold.",
           "properties": {
+            "dialect": {
+              "description": "The vocabulary `source` is written in: `posix_strftime` or\n`unicode_cldr`. Without this, `source` is an uninterpretable string.",
+              "type": "string"
+            },
+            "era": {
+              "description": "The locale asked for an era — the Lao Buddhist calendar, Japanese\nimperial eras (POSIX `%E`). Same reasoning as `native_digits`.",
+              "type": "boolean"
+            },
+            "native_digits": {
+              "description": "The locale asked for its OWN digits rather than 0-9 — Lao, Myanmar,\nOdia, Eastern Arabic numerals (POSIX `%O`).\n\nA separate field because it cannot be part of a pattern: CLDR carries\nthe numbering system in the locale identifier, which is why\n`resolvedOptions()` reports `numberingSystem` at the top level.",
+              "type": "boolean"
+            },
+            "source": {
+              "description": "Exactly what the operating system returned, unmodified.",
+              "type": "string"
+            },
             "value": {
+              "description": "The format as a Unicode CLDR pattern (UTS #35) — the portable\nanswer, identical in vocabulary on every platform.\n\n`None` when the platform's own format cannot be expressed in CLDR.\nThat is not a failure: `source` is still here, and a caller that\nunderstands `dialect` can use it. Half-converting instead would\nproduce a pattern that parses and is wrong.",
               "type": "string"
             }
           },
           "required": [
-            "value"
+            "source",
+            "dialect",
+            "native_digits",
+            "era"
           ],
-          "title": "NativeTimeFormatResult",
+          "title": "LocaleFormat",
           "type": "object"
         }
       },
