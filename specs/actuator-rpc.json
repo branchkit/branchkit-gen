@@ -3279,6 +3279,14 @@
             "default": "",
             "type": "string"
           },
+          "is_fullscreen": {
+            "description": "Whether the window occupies its display exclusively, where the\nplatform can say. `None` carries the same meaning as above.",
+            "type": "boolean"
+          },
+          "is_minimized": {
+            "description": "Whether the window is minimized (iconified, hidden to a dock or\ntaskbar), where the platform can say.\n\n`Option` and not `bool` for the same reason as `pid`: a platform that\ncannot tell has to be able to say so. `false` would assert that every\nwindow on a session with no minimize concept is on screen, which is a\nclaim rather than an absence — and it is the claim that kept\n`native.window_is_minimized` refused rather than answered wrongly.",
+            "type": "boolean"
+          },
           "pid": {
             "description": "The process that owns this window, where the platform can say.\n\nAdvisory and often absent: on X11 it comes from `_NET_WM_PID`, which\nthe client sets voluntarily. `None` rather than 0, because 0 is a\nreal pid-shaped value that would read as an answer.",
             "format": "int32",
@@ -3325,6 +3333,8 @@
           "desk",
           "h",
           "id",
+          "is_fullscreen",
+          "is_minimized",
           "pid",
           "source",
           "space_ids",
@@ -25274,16 +25284,8 @@
         "name": "native_window_is_fullscreen_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeWindowIsFullscreenResult",
-          "type": "object"
+          "title": "boolean",
+          "type": "boolean"
         }
       },
       "summary": "Check if window is fullscreen",
@@ -25311,16 +25313,8 @@
         "name": "native_window_is_minimized_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeWindowIsMinimizedResult",
-          "type": "object"
+          "title": "boolean",
+          "type": "boolean"
         }
       },
       "summary": "Check if window is minimized",
