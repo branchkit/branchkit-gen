@@ -4379,7 +4379,7 @@
           "name": "permission",
           "required": true,
           "schema": {
-            "description": "Which permission moved: \"accessibility\", \"microphone\", \"camera\",\n\"full_disk_access\", \"automation\", \"post_event\" (the WindowServer\naccepts this process's synthesized keystrokes), \"secure_input\" (the\nkeyboard is free of secure-input fields; `granted: true` = free).\nThe shell reports every state once shortly after boot, then on change.",
+            "description": "Which permission moved: \"accessibility\", \"microphone\", \"camera\",\n\"full_disk_access\", \"automation\", \"post_event\" (the WindowServer\naccepts this process's synthesized keystrokes), \"secure_input\" (the\nkeyboard is free of secure-input fields; `granted: true` = free),\n\"screen_recording\" (every capture path — screenshot, OCR, barcode,\ncolour probe — returns nothing at all without it).\nThe shell reports every state once shortly after boot, then on change.",
             "type": "string"
           }
         }
