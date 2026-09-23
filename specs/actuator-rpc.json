@@ -14614,6 +14614,50 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.format_date",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "style",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "when",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_format_date_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value"
+          ],
+          "title": "NativeFormatDateResult",
+          "type": "object"
+        }
+      },
+      "summary": "Format an instant for the user, ON THE PLATFORM. `when` is an RFC 3339 instant; `style` is one of date, time, date_time. Rendered in the USER'S LOCAL ZONE and their locale's own conventions - including calendars and digits no format pattern can express: a Lao user correctly sees the Buddhist year 2569 where a caller formatting with a CLDR pattern would render 2026, and an Odia user sees Odia digits. Prefer this over native.date_format whenever you are DISPLAYING a date rather than inspecting the locale's format. Output is NOT byte-identical across operating systems and is not meant to be - each renders its own platform's conventions for that locale. See DESIGN_TIME_AND_DATES.md.",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "locale",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.frontmost_app",
       "paramStructure": "by-name",
       "params": [],
@@ -29346,12 +29390,13 @@
     {
       "description": "System locale, timezone, and language settings",
       "gated_event_prefixes": [],
-      "method_count": 13,
+      "method_count": 14,
       "methods": [
         "native.auto_timezone",
         "native.currency_code",
         "native.date_format",
         "native.first_day_of_week",
+        "native.format_date",
         "native.locale",
         "native.measurement_system",
         "native.number_format_decimal",
