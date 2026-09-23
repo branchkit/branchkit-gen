@@ -14221,7 +14221,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Finder shows file extensions",
+      "summary": "Whether the file manager shows file extensions",
       "tags": [
         {
           "name": "native"
@@ -14250,7 +14250,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Finder shows hidden files",
+      "summary": "Whether the file manager shows hidden files",
       "tags": [
         {
           "name": "native"
@@ -14308,7 +14308,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Finder shows status bar",
+      "summary": "Whether the file manager shows a status bar",
       "tags": [
         {
           "name": "native"
@@ -17174,7 +17174,7 @@
           "type": "object"
         }
       },
-      "summary": "Get menu bar clock format string",
+      "summary": "Whether the clock is 12-hour or 24-hour, as 12h or 24h",
       "tags": [
         {
           "name": "native"
