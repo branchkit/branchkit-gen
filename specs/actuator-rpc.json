@@ -15955,7 +15955,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the Darwin kernel version string",
+      "summary": "Get the running kernel version as a bare version string",
       "tags": [
         {
           "name": "native"
