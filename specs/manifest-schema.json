@@ -61,6 +61,13 @@
           },
           "type": "array"
         },
+        "for_host": {
+          "description": "`secret_ref` only: the ONE host the stored credential may be sent\nto. A credential saved from Settings is bound to this, and the binding\ncomes from here — from the manifest the user consented to — never\nfrom the request that stores the value. Must be an exact host (no\nwildcard) that the plugin's own `requires.network` hosts allow.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "key": {
           "description": "JSON key name (e.g. \"selector\", \"direction\").",
           "type": "string"
