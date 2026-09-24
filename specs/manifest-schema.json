@@ -1619,6 +1619,10 @@
                 "type": "string"
               },
               "type": "array"
+            },
+            "requestable": {
+              "description": "The plugin may ask for MORE hosts while it runs\n(`network.request_host`), each off until the user allows it on\nthe plugin's page. For plugins whose endpoints the user chooses\n(a scripts host, a provider picker), which a static list cannot\nname. Disclosed at install. Hosts requested this way are never\ngranted by default — not even for a bundled plugin, because\nnobody consented to that host at install.",
+              "type": "boolean"
             }
           },
           "required": [

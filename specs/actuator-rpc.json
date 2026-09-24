@@ -26102,6 +26102,53 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "network.request_host",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "host",
+          "required": true,
+          "schema": {
+            "description": "One exact host (no wildcard, no port, no path).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "Shown to the user beside the switch — why the plugin wants it.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "network_request_host_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "status": {
+              "description": "`\"allowed\"` — the user has it switched on; `\"pending\"` — it now\nappears on the plugin's page, off, until the user allows it.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "title": "NetworkRequestHostResult",
+          "type": "object"
+        }
+      },
+      "summary": "Ask for one more network host at runtime (a plugin declaring requestable hosts). It appears on the plugin's page, off until the user allows it",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "on_action",
       "paramStructure": "by-name",
       "params": [
@@ -27686,6 +27733,61 @@
         }
       },
       "summary": "The credential names this plugin has stored, and how they are protected on this machine",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "secrets.request_slot",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "host",
+          "required": true,
+          "schema": {
+            "description": "The ONE host the value may be sent to — one this plugin may already\nreach (declared, or requested with `network.request_host`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "label",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "What the user sees on the row, e.g. \"Weather script — API key\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "The secret's name in this plugin's drawer (ASCII letters, digits,\n`_`, `-`, `.`).",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "secrets_request_slot_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "is_set": {
+              "description": "Whether a value is already stored under this name.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "is_set"
+          ],
+          "title": "SecretsRequestSlotResult",
+          "type": "object"
+        }
+      },
+      "summary": "Ask for a credential row on this plugin's Settings page: the user pastes the value straight into the store, bound to one host this plugin can reach. The plugin never sees the value",
       "tags": [
         {
           "name": "misc"
