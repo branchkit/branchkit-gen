@@ -5224,6 +5224,68 @@
       "x-since": "0.2.0"
     },
     {
+      "name": "blob.state",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "name",
+          "required": true,
+          "schema": {
+            "description": "The blob's name, as its provider declared it in `provides.blobs`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "provider",
+          "required": false,
+          "schema": {
+            "description": "The providing plugin. Omitted: the caller's own blob. Another\nplugin's blob is answerable only to a consumer granted to read it.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "blob_state_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "generation": {
+              "description": "The generation file currently being appended to — the one a\nrestarted provider writes next, and the one a consumer opens.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "length": {
+              "description": "Bytes published within that generation.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "version": {
+              "description": "The latest version; it rises across generations AND across actuator\nrestarts, so a consumer can tell new from already-seen.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "generation",
+            "length",
+            "version"
+          ],
+          "title": "BlobStateResult",
+          "type": "object"
+        }
+      },
+      "summary": "Where a blob stands: its current generation, published length and version. For a restarted provider (which generation to write) and a starting consumer (what to open)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "collection.append",
       "paramStructure": "by-name",
       "params": [
