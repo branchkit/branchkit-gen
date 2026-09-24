@@ -1646,6 +1646,49 @@
         ],
         "type": "object"
       },
+      "HttpHeader": {
+        "description": "One request header. Either a literal `value`, or a `secret` the platform\nsubstitutes — `prefix` + the stored value, e.g. `prefix: \"Bearer \"`.",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "prefix": {
+            "description": "Text placed before the substituted secret (`\"Bearer \"`, `\"token \"`).",
+            "type": "string"
+          },
+          "secret": {
+            "description": "The name of one of THIS plugin's stored secrets. It is substituted\nonly if the secret is bound to the request's host; an unbound secret\nis never sent.",
+            "type": "string"
+          },
+          "value": {
+            "description": "A literal value. Exactly one of `value` / `secret`.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "prefix",
+          "secret",
+          "value"
+        ],
+        "type": "object"
+      },
+      "HttpResponseHeader": {
+        "description": "One response header as received.",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ],
+        "type": "object"
+      },
       "HudFragment": {
         "description": "An HTML fragment pushed to a HUD channel. The `target_id` is the DOM element\nID to patch (e.g. \"content\", \"title\"); `html` is the innerHTML replacement.\nWhen `raw` is true, `html` is sent as-is (multiple elements, Datastar patches each by ID).",
         "properties": {
@@ -7182,6 +7225,107 @@
         }
       ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "http.request",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "body",
+          "required": false,
+          "schema": {
+            "description": "A UTF-8 body. Exactly one of `body` / `body_base64`, or neither.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "body_base64",
+          "required": false,
+          "schema": {
+            "description": "A binary body, base64.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "headers",
+          "required": false,
+          "schema": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/HttpHeader"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "method",
+          "required": false,
+          "schema": {
+            "description": "`GET` when omitted.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "timeout_ms",
+          "required": false,
+          "schema": {
+            "description": "Overall deadline; default 30000, at most 120000.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "url",
+          "required": true,
+          "schema": {
+            "description": "`https://` only, to a host this plugin declares in `requires.network`\nand the user has allowed.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "http_request_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "body": {
+              "description": "The body as text when it is valid UTF-8.",
+              "type": "string"
+            },
+            "body_base64": {
+              "description": "The body, base64. Always present.",
+              "type": "string"
+            },
+            "headers": {
+              "items": {
+                "$ref": "#/$defs/HttpResponseHeader"
+              },
+              "type": "array"
+            },
+            "status": {
+              "format": "uint16",
+              "maximum": 65535,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "status",
+            "headers",
+            "body_base64"
+          ],
+          "title": "HttpRequestResult",
+          "type": "object"
+        }
+      },
+      "summary": "Perform an HTTPS request to one of this plugin's allowed hosts, substituting the plugin's stored secrets into named headers. The plugin never sees the secret; redirects are returned, not followed",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "hud.create_channel",
