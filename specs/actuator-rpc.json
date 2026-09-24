@@ -30019,6 +30019,14 @@
       "risk": "low"
     },
     {
+      "description": "Capture microphone audio in a pipeline stage the plugin ships",
+      "gated_event_prefixes": [],
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.microphone",
+      "risk": "dangerous"
+    },
+    {
       "description": "Run machine-learning models on the Neural Engine (on-device acceleration; no network access, no file access)",
       "gated_event_prefixes": [],
       "method_count": 0,
