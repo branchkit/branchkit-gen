@@ -28621,7 +28621,7 @@
           "type": "object"
         }
       },
-      "summary": "Run a shell command via /bin/bash -c (security-sensitive)",
+      "summary": "Start a shell command via /bin/bash -c, run by the actuator outside any plugin sandbox (security-sensitive; not on Windows)",
       "tags": [
         {
           "name": "system"
@@ -29945,7 +29945,7 @@
       "risk": "low"
     },
     {
-      "description": "Run shell commands and scripts",
+      "description": "Run shell commands and scripts outside the plugin's sandbox, with BranchKit's own access to your files and network",
       "gated_event_prefixes": [],
       "method_count": 2,
       "methods": [
