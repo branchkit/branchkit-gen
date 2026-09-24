@@ -223,7 +223,7 @@
                 "type": "null"
               }
             ],
-            "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary.\n\nDeserialization is deliberately LENIENT: an unrecognized role string\ndegrades to `None` instead of failing the whole manifest parse.\nDisplay roles are guaranteed display-only (the matcher never reads\nthem), so a plugin built against a newer SDK that declares a role\nthis host predates must still load — strictness tracks blast\nradius. The typo-catching strictness lives at publish time\n(branchkit-gen validates against the schema's closed enum) and in\nthe load-time validator, which walks the raw JSON and emits a loud\nwarning for every unknown role it degraded. See\ndocs/design/DESIGN_COLLECTION_FIELD_ROLES.md, Decision 5."
+            "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary.\n\nDeserialization is deliberately LENIENT: an unrecognized role string\ndegrades to `None` instead of failing the whole manifest parse.\nDisplay roles are guaranteed display-only (the matcher never reads\nthem), so a plugin built against a newer SDK that declares a role\nthis host predates must still load — strictness tracks blast\nradius. The typo-catching strictness lives at publish time\n(branchkit-gen validates against the schema's closed enum) and in\nthe load-time validator, which walks the raw JSON and emits a loud\nwarning for every unknown role it degraded."
           },
           "enum_values": {
             "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
@@ -298,7 +298,7 @@
             "type": "string"
           },
           "modes": {
-            "description": "Supported interaction modes: \"tap\" (single press), \"hold\" (start/stop via phase),\nand/or \"toggle\" (start/stop cycle). Defaults to [\"tap\"] if omitted.",
+            "description": "Supported interaction modes: \"tap\" (single press), \"hold\" (start/stop via phase),\nand/or \"toggle\" (start/stop cycle). Defaults to [\"tap\"] if omitted.\nModes are declared, not inferred (modelled on QMK keycode types and\nStream Deck action manifests): a \"hold\" action handles press/release\nitself via `phase`, so a peripheral UI should not ask the user to pick\na separate release action for it.",
             "items": {
               "type": "string"
             },
@@ -667,7 +667,7 @@
             "type": "string"
           },
           "on_behalf_of": {
-            "description": "Actor label of the writer that CREATED this record — which hosted\nthing the `writer` plugin was acting for. `None` for the ordinary\ncase: a plugin acting only for itself.\n\nCreation-stamped, exactly like `writer` and for the same reason: it\nis the finer-grained half of the same answer (\"whose record is\nthis\"), so touching a record must not relabel it. Last-touch\nattribution is the audit log's job, and it carries the label too.\n\n**Not an ownership axis.** `collection.replace` scopes its\ncomplement by `writer` alone; two scripts hosted by one plugin share\none owner, because the platform grants and enforces at the plugin.\nMaking this a scoping key would turn an observability label into a\nsub-principal, which `docs/design/DESIGN_HOST_PLUGINS.md` forbids. Per-\nhosted-thing separation is the host's job — one host-owned\ncollection namespaced by script, not a platform ownership rule.",
+            "description": "Actor label of the writer that CREATED this record — which hosted\nthing the `writer` plugin was acting for. `None` for the ordinary\ncase: a plugin acting only for itself.\n\nCreation-stamped, exactly like `writer` and for the same reason: it\nis the finer-grained half of the same answer (\"whose record is\nthis\"), so touching a record must not relabel it. Last-touch\nattribution is the audit log's job, and it carries the label too.\n\n**Not an ownership axis.** `collection.replace` scopes its\ncomplement by `writer` alone; two scripts hosted by one plugin share\none owner, because the platform grants and enforces at the plugin.\nMaking this a scoping key would turn an observability label into a\nsub-principal: the platform cannot tell hosted things apart inside one\nprocess, so per-hosted-thing enforcement would be theatre. Per-\nhosted-thing separation is the host's job — one host-owned\ncollection namespaced by script, not a platform ownership rule.",
             "type": "string"
           },
           "payload": {},
@@ -687,7 +687,7 @@
           },
           "writer": {
             "default": "",
-            "description": "Who owns this record: the plugin id that CREATED it, or `_platform`\nfor host writes. Backend-maintained. `\"\"` = written before this field\nexisted.\n\n**Creation, not last touch** — deliberately unlike `revision` and\n`timestamp_ms`, which both track the most recent write. A later write\nby a different plugin does not transfer ownership, because the\nquestion this field answers is \"whose record is this\", not \"who\ntouched it last\". Last-touch is already served by the audit log; what\nthe platform had no answer for was ownership.\n\nThis is what lets a write be scoped to its author.\n`collection.replace` computes its complement over records whose writer\nis the caller, so a replace can only ever delete what that caller\ncreated — which is why a collection-wide replace is safe for any\nwriter the collection accepts, not just its introducer, and why\nanother plugin's records (and the user's) are invisible to the diff.\n`ListOpts.writer` is the read-side twin: ask for your own records.\n\nSee docs/design/DESIGN_RECORD_OWNERSHIP.md.",
+            "description": "Who owns this record: the plugin id that CREATED it, or `_platform`\nfor host writes. Backend-maintained. `\"\"` = written before this field\nexisted.\n\n**Creation, not last touch** — deliberately unlike `revision` and\n`timestamp_ms`, which both track the most recent write. A later write\nby a different plugin does not transfer ownership, because the\nquestion this field answers is \"whose record is this\", not \"who\ntouched it last\". Last-touch is already served by the audit log; what\nthe platform had no answer for was ownership.\n\nThis is what lets a write be scoped to its author.\n`collection.replace` computes its complement over records whose writer\nis the caller, so a replace can only ever delete what that caller\ncreated — which is why a collection-wide replace is safe for any\nwriter the collection accepts, not just its introducer, and why\nanother plugin's records (and the user's) are invisible to the diff.\n`ListOpts.writer` is the read-side twin: ask for your own records.\n\nA later write never transfers ownership, and a keyed-log fold keeps the\nintroducing entry's writer, so annotating someone else's record never\ninherits it.",
             "type": "string"
           }
         },
@@ -763,7 +763,7 @@
         "type": "object"
       },
       "CommandOverride": {
-        "description": "A user override of a command's *spoken phrase* — \"say `new_pattern` instead\nof `default_pattern` for `action`.\" A keyed delta on top of the contributed\ndefaults, owned by the platform and applied when the command union is built\n(`rebuild_commands_cache`), so it wins over the default and survives the\ncontributing plugin/extension re-contributing on reconnect.\n\nKeyed by the stable `(action, default_pattern)` identity, NOT by the phrase\n(which changes the instant you override it):\n - `action` — the full action id (`Action::type_label`, e.g.\n   `browser.scroll`), carrying the plugin prefix so the layer stays\n   plugin-agnostic across browser/tiling/system.\n - `default_pattern` — the default spoken form this replaces\n   (`Command::display_name`, the actuator's canonical `<capture>` notation).\n   Needed because one action can carry several patterns, each with its own\n   params; the key names which one.\n\nA stale override (default renamed/removed upstream) simply stops matching\nand the new default applies — single source + derived delta, no dual-sync.\nSee `docs/design/DESIGN_COMMAND_PHRASE_OVERRIDES.md`.",
+        "description": "A user override of a command's *spoken phrase* — \"say `new_pattern` instead\nof `default_pattern` for `action`.\" A keyed delta on top of the contributed\ndefaults, owned by the platform and applied when the command union is built\n(`rebuild_commands_cache`), so it wins over the default and survives the\ncontributing plugin/extension re-contributing on reconnect.\n\nKeyed by the stable `(action, default_pattern)` identity, NOT by the phrase\n(which changes the instant you override it):\n - `action` — the full action id (`Action::type_label`, e.g.\n   `browser.scroll`), carrying the plugin prefix so the layer stays\n   plugin-agnostic across browser/tiling/system.\n - `default_pattern` — the default spoken form this replaces\n   (`Command::display_name`, the actuator's canonical `<capture>` notation).\n   Needed because one action can carry several patterns, each with its own\n   params; the key names which one.\n\nA stale override (default renamed/removed upstream) simply stops matching\nand the new default applies — single source + derived delta, no dual-sync.\nKeyed by identity, not by phrase: a phrase key changes the moment it is\noverridden, so it could never be reset or re-targeted.",
         "properties": {
           "action": {
             "type": "string"
@@ -788,7 +788,7 @@
             "type": "string"
           },
           "action_json": {
-            "description": "Raw action JSON for editor decomposition (complements the display\n`action` string).\n\nOPEN BY DESIGN — do not declare this `Option<Action>`. It is built by\n`crate::actions::action_to_json`, which is NOT `serde::to_value`: for\na parameterized command (`Action::Template` / `CompiledTemplate`, the\nshape every command with captures carries) it deliberately emits the\nAUTHORED dialect — a flat `{\"type\": \"browser.scroll\", …}` whose `type`\nis the dotted plugin action type, not the `Action` tag. That is the\nright thing for an editor, which decomposes and round-trips what the\nauthor wrote, but it is a superset of the `Action` wire shape and one\ngenerated type would lie about it. Same verdict, same reason, as\n`CommandSpec.action`. See the ledger in\ndocs/design/DESIGN_SDK_GENERATION_FIDELITY.md."
+            "description": "Raw action JSON for editor decomposition (complements the display\n`action` string).\n\nOPEN BY DESIGN — do not declare this `Option<Action>`. It is built by\n`crate::actions::action_to_json`, which is NOT `serde::to_value`: for\na parameterized command (`Action::Template` / `CompiledTemplate`, the\nshape every command with captures carries) it deliberately emits the\nAUTHORED dialect — a flat `{\"type\": \"browser.scroll\", …}` whose `type`\nis the dotted plugin action type, not the `Action` tag. That is the\nright thing for an editor, which decomposes and round-trips what the\nauthor wrote, but it is a superset of the `Action` wire shape and one\ngenerated type would lie about it. Same verdict, same reason, as\n`CommandSpec.action`: this field's verdict follows the function that\nbuilds it (`action_to_json`), not the type it is built from."
           },
           "canonical": {
             "type": "string"
@@ -887,10 +887,10 @@
         "description": "One Command in a `commands.push` payload — published purely for\ndiscoverability. Wire deserialization goes through\n`commands::parse_commands_with_templates` against the opaque JSON\nvalue, so adding/removing a field here doesn't change runtime\nbehavior. Edit `commands::PartialCommand` first; mirror here.",
         "properties": {
           "action": {
-            "description": "Action fired on match.\n\nOPEN BY DESIGN — deliberately NOT declared `crate::actions::Action`,\nunlike `dispatch`'s `action` and `commands.resolve`'s, which are\ntyped. What `commands.push` accepts is the AUTHORED dialect, and\n`crate::actions::parse_action_or_template` shows it is a strict\nsuperset of the `Action` wire shape: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), the sequence\nenvelope (`{\"type\":\"sequence\",\"actions\":[…]}`) whose entries are\nthemselves authored-dialect, AND the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` carries a dotted plugin\naction type and the remaining keys are the params. Commands whose\npattern has captures additionally carry `{N}` placeholders, which\n`templateify_commands` later turns into `Action::Template`.\n\nOne generated type would have to lie about at least two of those, so\nthis stays `Value` and is defended in the ledger in\ndocs/design/DESIGN_SDK_GENERATION_FIDELITY.md rather than counted as\na gap. `branchkit-gen` types the params per plugin from the plugin's\nown `action_types`, which is where an author actually gets checked."
+            "description": "Action fired on match.\n\nOPEN BY DESIGN — deliberately NOT declared `crate::actions::Action`,\nunlike `dispatch`'s `action` and `commands.resolve`'s, which are\ntyped. What `commands.push` accepts is the AUTHORED dialect, and\n`crate::actions::parse_action_or_template` shows it is a strict\nsuperset of the `Action` wire shape: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), the sequence\nenvelope (`{\"type\":\"sequence\",\"actions\":[…]}`) whose entries are\nthemselves authored-dialect, AND the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` carries a dotted plugin\naction type and the remaining keys are the params. Commands whose\npattern has captures additionally carry `{N}` placeholders, which\n`templateify_commands` later turns into `Action::Template`.\n\nOne generated type would have to lie about at least two of those, so\nthis stays `Value`, deliberately open rather than counted as a gap to\nclose. `branchkit-gen` types the params per plugin from the plugin's\nown `action_types`, which is where an author actually gets checked."
           },
           "cancels_bridge": {
-            "description": "When true, this gated command is allowed to win during a\nmid-bridge restricted resolve. Default false: gated sibling\ncommands (`show_hints`, `dismiss`-style) are suppressed while\nthe user is mid-codeword. Set true on explicit cancel words\n(`dismiss`, `cancel`, `exit`) that should be able to abort an\nin-progress bridge. See\n`docs/design/DESIGN_MULTI_CANDIDATE_BRIDGE.md`.",
+            "description": "When true, this gated command is allowed to win during a\nmid-bridge restricted resolve. Default false: gated sibling\ncommands (`show_hints`, `dismiss`-style) are suppressed while\nthe user is mid-codeword. Set true on explicit cancel words\n(`dismiss`, `cancel`, `exit`) that should be able to abort an\nin-progress bridge.",
             "type": "boolean"
           },
           "category": {
@@ -909,14 +909,14 @@
             "type": "string"
           },
           "discovery": {
-            "description": "Prefix-discovery affordance for a `literal-prefix + tail-capture`\ncommand (e.g. `[\"jump\", \"<browser_tabs>\"]`). Declaring it makes the\nbare prefix (\"jump\") speakable on its own: instead of firing, it opens\nthe Discovery HUD over the capture's entries. One of:\n`\"prefix\"` (non-exclusive — the capture's words stay live in free\ncontext) or `\"exclusive\"` (entering the prefix flips an auto-minted\nmode so the words only decode while it holds — for large/dynamic sets).\nOnly valid when the pattern is literal word(s) followed by a single\ntail capture; other shapes are rejected at load. See\n`docs/design/DESIGN_DISCOVERABLE_PREFIX.md`.",
+            "description": "Prefix-discovery affordance for a `literal-prefix + tail-capture`\ncommand (e.g. `[\"jump\", \"<browser_tabs>\"]`). Declaring it makes the\nbare prefix (\"jump\") speakable on its own: instead of firing, it opens\nthe Discovery HUD over the capture's entries. One of:\n`\"prefix\"` (non-exclusive — the capture's words stay live in free\ncontext) or `\"exclusive\"` (entering the prefix flips an auto-minted\nmode so the words only decode while it holds — for large/dynamic sets).\nOnly valid when the pattern is literal word(s) followed by a single\ntail capture; other shapes are rejected at load so an author learns\nwhere they wrote it.",
             "type": "string"
           },
           "display_sources": {
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Discovery-HUD display override per capture binding name: when the\nHUD renders a capture slot of this command, enumerate the named\ncollection instead of the matching one. Matching is untouched — a\nsealed/static matching collection can pair with a live display menu.\nUnknown capture names are inert. See\n`docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md`.",
+            "description": "Discovery-HUD display override per capture binding name: when the\nHUD renders a capture slot of this command, enumerate the named\ncollection instead of the matching one. Matching is untouched — a\nsealed/static matching collection can pair with a live display menu.\nUnknown capture names are inert.",
             "type": "object"
           },
           "pattern": {
@@ -932,7 +932,7 @@
             "type": "array"
           },
           "sets_on_partial": {
-            "description": "Tags this command sets when it Partial-matches (mid-capture\nmode tag). Bound to the bridge's lifecycle; cleared on\ncompletion. See `docs/design/DESIGN_SETS_ON_PARTIAL.md`.",
+            "description": "Tags this command sets when it Partial-matches (mid-capture\nmode tag). Bound to the bridge's lifecycle; cleared on\ncompletion; the tag is the authoritative in-progress state, so the\nscope filter silences off-vocabulary words mid-capture.",
             "items": {
               "type": "string"
             },
@@ -1442,7 +1442,7 @@
         "type": "object"
       },
       "FieldDisplay": {
-        "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `docs/design/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
+        "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nRoles are a closed vocabulary so every surface renders a named role the\nsame way; publish rejects an unknown role, load degrades it to no-role\nwith a warning. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
         "enum": [
           "primary",
           "secondary",
@@ -1817,10 +1817,10 @@
         "type": "object"
       },
       "ListOpts": {
-        "description": "Listing parameters for `list`. All fields optional — an empty `ListOpts`\nasks a BACKEND for every record in default ordering. That is not what an\nRPC caller gets: `StateService::list` substitutes\n`StateService::DEFAULT_LIST_LIMIT` when the caller passed no `limit`, so\n\"every record\" is the backend contract and never the plugin-visible one.\nSee docs/design/DESIGN_PLATFORM_LOAD_SAFEGUARDS.md.\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
+        "description": "Listing parameters for `list`. All fields optional — an empty `ListOpts`\nasks a BACKEND for every record in default ordering. That is not what an\nRPC caller gets: `StateService::list` substitutes\n`StateService::DEFAULT_LIST_LIMIT` when the caller passed no `limit`, so\n\"every record\" is the backend contract and never the plugin-visible one.\nBytes are bounded at ingress (64 KB per record, 8 MB per writer per\ncollection), so this default only has to bound record count;\n`ListAll`/`ListAllCompacted` are the exhaustive opt-out.\nCLOSED vocabulary (verb-surface consolidation, 2026-06-11): every\nadded opt must be shape-generic or explicitly shape-scoped and\ndocumented here — an undisciplined\nopts bag becomes a hidden taxonomy that defeats the eight-verb thesis.",
         "properties": {
           "compacted": {
-            "description": "Shape-scoped to `by_field` log collections (the compacted-changelog\nprojection — see `docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md`, and\nDESIGN_PLATFORM_STATE.md §3.2). When true, a keyed log's raw appends\nare folded by their key field per the collection's `merge` and one\nrecord per key is returned (the record's current state) instead of the\nraw append history. Ignored by non-log backends; a validation error on\nan auto-ulid log (no key field to fold on). Absent/false = raw read.",
+            "description": "Shape-scoped to `by_field` log collections (the compacted-changelog\nprojection; shape-scoped under the closed-ListOpts rule above). When true, a keyed log's raw appends\nare folded by their key field per the collection's `merge` and one\nrecord per key is returned (the record's current state) instead of the\nraw append history. Ignored by non-log backends; a validation error on\nan auto-ulid log (no key field to fold on). Absent/false = raw read.",
             "type": "boolean"
           },
           "cursor": {
@@ -1846,7 +1846,7 @@
             "type": "integer"
           },
           "writer": {
-            "description": "Shape-generic equality filter on `Record::writer` — return only records\nowned by this writer. Absent = every record, whoever owns it.\n\nThis is the ONE in-verb extension DESIGN_PLATFORM_STATE.md section 3.2\nreserved (\"the only in-verb extension we would entertain is equality\nfilters on list opts\"), spent here rather than on a general predicate\nlanguage: it is exact equality on one structural envelope field, so it\ncannot compose into a query engine every backend must reimplement.\n\nIt exists so a caller can ask for its OWN records — the read half of\nscoped writes. `collection.replace` computes its complement from this,\nwhich is what lets a replace be safe on a multi-writer collection\nwithout the introducer restriction. See docs/design/DESIGN_RECORD_OWNERSHIP.md.\n\nFiltering happens BEFORE `limit`, so a limited+filtered read returns up\nto `limit` MATCHING records rather than the matches within the first\n`limit` records. Backends are free to filter earlier as an optimization\n(skipping a whole non-matching contribution, say) as long as the\nobservable result is identical — `backend_conformance` pins that.",
+            "description": "Shape-generic equality filter on `Record::writer` — return only records\nowned by this writer. Absent = every record, whoever owns it.\n\nThis is the ONE in-verb extension the eight-verb design reserved\n(\"the only in-verb extension we would entertain is equality\nfilters on list opts\"), spent here rather than on a general predicate\nlanguage: it is exact equality on one structural envelope field, so it\ncannot compose into a query engine every backend must reimplement.\n\nIt exists so a caller can ask for its OWN records — the read half of\nscoped writes. `collection.replace` computes its complement from this,\nwhich is what lets a replace be safe on a multi-writer collection\nwithout the introducer restriction.\n\nFiltering happens BEFORE `limit`, so a limited+filtered read returns up\nto `limit` MATCHING records rather than the matches within the first\n`limit` records. Backends are free to filter earlier as an optimization\n(skipping a whole non-matching contribution, say) as long as the\nobservable result is identical — `backend_conformance` pins that.",
             "type": "string"
           }
         },
@@ -2238,7 +2238,7 @@
             "description": "What confirming this item does. Absent means information only."
           },
           "alt_phrases": {
-            "description": "Other phrases that also confirm this item — a subtitle that is itself\nsayable, an alias. Meaning, not presentation: a renderer that shows\nthe subtitle may mark it as a way in when it appears here; a speech\nrenderer may accept any of them. Promoted into core 2026-09-19 from\nvoice's `extra.voice.speakable_subtitles` — the first extension the\nplatform's own renderer needed, which is the promotion rule in\n`DESIGN_SEMANTIC_OUTPUT_CHANNEL.md` (\"The shape\") working as written.",
+            "description": "Other phrases that also confirm this item — a subtitle that is itself\nsayable, an alias. Meaning, not presentation: a renderer that shows\nthe subtitle may mark it as a way in when it appears here; a speech\nrenderer may accept any of them. Promoted into core 2026-09-19 from\nvoice's `extra.voice.speakable_subtitles` — the first extension the\nplatform's own renderer needed, which is the promotion rule working as\nwritten: an extension a renderer depends on is promoted into core\ndeliberately, as a versioned addition, rather than read quietly from\n`extra`.",
             "items": {
               "type": "string"
             },
@@ -2779,7 +2779,7 @@
         "type": "object"
       },
       "ReplaceScope": {
-        "description": "Which of the CALLER'S OWN records `collection.replace` may delete — the\n\"complement\" it is allowed to clear.\n\nThe complement is always computed over records whose `writer` is the caller,\nso no scope can reach another plugin's records or the user's. Scope chooses\namong the caller's own; the worst a wrong one can do is clear too much of\nwhat you yourself published.\n\nStill explicit and required, never inferred: \"everything I own here\" and\n\"the subset under this key space\" are different intentions, and guessing\nbetween them is how a refresh silently becomes a wipe. See\ndocs/design/DESIGN_RECORD_OWNERSHIP.md and docs/design/DESIGN_COLLECTION_REPLACE.md.",
+        "description": "Which of the CALLER'S OWN records `collection.replace` may delete — the\n\"complement\" it is allowed to clear.\n\nThe complement is always computed over records whose `writer` is the caller,\nso no scope can reach another plugin's records or the user's. Scope chooses\namong the caller's own; the worst a wrong one can do is clear too much of\nwhat you yourself published.\n\nStill explicit and required, never inferred: \"everything I own here\" and\n\"the subset under this key space\" are different intentions, and guessing\nbetween them is how a refresh silently becomes a wipe.",
         "oneOf": [
           {
             "description": "Every other record the CALLER OWNS in this collection is the\ncomplement — whatever group it carries, ungrouped included. Permitted\nfor any writer the collection accepts, not only its introducer: a\nco-writer on a `writers: anyone_who_declares` collection manages its\nown contribution this way, and cannot touch anyone else's.",
@@ -3894,7 +3894,7 @@
           }
         }
       ],
-      "summary": "Plugin's exclusivity-shape effect assertion was overridden by a later asserter — see docs/design/DESIGN_CAPABILITY_MECHANISM.md section 10.2",
+      "summary": "Plugin's exclusivity-shape effect assertion was overridden by a later asserter",
       "tags": [
         {
           "name": "notifications"
@@ -3932,7 +3932,7 @@
           }
         }
       ],
-      "summary": "An effect's effective owner changed (including held→free) — the provider-facing twin of effect.displaced; see docs/design/DESIGN_PLUGIN_DEFINED_EFFECTS.md",
+      "summary": "An effect's effective owner changed (including held→free) — the provider-facing twin of effect.displaced",
       "tags": [
         {
           "name": "notifications"
@@ -4536,7 +4536,7 @@
           "name": "dictation_profile",
           "required": false,
           "schema": {
-            "description": "What this utterance IS, per the modes active when it was emitted:\n`query` (a search box, a field name — prosody punctuation is noise) or\n`prose` (writing — punctuation is intended). Declared by a gate\ncollection, carried verbatim; the platform never interprets it. Absent\nmeans no active mode declared one, and the engine owner's default\n(prose) stands. See `docs/design/DESIGN_DICTATION_PROFILES.md`.",
+            "description": "What this utterance IS, per the modes active when it was emitted:\n`query` (a search box, a field name — prosody punctuation is noise) or\n`prose` (writing — punctuation is intended). Declared by a gate\ncollection, carried verbatim; the platform never interprets it. Absent\nmeans no active mode declared one, and the engine owner's default\n(prose) stands.",
             "type": "string"
           }
         },
@@ -5801,7 +5801,7 @@
           "required": false,
           "schema": {
             "default": [],
-            "description": "Records to upsert. Always an array; single-record callers wrap one\nentry. The wire format is uniform across single and bulk callers;\nthe SDK helpers (`Put` vs `PutMany`) hide the wrapping for the\nsingle-record case. See docs/design/DESIGN_BROWSER_HINT_SILENT_EVICTION.md\nfor the rationale.",
+            "description": "Records to upsert. Always an array; single-record callers wrap one\nentry. The wire format is uniform across single and bulk callers;\nthe SDK helpers (`Put` vs `PutMany`) hide the wrapping for the\nsingle-record case. Per-key upserts replaced whole-collection REPLACE\npushes, which silently dropped codewords when a caller pushed an\nintermediate snapshot.",
             "items": {
               "$ref": "#/$defs/CollectionPutEntry"
             },
@@ -5820,7 +5820,7 @@
           "name": "label",
           "required": false,
           "schema": {
-            "description": "Optional human-readable label for the collection as a whole — the\nfriendly category name shown on the Discovery HUD's tag badge and in\nthe Settings UI, in place of the raw collection id (`Badge` instead of\n`browser_hints_arch_strict`). This is the dynamic-collection counterpart\nto a manifest-declared collection's `schema.label`; a plugin creating a\ncollection at runtime declares its label here. Same persistence\nsemantics as `roles`: last-write-wins, and a put omitting `label`\nleaves the prior setting in place. See\n`docs/design/DESIGN_COLLECTION_FIELD_ROLES.md`.",
+            "description": "Optional human-readable label for the collection as a whole — the\nfriendly category name shown on the Discovery HUD's tag badge and in\nthe Settings UI, in place of the raw collection id (`Badge` instead of\n`browser_hints_arch_strict`). This is the dynamic-collection counterpart\nto a manifest-declared collection's `schema.label`; a plugin creating a\ncollection at runtime declares its label here. Same persistence\nsemantics as `roles`: last-write-wins, and a put omitting `label`\nleaves the prior setting in place.",
             "type": "string"
           }
         },
@@ -6400,7 +6400,7 @@
           "name": "group",
           "required": false,
           "schema": {
-            "description": "Optional named group this push owns. Absent replaces the plugin's\nENTIRE command set (the original semantics, unchanged); present\nreplaces only the records in that group and leaves the plugin's other\ngroups intact.\n\nExists because the single implicit slot is a race whenever a plugin has\nmore than one command source. Browser has five (scroll, find,\nreferences, hint skeleton, palette) and each used to push\nindependently — whichever landed last was the only set the matcher saw,\nand the hint skeleton routinely lost. Its workaround is a mutex plus\nrebuilding the union from every builder on each call. With groups each\nsource owns its own, and dropping a source drops its group.\n\nSee docs/design/PRINCIPLE_PLUGIN_HELD_STATE.md — this is the same\n\"can two of these coexist?\" failure that `collection.replace`'s scope\nfixes for records.",
+            "description": "Optional named group this push owns. Absent replaces the plugin's\nENTIRE command set (the original semantics, unchanged); present\nreplaces only the records in that group and leaves the plugin's other\ngroups intact.\n\nExists because the single implicit slot is a race whenever a plugin has\nmore than one command source. Browser has five (scroll, find,\nreferences, hint skeleton, palette) and each used to push\nindependently — whichever landed last was the only set the matcher saw,\nand the hint skeleton routinely lost. Its workaround is a mutex plus\nrebuilding the union from every builder on each call. With groups each\nsource owns its own, and dropping a source drops its group.\n\nThis is the same \"can two of these coexist?\" failure that\n`collection.replace`'s scope fixes for records: a primitive that assumes\none source breaks as soon as there are two.",
             "type": "string"
           }
         }
@@ -12060,7 +12060,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the user's current local date and time as an RFC 3339 ZONED timestamp (offset populated, e.g. 2026-09-22T17:32:29-04:00). Deliberately zoned, not UTC: this answers 'what time is it for the user', and the offset is lossless - UTC is derivable from it, while local time is NOT derivable from a UTC instant without separately knowing the zone. Pair with native.timezone for the IANA identifier when you need DST-correct arithmetic rather than the current wall clock. See DESIGN_TIME_AND_DATES.md.",
+      "summary": "Get the user's current local date and time as an RFC 3339 ZONED timestamp (offset populated, e.g. 2026-09-22T17:32:29-04:00). Deliberately zoned, not UTC: this answers 'what time is it for the user', and the offset is lossless - UTC is derivable from it, while local time is NOT derivable from a UTC instant without separately knowing the zone. Pair with native.timezone for the IANA identifier when you need DST-correct arithmetic rather than the current wall clock.",
       "tags": [
         {
           "name": "native"
@@ -14859,7 +14859,7 @@
           "type": "object"
         }
       },
-      "summary": "Format an instant for the user, ON THE PLATFORM. `when` is an RFC 3339 instant; `style` is one of date, time, date_time. Rendered in the USER'S LOCAL ZONE and their locale's own conventions - including calendars and digits no format pattern can express: a Lao user correctly sees the Buddhist year 2569 where a caller formatting with a CLDR pattern would render 2026, and an Odia user sees Odia digits. Prefer this over native.date_format whenever you are DISPLAYING a date rather than inspecting the locale's format. Output is NOT byte-identical across operating systems and is not meant to be - each renders its own platform's conventions for that locale. See DESIGN_TIME_AND_DATES.md.",
+      "summary": "Format an instant for the user, ON THE PLATFORM. `when` is an RFC 3339 instant; `style` is one of date, time, date_time. Rendered in the USER'S LOCAL ZONE and their locale's own conventions - including calendars and digits no format pattern can express: a Lao user correctly sees the Buddhist year 2569 where a caller formatting with a CLDR pattern would render 2026, and an Odia user sees Odia digits. Prefer this over native.date_format whenever you are DISPLAYING a date rather than inspecting the locale's format. Output is NOT byte-identical across operating systems and is not meant to be - each renders its own platform's conventions for that locale.",
       "tags": [
         {
           "name": "native"
@@ -26571,7 +26571,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Which overlay tenant this mutation targets — a writer-namespace value\n(`\"_user\"` or a plugin id). Defaults: a plugin caller targets its OWN\noverlay; a host caller targets `\"_user\"`. A plugin transporting a user\ngesture from its settings tab says `\"_user\"` explicitly; it may never\ntarget another plugin's overlay. Plugin overlays carry per-field\npatches only (`patch`/`restore`/`reset`) — annotation, not authorship\n(docs/design/DESIGN_WRITER_SCOPED_OVERLAY.md).",
+            "description": "Which overlay tenant this mutation targets — a writer-namespace value\n(`\"_user\"` or a plugin id). Defaults: a plugin caller targets its OWN\noverlay; a host caller targets `\"_user\"`. A plugin transporting a user\ngesture from its settings tab says `\"_user\"` explicitly; it may never\ntarget another plugin's overlay. Plugin overlays carry per-field\npatches only (`patch`/`restore`/`reset`) — annotation, not authorship;\na plugin's patch never changes who owns the record.",
             "type": "string"
           }
         }
@@ -28234,7 +28234,7 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "conflict": {
-              "description": "Terminal-command-rule conflict report: a human-readable reason if this\ncandidate command would make another command unreachable (or be\nunreachable itself). **Advisory only** — the actuator does NOT block the\nsave; the caller decides what to do. Null when there's no conflict. With\n`check_only: true` in the request, the candidate is checked and reported\nbut NOT saved. See docs/design/DESIGN_COMMAND_FINALIZATION_RULE.md.",
+              "description": "Terminal-command-rule conflict report: a human-readable reason if this\ncandidate command would make another command unreachable (or be\nunreachable itself). **Advisory only** — the actuator does NOT block the\nsave; the caller decides what to do. Null when there's no conflict. With\n`check_only: true` in the request, the candidate is checked and reported\nbut NOT saved. The actuator only reports; blocking a user-authored save\nis the calling plugin's decision.",
               "type": "string"
             },
             "ok": {
@@ -29145,7 +29145,7 @@
       "writers": "anyone_who_declares"
     },
     {
-      "description": "Key name → keycode for this platform. The NAME REGISTRY behind `input.press_key` with a `name`, and behind hotkey registration: whichever surface turns a spoken or written key name into an OS event resolves it here, so the four paths cannot disagree about which keys exist or how they are spelled. Platform-owned and platform-SEEDED (see `collection_data` below): named keys work on a bare install with no plugins, which is the point — this used to be a plugin-introduced collection called `keycodes`, and the platform's ability to press `return` was hostage to the keyboard plugin being installed. That made key naming a SLOT; per the same reasoning as `_platform.input`, it should be a category. `writers: anyone_who_declares` is what makes it one: a remapper, an alternative-layout plugin, or hardware support can extend or correct the baseline, and users edit it like any other collection. `code` is authoritative where the OS injects by numeric keycode (macOS virtual keycodes). Off macOS the actuator resolves names through enigo's and global_hotkey's own vocabularies, and `code` carries that platform's native value for reference; see docs/design/DESIGN_SHAPED_CONSUMPTION.md for why those two encodings are not interchangeable.",
+      "description": "Key name → keycode for this platform. The NAME REGISTRY behind `input.press_key` with a `name`, and behind hotkey registration: whichever surface turns a spoken or written key name into an OS event resolves it here, so the four paths cannot disagree about which keys exist or how they are spelled. Platform-owned and platform-SEEDED (see `collection_data` below): named keys work on a bare install with no plugins, which is the point — this used to be a plugin-introduced collection called `keycodes`, and the platform's ability to press `return` was hostage to the keyboard plugin being installed. That made key naming a SLOT; per the same reasoning as `_platform.input`, it should be a category. `writers: anyone_who_declares` is what makes it one: a remapper, an alternative-layout plugin, or hardware support can extend or correct the baseline, and users edit it like any other collection. `code` is what `enigo.raw()` injects on this target: macOS virtual keycodes, X11-convention keycodes on Linux (evdev + 8), Windows scancodes with the 0xE0 prefix on extended keys. Native OS encodings (raw evdev, Windows virtual-key codes) are not interchangeable with these.",
       "name": "_platform.key_names",
       "preset": "named_entities",
       "writers": "anyone_who_declares"

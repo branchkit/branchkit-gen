@@ -247,7 +247,7 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	// The pre-`requires` flat shape, called out before the generic unknown
 	// -field pass below would soften it to info.
 	//
-	// These five moved into `requires` (DESIGN_MANIFEST_REQUEST_BLOCK.md).
+	// These five moved into `requires` in manifest api_version 0.2.0.
 	// Reported as info, an author migrating sees validation pass while the
 	// actuator loads their plugin with no privileges, no network and no
 	// declared sockets. This tool is the first thing an author runs, so it

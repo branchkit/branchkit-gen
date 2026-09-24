@@ -40,7 +40,7 @@
               "type": "null"
             }
           ],
-          "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary.\n\nDeserialization is deliberately LENIENT: an unrecognized role string\ndegrades to `None` instead of failing the whole manifest parse.\nDisplay roles are guaranteed display-only (the matcher never reads\nthem), so a plugin built against a newer SDK that declares a role\nthis host predates must still load — strictness tracks blast\nradius. The typo-catching strictness lives at publish time\n(branchkit-gen validates against the schema's closed enum) and in\nthe load-time validator, which walks the raw JSON and emits a loud\nwarning for every unknown role it degraded. See\ndocs/design/DESIGN_COLLECTION_FIELD_ROLES.md, Decision 5."
+          "description": "Optional display role for generic UI rendering. See `FieldDisplay`.\nCurrently consumed by the Collections tab's log-kind timeline view\nto pick which fields appear in the row summary.\n\nDeserialization is deliberately LENIENT: an unrecognized role string\ndegrades to `None` instead of failing the whole manifest parse.\nDisplay roles are guaranteed display-only (the matcher never reads\nthem), so a plugin built against a newer SDK that declares a role\nthis host predates must still load — strictness tracks blast\nradius. The typo-catching strictness lives at publish time\n(branchkit-gen validates against the schema's closed enum) and in\nthe load-time validator, which walks the raw JSON and emits a loud\nwarning for every unknown role it degraded."
         },
         "enum_values": {
           "description": "Allowed string values for `field_type: \"enum\"`. Ignored otherwise.",
@@ -112,7 +112,7 @@
           "type": "string"
         },
         "modes": {
-          "description": "Supported interaction modes: \"tap\" (single press), \"hold\" (start/stop via phase),\nand/or \"toggle\" (start/stop cycle). Defaults to [\"tap\"] if omitted.",
+          "description": "Supported interaction modes: \"tap\" (single press), \"hold\" (start/stop via phase),\nand/or \"toggle\" (start/stop cycle). Defaults to [\"tap\"] if omitted.\nModes are declared, not inferred (modelled on QMK keycode types and\nStream Deck action manifests): a \"hold\" action handles press/release\nitself via `phase`, so a peripheral UI should not ask the user to pick\na separate release action for it.",
           "items": {
             "type": "string"
           },
@@ -337,7 +337,7 @@
     },
     "BlobDeclaration": {
       "additionalProperties": false,
-      "description": "One entry of `provides.blobs`: a byte channel this plugin produces and\nother plugins may read.\n\nThe platform carries the bytes and never parses them. It enforces who may\nread (`Channel::BlobRead`), where they live (the sandbox policy), and how\nlarge they may grow — nothing about their meaning. Design:\n`docs/design/DESIGN_BLOB_CHANNEL.md`.\n\nThis is `provides.artifacts` made writable at runtime and readable by\ndeclared consumers, using the same per-plugin filesystem confinement.",
+      "description": "One entry of `provides.blobs`: a byte channel this plugin produces and\nother plugins may read.\n\nThe platform carries the bytes and never parses them. It enforces who may\nread (`Channel::BlobRead`), where they live (the sandbox policy), and how\nlarge they may grow — nothing about their meaning.\n\nThis is `provides.artifacts` made writable at runtime and readable by\ndeclared consumers, using the same per-plugin filesystem confinement.",
       "properties": {
         "content_type": {
           "description": "What the bytes are, as a media type (`image/x-rgba-frames`,\n`application/x-gaze-samples`). The platform never interprets it; it is\ncarried so a consumer can refuse a stream it does not understand.",
@@ -508,7 +508,7 @@
           "type": "boolean"
         },
         "clears_when_cleared": {
-          "description": "Tags whose clearing should automatically clear this tag too. Used\nfor dependent state that's only meaningful while a parent gate is\nheld — most commonly mid-capture mode tags (`sets_on_partial`)\nwhose lifetime is bounded by their parent's `requires_tags`. For\nthe common case the platform auto-infers the relationship from\n`requires_tags` + `sets_on_partial`; this field is an escape hatch\nfor cascades where the parent isn't in `requires_tags`. See\n`docs/design/DESIGN_TAG_CASCADE_CLEAR.md`.",
+          "description": "Tags whose clearing should automatically clear this tag too. Used\nfor dependent state that's only meaningful while a parent gate is\nheld — most commonly mid-capture mode tags (`sets_on_partial`)\nwhose lifetime is bounded by their parent's `requires_tags`. For\nthe common case the platform auto-infers the relationship from\n`requires_tags` + `sets_on_partial`; this field is an escape hatch\nfor cascades where the parent isn't in `requires_tags`. A dependent\nclears when ANY of its parents clears; cycles are rejected at load.",
           "items": {
             "type": "string"
           },
@@ -538,7 +538,7 @@
               "type": "null"
             }
           ],
-          "description": "Dictation shaping while this gate is active: the platform stamps the\neffective profile onto `_platform.pipeline.transcript`, and the plugin\nthat owns the dictation engine applies it. Absent → `prose` (the\ndefault: dictation is writing, and writing wants punctuation).\n\nStructural, like `exclusive` next door — a name, no content opinion.\nThe platform never learns what a profile means; it only carries the one\na mode declared. Declaring it on a GATE is what makes it safe: the\nprofile has no lifetime of its own, so every drain path that clears the\nmode clears it too, and no stale flag can hijack an unrelated\ndictation. See `docs/design/DESIGN_DICTATION_PROFILES.md`."
+          "description": "Dictation shaping while this gate is active: the platform stamps the\neffective profile onto `_platform.pipeline.transcript`, and the plugin\nthat owns the dictation engine applies it. Absent → `prose` (the\ndefault: dictation is writing, and writing wants punctuation).\n\nStructural, like `exclusive` next door — a name, no content opinion.\nThe platform never learns what a profile means; it only carries the one\na mode declared. Declaring it on a GATE is what makes it safe: the\nprofile has no lifetime of its own, so every drain path that clears the\nmode clears it too, and no stale flag can hijack an unrelated\ndictation."
         },
         "display": {
           "anyOf": [
@@ -549,7 +549,7 @@
               "type": "null"
             }
           ],
-          "description": "State policy slot — Discovery-HUD display shaping\n(docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md). Structural only: how many\nentries to enumerate before collapsing to a placeholder, never what\nthey mean. Absent → the platform default threshold applies."
+          "description": "State policy slot — Discovery-HUD display shaping. Structural only: how many\nentries to enumerate before collapsing to a placeholder, never what\nthey mean. Absent → the platform default threshold applies."
         },
         "emits_on_change": {
           "description": "State policy slot — whether mutations emit collection.updated events.",
@@ -596,7 +596,7 @@
           "description": "`policy.forbids_tag` — write only commits while the named tag is\n*not* in the active gate set. Introducer + platform writes bypass;\nonly cross-plugin writes are gated."
         },
         "grammar_only_when": {
-          "description": "Grammar-contribution condition (docs/design/DESIGN_SELECTION_PRIMITIVE.md,\nthe promotion mechanism): records contribute their spoken keys to the\nrecognition grammar ONLY when the named boolean field is true. The\nentity cache is NOT filtered — every record still binds in the matcher,\nenumerates in selection browses, and shows in Settings; the condition\ngates what the ENGINE can hear. This is what lets a churning or\nimported set live in a collection without growing the vocabulary:\nselection addresses everything, promotion (flipping the field) grants\na name its grammar slot deliberately. Only meaningful on collections\nthat feed matching; ignored elsewhere. Scope note: this gates the\ncollection's AMBIENT feed (`grammar_hwm`, and so the engine's grammar\nstructure); a command that directly captures the collection still\npulls the live cache keys into its owner's vocabulary HWM — but those\nwords carry no structure, so unpromoted names stay undecodable\n(`discovery: select` rewrites its capture off the source entirely,\nmaking the question moot for the selection path). HWM caveat:\ncontribution is session-monotone — un-promoting a record stops future\ncontribution but does not prune words already accumulated this\nsession.",
+          "description": "Grammar-contribution condition (the promotion mechanism: selection\ntargets stay out of the grammar until the user marks one speakable):\nrecords contribute their spoken keys to the\nrecognition grammar ONLY when the named boolean field is true. The\nentity cache is NOT filtered — every record still binds in the matcher,\nenumerates in selection browses, and shows in Settings; the condition\ngates what the ENGINE can hear. This is what lets a churning or\nimported set live in a collection without growing the vocabulary:\nselection addresses everything, promotion (flipping the field) grants\na name its grammar slot deliberately. Only meaningful on collections\nthat feed matching; ignored elsewhere. Scope note: this gates the\ncollection's AMBIENT feed (`grammar_hwm`, and so the engine's grammar\nstructure); a command that directly captures the collection still\npulls the live cache keys into its owner's vocabulary HWM — but those\nwords carry no structure, so unpromoted names stay undecodable\n(`discovery: select` rewrites its capture off the source entirely,\nmaking the question moot for the selection path). HWM caveat:\ncontribution is session-monotone — un-promoting a record stops future\ncontribution but does not prune words already accumulated this\nsession.",
           "type": [
             "string",
             "null"
@@ -773,11 +773,11 @@
               "type": "string"
             },
             "required": {
-              "description": "This plugin provably cannot do its job without a provider of\nthis collection (DESIGN_PLUGIN_DEPENDENCIES.md). A requirement\nis on the RESOURCE: any plugin introducing it satisfies this.\nDefault false — ordinary consumption degrades to dead paths.",
+              "description": "This plugin provably cannot do its job without a provider of\nthis collection. A requirement\nis on the RESOURCE: any plugin introducing it satisfies this.\nDefault false — ordinary consumption degrades to dead paths.",
               "type": "boolean"
             },
             "seeds": {
-              "description": "Grammar targets this collection's spoken keys are unioned into.\n\nA seed is a READ of this collection: the platform takes the\nsource's keys and merges them into the declaring plugin's grammar\nhigh-water mark. It lived in a top-level `grammar_seeds` map until\nit moved here, which made it a cross-plugin read that traversed no\ngate, derived no dep-graph edge, and required no declaration from\nthe consumer — the platform pushed it from the SOURCE's rebuild and\nnever asked. Expressing it as an attribute of the read is what\nmakes it one: same declaration, same grant, same edge.\n\nA trailing `*` declares a family (`grid_cells_*`), matching the\nsyntax the top-level map used. See DESIGN_GRAMMAR_ALPHABET_SEED.md.",
+              "description": "Grammar targets this collection's spoken keys are unioned into.\n\nA seed is a READ of this collection: the platform takes the\nsource's keys and merges them into the declaring plugin's grammar\nhigh-water mark. It lived in a top-level `grammar_seeds` map until\nit moved here, which made it a cross-plugin read that traversed no\ngate, derived no dep-graph edge, and required no declaration from\nthe consumer — the platform pushed it from the SOURCE's rebuild and\nnever asked. Expressing it as an attribute of the read is what\nmakes it one: same declaration, same grant, same edge.\n\nA trailing `*` declares a family (`grid_cells_*`), matching the\nsyntax the top-level map used.",
               "items": {
                 "type": "string"
               },
@@ -797,7 +797,7 @@
           "type": "object"
         }
       ],
-      "description": "One entry in `consumes.collections`. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form additionally declares the\nFIELDS this plugin reads from the collection's records.\n\nDeclaring fields buys a load-time compatibility check against the\nintroducer's `provides.collections[name].fields`: a field the provider\ndoes not declare is reported at load instead of silently reading as\nabsent forever. That is the whole point — a consumer binds to a SHAPE,\nand the platform can only verify a shape it was told about\n(docs/design/DESIGN_SHAPED_CONSUMPTION.md)."
+      "description": "One entry in `consumes.collections`. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form additionally declares the\nFIELDS this plugin reads from the collection's records.\n\nDeclaring fields buys a load-time compatibility check against the\nintroducer's `provides.collections[name].fields`: a field the provider\ndoes not declare is reported at load instead of silently reading as\nabsent forever. That is the whole point — a consumer binds to a SHAPE,\nand the platform can only verify a shape it was told about."
     },
     "ConsumedDispatch": {
       "anyOf": [
@@ -818,7 +818,7 @@
               "type": "string"
             },
             "required": {
-              "description": "This plugin provably cannot do its job without a claimant of\nthis prefix (DESIGN_PLUGIN_DEPENDENCIES.md). On the resource,\nnot a plugin name: any claimant satisfies it.",
+              "description": "This plugin provably cannot do its job without a claimant of\nthis prefix. On the resource,\nnot a plugin name: any claimant satisfies it.",
               "type": "boolean"
             },
             "suggested_provider": {
@@ -835,7 +835,7 @@
           "type": "object"
         }
       ],
-      "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — and this was the last one declared at manifest top level, as\n`dispatch_prefixes`, next to `dispatch_via`. `dispatch_via` is a MODE and\nstays where it is; the targets are what a user consents to, and they\nbelong under `consumes` with the rest.\n\n`actions` narrows the DECLARATION, not the grant. Decision (a) of\n`DESIGN_COORDINATION_CONSOLIDATION.md`: expanding the grant to\n(caller, target, action) took the two declaring plugins from 5 consent\nrows to 39, and a consent list long enough to scroll is one people click\nthrough. So the user still decides per prefix while the platform can hold\nthe plugin to the narrower thing it said."
+      "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — and this was the last one declared at manifest top level, as\n`dispatch_prefixes`, next to `dispatch_via`. `dispatch_via` is a MODE and\nstays where it is; the targets are what a user consents to, and they\nbelong under `consumes` with the rest.\n\n`actions` narrows the DECLARATION, not the grant: expanding the grant to\n(caller, target, action) took the two declaring plugins from 5 consent\nrows to 39, and a consent list long enough to scroll is one people click\nthrough. So the user still decides per prefix while the platform can hold\nthe plugin to the narrower thing it said."
     },
     "Consumes": {
       "additionalProperties": false,
@@ -863,7 +863,7 @@
           "type": "array"
         },
         "effects": {
-          "description": "Exclusivity-shape effects this plugin ASSERTS during its session,\nplus the user-facing branding for the install-time consent prompt.\n\nUnder `consumes`, not `provides`, because that is what asserting is:\nthe platform provides the effect — the name, the ownership stack,\nthe arbitration — and the plugin uses it. This field lived under\n`provides` until 2026-08-27, an inversion fossilised from v1, where\nnothing but the platform COULD provide one and the key had no\ncontrast to be wrong against. Renamed before launch precisely so\n`provides.effects` is free to mean what it says when plugin-defined\neffects land (`docs/design/DESIGN_PLUGIN_DEFINED_EFFECTS.md`).\n\nEffect names are validated against the closed\n`effects::REGISTERED_EFFECTS` registry at manifest load time.\nSee `docs/design/DESIGN_CAPABILITY_MECHANISM.md`.",
+          "description": "Exclusivity-shape effects this plugin ASSERTS during its session,\nplus the user-facing branding for the install-time consent prompt.\n\nUnder `consumes`, not `provides`, because that is what asserting is:\nthe platform provides the effect — the name, the ownership stack,\nthe arbitration — and the plugin uses it. This field lived under\n`provides` until 2026-08-27, an inversion fossilised from v1, where\nnothing but the platform COULD provide one and the key had no\ncontrast to be wrong against. Renamed before launch precisely so\n`provides.effects` is free to mean what it says when plugin-defined\neffects land.\n\nEffect names are validated against the closed\n`effects::REGISTERED_EFFECTS` registry at manifest load time: new\neffects join only through a platform release, never by plugin\ndeclaration.",
           "items": {
             "$ref": "#/$defs/EffectDeclaration"
           },
@@ -969,7 +969,7 @@
           "type": "string"
         }
       ],
-      "description": "What a dictated utterance IS while a gate is active, so the engine owner\ncan shape the transcript accordingly. Closed on purpose: the vocabulary is\na structural opinion (there are two kinds of dictation), not a content one.\n`Custom` is the valve — consumers that don't know a name ignore it and fall\nback to `Prose`.\n\nThe platform's remit stops at FORM (punctuation, whitespace, case). Meaning\n— spelled numbers, spoken symbols, filler words — belongs to the consumer's\nmatching and to the user's own corrections list, which apply in both\nprofiles. See `docs/design/DESIGN_DICTATION_PROFILES.md`."
+      "description": "What a dictated utterance IS while a gate is active, so the engine owner\ncan shape the transcript accordingly. Closed on purpose: the vocabulary is\na structural opinion (there are two kinds of dictation), not a content one.\n`Custom` is the valve — consumers that don't know a name ignore it and fall\nback to `Prose`.\n\nThe platform's remit stops at FORM (punctuation, whitespace, case). Meaning\n— spelled numbers, spoken symbols, filler words — belongs to the consumer's\nmatching and to the user's own corrections list, which apply in both\nprofiles."
     },
     "DispatchVia": {
       "description": "How a plugin determines dispatch targets.",
@@ -993,7 +993,7 @@
     },
     "DisplayPolicy": {
       "additionalProperties": false,
-      "description": "Discovery-HUD display shaping for a collection\n(docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md, part B). A capture over a large\ncollection enumerates noise in the HUD (a 999-number list is not a menu);\npast the threshold, discovery rendering emits one placeholder item\ninstead. Denylist posture: the platform default collapses automatically,\n`collapse_above: 0` opts a collection out entirely, and nothing an author\nasked to show is hidden.",
+      "description": "Discovery-HUD display shaping for a collection. A capture over a large\ncollection enumerates noise in the HUD (a 999-number list is not a menu);\npast the threshold, discovery rendering emits one placeholder item\ninstead. Denylist posture: the platform default collapses automatically,\n`collapse_above: 0` opts a collection out entirely, and nothing an author\nasked to show is hidden.",
       "properties": {
         "collapse_above": {
           "description": "Enumerate up to this many (non-alias) entries; past it, render one\nplaceholder item. `0` disables collapsing for this collection.\nAbsent → the platform default (`DISPLAY_COLLAPSE_DEFAULT`).",
@@ -1148,7 +1148,7 @@
           "type": "object"
         },
         {
-          "description": "Vocabulary keyed on the record id, with the whole payload as the\nvalue. Used by auto-registered dynamic collections (collections\nwhose names are runtime-determined, registered on first\n`collection.put`). The record id is what `<name:CollectionName>`\ncaptures match against; the payload travels through the matcher\nas the captured value. See docs/design/DESIGN_BROWSER_HINT_SILENT_EVICTION.md.",
+          "description": "Vocabulary keyed on the record id, with the whole payload as the\nvalue. Used by auto-registered dynamic collections (collections\nwhose names are runtime-determined, registered on first\n`collection.put`). The record id is what `<name:CollectionName>`\ncaptures match against; the payload travels through the matcher\nas the captured value. Registration is implicit: calling\n`collection.put` on an unknown name is the opt-in to per-key write\nsemantics.",
           "properties": {
             "type": {
               "const": "as_record_keyed",
@@ -1236,7 +1236,7 @@
       ]
     },
     "FieldDisplay": {
-      "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nSee `docs/design/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary\nrationale. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
+      "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nRoles are a closed vocabulary so every surface renders a named role the\nsame way; publish rejects an unknown role, load degrades it to no-role\nwith a warning. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
       "oneOf": [
         {
           "const": "primary",
@@ -1725,7 +1725,7 @@
               "type": "null"
             }
           ],
-          "description": "How the shell frames this tab. Absent = the ordinary page: rail,\nthe Plugins sidebar, the pane. `\"workbench\"` = the tab is a place you\ngo into and come back from: the sidebar collapses at every width and\na \"‹ Plugins\" back button sits atop the pane, the treatment the shell\nalready gives every page at window widths. For dense two-pane tabs\n(a command editor, a calibration bench) that need the room. The\nplatform owns the vocabulary; a plugin picks from it\n(DESIGN_SETTINGS_APP_SHELL.md, \"Workbench tabs\")."
+          "description": "How the shell frames this tab. Absent = the ordinary page: rail,\nthe Plugins sidebar, the pane. `\"workbench\"` = the tab is a place you\ngo into and come back from: the sidebar collapses at every width and\na \"‹ Plugins\" back button sits atop the pane, the treatment the shell\nalready gives every page at window widths. For dense two-pane tabs\n(a command editor, a calibration bench) that need the room. The\nplatform owns the vocabulary; a plugin picks from it."
         },
         "reads": {
           "description": "Shared store names this tab needs for rendering (e.g. [\"commands\", \"corrections\"]).",
@@ -1771,7 +1771,7 @@
         },
         {
           "const": "settings",
-          "description": "Plugin settings: a singleton of manifest-declared fields, each with a\nshipped `default`. The base record is VIRTUAL — materialized from the\nmanifest defaults at read time; only the user's changes are stored\n(the `_user` overlay band, composed last). `writers: platform_only`:\nplugins read the composed view, never write — settings are the user's\nchoices, and anything a plugin flips programmatically is domain state\nby definition. See docs/design/DESIGN_PLUGIN_SETTINGS_STORAGE.md\n(decisions D1-D3, approved 2026-08-15).",
+          "description": "Plugin settings: a singleton of manifest-declared fields, each with a\nshipped `default`. The base record is VIRTUAL — materialized from the\nmanifest defaults at read time; only the user's changes are stored\n(the `_user` overlay band, composed last). `writers: platform_only`:\nplugins read the composed view, never write — settings are the user's\nchoices, and anything a plugin flips programmatically is domain state\nby definition: a plugin rewriting the user's choices would store them\nas its own write, and revert/default-evolution only work when the store\nholds nothing but the user's sparse changes (decided 2026-08-15).",
           "type": "string"
         }
       ]
@@ -1834,7 +1834,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/ArtifactDeclaration"
           },
-          "description": "Artifacts this plugin's stages can load — named bundles of large\nrun-time files (ML weights, a font pack, a dictionary, an OCR engine),\nkeyed by the name a pipeline passes as the stage's artifact param.\nProvisioned by `branchkit-cli` into\n`<app_support>/artifacts/<plugin_id>/<name>`, which is the root the\nplatform hands the stage as `BRANCHKIT_ARTIFACTS_DIR` and the root its\nsandbox grant is confined to — so a stage sees a flat namespace it owns\nand nothing else. Was `provides.models` (accepted as an alias for one\nrelease); see `docs/design/DESIGN_ARTIFACTS_RENAME.md` and\n`docs/design/DESIGN_PLUGIN_MODEL_DECLARATION.md`.",
+          "description": "Artifacts this plugin's stages can load — named bundles of large\nrun-time files (ML weights, a font pack, a dictionary, an OCR engine),\nkeyed by the name a pipeline passes as the stage's artifact param.\nProvisioned by `branchkit-cli` into\n`<app_support>/artifacts/<plugin_id>/<name>`, which is the root the\nplatform hands the stage as `BRANCHKIT_ARTIFACTS_DIR` and the root its\nsandbox grant is confined to — so a stage sees a flat namespace it owns\nand nothing else. Was `provides.models` (accepted as an alias for one\nrelease). Namespaced by plugin id so two plugins\ncannot collide and no plugin can read another's artifacts.",
           "type": "object"
         },
         "blobs": {
@@ -1852,7 +1852,7 @@
           "type": "object"
         },
         "context_names": {
-          "description": "Friendly context names this plugin owns. The context engine's\n`name_for(tag_set, partial_prefix)` lookup walks every plugin's\n`context_names`; the first pattern whose `tags` are a subset of\nthe live active-tag set and whose `prefix_shape` matches the\ncaptured prefix positionally wins. See\n`docs/design/DESIGN_CALIBRATION_CONTEXTS.md` §8.",
+          "description": "Friendly context names this plugin owns. The context engine's\n`name_for(tag_set, partial_prefix)` lookup walks every plugin's\n`context_names`; the first pattern whose `tags` are a subset of\nthe live active-tag set and whose `prefix_shape` matches the\ncaptured prefix positionally wins. Unmatched states get a\ndeterministic auto-name flagged `context_unnamed`, so declaring a name\nis optional.",
           "items": {
             "$ref": "#/$defs/ContextNamePattern"
           },
@@ -1862,7 +1862,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/EffectDefinition"
           },
-          "description": "Effects this plugin DEFINES — coordination names it introduces for\nothers (and itself) to assert, keyed by plugin-local name. The\nfully-qualified name on the wire is `<plugin_id>.<name>`, exactly\nas stages qualify.\n\nThis is what `provides.effects` always should have meant, and the\nkey was freed for it by the 2026-08-27 rename (asserting moved to\n`consumes.effects`). Plugin-defined effects are SignalOnly from\nthe platform's side: the platform owns the name, the ownership\nstack, displacement and the crash release — the coordination — and\ndelivers no OS behaviour. A provider that wants its effect to DO\nsomething does it in its own process, driven by\n`_platform.effect.ownership_changed`.\nDesign: `docs/design/DESIGN_PLUGIN_DEFINED_EFFECTS.md`.\n\nThe key `\"*\"` declares a runtime-minted namespace: any\nsingle-segment name under `<plugin_id>.*` resolves against it.\nThis is the host projection, the same shape (and the same\nsolution) as `provides.events` patterns: a host cannot enumerate\nin a static manifest the names its hosted things coordinate under\n— a scripting host's scripts, an ambassador's connected apps, the\nbrowser plugin's tabs all mint names at runtime.",
+          "description": "Effects this plugin DEFINES — coordination names it introduces for\nothers (and itself) to assert, keyed by plugin-local name. The\nfully-qualified name on the wire is `<plugin_id>.<name>`, exactly\nas stages qualify.\n\nThis is what `provides.effects` always should have meant, and the\nkey was freed for it by the 2026-08-27 rename (asserting moved to\n`consumes.effects`). Plugin-defined effects are SignalOnly from\nthe platform's side: the platform owns the name, the ownership\nstack, displacement and the crash release — the coordination — and\ndelivers no OS behaviour. A provider that wants its effect to DO\nsomething does it in its own process, driven by\n`_platform.effect.ownership_changed`.\n\nThe key `\"*\"` declares a runtime-minted namespace: any\nsingle-segment name under `<plugin_id>.*` resolves against it.\nThis is the host projection, the same shape (and the same\nsolution) as `provides.events` patterns: a host cannot enumerate\nin a static manifest the names its hosted things coordinate under\n— a scripting host's scripts, an ambassador's connected apps, the\nbrowser plugin's tabs all mint names at runtime.",
           "type": "object"
         },
         "events": {
@@ -1881,7 +1881,7 @@
               "type": "null"
             }
           ],
-          "description": "A browser extension that pairs with one of this plugin's listen\nsockets over the OS native-messaging channel. The platform writes the\nper-browser host manifests naming the shared pairing host and these\nextension ids; nothing about a specific plugin or extension lives in\nthe actuator (docs/design/DESIGN_EXTENSION_PAIRING_AND_LOCAL_SURFACE.md)."
+          "description": "A browser extension that pairs with one of this plugin's listen\nsockets over the OS native-messaging channel. The platform writes the\nper-browser host manifests naming the shared pairing host and these\nextension ids; nothing about a specific plugin or extension lives in\nthe actuator."
         },
         "stages": {
           "additionalProperties": {
@@ -1953,7 +1953,7 @@
     },
     "Requires": {
       "additionalProperties": false,
-      "description": "The plugin's ask: everything a person is shown and accepts at install.\n\nMembership test, deliberately not \"is it security-relevant\": **the user\nmust see this before accepting, because there is no later moment, or the\nlater moment is not enough.** `sockets` and `runtimes` are disclosed and\nnever granted — the install panel is the only place they are ever seen.\n`privileges` and `network` do have later moments on the plugin's card,\nbut the first acceptance is still here.\n\nThings that look like they belong and do not: `run` (the sandbox confines\nthe process whatever it names), `collection_data.keybinds` (a real\ncapability, but grant-checked through `Channel::CollectionWrite` and\nrevocable on the card, so its later moment is enough), and\n`consumes.effects` (coordination, not capability —\n`DESIGN_SANDBOX_CONSENT_SURFACE.md`). The reasoning for all 29 top-level\nfields is in `DESIGN_MANIFEST_REQUEST_BLOCK.md`.",
+      "description": "The plugin's ask: everything a person is shown and accepts at install.\n\nMembership test, deliberately not \"is it security-relevant\": **the user\nmust see this before accepting, because there is no later moment, or the\nlater moment is not enough.** `sockets` and `runtimes` are disclosed and\nnever granted — the install panel is the only place they are ever seen.\n`privileges` and `network` do have later moments on the plugin's card,\nbut the first acceptance is still here.\n\nThings that look like they belong and do not: `run` (the sandbox confines\nthe process whatever it names), `collection_data.keybinds` (a real\ncapability, but grant-checked through `Channel::CollectionWrite` and\nrevocable on the card, so its later moment is enough), and\n`consumes.effects` (coordination, not capability: effects are arbitrated\nat runtime, not a reach the plugin is granted). Moving a field across this\nboundary is a breaking manifest change, so a new top-level field must\nchoose a side when it is added.",
       "properties": {
         "network": {
           "anyOf": [
@@ -1964,10 +1964,10 @@
               "type": "null"
             }
           ],
-          "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox). See DESIGN_PLUGIN_SANDBOX.md."
+          "description": "Network access level for sandbox enforcement.\nOmitted = no network (tightest sandbox)."
         },
         "optional_privileges": {
-          "description": "Privileges this plugin can carry but function WITHOUT — the ceiling\nof on-demand grants. Ungranted optional privileges never block the\nspawn; they are simply absent from the effective set and per-call\nauth denies them, which the plugin surfaces as a teaching error.\nAuthor-declared degradable. Design: docs/design/DESIGN_OPTIONAL_PRIVILEGES.md.",
+          "description": "Privileges this plugin can carry but function WITHOUT — the ceiling\nof on-demand grants. Ungranted optional privileges never block the\nspawn; they are simply absent from the effective set and per-call\nauth denies them, which the plugin surfaces as a teaching error.\nAuthor-declared degradable: the plugin must work without it, and a\nrevoked optional privilege never blocks a restart.",
           "items": {
             "type": "string"
           },
@@ -1996,7 +1996,7 @@
               "type": "null"
             }
           ],
-          "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux. See docs/design/DESIGN_SANDBOX_LOOPBACK_FDPASS.md."
+          "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux (a socket keeps the netns it was created in, so an fd bound on\nhost loopback still accepts inside the plugin's empty netns)."
         }
       },
       "type": "object"
@@ -2016,7 +2016,7 @@
     },
     "SelectionSurfaceSchema": {
       "additionalProperties": false,
-      "description": "One external selection surface's declaration\n(docs/design/DESIGN_SELECTION_SURFACES.md). Everything else about the\nsurface — its tag, its minted collections, its assignments collection —\nis derived from the plugin id and the surface name.",
+      "description": "One external selection surface's declaration. Everything else about the\nsurface — its tag, its minted collections, its assignments collection —\nis derived from the plugin id and the surface name.",
       "properties": {
         "dictation_profile": {
           "anyOf": [
@@ -2086,7 +2086,7 @@
           ]
         },
         "feeds": {
-          "description": "Bus event types this stage supplies as a spontaneous SOURCE. Two\nvocabularies are accepted:\n\n- `ext.<vendor>.<name>` custom-event types, or `ext.<vendor>.*` globs\n  (see the pipeline contract's customEvents rule) — a stage's own\n  vocabulary, which it may always supply.\n- a `_platform.*` event classified `delivery: signal`, IF this plugin\n  holds the privilege that event names. A signal is a doorbell whose\n  payload is advisory, so ringing one costs a consumer a redundant\n  re-pull rather than telling it a lie — which is why a plugin's stage\n  may ring one where it may not produce `delivery: data`. See\n  `docs/design/DESIGN_EVENT_SIGNAL_VS_DATA.md`.\n\nDeclaring feeds makes\nthe platform host the stage on demand: it is spawned while at least\none enabled plugin subscribes to something it feeds, and stopped when\nno subscriber remains. Omit for pipeline stages (STT, VAD, sources\nnamed by a pipeline), which are spawned by the pipelines that\nreference them.",
+          "description": "Bus event types this stage supplies as a spontaneous SOURCE. Two\nvocabularies are accepted:\n\n- `ext.<vendor>.<name>` custom-event types, or `ext.<vendor>.*` globs\n  (see the pipeline contract's customEvents rule) — a stage's own\n  vocabulary, which it may always supply.\n- a `_platform.*` event classified `delivery: signal`, IF this plugin\n  holds the privilege that event names. A signal is a doorbell whose\n  payload is advisory, so ringing one costs a consumer a redundant\n  re-pull rather than telling it a lie — which is why a plugin's stage\n  may ring one where it may not produce `delivery: data`.\n\nDeclaring feeds makes\nthe platform host the stage on demand: it is spawned while at least\none enabled plugin subscribes to something it feeds, and stopped when\nno subscriber remains. Omit for pipeline stages (STT, VAD, sources\nnamed by a pipeline), which are spawned by the pipelines that\nreference them.",
           "items": {
             "type": "string"
           },
@@ -2316,7 +2316,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/CaptureMacro"
       },
-      "description": "Named capture-group macros this plugin's command patterns can\nreference (`<targets:hint_pair>` / `<targets:hint_pair>+`). A macro\ndeclares a compound capture once — slots, per-instance projection,\ndisplay name, repeat cap — instead of every pattern restating the\ngroup. Resolution is macro-table-first at pattern compile time; a\nruntime collection later shadowing a macro name draws a validation\nwarning. See docs/design/DESIGN_MULTI_TARGET_COMMANDS.md (\"Phase 2 — the\nmacro form\").",
+      "description": "Named capture-group macros this plugin's command patterns can\nreference (`<targets:hint_pair>` / `<targets:hint_pair>+`). A macro\ndeclares a compound capture once — slots, per-instance projection,\ndisplay name, repeat cap — instead of every pattern restating the\ngroup. Resolution is macro-table-first at pattern compile time; a\nruntime collection later shadowing a macro name draws a validation\nwarning.",
       "type": "object"
     },
     "collection_data": {
@@ -2642,7 +2642,7 @@
       "description": "What this plugin provides to the ecosystem."
     },
     "publisher": {
-      "description": "Publisher identity anchored at a git provider, `<provider>:<identity>`\n(or `<provider>=<host>:<identity>` for self-hosted). This is the trust\nanchor — unlike `author` (free-text, anyone can set), a `publisher` is\nwhat the signing chain's author signature and the verified-publisher\nbadge resolve against. Optional; absent = no provenance claim (community\n/ unsigned posture). Parse with `parsed_publisher()`. See\ndocs/design/DESIGN_PLUGIN_SIGNING_CHAIN.md + DESIGN_PLUGIN_PUBLISHER_VERIFICATION.md.",
+      "description": "Publisher identity anchored at a git provider, `<provider>:<identity>`\n(or `<provider>=<host>:<identity>` for self-hosted). This is the trust\nanchor — unlike `author` (free-text, anyone can set), a `publisher` is\nwhat the signing chain's author signature and the verified-publisher\nbadge resolve against; the badge mirrors the provider's own\nverified-domain status for this identity. Optional; absent = no\nprovenance claim (community / unsigned posture). An unverified claim:\nit never elevates trust by itself — only a CLI-verified author\nsignature carrying the same provider identity does. Parse with\n`parsed_publisher()`.",
       "type": [
         "string",
         "null"
@@ -2650,7 +2650,7 @@
     },
     "requires": {
       "$ref": "#/$defs/Requires",
-      "description": "What this plugin asks the user to allow.\n\nThe one part of a manifest a person approves. It is a block rather\nthan five loose fields so that the install prompt, the sandbox\ncompiler and the signing chain read the same subtree instead of each\nrebuilding the list — and so a new capability field has to choose a\nside rather than defaulting to invisible.\n\nDesign: docs/design/DESIGN_MANIFEST_REQUEST_BLOCK.md."
+      "description": "What this plugin asks the user to allow.\n\nThe one part of a manifest a person approves. It is a block rather\nthan five loose fields so that the install prompt, the sandbox\ncompiler and the signing chain read the same subtree instead of each\nrebuilding the list — and so a new capability field has to choose a\nside rather than defaulting to invisible. A subtree also gives the\nsigning chain one thing to hash that is, by construction, the same\nbytes the install prompt rendered."
     },
     "run": {
       "description": "Shell command to run the plugin process. When set, the actuator spawns + monitors this process.",
@@ -2663,7 +2663,7 @@
       "additionalProperties": {
         "$ref": "#/$defs/SelectionSurfaceSchema"
       },
-      "description": "External selection surfaces (docs/design/DESIGN_SELECTION_SURFACES.md):\nviews this plugin (or its remote client) renders itself — a command\npalette, a window picker — whose ADDRESSING the platform owns. The\nsurface's lifecycle is its rows collection's contents: rows present ⇒\nthe platform sets the surface's exclusive `_surface.<plugin>.<name>`\ntag, assigns pointing-deck codewords, and mints the matchable\ncollections; rows drained ⇒ everything clears. Assignments flow back\nthrough the platform-owned `…_assign` collection the client\nsubscribes to. Commands bind the surface with a `<row:@name>` tail\ncapture.",
+      "description": "External selection surfaces:\nviews this plugin (or its remote client) renders itself — a command\npalette, a window picker — whose ADDRESSING the platform owns. The\nsurface's lifecycle is its rows collection's contents: rows present ⇒\nthe platform sets the surface's exclusive `_surface.<plugin>.<name>`\ntag, assigns pointing-deck codewords, and mints the matchable\ncollections; rows drained ⇒ everything clears. Assignments flow back\nthrough the platform-owned `…_assign` collection the client\nsubscribes to. Commands bind the surface with a `<row:@name>` tail\ncapture.",
       "type": "object"
     },
     "version": {
