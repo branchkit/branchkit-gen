@@ -28780,6 +28780,10 @@
         "name": "invalid_params"
       },
       {
+        "json_rpc_code": -32007,
+        "name": "unsupported"
+      },
+      {
         "json_rpc_code": -32603,
         "name": "internal"
       }
