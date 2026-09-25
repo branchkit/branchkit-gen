@@ -29151,6 +29151,12 @@
       "writers": "anyone_who_declares"
     },
     {
+      "description": "Whether the diagnostic logs (actuator.log, show-all, audit) keep the user's own content — what they said or typed, and what plugins and stages printed. One record `{enabled}`. Off: every field an event's redaction policy names is written as its size. No record: a release build keeps it off, a dev build on. Applied live.",
+      "name": "_platform.log_recording",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
       "description": "Per-sink archive retention overrides for the dated-gzip archiving sinks (audit_log, show_all, dev_mutation_stream, verbose). One record per overridden sink `{sink, days}`; a sink with no record keeps its env-seeded default (90/30/30/7). Set from the Debug tab; applied live.",
       "name": "_platform.log_retention",
       "preset": "data",
