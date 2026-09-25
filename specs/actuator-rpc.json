@@ -3771,17 +3771,28 @@
           "name": "change_count",
           "required": true,
           "schema": {
-            "description": "`NSPasteboard.changeCount` after the change. Monotonic per session;\nuseful for deduping and for detecting missed changes.",
+            "description": "The host's clipboard change counter after the change (macOS\n`changeCount`, Windows `GetClipboardSequenceNumber`, a counter kept by\nthe host on Linux). Monotonic per session; useful for deduping and for\ndetecting missed changes.",
             "format": "uint64",
             "minimum": 0,
             "type": "integer"
           }
         },
         {
+          "name": "native_types",
+          "required": true,
+          "schema": {
+            "description": "The host's own names for the same contents, for what MIME cannot\nname: macOS UTIs (`public.utf8-plain-text`), Windows clipboard formats\n(`CF_UNICODETEXT`, `HTML Format`), X11 targets (`UTF8_STRING`).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
           "name": "types",
           "required": true,
           "schema": {
-            "description": "Pasteboard type identifiers now available (e.g.\n`public.utf8-plain-text`, `public.png`). Enough to filter on without\nreading anything.",
+            "description": "MIME types of what the clipboard now holds, e.g. `text/plain`,\n`image/png`, `text/uri-list` for files — the same names on every OS.\nEnough to filter on without reading anything.",
             "items": {
               "type": "string"
             },
