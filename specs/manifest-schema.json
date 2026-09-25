@@ -551,6 +551,13 @@
           ],
           "description": "State policy slot — Discovery-HUD display shaping. Structural only: how many\nentries to enumerate before collapsing to a placeholder, never what\nthey mean. Absent → the platform default threshold applies."
         },
+        "durable": {
+          "description": "State policy slot — whether the collection's records survive an app\nrestart. Only `shared_overrides` storage has a choice: `data` defaults\nto true; `named_entities` and `settings` default to false, because\ntheir plugin re-publishes them on every connect (and a settings\ncollection's user choices persist in the user band regardless).\nDeclare `true` on a collection whose records a plugin writes at\nruntime and cannot re-derive — imported snippets, say. Undeclared on\nother storage, it follows the storage: `per_collection_disk` always\nsurvives, memory storage never does, and declaring the opposite is a\nvalidation error. Not `lifecycle`: that governs when records are\ndeleted, not whether a restart keeps them.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "emits_on_change": {
           "description": "State policy slot — whether mutations emit collection.updated events.",
           "type": [
