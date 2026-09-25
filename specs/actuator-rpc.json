@@ -3474,6 +3474,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3496,6 +3497,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3568,6 +3570,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3620,6 +3623,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "input",
       "x-since": "0.1.0"
     },
     {
@@ -3706,6 +3710,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.2.0"
     },
     {
@@ -3761,6 +3766,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "speech",
       "x-since": "0.1.0"
     },
     {
@@ -3807,6 +3813,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "clipboard",
       "x-since": "0.1.0"
     },
     {
@@ -3837,6 +3844,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3850,6 +3858,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3874,6 +3883,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3912,6 +3922,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -3950,6 +3961,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4028,6 +4040,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4063,6 +4076,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4129,6 +4143,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "input",
       "x-since": "0.1.0"
     },
     {
@@ -4200,6 +4215,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "input",
       "x-since": "0.1.0"
     },
     {
@@ -4213,6 +4229,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4226,6 +4243,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4256,6 +4274,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4278,6 +4297,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4324,6 +4344,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4364,6 +4385,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4420,6 +4442,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "output",
       "x-since": "0.1.0"
     },
     {
@@ -4450,6 +4473,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4478,6 +4502,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4507,6 +4532,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4528,6 +4554,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4605,6 +4632,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "speech",
       "x-since": "0.1.0"
     },
     {
@@ -4626,6 +4654,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4664,6 +4693,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4685,6 +4715,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4706,6 +4737,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4763,6 +4795,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4793,6 +4826,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4823,6 +4857,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4836,6 +4871,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4849,6 +4885,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4871,6 +4908,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -4899,6 +4937,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -4942,6 +4981,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -4970,6 +5010,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -5007,6 +5048,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -5042,6 +5084,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -5064,6 +5107,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
     },
     {
@@ -5116,6 +5160,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "world",
       "x-since": "0.1.0"
     },
     {
@@ -29117,6 +29162,97 @@
       "lift_keys_on_dispatch"
     ]
   },
+  "x-branchkit-event-families": [
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.action.executed",
+        "_platform.app.focused",
+        "_platform.audio_devices.changed",
+        "_platform.blob.updated",
+        "_platform.collection.updated",
+        "_platform.discovery.closed",
+        "_platform.display.changed",
+        "_platform.effect.displaced",
+        "_platform.effect.ownership_changed",
+        "_platform.hid.connected",
+        "_platform.hid.disconnected",
+        "_platform.input.session_boundary",
+        "_platform.input.session_ended",
+        "_platform.keyboard.layout_changed",
+        "_platform.memory_pressure.changed",
+        "_platform.network.changed",
+        "_platform.output.cleared",
+        "_platform.permission.changed",
+        "_platform.pipeline.error",
+        "_platform.pipeline.started",
+        "_platform.pipeline.stopped",
+        "_platform.pipeline.warmed",
+        "_platform.plugin.degraded",
+        "_platform.plugin.disabled",
+        "_platform.plugin.enabled",
+        "_platform.power.changed",
+        "_platform.privilege.granted",
+        "_platform.selection.picked",
+        "_platform.system.did_wake",
+        "_platform.system.will_sleep",
+        "_platform.thermal.changed",
+        "_platform.workspace.changed"
+      ],
+      "name": "routine",
+      "privilege": null
+    },
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.capture.progress",
+        "_platform.pipeline.transcript"
+      ],
+      "name": "speech",
+      "privilege": "events.speech"
+    },
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.ble.notification",
+        "_platform.hid.input",
+        "_platform.hid.report"
+      ],
+      "name": "input",
+      "privilege": "events.input"
+    },
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.clipboard.changed"
+      ],
+      "name": "clipboard",
+      "privilege": "events.clipboard"
+    },
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.output.state"
+      ],
+      "name": "output",
+      "privilege": "events.output"
+    },
+    {
+      "also_admitted_by": [
+        "windows"
+      ],
+      "events": [
+        "_platform.window.closed",
+        "_platform.window.created",
+        "_platform.window.focused",
+        "_platform.window.frame_changed",
+        "_platform.window.title_changed",
+        "_platform.world.updated"
+      ],
+      "name": "world",
+      "privilege": "events.world"
+    }
+  ],
   "x-branchkit-limits": {
     "collection_writer_max_bytes": 8388608,
     "event_max_payload_bytes": 65536,
@@ -29261,8 +29397,8 @@
   ],
   "x-branchkit-privileges": [
     {
+      "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "gated_event_prefixes": [],
       "method_count": 19,
       "methods": [
         "native.accessibility_display_invert",
@@ -29289,8 +29425,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Read and set system appearance — accent color, highlight color",
-      "gated_event_prefixes": [],
       "method_count": 14,
       "methods": [
         "native.accent_color",
@@ -29312,8 +29448,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "List and inspect running applications",
-      "gated_event_prefixes": [],
       "method_count": 24,
       "methods": [
         "native.app_bundle_path",
@@ -29345,8 +29481,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Launch, quit, activate, and hide applications",
-      "gated_event_prefixes": [],
       "method_count": 13,
       "methods": [
         "native.activate_app",
@@ -29367,8 +29503,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Audio devices, volume, sound playback, and text-to-speech",
-      "gated_event_prefixes": [],
       "method_count": 19,
       "methods": [
         "native.alert_sound",
@@ -29395,8 +29531,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Discover services and write to paired Bluetooth LE devices",
-      "gated_event_prefixes": [],
       "method_count": 4,
       "methods": [
         "native.ble_discover_services",
@@ -29408,8 +29544,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Read calendar events and reminders",
-      "gated_event_prefixes": [],
       "method_count": 3,
       "methods": [
         "native.calendar_events_range",
@@ -29420,8 +29556,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Read and write clipboard contents",
-      "gated_event_prefixes": [],
       "method_count": 8,
       "methods": [
         "input.clipboard_history",
@@ -29437,8 +29573,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Read contact information",
-      "gated_event_prefixes": [],
       "method_count": 1,
       "methods": [
         "native.search_contacts"
@@ -29447,8 +29583,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Resolve spoken words to any plugin's commands, seeing what they capture, and dispatch typed actions to plugins on behalf of the user",
-      "gated_event_prefixes": [],
       "method_count": 2,
       "methods": [
         "commands.resolve",
@@ -29458,8 +29594,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Display info, brightness, and cursor position",
-      "gated_event_prefixes": [],
       "method_count": 19,
       "methods": [
         "native.auto_brightness",
@@ -29486,8 +29622,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Dock configuration — position, size, auto-hide, items",
-      "gated_event_prefixes": [],
       "method_count": 15,
       "methods": [
         "native.dock_auto_hide",
@@ -29510,37 +29646,88 @@
       "risk": "low"
     },
     {
-      "description": "Receive all platform events",
-      "gated_event_prefixes": [],
+      "admits_events": [
+        "_platform.ble.notification",
+        "_platform.capture.progress",
+        "_platform.clipboard.changed",
+        "_platform.hid.input",
+        "_platform.hid.report",
+        "_platform.output.state",
+        "_platform.pipeline.transcript",
+        "_platform.window.closed",
+        "_platform.window.created",
+        "_platform.window.focused",
+        "_platform.window.frame_changed",
+        "_platform.window.title_changed",
+        "_platform.world.updated"
+      ],
+      "description": "Receive every platform event, including what you say, raw device input, clipboard activity, other plugins' output and window titles",
       "method_count": 0,
       "methods": [],
       "name": "events.*",
-      "risk": "low"
+      "risk": "dangerous"
     },
     {
-      "description": "Receive speech recognition events",
-      "gated_event_prefixes": [
-        "speech."
+      "admits_events": [
+        "_platform.clipboard.changed"
       ],
+      "description": "Know when you copy something and what kind of content it is (never the content itself)",
+      "method_count": 0,
+      "methods": [],
+      "name": "events.clipboard",
+      "risk": "moderate"
+    },
+    {
+      "admits_events": [
+        "_platform.ble.notification",
+        "_platform.hid.input",
+        "_platform.hid.report"
+      ],
+      "description": "Receive raw input from your devices: every HID input value and report, including a keyboard's keystrokes, and Bluetooth LE notifications",
+      "method_count": 0,
+      "methods": [],
+      "name": "events.input",
+      "risk": "dangerous"
+    },
+    {
+      "admits_events": [
+        "_platform.output.state"
+      ],
+      "description": "Receive what other plugins show and say: the output each plugin pushes to its HUD channels",
+      "method_count": 0,
+      "methods": [],
+      "name": "events.output",
+      "risk": "moderate"
+    },
+    {
+      "admits_events": [
+        "_platform.capture.progress",
+        "_platform.pipeline.transcript"
+      ],
+      "description": "Hear what you say: the text of your speech, and the words a spoken command has captured",
       "method_count": 0,
       "methods": [],
       "name": "events.speech",
-      "risk": "low"
+      "risk": "dangerous"
     },
     {
-      "description": "Receive window title and world model events",
-      "gated_event_prefixes": [
-        "_platform.window.",
-        "_platform.world."
+      "admits_events": [
+        "_platform.window.closed",
+        "_platform.window.created",
+        "_platform.window.focused",
+        "_platform.window.frame_changed",
+        "_platform.window.title_changed",
+        "_platform.world.updated"
       ],
+      "description": "See every window's title and position as windows open, close, move and change",
       "method_count": 0,
       "methods": [],
       "name": "events.world",
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "File operations — trash, search, tags, reveal",
-      "gated_event_prefixes": [],
       "method_count": 53,
       "methods": [
         "native.app_support_directory",
@@ -29601,8 +29788,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Finder operations — desktop items, sidebar, Finder windows",
-      "gated_event_prefixes": [],
       "method_count": 11,
       "methods": [
         "native.finder_default_view",
@@ -29621,8 +29808,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Hardware info — CPU, memory, model, serial number",
-      "gated_event_prefixes": [],
       "method_count": 14,
       "methods": [
         "native.cameras",
@@ -29644,8 +29831,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Send reports to connected HID devices",
-      "gated_event_prefixes": [],
       "method_count": 4,
       "methods": [
         "native.hid_claim",
@@ -29657,8 +29844,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "iCloud account status and storage info",
-      "gated_event_prefixes": [],
       "method_count": 2,
       "methods": [
         "native.icloud_desktop_sync",
@@ -29668,8 +29855,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Simulate keyboard and mouse events",
-      "gated_event_prefixes": [],
       "method_count": 45,
       "methods": [
         "input.click",
@@ -29722,8 +29909,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "System locale, timezone, and language settings",
-      "gated_event_prefixes": [],
       "method_count": 14,
       "methods": [
         "native.auto_timezone",
@@ -29745,8 +29932,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Application menu bar — read structure, click items",
-      "gated_event_prefixes": [],
       "method_count": 3,
       "methods": [
         "native.click_menu_item",
@@ -29757,8 +29944,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Menu bar extras — clock, control center items",
-      "gated_event_prefixes": [],
       "method_count": 3,
       "methods": [
         "native.menu_bar_battery_percent",
@@ -29769,16 +29956,16 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Capture microphone audio through a platform pipeline",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "microphone",
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Network interfaces, wifi state, and connections",
-      "gated_event_prefixes": [],
       "method_count": 21,
       "methods": [
         "native.active_network_service",
@@ -29807,8 +29994,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Post, list, and dismiss notifications",
-      "gated_event_prefixes": [],
       "method_count": 7,
       "methods": [
         "native.clear_notifications",
@@ -29823,8 +30010,8 @@
       "risk": "moderate"
     },
     {
+      "admits_events": [],
       "description": "Battery state, power source, and charging status",
-      "gated_event_prefixes": [],
       "method_count": 11,
       "methods": [
         "native.battery_cycle_count",
@@ -29843,8 +30030,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Privacy settings — permissions status for camera, mic, location",
-      "gated_event_prefixes": [],
       "method_count": 12,
       "methods": [
         "native.automation_permission",
@@ -29864,8 +30051,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "List and inspect running processes",
-      "gated_event_prefixes": [],
       "method_count": 11,
       "methods": [
         "native.cron_jobs",
@@ -29884,8 +30071,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Capture screen content as images",
-      "gated_event_prefixes": [],
       "method_count": 16,
       "methods": [
         "native.color_at_point",
@@ -29909,8 +30096,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Security settings — firewall, FileVault, Gatekeeper",
-      "gated_event_prefixes": [],
       "method_count": 13,
       "methods": [
         "native.automatic_login_user",
@@ -29931,8 +30118,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Login session — screen lock, screensaver, idle time",
-      "gated_event_prefixes": [],
       "method_count": 6,
       "methods": [
         "native.fast_user_switching",
@@ -29946,8 +30133,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Sharing settings — computer name, remote login, file sharing",
-      "gated_event_prefixes": [],
       "method_count": 7,
       "methods": [
         "native.computer_name",
@@ -29962,8 +30149,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Run shell commands and scripts outside the plugin's sandbox, with BranchKit's own access to your files and network",
-      "gated_event_prefixes": [],
       "method_count": 2,
       "methods": [
         "native.run_applescript",
@@ -29973,8 +30160,8 @@
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "System sound settings — alert sounds, UI sound effects",
-      "gated_event_prefixes": [],
       "method_count": 4,
       "methods": [
         "native.play_feedback_when_volume_changed",
@@ -29986,8 +30173,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Mission Control spaces and desktop management",
-      "gated_event_prefixes": [],
       "method_count": 8,
       "methods": [
         "native.auto_rearrange_spaces",
@@ -30003,8 +30190,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Speak through the system voice and post VoiceOver announcements (the platform makes the sound; what to say is the plugin's)",
-      "gated_event_prefixes": [],
       "method_count": 8,
       "methods": [
         "native.dictation_enabled",
@@ -30020,48 +30207,48 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "See and monitor audio devices from a pipeline stage",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "stage.audio_devices",
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "See and monitor connected displays from a pipeline stage",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "stage.displays",
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Capture microphone audio in a pipeline stage the plugin ships",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "stage.microphone",
       "risk": "dangerous"
     },
     {
+      "admits_events": [],
       "description": "Run machine-learning models on the Neural Engine (on-device acceleration; no network access, no file access)",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "stage.neural_engine",
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "See and monitor power source and battery state from a pipeline stage",
-      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "stage.power",
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Disk usage and volume information",
-      "gated_event_prefixes": [],
       "method_count": 5,
       "methods": [
         "native.apfs_snapshots",
@@ -30074,8 +30261,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "System state — battery, wifi, bluetooth, dark mode",
-      "gated_event_prefixes": [],
       "method_count": 35,
       "methods": [
         "native.active_ports",
@@ -30118,8 +30305,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "gated_event_prefixes": [],
       "method_count": 23,
       "methods": [
         "native.eject_disk",
@@ -30150,8 +30337,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "Status indicator — whether a menu bar item exists to show recording state",
-      "gated_event_prefixes": [],
       "method_count": 1,
       "methods": [
         "native.status_indicator"
@@ -30160,8 +30347,8 @@
       "risk": "low"
     },
     {
+      "admits_events": [],
       "description": "User session — current user, default browser, login items",
-      "gated_event_prefixes": [],
       "method_count": 7,
       "methods": [
         "native.current_user",
@@ -30176,11 +30363,15 @@
       "risk": "low"
     },
     {
-      "description": "Move, resize, and manage windows",
-      "gated_event_prefixes": [
-        "_platform.window.",
-        "_platform.world."
+      "admits_events": [
+        "_platform.window.closed",
+        "_platform.window.created",
+        "_platform.window.focused",
+        "_platform.window.frame_changed",
+        "_platform.window.title_changed",
+        "_platform.world.updated"
       ],
+      "description": "Move, resize, and manage windows",
       "method_count": 39,
       "methods": [
         "native.active_space",
