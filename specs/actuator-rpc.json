@@ -29492,9 +29492,7 @@
     },
     {
       "description": "Receive all platform events",
-      "gated_event_prefixes": [
-        "_platform."
-      ],
+      "gated_event_prefixes": [],
       "method_count": 0,
       "methods": [],
       "name": "events.*",
@@ -30160,7 +30158,10 @@
     },
     {
       "description": "Move, resize, and manage windows",
-      "gated_event_prefixes": [],
+      "gated_event_prefixes": [
+        "_platform.window.",
+        "_platform.world."
+      ],
       "method_count": 39,
       "methods": [
         "native.active_space",
