@@ -877,7 +877,7 @@
           "type": "array"
         },
         "events": {
-          "description": "Event patterns this plugin subscribes to.",
+          "description": "Event patterns this plugin subscribes to. See `Subscription.pattern`\nfor the pattern language.",
           "items": {
             "$ref": "#/$defs/Subscription"
           },
@@ -1876,7 +1876,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/EventSchemaDecl"
           },
-          "description": "Event types this plugin emits, keyed by event type name — or by a\nPATTERN, using the same language `consumes.events` accepts: `*`\nstands for exactly one dot-separated segment.\n\nA pattern is how a plugin declares a namespace whose names it only\nlearns at runtime. A scripting host emitting `scripts.<script>.<event>`\ndeclares `scripts.*.*`; an ambassador emitting per connected app, or\nthe browser plugin emitting per tab, has the same shape. Enumerating\nthose in a static manifest is impossible, which is why exact-string\nmatching here used to make host-shaped plugins undeliverable.\n\nTwo limits keep the widening bounded, both enforced at load\n(`validate::cross_plugin`): the first segment must be a literal, so a\ndeclaration stays anchored to a namespace its author can be held to;\nand `_platform.*` / `ext.*` are refused outright, matching the\nreserved-namespace check the emit path applies regardless.",
+          "description": "Event types this plugin emits, keyed by event type name — or by a\nPATTERN in which `*` stands for exactly one dot-separated segment, as\nin `consumes.events`. Unlike a subscription, a declaration does not\ntake `**`: it is literal text here, because a declaration is the\nbounded shape of what the plugin may emit and names each depth it\nuses (`tempo.*` and `tempo.*.*`, not `tempo.**`).\n\nA pattern is how a plugin declares a namespace whose names it only\nlearns at runtime. A scripting host emitting `scripts.<script>.<event>`\ndeclares `scripts.*.*`; an ambassador emitting per connected app, or\nthe browser plugin emitting per tab, has the same shape. Enumerating\nthose in a static manifest is impossible, which is why exact-string\nmatching here used to make host-shaped plugins undeliverable.\n\nTwo limits keep the widening bounded, both enforced at load\n(`validate::cross_plugin`): the first segment must be a literal, so a\ndeclaration stays anchored to a namespace its author can be held to;\nand `_platform.*` / `ext.*` are refused outright, matching the\nreserved-namespace check the emit path applies regardless.",
           "type": "object"
         },
         "native_messaging": {
@@ -2204,6 +2204,7 @@
           "type": "boolean"
         },
         "pattern": {
+          "description": "The event types to receive, as a pattern over dot-separated segments:\n`*` is exactly one whole segment, `**` is zero or more whole segments,\nand anything else is literal (`write_*` is the text `write_*`). A\npattern with no wildcard names one event type.\n\n`_platform.window.*` receives `_platform.window.focused` but not\n`_platform.window.frame.changed`; `_platform.window.**` receives\nboth. Because `**` may match nothing, `tempo.**` also receives a\nbare `tempo`, and `a.**.b` receives `a.b`.\n\nA wide pattern asks for more events, never for more access: every\nevent still needs what it would need under a pattern naming it\nalone — a privilege for the gated ones (window titles, the world\nmodel), the user's grant on this subscription for another plugin's\nevents, and nothing the emitter declared `private`.",
           "type": "string"
         },
         "source": {
