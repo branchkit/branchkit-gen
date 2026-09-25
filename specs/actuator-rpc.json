@@ -6791,6 +6791,7 @@
           "name": "matching"
         }
       ],
+      "x-branchkit-privilege": "dispatch",
       "x-since": "0.1.0"
     },
     {
@@ -29435,10 +29436,11 @@
       "risk": "moderate"
     },
     {
-      "description": "Dispatch typed actions to plugins on behalf of the user",
+      "description": "Resolve spoken words to any plugin's commands, seeing what they capture, and dispatch typed actions to plugins on behalf of the user",
       "gated_event_prefixes": [],
-      "method_count": 1,
+      "method_count": 2,
       "methods": [
+        "commands.resolve",
         "dispatch"
       ],
       "name": "dispatch",
