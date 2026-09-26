@@ -3167,6 +3167,28 @@
         ],
         "type": "object"
       },
+      "UnavailableOperation": {
+        "properties": {
+          "detail": {
+            "description": "Prose, for a session refusal: the session's own explanation.",
+            "type": "string"
+          },
+          "op": {
+            "description": "The operation's method name.",
+            "type": "string"
+          },
+          "reason": {
+            "description": "Why, as a refusal's `data.reason` says it: `platform_no_analogue`,\n`platform_unported` or `session_unsupported` (each SDK's\n`UNSUPPORTED_REASON_*` constants). A string, as on a refusal, so an\nSDK older than a new reason still reads the profile.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "op",
+          "reason"
+        ],
+        "type": "object"
+      },
       "UsbDevice": {
         "properties": {
           "manufacturer": {
@@ -26992,6 +27014,61 @@
         }
       ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "platform.profile",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "platform_profile_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "What this machine can do, asked before calling rather than learned from a\nrefusal.",
+          "properties": {
+            "host": {
+              "description": "The host process serving host-dependent operations and events.",
+              "type": "string"
+            },
+            "os": {
+              "description": "`macos`, `linux` or `windows`.",
+              "type": "string"
+            },
+            "session": {
+              "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`gnome` or `other_wayland`. Absent on other systems.",
+              "type": "string"
+            },
+            "unavailable": {
+              "description": "Every operation a plugin can call that would be refused here, with\nthe reason and detail the refusal itself carries. An operation not\nlisted runs here.",
+              "items": {
+                "$ref": "#/$defs/UnavailableOperation"
+              },
+              "type": "array"
+            },
+            "unobservable_events": {
+              "description": "Host events (`_platform.*`) that are never delivered here.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "os",
+            "host",
+            "unavailable",
+            "unobservable_events"
+          ],
+          "title": "PlatformProfileResult",
+          "type": "object"
+        }
+      },
+      "summary": "Which operations and host events this machine cannot provide, and why — ask before calling instead of handling a refusal",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "plugin.data.export",
