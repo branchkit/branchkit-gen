@@ -3754,7 +3754,7 @@
           "name": "owner_plugin",
           "required": true,
           "schema": {
-            "description": "The plugin that owns the command being partially matched.\nSubscribers filter on this to receive only events for their\nown commands.",
+            "description": "The plugin that owns the command being partially matched. The\nevent is ADDRESSED to it: the platform delivers it to this plugin\nand no other, so a subscriber only ever sees progress on its own\ncommands.",
             "type": "string"
           }
         }
@@ -3766,7 +3766,7 @@
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "speech",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -29205,7 +29205,6 @@
     {
       "also_admitted_by": [],
       "events": [
-        "_platform.capture.progress",
         "_platform.pipeline.transcript"
       ],
       "name": "speech",
@@ -29251,6 +29250,14 @@
       ],
       "name": "world",
       "privilege": "events.world"
+    },
+    {
+      "also_admitted_by": [],
+      "events": [
+        "_platform.capture.progress"
+      ],
+      "name": "own",
+      "privilege": null
     }
   ],
   "x-branchkit-limits": {
@@ -29648,7 +29655,6 @@
     {
       "admits_events": [
         "_platform.ble.notification",
-        "_platform.capture.progress",
         "_platform.clipboard.changed",
         "_platform.hid.input",
         "_platform.hid.report",
@@ -29701,10 +29707,9 @@
     },
     {
       "admits_events": [
-        "_platform.capture.progress",
         "_platform.pipeline.transcript"
       ],
-      "description": "Hear what you say: the text of your speech, and the words a spoken command has captured",
+      "description": "Hear what you say: the text of your speech",
       "method_count": 0,
       "methods": [],
       "name": "events.speech",
