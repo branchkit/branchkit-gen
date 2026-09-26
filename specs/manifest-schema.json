@@ -2199,6 +2199,15 @@
       "additionalProperties": false,
       "description": "A subscription pattern for consuming events.",
       "properties": {
+        "max_rate_hz": {
+          "description": "The most events per second this plugin wants from a `latest` stream\nthis subscription covers — a stage stream whose every event carries\nthe whole current value (a gaze position, a pointer). A positive\nnumber.\n\nA gaze-dot overlay that redraws at 60 Hz subscribes to a 250 Hz gaze\nstream with `\"max_rate_hz\": 60`: it receives at most 60 positions a\nsecond, and always the newest when it does, including the last one\nafter the stream goes quiet. Every other subscriber, and the stage\nitself, is unaffected.\n\nOnly `latest` streams are thinned. Events that each matter — a blink,\na key, anything not declared `latest` — are delivered one by one\nwhatever this says, so a cap on a subscription that can only receive\nthose is refused when the manifest loads.",
+          "exclusiveMinimum": 0,
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
         "optional": {
           "default": false,
           "type": "boolean"
