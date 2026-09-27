@@ -303,12 +303,20 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "uses": {
+            "description": "Platform operations this action cannot work without (e.g.\n`[\"native.toggle_fullscreen\"]`). Where the machine refuses any of\nthem — the OS, the desktop session or the host cannot provide it —\nevery command running this action is gated off: it never matches and\nthe Discovery HUD does not offer it, while its words stay in the\ngrammar so the utterance cannot land on a different command. List\nonly what the action has no way around; an operation it merely\nprefers belongs in the handler's own `Supports` check.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
           "fields",
           "label",
-          "modes"
+          "modes",
+          "uses"
         ],
         "type": "object"
       },
