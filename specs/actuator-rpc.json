@@ -16275,7 +16275,7 @@
           "type": "number"
         }
       },
-      "summary": "Get initial key repeat delay",
+      "summary": "Get initial key repeat delay (seconds)",
       "tags": [
         {
           "name": "native"
@@ -22416,7 +22416,7 @@
           "type": "object"
         }
       },
-      "summary": "Set initial key repeat delay",
+      "summary": "Set initial key repeat delay (seconds)",
       "tags": [
         {
           "name": "native"
@@ -22454,7 +22454,7 @@
           "type": "object"
         }
       },
-      "summary": "Set key repeat rate",
+      "summary": "Set key repeat rate (keys per second)",
       "tags": [
         {
           "name": "native"
