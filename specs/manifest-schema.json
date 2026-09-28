@@ -928,6 +928,20 @@
       ],
       "type": "object"
     },
+    "DbusConfig": {
+      "additionalProperties": false,
+      "description": "`requires.dbus`: the D-Bus methods a plugin calls.",
+      "properties": {
+        "methods": {
+          "description": "Each `<bus>:<service>/<interface>.<method>`: `session` or `system`;\na well-known service name, or a family ending `.*`\n(`org.mpris.MediaPlayer2.*`); an interface and one method. The\nsystem bus admits only `org.freedesktop.DBus.Properties.Get` and\n`GetAll`, and services that run code, hold secrets or are\ncapabilities of their own are refused at load.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "DenylistPolicy": {
       "description": "`policy.denylist` — manifest affordance.\n\nThe manifest declares the affordance (\"the user may freeze writes from\nthis plugin to this collection\"); the user toggles the per-plugin gate\nin Settings → Plugins → Inspector. v1 ships a single boolean affordance;\nfuture versions could add per-collection scoping or\n\"always denylisted\" claims.",
       "properties": {
@@ -1969,6 +1983,17 @@
       "additionalProperties": false,
       "description": "The plugin's ask: everything a person is shown and accepts at install.\n\nMembership test, deliberately not \"is it security-relevant\": **the user\nmust see this before accepting, because there is no later moment, or the\nlater moment is not enough.** `sockets` and `runtimes` are disclosed and\nnever granted — the install panel is the only place they are ever seen.\n`privileges` and `network` do have later moments on the plugin's card,\nbut the first acceptance is still here.\n\nThings that look like they belong and do not: `run` (the sandbox confines\nthe process whatever it names), `collection_data.keybinds` (a real\ncapability, but grant-checked through `Channel::CollectionWrite` and\nrevocable on the card, so its later moment is enough), and\n`consumes.effects` (coordination, not capability: effects are arbitrated\nat runtime, not a reach the plugin is granted). Moving a field across this\nboundary is a breaking manifest change, so a new top-level field must\nchoose a side when it is added.",
       "properties": {
+        "dbus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DbusConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "D-Bus methods this plugin calls through `native.dbus_call` (Linux),\none entry per method. Each is a request the user grants on the\nplugin's card; the manifest asks, the grant store decides."
+        },
         "network": {
           "anyOf": [
             {

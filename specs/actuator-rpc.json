@@ -12589,6 +12589,103 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.dbus_call",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "args",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Opaque by design: D-Bus values are typed by `signature` at run time,\nso no static type can describe them. One JSON value per argument,\nin the form its type takes: integers,\nnumbers, booleans and strings as themselves; an array for `a…` and\n`(…)`; an object for `a{…}`; a variant as\n`{\"signature\": \"d\", \"value\": 0.5}` or a plain string, boolean or\nnumber.",
+            "items": {},
+            "type": "array"
+          }
+        },
+        {
+          "name": "bus",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "`session` (the default) or `system` (Properties.Get / GetAll only).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "interface",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "method",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "path",
+          "required": true,
+          "schema": {
+            "description": "The object path (`/org/mpris/MediaPlayer2`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "service",
+          "required": true,
+          "schema": {
+            "description": "The well-known service name (`org.mpris.MediaPlayer2.spotify`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "signature",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The arguments' D-Bus signature (`su`); empty or absent for none.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_dbus_call_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "signature": {
+              "description": "The reply's D-Bus signature; empty when it carries nothing.",
+              "type": "string"
+            },
+            "values": {
+              "description": "Opaque by design, typed by `signature` at run time: one JSON value\nper reply value, a variant unwrapped to its value.",
+              "items": {},
+              "type": "array"
+            }
+          },
+          "required": [
+            "signature",
+            "values"
+          ],
+          "title": "NativeDbusCallResult",
+          "type": "object"
+        }
+      },
+      "summary": "Call one D-Bus method the plugin declared and the user switched on. Exists only on Linux; elsewhere it is refused with platform_no_analogue",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-emits": [
+        "plugin.dbus_call"
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.default_app_for_uti",
       "paramStructure": "by-name",
       "params": [
