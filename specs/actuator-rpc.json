@@ -10329,7 +10329,7 @@
           "type": "object"
         }
       },
-      "summary": "Perform an action on an accessibility element",
+      "summary": "Perform an action on an accessibility element: press (its default action, what a click does), toggle, focus, expand, collapse, increment, decrement, scroll_into_view, show_menu, or one of the element's own actions by its OS name. The element's actions list says which it offers",
       "tags": [
         {
           "name": "native"
@@ -10419,7 +10419,7 @@
           "type": "object"
         }
       },
-      "summary": "Set an attribute on an accessibility element",
+      "summary": "Set an accessibility element's value (text, or a number for a slider or spin button) or focus it (focused: true). Returns whether it took",
       "tags": [
         {
           "name": "native"
