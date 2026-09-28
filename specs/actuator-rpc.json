@@ -3599,6 +3599,69 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "_platform.ax.notification",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "element",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/AccessibleElement",
+            "description": "The element it happened to, as the tree operations describe one."
+          }
+        },
+        {
+          "name": "notification",
+          "required": true,
+          "schema": {
+            "description": "focus_changed, value_changed, name_changed, state_changed,\nchildren_changed, selection_changed or window_opened.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "on",
+          "required": false,
+          "schema": {
+            "description": "For state_changed: whether that state is now on.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin holding the subscription. The event is ADDRESSED to it:\nwhat a user types into a field arrives as value_changed, so no other\nplugin receives it, whatever it holds.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "state",
+          "required": false,
+          "schema": {
+            "description": "For state_changed: the ARIA state that changed (checked, expanded,\nselected, pressed, disabled).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "subscription_id",
+          "required": true,
+          "schema": {
+            "description": "The subscription `native.ax_observe` returned.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A change in an application's accessibility tree that a native.ax_observe subscription asked for: focus moved, a value, name or state changed, children or selection changed, a window opened.",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "own",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "_platform.ble.notification",
       "paramStructure": "by-name",
       "params": [
@@ -10254,6 +10317,7 @@
           "required": false,
           "schema": {
             "default": [],
+            "description": "The notifications wanted, from the portable vocabulary; none means\nall of them. An unknown name is refused.",
             "items": {
               "type": "string"
             },
@@ -10264,6 +10328,7 @@
           "name": "pid",
           "required": true,
           "schema": {
+            "description": "The application to observe.",
             "format": "int32",
             "type": "integer"
           }
@@ -10285,11 +10350,14 @@
           "type": "object"
         }
       },
-      "summary": "Start observing AX notifications (STUB -- not yet implemented)",
+      "summary": "Observe an application's accessibility changes. Notifications arrive as _platform.ax.notification, addressed to the calling plugin alone: focus_changed, value_changed, name_changed, state_changed, children_changed, selection_changed, window_opened (none named means all)",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "_platform.ax.notification"
       ],
       "x-branchkit-privilege": "accessibility",
       "x-since": "0.1.0"
@@ -10456,7 +10524,7 @@
           "type": "object"
         }
       },
-      "summary": "Stop observing AX notifications (STUB)",
+      "summary": "Stop observing accessibility changes. A plugin can end only its own subscriptions",
       "tags": [
         {
           "name": "native"
@@ -29326,6 +29394,7 @@
     {
       "also_admitted_by": [],
       "events": [
+        "_platform.ax.notification",
         "_platform.capture.progress"
       ],
       "name": "own",
