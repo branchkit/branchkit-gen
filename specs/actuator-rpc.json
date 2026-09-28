@@ -349,6 +349,40 @@
         ],
         "type": "string"
       },
+      "AppVolume": {
+        "description": "One app's audio in the system mixer: its own volume and mute, apart from\nthe device's. An app with several streams (a browser's tabs) is one\nentry, and setting it sets them all.",
+        "properties": {
+          "app": {
+            "description": "The app's identity, as `native.running_apps` reports it.",
+            "type": "string"
+          },
+          "muted": {
+            "description": "True when every one of its streams is muted.",
+            "type": "boolean"
+          },
+          "name": {
+            "description": "The app's name as the mixer shows it.",
+            "type": "string"
+          },
+          "playing": {
+            "description": "True when a stream is playing now; a paused one stays listed.",
+            "type": "boolean"
+          },
+          "volume": {
+            "description": "0.0–1.0; the loudest of its streams.",
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "app",
+          "muted",
+          "name",
+          "playing",
+          "volume"
+        ],
+        "type": "object"
+      },
       "AudioDevice": {
         "description": "An audio input/output device.",
         "properties": {
@@ -9702,6 +9736,38 @@
       ],
       "x-branchkit-privilege": "apps",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.app_volumes",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_app_volumes_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "apps": {
+              "items": {
+                "$ref": "#/$defs/AppVolume"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "apps"
+          ],
+          "title": "NativeAppVolumesResult",
+          "type": "object"
+        }
+      },
+      "summary": "List each app playing audio, with its own volume and mute, as the system mixer shows it",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "audio",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.app_windows",
@@ -21485,6 +21551,95 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_app_muted",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "app",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "muted",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_app_muted_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetAppMutedResult",
+          "type": "object"
+        }
+      },
+      "summary": "Mute or unmute one app in the system mixer; false when the app has no audio stream",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "audio",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "native.set_app_volume",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "app",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "volume",
+          "required": true,
+          "schema": {
+            "format": "double",
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_app_volume_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetAppVolumeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set one app's volume (0.0-1.0) in the system mixer; false when the app has no audio stream",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "audio",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_audio_device",
       "paramStructure": "by-name",
       "params": [
@@ -29653,10 +29808,11 @@
     {
       "admits_events": [],
       "description": "Audio devices, volume, sound playback, and text-to-speech",
-      "method_count": 19,
+      "method_count": 22,
       "methods": [
         "native.alert_sound",
         "native.alert_volume",
+        "native.app_volumes",
         "native.audio_device_volume",
         "native.audio_devices",
         "native.audio_input_device",
@@ -29666,6 +29822,8 @@
         "native.list_audio_output_devices",
         "native.mute",
         "native.play_sound",
+        "native.set_app_muted",
+        "native.set_app_volume",
         "native.set_audio_device",
         "native.set_audio_device_volume",
         "native.set_audio_input_device",
