@@ -20657,7 +20657,7 @@
           "type": "object"
         }
       },
-      "summary": "Execute an AppleScript via osascript",
+      "summary": "Execute an AppleScript via osascript. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
