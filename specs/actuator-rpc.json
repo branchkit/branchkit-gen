@@ -19367,6 +19367,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.power_mode",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_power_mode_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "mode": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "mode"
+          ],
+          "title": "NativePowerModeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Get the power mode: saving energy, balanced, or favouring performance. Returns one of: power-saver, balanced, performance",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "power",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.power_source",
       "paramStructure": "by-name",
       "params": [],
@@ -23080,6 +23109,43 @@
       "x-since": "0.2.0"
     },
     {
+      "name": "native.set_power_mode",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "mode",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_power_mode_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetPowerModeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set the power mode (power-saver, balanced or performance); false when refused or not offered",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_screen_reader_enabled",
       "paramStructure": "by-name",
       "params": [
@@ -23570,6 +23636,43 @@
       ],
       "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.set_visual_alerts_enabled",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_visual_alerts_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetVisualAlertsEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn screen flashing on alert sounds on or off; false when it did not change",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.set_volume",
@@ -26065,6 +26168,35 @@
       ],
       "x-branchkit-privilege": "user",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.visual_alerts_enabled",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_visual_alerts_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeVisualAlertsEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the screen flashes when an alert sound plays",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.volume",
@@ -30108,7 +30240,7 @@
     {
       "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "method_count": 23,
+      "method_count": 24,
       "methods": [
         "native.accessibility_display_invert",
         "native.accessibility_enabled",
@@ -30132,7 +30264,8 @@
         "native.selected_text",
         "native.slow_keys",
         "native.sticky_keys",
-        "native.text_scale"
+        "native.text_scale",
+        "native.visual_alerts_enabled"
       ],
       "name": "accessibility",
       "risk": "dangerous"
@@ -30726,7 +30859,7 @@
     {
       "admits_events": [],
       "description": "Battery state, power source, and charging status",
-      "method_count": 11,
+      "method_count": 12,
       "methods": [
         "native.battery_cycle_count",
         "native.battery_health",
@@ -30737,6 +30870,7 @@
         "native.low_power_mode",
         "native.optimized_charging",
         "native.power_adapter_connected",
+        "native.power_mode",
         "native.power_source",
         "native.time_on_battery"
       ],
@@ -31021,7 +31155,7 @@
     {
       "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "method_count": 31,
+      "method_count": 33,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
@@ -31046,12 +31180,14 @@
         "native.set_mouse_keys",
         "native.set_night_shift",
         "native.set_on_screen_keyboard_enabled",
+        "native.set_power_mode",
         "native.set_screen_reader_enabled",
         "native.set_screenshot_location",
         "native.set_slow_keys",
         "native.set_sticky_keys",
         "native.set_text_scale",
         "native.set_url_scheme_handler",
+        "native.set_visual_alerts_enabled",
         "native.set_wallpaper",
         "native.sleep_now"
       ],
