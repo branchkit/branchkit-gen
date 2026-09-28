@@ -933,7 +933,7 @@
       "description": "`requires.dbus`: the D-Bus methods a plugin calls.",
       "properties": {
         "methods": {
-          "description": "Each `<bus>:<service>/<interface>.<method>`: `session` or `system`;\na well-known service name, or a family ending `.*`\n(`org.mpris.MediaPlayer2.*`); an interface and one method. The\nsystem bus admits only `org.freedesktop.DBus.Properties.Get` and\n`GetAll`, and services that run code, hold secrets or are\ncapabilities of their own are refused at load.",
+          "description": "Each `<bus>:<service>/<interface>.<method>`: `session` or `system`;\na well-known service name, or a family ending `.*`\n(`org.mpris.MediaPlayer2.*`); an interface and one method. The\nsystem bus admits only `org.freedesktop.DBus.Properties.Get` and\n`GetAll`, and services that run code, hold secrets or are\ncapabilities of their own are refused at load. A general-purpose\nmethod names what it acts on in parentheses:\n`…/org.freedesktop.DBus.Properties.Set(org.mpris.MediaPlayer2.Player)`,\n`…/org.freedesktop.Application.ActivateAction(quit)`; for\n`Properties.Set`, `ActivateAction` and `org.gtk.Actions` this is\nrequired and the service cannot be a family.",
           "items": {
             "type": "string"
           },
