@@ -1,154 +1,149 @@
 {
   "components": {
     "schemas": {
-      "AXElementInfo": {
-        "description": "Detailed info about an accessibility element.",
+      "AccessibleBounds": {
+        "description": "An element's frame.",
+        "properties": {
+          "height": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "width": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "x": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "y": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "height",
+          "width",
+          "x",
+          "y"
+        ],
+        "type": "object"
+      },
+      "AccessibleElement": {
+        "description": "An element of an application's accessibility tree.",
         "properties": {
           "actions": {
+            "description": "The portable actions it offers: \"press\", \"focus\", \"toggle\",\n\"expand\", \"collapse\", \"increment\", \"decrement\", \"set_value\",\n\"scroll_into_view\", \"show_menu\".",
             "items": {
               "type": "string"
             },
             "type": "array"
           },
-          "attributes": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
+          "bounds": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AccessibleBounds"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Where it is on screen, in the same coordinates as the window list."
           },
           "children_count": {
+            "description": "How many children it has.",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
           },
           "description": {
+            "description": "Longer help or description text.",
             "type": "string"
           },
-          "enabled": {
-            "type": "boolean"
+          "id": {
+            "description": "Opaque handle to pass back to read this element, valid while it\nlives. Its form differs per OS; treat it as a token.",
+            "type": "string"
           },
-          "focused": {
-            "type": "boolean"
+          "name": {
+            "description": "What assistive technology reads as the element's name (\"Send\").",
+            "type": "string"
           },
-          "path": {
+          "native_role": {
+            "description": "The OS's own role: \"AXButton\" (with its subrole, \"AXButton/\nAXCloseButton\"), \"push button\", \"Button\".",
+            "type": "string"
+          },
+          "pid": {
+            "description": "The process the element belongs to.",
+            "format": "int32",
+            "type": "integer"
+          },
+          "role": {
+            "description": "The ARIA role (\"button\", \"checkbox\", \"textbox\", \"menuitem\", …), or\n\"generic\" where none fits. Also \"window\" and \"text\" (static text),\nwhich ARIA leaves to the host.",
+            "type": "string"
+          },
+          "states": {
+            "description": "ARIA states that hold: \"focused\", \"focusable\", \"disabled\",\n\"checked\", \"mixed\", \"pressed\", \"expanded\", \"collapsed\", \"selected\",\n\"readonly\", \"multiline\", \"protected\" (a password field).",
             "items": {
-              "$ref": "#/$defs/AXPathSegment"
+              "type": "string"
             },
             "type": "array"
           },
-          "position": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "format": "int32",
-                "type": "integer"
-              },
-              {
-                "format": "int32",
-                "type": "integer"
-              }
-            ],
-            "type": "array"
-          },
-          "role": {
+          "value": {
+            "description": "Its value as text: a field's contents, a slider's position.",
             "type": "string"
-          },
-          "size": {
-            "maxItems": 2,
-            "minItems": 2,
-            "prefixItems": [
-              {
-                "format": "int32",
-                "type": "integer"
-              },
-              {
-                "format": "int32",
-                "type": "integer"
-              }
-            ],
-            "type": "array"
-          },
-          "subrole": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "value": {}
+          }
         },
         "required": [
           "actions",
-          "attributes",
+          "bounds",
           "children_count",
           "description",
-          "enabled",
-          "focused",
-          "path",
-          "position",
+          "id",
+          "name",
+          "native_role",
+          "pid",
           "role",
-          "size",
-          "subrole",
-          "title"
+          "states",
+          "value"
         ],
         "type": "object"
       },
-      "AXElementNode": {
-        "description": "A tree node of accessibility elements (recursive).\n\nschemars handles the self-reference automatically via a `$defs`\nentry — no `#[schema(no_recursion)]` annotation needed (that was\nutoipa-specific and was dropped in Phase 2j-utoipa-removal).",
+      "AccessibleNode": {
+        "description": "An element and its descendants, to the depth asked for.",
         "properties": {
           "children": {
             "items": {
-              "$ref": "#/components/schemas/AXElementNode"
+              "$ref": "#/components/schemas/AccessibleNode"
             },
             "type": "array"
           },
           "element": {
-            "$ref": "#/$defs/AXElementInfo"
+            "$ref": "#/$defs/AccessibleElement"
           }
         },
         "required": [
           "children",
           "element"
         ],
-        "title": "AXElementNode",
+        "title": "AccessibleNode",
         "type": "object"
       },
-      "AXElementRef": {
-        "description": "A reference to an accessibility element by PID + path from the application root.",
+      "AccessibleRef": {
+        "description": "Which element: one a previous answer handed out (`id`), or an\napplication's root (`pid`).",
         "properties": {
-          "path": {
-            "default": [],
-            "items": {
-              "$ref": "#/$defs/AXPathSegment"
-            },
-            "type": "array"
+          "id": {
+            "default": null,
+            "type": "string"
           },
           "pid": {
+            "default": null,
             "format": "int32",
             "type": "integer"
           }
         },
         "required": [
-          "path",
+          "id",
           "pid"
-        ],
-        "type": "object"
-      },
-      "AXPathSegment": {
-        "description": "A segment of an accessibility element path (role + index among siblings with that role).",
-        "properties": {
-          "index": {
-            "format": "uint32",
-            "minimum": 0,
-            "type": "integer"
-          },
-          "role": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "index",
-          "role"
         ],
         "type": "object"
       },
@@ -10099,8 +10094,10 @@
       "params": [
         {
           "name": "pid",
-          "required": true,
+          "required": false,
           "schema": {
+            "default": null,
+            "description": "Only this application's element; any application's when absent.",
             "format": "int32",
             "type": "integer"
           }
@@ -10126,91 +10123,79 @@
         "name": "native_ax_element_at_point_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Detailed info about an accessibility element.",
+          "description": "An element of an application's accessibility tree.",
           "properties": {
             "actions": {
+              "description": "The portable actions it offers: \"press\", \"focus\", \"toggle\",\n\"expand\", \"collapse\", \"increment\", \"decrement\", \"set_value\",\n\"scroll_into_view\", \"show_menu\".",
               "items": {
                 "type": "string"
               },
               "type": "array"
             },
-            "attributes": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
+            "bounds": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AccessibleBounds"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Where it is on screen, in the same coordinates as the window list."
             },
             "children_count": {
+              "description": "How many children it has.",
               "format": "uint32",
               "minimum": 0,
               "type": "integer"
             },
             "description": {
+              "description": "Longer help or description text.",
               "type": "string"
             },
-            "enabled": {
-              "type": "boolean"
+            "id": {
+              "description": "Opaque handle to pass back to read this element, valid while it\nlives. Its form differs per OS; treat it as a token.",
+              "type": "string"
             },
-            "focused": {
-              "type": "boolean"
+            "name": {
+              "description": "What assistive technology reads as the element's name (\"Send\").",
+              "type": "string"
             },
-            "path": {
+            "native_role": {
+              "description": "The OS's own role: \"AXButton\" (with its subrole, \"AXButton/\nAXCloseButton\"), \"push button\", \"Button\".",
+              "type": "string"
+            },
+            "pid": {
+              "description": "The process the element belongs to.",
+              "format": "int32",
+              "type": "integer"
+            },
+            "role": {
+              "description": "The ARIA role (\"button\", \"checkbox\", \"textbox\", \"menuitem\", …), or\n\"generic\" where none fits. Also \"window\" and \"text\" (static text),\nwhich ARIA leaves to the host.",
+              "type": "string"
+            },
+            "states": {
+              "description": "ARIA states that hold: \"focused\", \"focusable\", \"disabled\",\n\"checked\", \"mixed\", \"pressed\", \"expanded\", \"collapsed\", \"selected\",\n\"readonly\", \"multiline\", \"protected\" (a password field).",
               "items": {
-                "$ref": "#/$defs/AXPathSegment"
+                "type": "string"
               },
               "type": "array"
             },
-            "position": {
-              "maxItems": 2,
-              "minItems": 2,
-              "prefixItems": [
-                {
-                  "format": "int32",
-                  "type": "integer"
-                },
-                {
-                  "format": "int32",
-                  "type": "integer"
-                }
-              ],
-              "type": "array"
-            },
-            "role": {
+            "value": {
+              "description": "Its value as text: a field's contents, a slider's position.",
               "type": "string"
-            },
-            "size": {
-              "maxItems": 2,
-              "minItems": 2,
-              "prefixItems": [
-                {
-                  "format": "int32",
-                  "type": "integer"
-                },
-                {
-                  "format": "int32",
-                  "type": "integer"
-                }
-              ],
-              "type": "array"
-            },
-            "subrole": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "value": {}
+            }
           },
           "required": [
+            "id",
             "role",
-            "enabled",
-            "focused",
-            "children_count",
+            "native_role",
+            "states",
             "actions",
-            "attributes",
-            "path"
+            "pid",
+            "children_count"
           ],
-          "title": "AXElementInfo",
+          "title": "AccessibleElement",
           "type": "object"
         }
       },
@@ -10241,14 +10226,14 @@
           "name": "element",
           "required": true,
           "schema": {
-            "$ref": "#/$defs/AXElementRef"
+            "$ref": "#/$defs/AccessibleRef"
           }
         }
       ],
       "result": {
         "name": "native_ax_element_tree_result",
         "schema": {
-          "$ref": "#/components/schemas/AXElementNode"
+          "$ref": "#/components/schemas/AccessibleNode"
         }
       },
       "summary": "Get the accessibility element tree rooted at an element",
@@ -10324,7 +10309,7 @@
           "name": "element",
           "required": true,
           "schema": {
-            "$ref": "#/$defs/AXElementRef"
+            "$ref": "#/$defs/AccessibleRef"
           }
         }
       ],
@@ -10372,7 +10357,7 @@
           "name": "element",
           "required": true,
           "schema": {
-            "$ref": "#/$defs/AXElementRef"
+            "$ref": "#/$defs/AccessibleRef"
           }
         }
       ],
@@ -10380,7 +10365,9 @@
         "name": "native_ax_read_attributes_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "title": "AnyValue"
+          "additionalProperties": true,
+          "title": "Map_of_AnyValue",
+          "type": "object"
         }
       },
       "summary": "Read specific attributes from an accessibility element",
@@ -10407,7 +10394,7 @@
           "name": "element",
           "required": true,
           "schema": {
-            "$ref": "#/$defs/AXElementRef"
+            "$ref": "#/$defs/AccessibleRef"
           }
         },
         {
@@ -14795,7 +14782,7 @@
             "element": {
               "anyOf": [
                 {
-                  "$ref": "#/$defs/AXElementInfo"
+                  "$ref": "#/$defs/AccessibleElement"
                 },
                 {
                   "type": "null"
