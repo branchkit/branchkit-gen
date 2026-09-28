@@ -29134,6 +29134,15 @@
       "paramStructure": "by-name",
       "params": [
         {
+          "name": "check_only",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Check the candidate and report any conflict without saving it.",
+            "type": "boolean"
+          }
+        },
+        {
           "name": "newruleactionjson",
           "required": false,
           "schema": {
@@ -29253,6 +29262,15 @@
           "schema": {
             "description": "Existing canonical command id (the previous canonical phrase) of\nthe rule being updated. Required.",
             "type": "string"
+          }
+        },
+        {
+          "name": "check_only",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Check the candidate and report any conflict without saving it or\nremoving the command it would replace.",
+            "type": "boolean"
           }
         },
         {
