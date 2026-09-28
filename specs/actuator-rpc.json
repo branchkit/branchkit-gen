@@ -11218,6 +11218,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.bounce_keys",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_bounce_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeBounceKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if Bounce Keys is on (repeated presses of one key are ignored)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.brightness",
       "paramStructure": "by-name",
       "params": [
@@ -17257,6 +17286,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.magnifier_enabled",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_magnifier_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeMagnifierEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the screen magnifier is on (Zoom, the GNOME magnifier, Magnifier)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.maximize_window",
       "paramStructure": "by-name",
       "params": [
@@ -17787,6 +17845,35 @@
       ],
       "x-branchkit-privilege": "input",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.mouse_keys",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_mouse_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeMouseKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if Mouse Keys is on (the numeric keypad moves the pointer)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.mouse_speed",
@@ -18684,6 +18771,35 @@
       ],
       "x-branchkit-privilege": "screenshot",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.on_screen_keyboard_enabled",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_on_screen_keyboard_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeOnScreenKeyboardEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the on-screen keyboard is on",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.open_app_settings",
@@ -20900,6 +21016,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.screen_reader_enabled",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_screen_reader_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeScreenReaderEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the screen reader is on (VoiceOver, Orca, Narrator)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.screen_resolution",
       "paramStructure": "by-name",
       "params": [],
@@ -21880,6 +22025,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_bounce_keys",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_bounce_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetBounceKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn Bounce Keys on or off (repeated presses of one key are ignored)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_brightness",
       "paramStructure": "by-name",
       "params": [
@@ -22674,6 +22856,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_magnifier_enabled",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_magnifier_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetMagnifierEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn the screen magnifier on or off; false when it did not change",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_menu_bar_auto_hide",
       "paramStructure": "by-name",
       "params": [
@@ -22709,6 +22928,43 @@
       ],
       "x-branchkit-privilege": "menubar",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.set_mouse_keys",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_mouse_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetMouseKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn Mouse Keys on or off (the numeric keypad moves the pointer)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.set_mouse_speed",
@@ -22785,6 +23041,80 @@
       ],
       "x-branchkit-privilege": "system.control",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.set_on_screen_keyboard_enabled",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_on_screen_keyboard_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetOnScreenKeyboardEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Show or hide the on-screen keyboard; false when it did not change",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "native.set_screen_reader_enabled",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_screen_reader_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetScreenReaderEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.set_screenshot_format",
@@ -22974,6 +23304,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_slow_keys",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_slow_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetSlowKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn Slow Keys on or off (a key registers only after it is held)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_stage_manager",
       "paramStructure": "by-name",
       "params": [
@@ -23011,6 +23378,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_sticky_keys",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_sticky_keys_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetStickyKeysResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_tap_to_click",
       "paramStructure": "by-name",
       "params": [
@@ -23046,6 +23450,44 @@
       ],
       "x-branchkit-privilege": "input",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.set_text_scale",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "scale",
+          "required": true,
+          "schema": {
+            "format": "double",
+            "type": "number"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_text_scale_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetTextScaleResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set the system text size as a factor of the default (1.0); false when refused",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.set_trackpad_speed",
@@ -24724,6 +25166,28 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.text_scale",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_text_scale_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "format": "double",
+          "title": "double",
+          "type": "number"
+        }
+      },
+      "summary": "Get the system text size as a factor of the default (1.0)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.thermal_state",
       "paramStructure": "by-name",
       "params": [],
@@ -25603,35 +26067,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.voiceover_enabled",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_voiceover_enabled_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeVoiceoverEnabledResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if VoiceOver is enabled",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.volume",
       "paramStructure": "by-name",
       "params": [],
@@ -26367,35 +26802,6 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.zoom_enabled",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_zoom_enabled_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeZoomEnabledResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if Zoom accessibility is enabled",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "accessibility",
       "x-since": "0.1.0"
     },
     {
@@ -29702,7 +30108,7 @@
     {
       "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "method_count": 19,
+      "method_count": 23,
       "methods": [
         "native.accessibility_display_invert",
         "native.accessibility_enabled",
@@ -29714,15 +30120,19 @@
         "native.ax_set_attribute",
         "native.ax_unobserve",
         "native.bold_text_enabled",
+        "native.bounce_keys",
         "native.cursor_shake_to_locate",
         "native.differentiate_without_color",
         "native.focused_element",
         "native.grayscale_enabled",
+        "native.magnifier_enabled",
+        "native.mouse_keys",
+        "native.on_screen_keyboard_enabled",
+        "native.screen_reader_enabled",
         "native.selected_text",
         "native.slow_keys",
         "native.sticky_keys",
-        "native.voiceover_enabled",
-        "native.zoom_enabled"
+        "native.text_scale"
       ],
       "name": "accessibility",
       "risk": "dangerous"
@@ -30611,7 +31021,7 @@
     {
       "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "method_count": 23,
+      "method_count": 31,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
@@ -30627,12 +31037,20 @@
         "native.screen_saver_start",
         "native.set_airport_power",
         "native.set_bluetooth_power",
+        "native.set_bounce_keys",
         "native.set_computer_name",
         "native.set_dark_mode",
         "native.set_dnd",
         "native.set_dock_position",
+        "native.set_magnifier_enabled",
+        "native.set_mouse_keys",
         "native.set_night_shift",
+        "native.set_on_screen_keyboard_enabled",
+        "native.set_screen_reader_enabled",
         "native.set_screenshot_location",
+        "native.set_slow_keys",
+        "native.set_sticky_keys",
+        "native.set_text_scale",
         "native.set_url_scheme_handler",
         "native.set_wallpaper",
         "native.sleep_now"
