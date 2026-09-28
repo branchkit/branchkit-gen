@@ -26779,6 +26779,94 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.wmi_query",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "class",
+          "required": true,
+          "schema": {
+            "description": "The class (`Win32_Battery`).",
+            "type": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Instances to return at most, 1 to 1000 (default 200); more sets\n`truncated`.",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "namespace",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The namespace, `root/cimv2` when absent (`root/WMI`,\n`root/StandardCimv2`); `/` or `\\` between its parts.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "properties",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The properties to read; all of them when empty.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "where",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "A condition on the class's own properties (`Name = 'x' AND\nProcessId > 4`), in WQL's syntax: comparisons with a string, number,\n`TRUE` or `FALSE`; `LIKE` with `%`, `_` and `[…]`; `IS [NOT] NULL`;\n`AND` / `OR` / `NOT` and parentheses. BranchKit evaluates it on the\nlisted instances; it is never sent to WMI. Strings compare without\nregard to case, and a null or missing property matches no\ncomparison.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_wmi_query_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "instances": {
+              "description": "Opaque by design: each instance's properties are typed by its class\nat run time, so no static type can describe them. One object per\ninstance, its properties by name (64-bit integers as numbers,\ndates as WMI's `yyyymmddHHMMSS.mmmmmmsUUU` strings, embedded\nobjects as objects), and its class as `__CLASS`.",
+              "items": {},
+              "type": "array"
+            },
+            "truncated": {
+              "description": "More instances matched than `limit`.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "instances",
+            "truncated"
+          ],
+          "title": "NativeWmiQueryResult",
+          "type": "object"
+        }
+      },
+      "summary": "Read the instances of one WMI class the plugin declared and the user switched on. Exists only on Windows; elsewhere it is refused with platform_no_analogue",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-emits": [
+        "plugin.wmi_query"
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.world_model",
       "paramStructure": "by-name",
       "params": [

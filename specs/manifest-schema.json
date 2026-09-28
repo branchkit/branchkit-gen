@@ -2036,6 +2036,17 @@
             }
           ],
           "description": "Loopback listener sockets the ACTUATOR binds on the plugin's behalf\nand delivers as inherited fds 3+ (`LISTEN_FDS` convention; resolved\nports in `BRANCHKIT_LISTEN_PORTS`). This is how the `\"localhost\"`\nnetwork tier serves clients from inside a no-network sandbox on\nLinux (a socket keeps the netns it was created in, so an fd bound on\nhost loopback still accepts inside the plugin's empty netns)."
+        },
+        "wmi": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WmiConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "WMI classes this plugin reads through `native.wmi_query` (Windows),\none entry per class, each granted on the plugin's card."
         }
       },
       "type": "object"
@@ -2305,6 +2316,20 @@
           "type": "string"
         }
       ]
+    },
+    "WmiConfig": {
+      "additionalProperties": false,
+      "description": "`requires.wmi`: the WMI classes a plugin reads.",
+      "properties": {
+        "classes": {
+          "description": "Each `<namespace>/<Class>`, the namespace's parts separated by `/`\n(`root/cimv2/Win32_Battery`, `root/WMI/WmiMonitorBrightness`).\nClasses that read the file system, reach the network or change the\nmachine when queried, and namespaces holding keys, security policy\nor WMI's own persistence, are refused at load.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "Writers": {
       "description": "Who is allowed to write records to this collection.",
