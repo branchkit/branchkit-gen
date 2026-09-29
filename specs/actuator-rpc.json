@@ -15349,7 +15349,7 @@
           "type": "object"
         }
       },
-      "summary": "Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON",
+      "summary": "Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -21963,7 +21963,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Secure Input is currently enabled (blocks key events)",
+      "summary": "Check if Secure Input is currently enabled (blocks key events). Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -25024,7 +25024,7 @@
           "type": "object"
         }
       },
-      "summary": "Get current spelling language",
+      "summary": "Get current spelling language. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
