@@ -12743,35 +12743,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.cursor_shake_to_locate",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_cursor_shake_to_locate_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeCursorShakeToLocateResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if shake mouse to locate cursor is enabled",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.dark_mode",
       "paramStructure": "by-name",
       "params": [],
@@ -17460,6 +17431,35 @@
         }
       ],
       "x-branchkit-privilege": "locale",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "native.locate_pointer_enabled",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_locate_pointer_enabled_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeLocatePointerEnabledResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the system shows where the pointer is on request: shaking it on macOS, pressing Ctrl on GNOME and Windows",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
       "x-since": "0.1.0"
     },
     {
@@ -30939,11 +30939,11 @@
         "native.ax_unobserve",
         "native.bold_text_enabled",
         "native.bounce_keys",
-        "native.cursor_shake_to_locate",
         "native.differentiate_without_color",
         "native.dwell_click",
         "native.focused_element",
         "native.grayscale_enabled",
+        "native.locate_pointer_enabled",
         "native.magnifier_enabled",
         "native.mono_audio",
         "native.mouse_keys",
