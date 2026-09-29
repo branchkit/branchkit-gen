@@ -12948,6 +12948,43 @@
       "x-since": "0.2.0"
     },
     {
+      "name": "native.default_app_for_mime_type",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "mime_type",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_default_app_for_mime_type_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "app": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "app"
+          ],
+          "title": "NativeDefaultAppForMimeTypeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Get the application that opens files of a MIME type by default, by the identity the app operations use",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "apps",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.default_app_for_uti",
       "paramStructure": "by-name",
       "params": [
@@ -12975,7 +13012,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the default application for a UTI",
+      "summary": "Get the default application for a UTI. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -14651,6 +14688,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.file_mime_type",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_file_mime_type_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "string",
+          "type": "string"
+        }
+      },
+      "summary": "Get a file's MIME type (text/plain, image/png), the file-type name every OS shares",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "filesystem",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.file_modification_date",
       "paramStructure": "by-name",
       "params": [
@@ -14880,7 +14946,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the UTI type of a file",
+      "summary": "Get the UTI type of a file. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -14909,7 +14975,7 @@
           "type": "string"
         }
       },
-      "summary": "Get the UTI (Uniform Type Identifier) for a file",
+      "summary": "Get the UTI (Uniform Type Identifier) for a file. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -30918,7 +30984,7 @@
     {
       "admits_events": [],
       "description": "List and inspect running applications",
-      "method_count": 24,
+      "method_count": 25,
       "methods": [
         "native.app_bundle_path",
         "native.app_focused_window_id",
@@ -30935,6 +31001,7 @@
         "native.app_windows_count",
         "native.apps_for_path",
         "native.bundle_for_remote_port",
+        "native.default_app_for_mime_type",
         "native.default_app_for_uti",
         "native.default_email_client",
         "native.frontmost_app",
@@ -31197,7 +31264,7 @@
     {
       "admits_events": [],
       "description": "File operations — trash, search, tags, reveal",
-      "method_count": 53,
+      "method_count": 54,
       "methods": [
         "native.app_support_directory",
         "native.clear_file_quarantine",
@@ -31217,6 +31284,7 @@
         "native.file_extended_attributes",
         "native.file_hash",
         "native.file_metadata",
+        "native.file_mime_type",
         "native.file_modification_date",
         "native.file_owner",
         "native.file_quarantine",
