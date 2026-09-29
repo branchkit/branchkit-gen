@@ -11343,7 +11343,7 @@
           "type": "object"
         }
       },
-      "summary": "Get battery health status",
+      "summary": "Get battery health status. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -12114,7 +12114,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if calendar access is available",
+      "summary": "Check if calendar access is available. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -12746,7 +12746,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if contacts access is available",
+      "summary": "Check if contacts access is available. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -14223,7 +14223,7 @@
           "type": "object"
         }
       },
-      "summary": "Get Do Not Disturb / Focus state (via the BranchKit Focus helper shortcut)",
+      "summary": "Get Do Not Disturb / Focus state (macOS: via the BranchKit Focus helper shortcut). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23129,7 +23129,7 @@
           "type": "object"
         }
       },
-      "summary": "Set Do Not Disturb on or off (idempotent; via the BranchKit Focus helper shortcut)",
+      "summary": "Set Do Not Disturb on or off (idempotent; macOS: via the BranchKit Focus helper shortcut). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24519,7 +24519,7 @@
           "type": "object"
         }
       },
-      "summary": "Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
+      "summary": "Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
