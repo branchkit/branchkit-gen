@@ -15918,6 +15918,7 @@
           "name": "html",
           "required": true,
           "schema": {
+            "description": "The page, as HTML. Nothing it links to on the network is fetched.",
             "minLength": 1,
             "type": "string"
           }
@@ -15926,6 +15927,7 @@
           "name": "output_path",
           "required": true,
           "schema": {
+            "description": "Where to write the PDF; replaced if it exists.",
             "minLength": 1,
             "type": "string"
           }
@@ -15935,6 +15937,7 @@
         "name": "native_generate_pdf_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -15943,11 +15946,11 @@
           "required": [
             "ok"
           ],
-          "title": "NativeGeneratePdfResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
-      "summary": "Generate a PDF from HTML content",
+      "summary": "Render HTML to a PDF file through a Chromium-family browser (Chromium, Chrome, Edge or Brave) run headless and cut off from the network. Refused, naming what to install, when none is",
       "tags": [
         {
           "name": "native"
