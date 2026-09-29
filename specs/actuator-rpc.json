@@ -2972,6 +2972,29 @@
         ],
         "type": "object"
       },
+      "SecurityFact": {
+        "description": "One security mechanism and its state (`native.app_verification`,\n`native.system_integrity`): a fact about the machine, never a verdict on\nit. Mechanisms differ per OS and none is the equal of another's, so no\nlist of them adds up to \"secure\".",
+        "properties": {
+          "detail": {
+            "description": "What the OS said, where it says more than the state.",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "`gatekeeper`, `sip`, `smartscreen`, `smart_app_control`,\n`secure_boot`, `memory_integrity`, `apparmor`, `selinux`.",
+            "type": "string"
+          },
+          "state": {
+            "description": "`on`, `off`; `warn` / `block` (SmartScreen), `evaluation` (Smart\nApp Control), `enforcing` / `permissive` (SELinux).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "mechanism",
+          "state"
+        ],
+        "type": "object"
+      },
       "SettingsListSchemaInfo": {
         "description": "List schema info sent to plugins in render_settings (enriched with entry count + source).",
         "properties": {
@@ -9939,6 +9962,38 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.app_verification",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_app_verification_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "mechanisms": {
+              "items": {
+                "$ref": "#/$defs/SecurityFact"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "mechanisms"
+          ],
+          "title": "NativeAppVerificationResult",
+          "type": "object"
+        }
+      },
+      "summary": "The mechanisms that check apps before they run, and their states: Gatekeeper on macOS; SmartScreen and Smart App Control on Windows; none on Linux (an empty list). Facts, not a verdict",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "security",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.app_version",
       "paramStructure": "by-name",
       "params": [
@@ -15622,35 +15677,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.gatekeeper_status",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_gatekeeper_status_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeGatekeeperStatusResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if Gatekeeper is enabled",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.gateway_address",
       "paramStructure": "by-name",
       "params": [],
@@ -20445,35 +20471,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.purge_memory",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_purge_memory_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "NativePurgeMemoryResult",
-          "type": "object"
-        }
-      },
-      "summary": "Purge inactive memory",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.purgeable_space",
       "paramStructure": "by-name",
       "params": [],
@@ -22559,43 +22556,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.set_computer_name",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "name",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_set_computer_name_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "NativeSetComputerNameResult",
-          "type": "object"
-        }
-      },
-      "summary": "Set the computer name",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.set_dark_mode",
       "paramStructure": "by-name",
       "params": [
@@ -24619,35 +24579,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.sip_status",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_sip_status_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "enabled": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "enabled"
-          ],
-          "title": "NativeSipStatusResult",
-          "type": "object"
-        }
-      },
-      "summary": "Check if System Integrity Protection is enabled",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.siri_enabled",
       "paramStructure": "by-name",
       "params": [],
@@ -25459,33 +25390,36 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.system_integrity_info",
+      "name": "native.system_integrity",
       "paramStructure": "by-name",
       "params": [],
       "result": {
-        "name": "native_system_integrity_info_result",
+        "name": "native_system_integrity_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "value": {
-              "type": "string"
+            "mechanisms": {
+              "items": {
+                "$ref": "#/$defs/SecurityFact"
+              },
+              "type": "array"
             }
           },
           "required": [
-            "value"
+            "mechanisms"
           ],
-          "title": "NativeSystemIntegrityInfoResult",
+          "title": "NativeSystemIntegrityResult",
           "type": "object"
         }
       },
-      "summary": "Get SIP and security policy details",
+      "summary": "The mechanisms that protect the system itself, and their states: SIP on macOS; Secure Boot and memory integrity on Windows; Secure Boot and AppArmor or SELinux on Linux. Facts, not a verdict",
       "tags": [
         {
           "name": "native"
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.2.0"
     },
     {
       "name": "native.system_language",
@@ -31347,7 +31281,7 @@
     {
       "admits_events": [],
       "description": "Hardware info — CPU, memory, model, serial number",
-      "method_count": 14,
+      "method_count": 13,
       "methods": [
         "native.cameras",
         "native.cpu_info",
@@ -31360,7 +31294,6 @@
         "native.memory_info",
         "native.memory_pressure",
         "native.model_name",
-        "native.purge_memory",
         "native.rosetta_installed",
         "native.thunderbolt_devices"
       ],
@@ -31646,8 +31579,9 @@
     {
       "admits_events": [],
       "description": "Security settings — firewall, FileVault, Gatekeeper",
-      "method_count": 13,
+      "method_count": 14,
       "methods": [
+        "native.app_verification",
         "native.automatic_login_user",
         "native.firewall_enabled",
         "native.keychain_delete",
@@ -31657,7 +31591,7 @@
         "native.screen_saver_ask_password",
         "native.screen_saver_delay",
         "native.startup_disk",
-        "native.system_integrity_info",
+        "native.system_integrity",
         "native.time_machine_last_backup",
         "native.time_machine_status",
         "native.touch_id_available"
@@ -31811,7 +31745,7 @@
     {
       "admits_events": [],
       "description": "System state — battery, wifi, bluetooth, dark mode",
-      "method_count": 35,
+      "method_count": 33,
       "methods": [
         "native.active_ports",
         "native.battery",
@@ -31826,7 +31760,6 @@
         "native.epoch_time",
         "native.external_disks",
         "native.filevault_status",
-        "native.gatekeeper_status",
         "native.hostname_resolve",
         "native.kernel_version",
         "native.network_interfaces",
@@ -31840,7 +31773,6 @@
         "native.random_uuid",
         "native.resource_usage",
         "native.serial_number",
-        "native.sip_status",
         "native.system_info",
         "native.system_uptime",
         "native.system_uptime_seconds",
@@ -31855,7 +31787,7 @@
     {
       "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "method_count": 35,
+      "method_count": 34,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
@@ -31872,7 +31804,6 @@
         "native.set_airport_power",
         "native.set_bluetooth_power",
         "native.set_bounce_keys",
-        "native.set_computer_name",
         "native.set_dark_mode",
         "native.set_dnd",
         "native.set_dock_position",
