@@ -32146,11 +32146,11 @@
     },
     {
       "admits_events": [],
-      "description": "See and monitor connected displays from a pipeline stage",
+      "description": "See and monitor connected displays from a pipeline stage. Its display-server connection can also observe keyboard and mouse input",
       "method_count": 0,
       "methods": [],
       "name": "stage.displays",
-      "risk": "low"
+      "risk": "dangerous"
     },
     {
       "admits_events": [],
