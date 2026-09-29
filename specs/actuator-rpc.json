@@ -1521,6 +1521,37 @@
         ],
         "type": "object"
       },
+      "FanSpeed": {
+        "description": "One fan (`native.fan_speeds`).",
+        "properties": {
+          "label": {
+            "description": "The fan's label where the hardware gives one, else its position\n(`Fan 1`).",
+            "type": "string"
+          },
+          "max_rpm": {
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "min_rpm": {
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "rpm": {
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "label",
+          "max_rpm",
+          "min_rpm",
+          "rpm"
+        ],
+        "type": "object"
+      },
       "FieldDisplay": {
         "description": "Where a field appears in generic UI rendering. Each field on a\ncollection declares at most one role; surfaces (discovery HUD,\nsettings UI, etc.) interpret roles on their own terms.\n\nRoles are a closed vocabulary so every surface renders a named role the\nsame way; publish rejects an unknown role, load degrades it to no-role\nwith a warning. Roles `primary`, `secondary`, `group`, `description`,\n`payload` are consumed by\n`services::matching_service::expand_collections_to_items`\nfor discovery items; `summary` is consumed by the settings UI's\nlog-kind timeline rows.",
         "enum": [
@@ -1581,6 +1612,36 @@
           "w",
           "x",
           "y"
+        ],
+        "type": "object"
+      },
+      "GpuInfo": {
+        "description": "A graphics processor (`native.gpu_info`).",
+        "properties": {
+          "driver": {
+            "description": "The driver the OS bound to it (`amdgpu`, `i915`), where it names one.",
+            "type": "string"
+          },
+          "name": {
+            "description": "As the OS names it (`Apple M4`, `NVIDIA GeForce RTX 4070`).",
+            "type": "string"
+          },
+          "vendor": {
+            "description": "The maker (`Apple`, `NVIDIA`, `AMD`, `Intel`), when known.",
+            "type": "string"
+          },
+          "vram_bytes": {
+            "description": "Memory of its own, in bytes. None when it shares system memory or\nthe OS does not say.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "driver",
+          "name",
+          "vendor",
+          "vram_bytes"
         ],
         "type": "object"
       },
@@ -3353,6 +3414,32 @@
           "increase_contrast",
           "reduce_motion",
           "reduce_transparency"
+        ],
+        "type": "object"
+      },
+      "ThunderboltDevice": {
+        "description": "A device connected over Thunderbolt or USB4 (`native.thunderbolt_devices`).",
+        "properties": {
+          "authorized": {
+            "description": "Whether the OS has let the device's PCIe tunnels through. Linux asks\n(the `authorized` attribute); macOS authorizes devices itself, so\nthere it is none.",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "The device's unique id (its switch UID), stable across connections.",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "vendor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authorized",
+          "id",
+          "name",
+          "vendor"
         ],
         "type": "object"
       },
@@ -14548,18 +14635,21 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "value": {
-              "type": "string"
+            "fans": {
+              "items": {
+                "$ref": "#/$defs/FanSpeed"
+              },
+              "type": "array"
             }
           },
           "required": [
-            "value"
+            "fans"
           ],
           "title": "NativeFanSpeedsResult",
           "type": "object"
         }
       },
-      "summary": "Get raw SMC fan lines as reported by powermetrics or ioreg — free-form text, NOT JSON, and unavailable unless a fan source can be read",
+      "summary": "The machine's fans and their speeds in RPM, with each fan's minimum and maximum where the OS reports them. Empty on a machine without fans",
       "tags": [
         {
           "name": "native"
@@ -15997,18 +16087,21 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "info": {
-              "type": "string"
+            "gpus": {
+              "items": {
+                "$ref": "#/$defs/GpuInfo"
+              },
+              "type": "array"
             }
           },
           "required": [
-            "info"
+            "gpus"
           ],
           "title": "NativeGpuInfoResult",
           "type": "object"
         }
       },
-      "summary": "Get GPU name and VRAM info",
+      "summary": "The machine's graphics processors: name, vendor, dedicated memory and driver. A GPU that shares system memory (Apple silicon, most integrated GPUs) reports no dedicated memory",
       "tags": [
         {
           "name": "native"
@@ -25901,18 +25994,21 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "value": {
-              "type": "string"
+            "devices": {
+              "items": {
+                "$ref": "#/$defs/ThunderboltDevice"
+              },
+              "type": "array"
             }
           },
           "required": [
-            "value"
+            "devices"
           ],
           "title": "NativeThunderboltDevicesResult",
           "type": "object"
         }
       },
-      "summary": "List connected Thunderbolt devices",
+      "summary": "Devices connected over Thunderbolt or USB4, not the machine's own ports: name, vendor, unique id, and whether the OS has authorized each where it asks",
       "tags": [
         {
           "name": "native"
