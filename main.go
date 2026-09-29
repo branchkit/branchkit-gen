@@ -20,7 +20,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 )
 
 func main() {
@@ -132,43 +131,29 @@ func run(dirs []string) {
 			os.Exit(1)
 		}
 
-		srcDir := filepath.Join(dir, "src")
+		goDir, isGo := goOutDir(dir)
+		tsDir, isTS := tsOutDir(dir)
+		pyDir, isPy := pyOutDir(dir, manifest)
 
 		// Collections are emitted independently of action types: a plugin
 		// that reads another's data but declares no actions of its own is a
 		// perfectly ordinary plugin, and skipping it here would have made the
 		// generated shapes quietly incomplete.
-		if fileExists(filepath.Join(srcDir, "go.mod")) {
+		if isGo {
 			if contents := RenderGoCollections(manifest, providers); contents != "" {
-				path := filepath.Join(srcDir, "collections_gen.go")
-				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-					os.Exit(1)
-				}
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				writeGenerated(filepath.Join(goDir, "collections_gen.go"), contents)
 				totalColl++
 			}
 		}
-
-		if fileExists(filepath.Join(srcDir, "package.json")) {
+		if isTS {
 			if contents := RenderTSCollections(manifest, providers); contents != "" {
-				path := filepath.Join(srcDir, "collections_gen.ts")
-				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-					os.Exit(1)
-				}
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				writeGenerated(filepath.Join(tsDir, "collections_gen.ts"), contents)
 				totalColl++
 			}
 		}
-		if fileExists(filepath.Join(srcDir, "pyproject.toml")) {
+		if isPy {
 			if contents := RenderPyCollections(manifest, providers); contents != "" {
-				path := filepath.Join(srcDir, "collections_gen.py")
-				if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-					fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-					os.Exit(1)
-				}
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+				writeGenerated(filepath.Join(pyDir, "collections_gen.py"), contents)
 				totalColl++
 			}
 		}
@@ -178,48 +163,16 @@ func run(dirs []string) {
 			continue
 		}
 
-		// Emit Go if src/go.mod exists.
-		if fileExists(filepath.Join(srcDir, "go.mod")) {
-			contents := RenderGo(manifest)
-			path := filepath.Join(srcDir, "actions_gen.go")
-			if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-				os.Exit(1)
-			}
-			fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+		if isGo {
+			writeGenerated(filepath.Join(goDir, "actions_gen.go"), RenderGo(manifest))
 			totalGo++
 		}
-
-		// Emit TS if src/package.json exists.
-		if fileExists(filepath.Join(srcDir, "package.json")) {
-			contents := RenderTS(manifest)
-			path := filepath.Join(srcDir, "actions_gen.ts")
-			if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-				os.Exit(1)
-			}
-			fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+		if isTS {
+			writeGenerated(filepath.Join(tsDir, "actions_gen.ts"), RenderTS(manifest))
 			totalTS++
 		}
-
-		// Emit Python if the plugin runs under Python (manifest `run`
-		// starts with python) or ships a main.py. Lands next to the
-		// entrypoint: src/ when the source lives there, plugin root
-		// otherwise.
-		if strings.HasPrefix(manifest.Run, "python") ||
-			fileExists(filepath.Join(dir, "main.py")) ||
-			fileExists(filepath.Join(srcDir, "main.py")) {
-			out := dir
-			if fileExists(filepath.Join(srcDir, "main.py")) {
-				out = srcDir
-			}
-			contents := RenderPy(manifest)
-			path := filepath.Join(out, "actions_gen.py")
-			if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
-				fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
-				os.Exit(1)
-			}
-			fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
+		if isPy {
+			writeGenerated(filepath.Join(pyDir, "actions_gen.py"), RenderPy(manifest))
 			totalPy++
 		}
 	}
@@ -227,6 +180,15 @@ func run(dirs []string) {
 	fmt.Fprintf(os.Stderr,
 		"[branchkit-gen] summary: %d plugins, %d go, %d ts, %d py, %d collections, %d skipped\n",
 		len(dirs), totalGo, totalTS, totalPy, totalColl, skipped)
+}
+
+// writeGenerated writes one generated file, exiting on failure.
+func writeGenerated(path, contents string) {
+	if err := os.WriteFile(path, []byte(contents), 0644); err != nil {
+		fmt.Fprintf(os.Stderr, "[branchkit-gen] write %s: %v\n", path, err)
+		os.Exit(1)
+	}
+	fmt.Fprintf(os.Stderr, "[branchkit-gen] wrote %s\n", path)
 }
 
 // enumeratePluginDirs lists subdirectories of root that contain a plugin.json.
