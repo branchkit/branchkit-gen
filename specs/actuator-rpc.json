@@ -27719,7 +27719,7 @@
           "name": "value",
           "required": true,
           "schema": {
-            "description": "Opaque by design, as the read's result is. A GSettings value must\nfit the key's type; an existing registry value keeps its type.\n`null` removes the setting (GSettings: resets it to its default)."
+            "description": "Opaque by design, as the read's result is. A GSettings value must\nfit the key's type; an existing registry value keeps its type.\nWhere GSettings has no fixed type (a variant, `v`, as in `a{sv}`)\nthe JSON's own shape gives it: a boolean, an integer (int32, wider\nwhen it must be), a fraction (double), text, an array, an object\n(`a{sv}`). A byte string (`ay`) takes text, as it reads, or bytes.\n`null` removes the setting (GSettings: resets it to its default)."
           }
         }
       ],
