@@ -8265,7 +8265,7 @@
           "type": "object"
         }
       },
-      "summary": "Get recent clipboard entries (if available)",
+      "summary": "Get recent clipboard entries (if available). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "input"
@@ -11213,6 +11213,29 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.battery_time_remaining",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_battery_time_remaining_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "format": "uint64",
+          "minimum": 0,
+          "title": "uint64",
+          "type": "integer"
+        }
+      },
+      "summary": "Minutes of battery left at the current rate; absent on AC power or when the OS has no estimate",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "power",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "native.ble_discover_services",
       "paramStructure": "by-name",
       "params": [
@@ -11635,7 +11658,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Bounce Keys is on (repeated presses of one key are ignored)",
+      "summary": "Check if Bounce Keys is on (repeated presses of one key are ignored). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -12153,13 +12176,13 @@
           "type": "object"
         }
       },
-      "summary": "Clear all delivered notifications for an app",
+      "summary": "Clear all delivered notifications for an app. Exists only on Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "notifications",
+      "x-branchkit-privilege": "notifications.others",
       "x-since": "0.1.0"
     },
     {
@@ -12557,7 +12580,7 @@
           "type": "number"
         }
       },
-      "summary": "Get CPU temperature in Celsius. Requires the third-party `osx-cpu-temp`; a reading without an explicit scale marker is rejected rather than assumed",
+      "summary": "Get CPU temperature in Celsius. Requires the third-party `osx-cpu-temp`; a reading without an explicit scale marker is rejected rather than assumed. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -13393,7 +13416,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Dictation is enabled",
+      "summary": "Check if Dictation is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -13604,13 +13627,13 @@
           "type": "object"
         }
       },
-      "summary": "Dismiss a delivered notification (partial — no-op)",
+      "summary": "Dismiss a delivered notification (partial — no-op). Exists only on Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "notifications",
+      "x-branchkit-privilege": "notifications.others",
       "x-since": "0.1.0"
     },
     {
@@ -15180,7 +15203,7 @@
           "type": "object"
         }
       },
-      "summary": "Get Finder default view style",
+      "summary": "Get Finder default view style. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -15210,38 +15233,6 @@
         }
       },
       "summary": "Get Finder new window default location. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.finder_selection",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_finder_selection_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "paths": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "paths"
-          ],
-          "title": "NativeFinderSelectionResult",
-          "type": "object"
-        }
-      },
-      "summary": "Get the currently selected files in Finder. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -15357,7 +15348,7 @@
           "type": "object"
         }
       },
-      "summary": "Whether the file manager shows a status bar",
+      "summary": "Whether the file manager shows a status bar. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -16611,7 +16602,7 @@
           "type": "object"
         }
       },
-      "summary": "Get hot corner actions as JSON string",
+      "summary": "Get hot corner actions as JSON string. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -17058,7 +17049,7 @@
           "type": "number"
         }
       },
-      "summary": "Get keyboard backlight brightness (0.0-1.0)",
+      "summary": "Get keyboard backlight brightness (0.0-1.0). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -17442,13 +17433,13 @@
           "type": "object"
         }
       },
-      "summary": "List delivered notifications (partial — returns empty)",
+      "summary": "List delivered notifications (partial — returns empty). Exists only on Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "notifications",
+      "x-branchkit-privilege": "notifications.others",
       "x-since": "0.1.0"
     },
     {
@@ -18619,7 +18610,7 @@
           "type": "object"
         }
       },
-      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes",
+      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -18961,7 +18952,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if Night Shift is currently enabled",
+      "summary": "Check if Night Shift is currently enabled. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -19118,44 +19109,6 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.observe_windows",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "pid",
-          "required": true,
-          "schema": {
-            "format": "int32",
-            "type": "integer"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_observe_windows_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "subscription_id": {
-              "type": "string"
-            }
-          },
-          "required": [
-            "subscription_id"
-          ],
-          "title": "NativeObserveWindowsResult",
-          "type": "object"
-        }
-      },
-      "summary": "Start observing window events for a PID (STUB -- not yet implemented)",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "windows",
       "x-since": "0.1.0"
     },
     {
@@ -19429,7 +19382,7 @@
           "type": "object"
         }
       },
-      "summary": "Open an app's preferences window",
+      "summary": "Open an app's preferences window. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -19661,7 +19614,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if optimized battery charging is enabled",
+      "summary": "Check if optimized battery charging is enabled. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -22173,7 +22126,7 @@
           "type": "object"
         }
       },
-      "summary": "Get Finder selection",
+      "summary": "Get Finder selection. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -22686,7 +22639,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn Bounce Keys on or off (repeated presses of one key are ignored)",
+      "summary": "Turn Bounce Keys on or off (repeated presses of one key are ignored). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23376,7 +23329,7 @@
           "type": "object"
         }
       },
-      "summary": "Set a hot corner action",
+      "summary": "Set a hot corner action. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23714,7 +23667,7 @@
           "type": "object"
         }
       },
-      "summary": "Enable or disable Night Shift",
+      "summary": "Enable or disable Night Shift. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24694,7 +24647,7 @@
           "type": "object"
         }
       },
-      "summary": "Set a window to appear on all spaces (sticky)",
+      "summary": "Set a window to appear on all spaces (sticky). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24995,62 +24948,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "native.speak",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "rate",
-          "required": false,
-          "schema": {
-            "default": null,
-            "format": "double",
-            "type": "number"
-          }
-        },
-        {
-          "name": "text",
-          "required": true,
-          "schema": {
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        {
-          "name": "voice",
-          "required": false,
-          "schema": {
-            "default": null,
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_speak_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "OkResult",
-          "type": "object"
-        }
-      },
-      "summary": "Speak text using the system text-to-speech engine",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
-    },
-    {
       "name": "native.speech_locales",
       "paramStructure": "by-name",
       "params": [],
@@ -25073,7 +24970,7 @@
           "type": "object"
         }
       },
-      "summary": "List available speech recognition locales",
+      "summary": "List available speech recognition locales. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -25102,7 +24999,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if on-device speech recognition is available",
+      "summary": "Check if on-device speech recognition is available. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -25140,7 +25037,7 @@
           "type": "string"
         }
       },
-      "summary": "Recognize speech from an audio file (returns transcript)",
+      "summary": "Recognize speech from an audio file (returns transcript). Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -26091,7 +25988,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the last Time Machine backup date",
+      "summary": "Get the last Time Machine backup date. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -26120,36 +26017,13 @@
           "type": "object"
         }
       },
-      "summary": "Check if Time Machine is enabled and get destination",
+      "summary": "Check if Time Machine is enabled and get destination. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.time_on_battery",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_time_on_battery_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "format": "uint64",
-          "minimum": 0,
-          "title": "uint64",
-          "type": "integer"
-        }
-      },
-      "summary": "Get time on battery in minutes since last unplug",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "power",
       "x-since": "0.1.0"
     },
     {
@@ -26573,44 +26447,6 @@
         }
       },
       "summary": "Restore a minimized window by ID",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.unobserve_windows",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "subscription_id",
-          "required": true,
-          "schema": {
-            "minLength": 1,
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "native_unobserve_windows_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "result": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "result"
-          ],
-          "title": "NativeUnobserveWindowsResult",
-          "type": "object"
-        }
-      },
-      "summary": "Stop observing window events (STUB)",
       "tags": [
         {
           "name": "native"
@@ -27242,7 +27078,7 @@
           "type": "integer"
         }
       },
-      "summary": "Get window layer level",
+      "summary": "Get window layer level. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -27303,7 +27139,7 @@
           "type": "string"
         }
       },
-      "summary": "Get window subrole",
+      "summary": "Get window subrole. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -31254,7 +31090,7 @@
     {
       "admits_events": [],
       "description": "Audio devices, volume, sound playback, and text-to-speech",
-      "method_count": 22,
+      "method_count": 21,
       "methods": [
         "native.alert_sound",
         "native.alert_volume",
@@ -31275,7 +31111,6 @@
         "native.set_audio_input_device",
         "native.set_audio_output_device",
         "native.set_volume",
-        "native.speak",
         "native.tts_voices",
         "native.volume"
       ],
@@ -31541,11 +31376,10 @@
     {
       "admits_events": [],
       "description": "Finder operations — desktop items, sidebar, Finder windows",
-      "method_count": 11,
+      "method_count": 10,
       "methods": [
         "native.finder_default_view",
         "native.finder_new_window_target",
-        "native.finder_selection",
         "native.finder_show_extensions",
         "native.finder_show_hidden",
         "native.finder_show_path_bar",
@@ -31745,19 +31579,28 @@
     },
     {
       "admits_events": [],
-      "description": "Post, list, and dismiss notifications",
-      "method_count": 7,
+      "description": "Post notifications",
+      "method_count": 4,
       "methods": [
-        "native.clear_notifications",
-        "native.dismiss_notification",
         "native.focus_modes",
-        "native.list_notifications",
         "native.notification_sound_enabled",
         "native.notify",
         "system.notify"
       ],
       "name": "notifications",
       "risk": "moderate"
+    },
+    {
+      "admits_events": [],
+      "description": "Read, dismiss and clear other apps' delivered notifications, which can include messages and sign-in codes",
+      "method_count": 3,
+      "methods": [
+        "native.clear_notifications",
+        "native.dismiss_notification",
+        "native.list_notifications"
+      ],
+      "name": "notifications.others",
+      "risk": "dangerous"
     },
     {
       "admits_events": [],
@@ -31778,6 +31621,7 @@
         "native.battery_cycle_count",
         "native.battery_health",
         "native.battery_max_capacity",
+        "native.battery_time_remaining",
         "native.boot_volume",
         "native.computer_sleep_time",
         "native.display_sleep_time",
@@ -31785,8 +31629,7 @@
         "native.optimized_charging",
         "native.power_adapter_connected",
         "native.power_mode",
-        "native.power_source",
-        "native.time_on_battery"
+        "native.power_source"
       ],
       "name": "power",
       "risk": "low"
@@ -32143,7 +31986,7 @@
         "_platform.world.updated"
       ],
       "description": "Move, resize, and manage windows",
-      "method_count": 39,
+      "method_count": 37,
       "methods": [
         "native.active_space",
         "native.all_window_ids",
@@ -32161,7 +32004,6 @@
         "native.minimize_window",
         "native.move_window_to_display",
         "native.move_window_to_space",
-        "native.observe_windows",
         "native.pin_window_above",
         "native.poll_burst",
         "native.raise_window",
@@ -32174,7 +32016,6 @@
         "native.switch_space",
         "native.toggle_fullscreen",
         "native.unminimize_window",
-        "native.unobserve_windows",
         "native.window_app",
         "native.window_bounds",
         "native.window_display_id",
