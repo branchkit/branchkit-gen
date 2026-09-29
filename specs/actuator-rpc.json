@@ -23125,7 +23125,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn the system's dwell click on or off (holding the pointer still clicks). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
+      "summary": "Turn the system's dwell click on or off (holding the pointer still clicks). Exists only on Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23579,7 +23579,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn the screen magnifier on or off; false when it did not change",
+      "summary": "Turn the screen magnifier on or off; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23690,7 +23690,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn Mouse Keys on or off (the numeric keypad moves the pointer)",
+      "summary": "Turn Mouse Keys on or off (the numeric keypad moves the pointer). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23803,7 +23803,7 @@
           "type": "object"
         }
       },
-      "summary": "Show or hide the on-screen keyboard; false when it did not change",
+      "summary": "Show or hide the on-screen keyboard; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23841,7 +23841,7 @@
           "type": "object"
         }
       },
-      "summary": "Set the power mode (power-saver, balanced or performance); false when refused or not offered",
+      "summary": "Set the power mode (power-saver, balanced or performance); false when refused or not offered. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -23878,7 +23878,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change",
+      "summary": "Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24104,7 +24104,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn Slow Keys on or off (a key registers only after it is held)",
+      "summary": "Turn Slow Keys on or off (a key registers only after it is held). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24178,7 +24178,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time)",
+      "summary": "Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24253,7 +24253,7 @@
           "type": "object"
         }
       },
-      "summary": "Set the system text size as a factor of the default (1.0); false when refused",
+      "summary": "Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
@@ -24374,7 +24374,7 @@
           "type": "object"
         }
       },
-      "summary": "Turn screen flashing on alert sounds on or off; false when it did not change",
+      "summary": "Turn screen flashing on alert sounds on or off; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
