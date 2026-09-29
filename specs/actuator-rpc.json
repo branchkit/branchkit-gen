@@ -19900,7 +19900,7 @@
           "type": "object"
         }
       },
-      "summary": "Open a URL in the default handler",
+      "summary": "Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused",
       "tags": [
         {
           "name": "native"
