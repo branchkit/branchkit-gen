@@ -20778,6 +20778,7 @@
           "name": "domain",
           "required": true,
           "schema": {
+            "description": "`<store>:<domain>`, the store this OS keeps settings in:\n`defaults:com.apple.dock` (macOS), `gsettings:org.gnome.desktop.interface`\n(Linux; a relocatable schema adds `:<path>`), or\n`registry:Software\\7-Zip\\FM`, a key under HKEY_CURRENT_USER at or\nbelow a declared one (Windows).",
             "minLength": 1,
             "type": "string"
           }
@@ -20786,7 +20787,7 @@
           "name": "key",
           "required": true,
           "schema": {
-            "minLength": 1,
+            "description": "The setting: a defaults key, a GSettings key, or a registry value\nname (`\"\"` for the key's default value).",
             "type": "string"
           }
         }
@@ -20798,13 +20799,15 @@
           "title": "AnyValue"
         }
       },
-      "summary": "Read a preference value for an app domain",
+      "summary": "Read one setting from another app's settings domain the plugin declared and the user switched on: macOS defaults, GSettings on Linux, the user's registry on Windows",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps",
+      "x-branchkit-emits": [
+        "plugin.app_preference"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -27335,6 +27338,7 @@
           "name": "domain",
           "required": true,
           "schema": {
+            "description": "As for `native.read_app_preference`; declared under\n`requires.preferences.write`.",
             "minLength": 1,
             "type": "string"
           }
@@ -27343,20 +27347,22 @@
           "name": "key",
           "required": true,
           "schema": {
-            "minLength": 1,
             "type": "string"
           }
         },
         {
           "name": "value",
           "required": true,
-          "schema": {}
+          "schema": {
+            "description": "Opaque by design, as the read's result is. A GSettings value must\nfit the key's type; an existing registry value keeps its type.\n`null` removes the setting (GSettings: resets it to its default)."
+          }
         }
       ],
       "result": {
         "name": "native_write_app_preference_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
           "properties": {
             "ok": {
               "type": "boolean"
@@ -27365,17 +27371,19 @@
           "required": [
             "ok"
           ],
-          "title": "NativeWriteAppPreferenceResult",
+          "title": "OkResult",
           "type": "object"
         }
       },
-      "summary": "Write a preference value for an app domain",
+      "summary": "Change (or, with null, reset) one setting in another app's settings domain the plugin declared for writing and the user switched on",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "apps.control",
+      "x-branchkit-emits": [
+        "plugin.app_preference"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -31034,7 +31042,7 @@
     {
       "admits_events": [],
       "description": "List and inspect running applications",
-      "method_count": 25,
+      "method_count": 24,
       "methods": [
         "native.app_bundle_path",
         "native.app_focused_window_id",
@@ -31057,7 +31065,6 @@
         "native.frontmost_app",
         "native.installed_apps",
         "native.is_app_hidden",
-        "native.read_app_preference",
         "native.recent_documents",
         "native.running_apps",
         "native.url_scheme_handler"
@@ -31068,7 +31075,7 @@
     {
       "admits_events": [],
       "description": "Launch, quit, activate, and hide applications",
-      "method_count": 13,
+      "method_count": 12,
       "methods": [
         "native.activate_app",
         "native.force_quit_app",
@@ -31081,7 +31088,6 @@
         "native.quit_app",
         "native.set_app_hidden",
         "native.unhide_app",
-        "native.write_app_preference",
         "system.launch_app"
       ],
       "name": "apps.control",

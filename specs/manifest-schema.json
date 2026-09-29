@@ -1769,6 +1769,27 @@
       ],
       "type": "object"
     },
+    "PreferencesConfig": {
+      "additionalProperties": false,
+      "description": "`requires.preferences`: other apps' settings domains, each\n`<store>:<domain>` in the store its OS keeps settings in:\n`defaults:com.apple.dock` (macOS), `gsettings:org.gnome.desktop.interface`\n(Linux; a relocatable schema adds `:<path>`), `registry:Software\\7-Zip`\n(Windows: a key under HKEY_CURRENT_USER, covering the keys below it).\nA plugin for several OSes lists each one's domains; each shows on its\nown OS. Security and network settings, and settings naming a program\nsomething else runs, are refused at load.",
+      "properties": {
+        "read": {
+          "description": "Domains the plugin reads.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "write": {
+          "description": "Domains the plugin reads and changes. A domain is listed once:\nhere if it is changed.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Preset": {
       "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.\nSee proposal section 3.5.",
       "oneOf": [
@@ -2011,6 +2032,17 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "preferences": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PreferencesConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Other apps' settings domains this plugin reads or changes through\n`native.read_app_preference` / `native.write_app_preference`, one\nentry per domain, each granted on the plugin's card."
         },
         "privileges": {
           "description": "Platform-defined privileges this plugin REQUIRES — ungranted means\nthe plugin does not spawn (refuse-don't-degrade).",
