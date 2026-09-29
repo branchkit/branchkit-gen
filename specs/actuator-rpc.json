@@ -21758,7 +21758,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system.control",
+      "x-branchkit-privilege": "shell",
       "x-since": "0.1.0"
     },
     {
@@ -21804,7 +21804,7 @@
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "system.control",
+      "x-branchkit-privilege": "shell",
       "x-since": "0.1.0"
     },
     {
@@ -32079,9 +32079,11 @@
     {
       "admits_events": [],
       "description": "Run shell commands and scripts outside the plugin's sandbox, with BranchKit's own access to your files and network",
-      "method_count": 2,
+      "method_count": 4,
       "methods": [
         "native.run_applescript",
+        "native.run_jxa",
+        "native.run_shortcut",
         "system.run_shell"
       ],
       "name": "shell",
@@ -32233,7 +32235,7 @@
     {
       "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "method_count": 34,
+      "method_count": 32,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
@@ -32243,8 +32245,6 @@
         "native.open_system_settings",
         "native.prevent_sleep",
         "native.restart_app",
-        "native.run_jxa",
-        "native.run_shortcut",
         "native.screen_lock",
         "native.screen_saver_start",
         "native.set_airport_power",
