@@ -13830,6 +13830,35 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.dwell_click",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_dwell_click_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "title": "NativeDwellClickResult",
+          "type": "object"
+        }
+      },
+      "summary": "Check if the system's dwell click is on (holding the pointer still clicks). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.eject_disk",
       "paramStructure": "by-name",
       "params": [
@@ -22602,6 +22631,43 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.set_dwell_click",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "enabled",
+          "required": true,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_set_dwell_click_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "NativeSetDwellClickResult",
+          "type": "object"
+        }
+      },
+      "summary": "Turn the system's dwell click on or off (holding the pointer still clicks). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "system.control",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.set_extended_attribute",
       "paramStructure": "by-name",
       "params": [
@@ -30509,7 +30575,7 @@
     {
       "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "method_count": 25,
+      "method_count": 26,
       "methods": [
         "native.accessibility_display_invert",
         "native.accessibility_enabled",
@@ -30524,6 +30590,7 @@
         "native.bounce_keys",
         "native.cursor_shake_to_locate",
         "native.differentiate_without_color",
+        "native.dwell_click",
         "native.focused_element",
         "native.grayscale_enabled",
         "native.magnifier_enabled",
@@ -31425,7 +31492,7 @@
     {
       "admits_events": [],
       "description": "System settings — lock screen, prevent sleep, dark mode, volume",
-      "method_count": 34,
+      "method_count": 35,
       "methods": [
         "native.eject_disk",
         "native.kill_process",
@@ -31446,6 +31513,7 @@
         "native.set_dark_mode",
         "native.set_dnd",
         "native.set_dock_position",
+        "native.set_dwell_click",
         "native.set_magnifier_enabled",
         "native.set_mono_audio",
         "native.set_mouse_keys",
