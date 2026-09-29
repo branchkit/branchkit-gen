@@ -31999,6 +31999,14 @@
     },
     {
       "admits_events": [],
+      "description": "Answer BranchKit's questions, such as permission requests, with words it recognizes from your voice",
+      "method_count": 0,
+      "methods": [],
+      "name": "questions.answer",
+      "risk": "dangerous"
+    },
+    {
+      "admits_events": [],
       "description": "Capture screen content as images",
       "method_count": 16,
       "methods": [
