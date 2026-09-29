@@ -2975,6 +2975,193 @@
         ],
         "type": "object"
       },
+      "Shape": {
+        "description": "One shape.",
+        "oneOf": [
+          {
+            "additionalProperties": false,
+            "description": "A rectangle's outline (`stroke` wide, drawn inside the rectangle),\nwith rounded corners when `radius` is set: a window border, a target.",
+            "properties": {
+              "color": {
+                "description": "`#RRGGBB` or `#RRGGBBAA`.",
+                "type": "string"
+              },
+              "corner_radius": {
+                "default": null,
+                "description": "Corner radius in pixels (default 0).",
+                "format": "float",
+                "type": "number"
+              },
+              "height": {
+                "format": "float",
+                "type": "number"
+              },
+              "kind": {
+                "const": "rect",
+                "type": "string"
+              },
+              "stroke": {
+                "default": null,
+                "description": "Line width in pixels, 1 to 64 (default 3).",
+                "format": "float",
+                "type": "number"
+              },
+              "width": {
+                "format": "float",
+                "type": "number"
+              },
+              "x": {
+                "format": "float",
+                "type": "number"
+              },
+              "y": {
+                "format": "float",
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "x",
+              "y",
+              "width",
+              "height",
+              "color"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "description": "A filled rectangle: a highlight or a dimmed region. Use a colour\nwith alpha (`#RRGGBB40`) to leave what is under it readable.",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "corner_radius": {
+                "default": null,
+                "description": "Corner radius in pixels (default 0).",
+                "format": "float",
+                "type": "number"
+              },
+              "height": {
+                "format": "float",
+                "type": "number"
+              },
+              "kind": {
+                "const": "fill",
+                "type": "string"
+              },
+              "width": {
+                "format": "float",
+                "type": "number"
+              },
+              "x": {
+                "format": "float",
+                "type": "number"
+              },
+              "y": {
+                "format": "float",
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "x",
+              "y",
+              "width",
+              "height",
+              "color"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "description": "A circle, outlined when `stroke` is set, filled otherwise.",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "cx": {
+                "format": "float",
+                "type": "number"
+              },
+              "cy": {
+                "format": "float",
+                "type": "number"
+              },
+              "kind": {
+                "const": "circle",
+                "type": "string"
+              },
+              "radius": {
+                "format": "float",
+                "type": "number"
+              },
+              "stroke": {
+                "default": null,
+                "format": "float",
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "cx",
+              "cy",
+              "radius",
+              "color"
+            ],
+            "type": "object"
+          },
+          {
+            "additionalProperties": false,
+            "description": "A ring that fills clockwise from twelve o'clock over `duration_ms`,\nover a faint track: a dwell click's countdown. With\n`follow_pointer`, the host keeps it centred on the pointer and\n`cx` / `cy` are ignored (send 0). It stays full when the time is up,\nuntil the overlay is cleared or replaced.",
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "cx": {
+                "format": "float",
+                "type": "number"
+              },
+              "cy": {
+                "format": "float",
+                "type": "number"
+              },
+              "duration_ms": {
+                "description": "1 to 60000.",
+                "format": "uint32",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "follow_pointer": {
+                "default": false,
+                "type": "boolean"
+              },
+              "kind": {
+                "const": "ring",
+                "type": "string"
+              },
+              "radius": {
+                "format": "float",
+                "type": "number"
+              },
+              "stroke": {
+                "default": null,
+                "format": "float",
+                "type": "number"
+              }
+            },
+            "required": [
+              "kind",
+              "cx",
+              "cy",
+              "radius",
+              "color",
+              "duration_ms"
+            ],
+            "type": "object"
+          }
+        ]
+      },
       "ShortcutInfo": {
         "properties": {
           "folder": {
@@ -27664,6 +27851,93 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "overlay.clear",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "description": "The overlay to remove; nothing happens if it is not showing.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "overlay_clear_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OverlayClearResult",
+          "type": "object"
+        }
+      },
+      "summary": "Remove the caller's overlay of that id",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "overlay",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "overlay.show",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "description": "The caller's name for this overlay (letters, digits, `_`, `-`, `.`;\nup to 64). Showing it again replaces its shapes. Overlays are kept\nper caller, so one plugin cannot replace or clear another's.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "shapes",
+          "required": true,
+          "schema": {
+            "description": "Up to 64 shapes: outlines, fills, circles and a countdown ring. No\ntext or images: nothing drawn can pass for a prompt. An empty list\nclears the overlay.",
+            "items": {
+              "$ref": "#/$defs/Shape"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "overlay_show_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OverlayShowResult",
+          "type": "object"
+        }
+      },
+      "summary": "Draw shapes over the screen (outlines, fills, circles, a countdown ring; never text), replacing the caller's overlay of that id",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "overlay",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "overrides.apply",
       "paramStructure": "by-name",
       "params": [
@@ -31191,6 +31465,17 @@
         "system.notify"
       ],
       "name": "notifications",
+      "risk": "moderate"
+    },
+    {
+      "admits_events": [],
+      "description": "Draw shapes over the screen: outlines, highlights and a countdown ring (never text)",
+      "method_count": 2,
+      "methods": [
+        "overlay.clear",
+        "overlay.show"
+      ],
+      "name": "overlay",
       "risk": "moderate"
     },
     {
