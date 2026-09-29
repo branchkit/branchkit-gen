@@ -980,6 +980,27 @@
       },
       "type": "object"
     },
+    "DevicesConfig": {
+      "additionalProperties": false,
+      "description": "`requires.devices`: the HID products and Bluetooth LE services a plugin\ndrives through `native.hid_*` and `native.ble_*`. Keyboards, keypads,\nmice, pointers, system controls and security keys are refused whatever\nis declared, as are the HID-over-GATT and FIDO services.",
+      "properties": {
+        "ble": {
+          "description": "GATT services (`fff0`, or a 128-bit UUID). The user allows each\ndevice for a service on the plugin's card, the first time the\nplugin reaches for it.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "hid": {
+          "description": "HID products, each `<vendor>:<product>` as four lower-case hex\ndigits (`046d:c52b`), covering every unit of that product. Each is\nswitched on or off on the plugin's card.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "DictationProfile": {
       "anyOf": [
         {
@@ -2014,6 +2035,17 @@
             }
           ],
           "description": "D-Bus methods this plugin calls through `native.dbus_call` (Linux),\none entry per method. Each is a request the user grants on the\nplugin's card; the manifest asks, the grant store decides."
+        },
+        "devices": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DevicesConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "HID products and Bluetooth LE services this plugin drives, each a\ngrant on the plugin's card."
         },
         "network": {
           "anyOf": [

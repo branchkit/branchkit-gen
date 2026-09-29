@@ -518,6 +518,28 @@
         ],
         "type": "object"
       },
+      "BleDeviceEntry": {
+        "description": "A Bluetooth LE device offering the asked-for service.",
+        "properties": {
+          "allowed": {
+            "description": "Whether the user has allowed this device for this service. Until\nthey do, calls on it are refused, and the first one puts it on the\nplugin's card to be allowed.",
+            "type": "boolean"
+          },
+          "id": {
+            "description": "How the OS names it (an address, or on macOS a CoreBluetooth\nidentifier): the `device_identifier` every other BLE call takes.",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "allowed",
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
       "BleService": {
         "description": "A GATT service with its characteristics.",
         "properties": {
@@ -1673,7 +1695,12 @@
         "type": "object"
       },
       "HidDeviceEntry": {
+        "description": "A HID device as its caller may see it: one whose product the plugin\ndeclared, never a keyboard, pointer, system control or security key.",
         "properties": {
+          "allowed": {
+            "description": "Whether the user has this product switched on for the caller. Every\nother HID call on it is refused until they do.",
+            "type": "boolean"
+          },
           "axes": {
             "format": "uint32",
             "minimum": 0,
@@ -1688,7 +1715,12 @@
             "type": "integer"
           },
           "id": {
+            "description": "Device ID (`0x046d:0xc52b:…`), the handle every other HID call takes.",
             "type": "string"
+          },
+          "open": {
+            "description": "Whether the caller has it open (`native.hid_open`).",
+            "type": "boolean"
           },
           "product": {
             "type": "string"
@@ -1699,6 +1731,7 @@
             "type": "integer"
           },
           "seized": {
+            "description": "Whether some plugin holds it exclusively (`native.hid_claim`).",
             "type": "boolean"
           },
           "transport": {
@@ -1711,10 +1744,12 @@
           }
         },
         "required": [
+          "allowed",
           "axes",
           "ble_uuid",
           "buttons",
           "id",
+          "open",
           "product",
           "product_id",
           "seized",
@@ -4043,7 +4078,7 @@
           "name": "characteristic_uuid",
           "required": true,
           "schema": {
-            "description": "GATT characteristic UUID.",
+            "description": "GATT characteristic UUID, 128-bit lower case.",
             "type": "string"
           }
         },
@@ -4065,7 +4100,15 @@
           "name": "device_identifier",
           "required": true,
           "schema": {
-            "description": "CoreBluetooth peripheral UUID.",
+            "description": "The device as `native.ble_devices` names it.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin that subscribed; the event reaches it alone.",
             "type": "string"
           }
         },
@@ -4073,19 +4116,19 @@
           "name": "service_uuid",
           "required": true,
           "schema": {
-            "description": "GATT service UUID.",
+            "description": "GATT service UUID, 128-bit lower case.",
             "type": "string"
           }
         }
       ],
-      "summary": "GATT notification from a subscribed BLE characteristic",
+      "summary": "A GATT notification from a characteristic the receiving plugin subscribed to (native.ble_subscribe), addressed to that plugin alone",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "input",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -4463,6 +4506,14 @@
           }
         },
         {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin this copy is for: one that declared the product.",
+            "type": "string"
+          }
+        },
+        {
           "name": "product",
           "required": true,
           "schema": {
@@ -4495,14 +4546,14 @@
           }
         }
       ],
-      "summary": "Non-Apple HID device connected (USB plug or Bluetooth pair)",
+      "summary": "A HID device whose vendor:product the receiving plugin declares arrived (USB plug or Bluetooth pair)",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "routine",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -4513,6 +4564,14 @@
           "name": "device_id",
           "required": true,
           "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin this copy is for: one that declared the product.",
             "type": "string"
           }
         },
@@ -4531,14 +4590,14 @@
           }
         }
       ],
-      "summary": "Non-Apple HID device disconnected",
+      "summary": "A HID device whose vendor:product the receiving plugin declares left",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "routine",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -4549,6 +4608,14 @@
           "name": "device_id",
           "required": true,
           "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin that opened the device; the event reaches it alone.",
             "type": "string"
           }
         },
@@ -4582,7 +4649,7 @@
           "name": "usage_page",
           "required": true,
           "schema": {
-            "description": "HID usage page (e.g. 0x09 = Button, 0x07 = Keyboard, 0x01 = Generic Desktop).",
+            "description": "HID usage page (e.g. 0x09 = Button, 0x01 = Generic Desktop).",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
@@ -4598,14 +4665,14 @@
           }
         }
       ],
-      "summary": "Raw input value from a non-Apple HID device (usage page, usage, value — no interpretation)",
+      "summary": "An input value (usage page, usage, value) from a HID device the receiving plugin opened, addressed to that plugin alone (macOS)",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "input",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -4616,7 +4683,7 @@
           "name": "data",
           "required": true,
           "schema": {
-            "description": "Raw report bytes.",
+            "description": "Raw report bytes, without the report ID.",
             "items": {
               "format": "uint8",
               "maximum": 255,
@@ -4634,6 +4701,14 @@
           }
         },
         {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin that opened the device; the event reaches it alone.",
+            "type": "string"
+          }
+        },
+        {
           "name": "product",
           "required": true,
           "schema": {
@@ -4644,7 +4719,7 @@
           "name": "report_id",
           "required": true,
           "schema": {
-            "description": "HID report ID.",
+            "description": "HID report ID, 0 for a device that numbers none.",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
@@ -4654,7 +4729,7 @@
           "name": "report_type",
           "required": true,
           "schema": {
-            "description": "IOHIDReportType (0 = input, 1 = output, 2 = feature).",
+            "description": "0 = input (the only kind a device sends unasked).",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
@@ -4670,14 +4745,14 @@
           }
         }
       ],
-      "summary": "Raw HID report bytes from a device (for devices that don't fire value callbacks)",
+      "summary": "An input report's bytes from a HID device the receiving plugin opened, addressed to that plugin alone",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "input",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -11323,6 +11398,47 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.ble_devices",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "service_uuid",
+          "required": true,
+          "schema": {
+            "description": "A GATT service the plugin declares in `requires.devices.ble`\n(`fff0`, or 128 bits).",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_ble_devices_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "devices": {
+              "items": {
+                "$ref": "#/$defs/BleDeviceEntry"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "devices"
+          ],
+          "title": "NativeBleDevicesResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the Bluetooth LE devices the OS is connected to or paired with that offer a GATT service the plugin declared",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.ble_discover_services",
       "paramStructure": "by-name",
       "params": [
@@ -11330,7 +11446,7 @@
           "name": "device_identifier",
           "required": true,
           "schema": {
-            "description": "Identifier for the paired BLE device. Accepts a CoreBluetooth\nperipheral UUID (e.g. \"12345678-...\") or a device name to match\namong connected BLE HID peripherals (e.g. \"Shortcut Remote\").",
+            "description": "The device, as `native.ble_devices` names it.",
             "minLength": 1,
             "type": "string"
           }
@@ -11355,13 +11471,15 @@
           "type": "object"
         }
       },
-      "summary": "Discover GATT services and characteristics on a paired BLE device",
+      "summary": "Discover the declared GATT services and their characteristics on a Bluetooth LE device the user allowed",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "ble",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -11381,7 +11499,7 @@
           "name": "device_identifier",
           "required": true,
           "schema": {
-            "description": "CoreBluetooth peripheral UUID or device name.",
+            "description": "The device, as `native.ble_devices` names it.",
             "minLength": 1,
             "type": "string"
           }
@@ -11390,7 +11508,7 @@
           "name": "service_uuid",
           "required": true,
           "schema": {
-            "description": "GATT service UUID containing the characteristic.",
+            "description": "A declared GATT service containing the characteristic.",
             "minLength": 1,
             "type": "string"
           }
@@ -11412,13 +11530,15 @@
           "type": "object"
         }
       },
-      "summary": "Subscribe to GATT notifications on a BLE characteristic",
+      "summary": "Subscribe to a GATT characteristic's notifications; they arrive as _platform.ble.notification, addressed to the calling plugin alone",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "ble",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -11429,7 +11549,7 @@
           "name": "device_identifier",
           "required": true,
           "schema": {
-            "description": "CoreBluetooth peripheral UUID or device name.",
+            "description": "The device, as `native.ble_devices` names it.",
             "minLength": 1,
             "type": "string"
           }
@@ -11439,7 +11559,7 @@
           "required": false,
           "schema": {
             "default": [],
-            "description": "GATT service UUIDs to subscribe to all notify characteristics on.",
+            "description": "Declared GATT services to subscribe to all notify characteristics\non. Their notifications are the caller's until\n`native.ble_unsubscribe` with characteristic `*`.",
             "items": {
               "type": "string"
             },
@@ -11474,14 +11594,72 @@
           "type": "object"
         }
       },
-      "summary": "Subscribe to all notify characteristics on listed services, then write — single GATT cycle",
+      "summary": "Subscribe to all notify characteristics on the listed declared services, then write, in one GATT cycle",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "ble",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.ble_unsubscribe",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "characteristic_uuid",
+          "required": true,
+          "schema": {
+            "description": "The characteristic `native.ble_subscribe` subscribed to.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "device_identifier",
+          "required": true,
+          "schema": {
+            "description": "The device, as `native.ble_devices` names it.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "service_uuid",
+          "required": true,
+          "schema": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_ble_unsubscribe_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "unsubscribed": {
+              "description": "Whether the caller was subscribed.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "unsubscribed"
+          ],
+          "title": "NativeBleUnsubscribeResult",
+          "type": "object"
+        }
+      },
+      "summary": "Stop the notifications native.ble_subscribe started on one characteristic",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "native.ble_write",
@@ -11515,7 +11693,7 @@
           "name": "device_identifier",
           "required": true,
           "schema": {
-            "description": "Identifier for the paired BLE device. Accepts a CoreBluetooth\nperipheral UUID or a device name (see ble_discover_services).",
+            "description": "The device, as `native.ble_devices` names it.",
             "minLength": 1,
             "type": "string"
           }
@@ -11524,7 +11702,7 @@
           "name": "service_uuid",
           "required": true,
           "schema": {
-            "description": "GATT service UUID (e.g. \"FFF0\").",
+            "description": "A declared GATT service (e.g. \"fff0\").",
             "minLength": 1,
             "type": "string"
           }
@@ -11555,13 +11733,15 @@
           "type": "object"
         }
       },
-      "summary": "Write bytes to a GATT characteristic on a paired BLE device",
+      "summary": "Write bytes to a GATT characteristic of a declared service on a Bluetooth LE device the user allowed",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "ble",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -16288,14 +16468,55 @@
           "type": "object"
         }
       },
-      "summary": "Seize exclusive access to a HID device, suppressing native macOS events",
+      "summary": "Hold a HID device the plugin declared exclusively, so its input reaches the plugin and not the OS. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "hid",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.hid_close",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "device_id",
+          "required": true,
+          "schema": {
+            "description": "Device ID, as `native.hid_devices` lists it.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_hid_close_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "closed": {
+              "description": "Whether the caller had it open.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "closed"
+          ],
+          "title": "NativeHidCloseResult",
+          "type": "object"
+        }
+      },
+      "summary": "Stop receiving a HID device's input (and end the plugin's exclusive hold on it)",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "native.hid_devices",
@@ -16320,7 +16541,7 @@
           "type": "object"
         }
       },
-      "summary": "List all connected non-Apple HID devices",
+      "summary": "List the connected HID devices whose vendor:product the plugin declared, never a keyboard, pointer or security key",
       "tags": [
         {
           "name": "native"
@@ -16361,14 +16582,57 @@
           "type": "object"
         }
       },
-      "summary": "Return the parsed HID element tree (buttons, axes, dials) for a connected device",
+      "summary": "Return the parsed HID element tree (buttons, axes, dials) of a HID device the plugin declared and the user switched on",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "hid",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.hid_open",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "device_id",
+          "required": true,
+          "schema": {
+            "description": "Device ID, as `native.hid_devices` lists it.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "native_hid_open_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "success"
+          ],
+          "title": "NativeHidOpenResult",
+          "type": "object"
+        }
+      },
+      "summary": "Start receiving a HID device's input as _platform.hid.report (and on macOS _platform.hid.input), addressed to the calling plugin alone",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
+      "x-since": "0.2.0"
     },
     {
       "name": "native.hid_release",
@@ -16390,6 +16654,7 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "success": {
+              "description": "Whether the caller held it exclusively.",
               "type": "boolean"
             }
           },
@@ -16400,13 +16665,12 @@
           "type": "object"
         }
       },
-      "summary": "Release exclusive access to a HID device, restoring native macOS behavior",
+      "summary": "End the plugin's exclusive hold on a HID device, giving its input back to the OS. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "hid",
       "x-since": "0.1.0"
     },
     {
@@ -16473,13 +16737,15 @@
           "type": "object"
         }
       },
-      "summary": "Send an output or feature report to a connected HID device",
+      "summary": "Send an output or feature report to a HID device the plugin declared and the user switched on",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "hid",
+      "x-branchkit-emits": [
+        "plugin.device_access"
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -30851,8 +31117,6 @@
         "_platform.display.changed",
         "_platform.effect.displaced",
         "_platform.effect.ownership_changed",
-        "_platform.hid.connected",
-        "_platform.hid.disconnected",
         "_platform.input.session_boundary",
         "_platform.input.session_ended",
         "_platform.keyboard.layout_changed",
@@ -30889,16 +31153,6 @@
     {
       "also_admitted_by": [],
       "events": [
-        "_platform.ble.notification",
-        "_platform.hid.input",
-        "_platform.hid.report"
-      ],
-      "name": "input",
-      "privilege": "events.input"
-    },
-    {
-      "also_admitted_by": [],
-      "events": [
         "_platform.clipboard.changed"
       ],
       "name": "clipboard",
@@ -30931,7 +31185,12 @@
       "also_admitted_by": [],
       "events": [
         "_platform.ax.notification",
-        "_platform.capture.progress"
+        "_platform.ble.notification",
+        "_platform.capture.progress",
+        "_platform.hid.connected",
+        "_platform.hid.disconnected",
+        "_platform.hid.input",
+        "_platform.hid.report"
       ],
       "name": "own",
       "privilege": null
@@ -31224,19 +31483,6 @@
     },
     {
       "admits_events": [],
-      "description": "Discover services and write to paired Bluetooth LE devices",
-      "method_count": 4,
-      "methods": [
-        "native.ble_discover_services",
-        "native.ble_subscribe",
-        "native.ble_subscribe_all_then_write",
-        "native.ble_write"
-      ],
-      "name": "ble",
-      "risk": "moderate"
-    },
-    {
-      "admits_events": [],
       "description": "Read calendar events and reminders",
       "method_count": 3,
       "methods": [
@@ -31339,10 +31585,7 @@
     },
     {
       "admits_events": [
-        "_platform.ble.notification",
         "_platform.clipboard.changed",
-        "_platform.hid.input",
-        "_platform.hid.report",
         "_platform.output.state",
         "_platform.pipeline.transcript",
         "_platform.window.closed",
@@ -31367,18 +31610,6 @@
       "methods": [],
       "name": "events.clipboard",
       "risk": "moderate"
-    },
-    {
-      "admits_events": [
-        "_platform.ble.notification",
-        "_platform.hid.input",
-        "_platform.hid.report"
-      ],
-      "description": "Receive raw input from your devices: every HID input value and report, including a keyboard's keystrokes, and Bluetooth LE notifications",
-      "method_count": 0,
-      "methods": [],
-      "name": "events.input",
-      "risk": "dangerous"
     },
     {
       "admits_events": [
@@ -31518,19 +31749,6 @@
       ],
       "name": "hardware",
       "risk": "low"
-    },
-    {
-      "admits_events": [],
-      "description": "Send reports to connected HID devices",
-      "method_count": 4,
-      "methods": [
-        "native.hid_claim",
-        "native.hid_elements",
-        "native.hid_release",
-        "native.hid_send_report"
-      ],
-      "name": "hid",
-      "risk": "moderate"
     },
     {
       "admits_events": [],
