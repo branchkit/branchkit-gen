@@ -421,6 +421,49 @@
         ],
         "type": "object"
       },
+      "BackgroundItem": {
+        "description": "A program that runs in the background or starts at login\n(`native.background_items`).",
+        "properties": {
+          "display_name": {
+            "description": "A human name where the mechanism keeps one (a systemd Description, a\nWindows service's display name, an autostart entry's Name).",
+            "type": "string"
+          },
+          "mechanism": {
+            "description": "What keeps it: `launchd`, `systemd`, `autostart`, `service`,\n`run_key` or `startup_folder`.",
+            "type": "string"
+          },
+          "name": {
+            "description": "Its identifier in its mechanism: a launchd label, a systemd unit, a\nWindows service name, a Run value or a Startup-folder file.",
+            "type": "string"
+          },
+          "program": {
+            "description": "The program it runs, with its arguments where the mechanism records\nthem as one command line.",
+            "type": "string"
+          },
+          "running": {
+            "description": "Whether it is running now; None where the mechanism does not say\n(a Run key or autostart entry is a launch, not a process).",
+            "type": "boolean"
+          },
+          "scope": {
+            "description": "`user` (runs for the signed-in user) or `system` (for the machine).",
+            "type": "string"
+          },
+          "starts_automatically": {
+            "description": "Whether it starts on its own, at login or at boot.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "display_name",
+          "mechanism",
+          "name",
+          "program",
+          "running",
+          "scope",
+          "starts_automatically"
+        ],
+        "type": "object"
+      },
       "BarcodeResult": {
         "properties": {
           "height": {
@@ -10787,6 +10830,38 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "native.background_items",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_background_items_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "items": {
+              "items": {
+                "$ref": "#/$defs/BackgroundItem"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "title": "NativeBackgroundItemsResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the programs that run in the background or start at login: launchd jobs on macOS, systemd services and autostart entries on Linux, services, Run keys and Startup folders on Windows",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "process",
+      "x-since": "0.2.0"
+    },
+    {
       "name": "native.batch_is_tileable",
       "paramStructure": "by-name",
       "params": [
@@ -17072,70 +17147,6 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.launchd_agents",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_launchd_agents_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "agents": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "agents"
-          ],
-          "title": "NativeLaunchdAgentsResult",
-          "type": "object"
-        }
-      },
-      "summary": "List user launch agents",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "native.launchd_daemons",
-      "paramStructure": "by-name",
-      "params": [],
-      "result": {
-        "name": "native_launchd_daemons_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "daemons": {
-              "items": {
-                "type": "string"
-              },
-              "type": "array"
-            }
-          },
-          "required": [
-            "daemons"
-          ],
-          "title": "NativeLaunchdDaemonsResult",
-          "type": "object"
-        }
-      },
-      "summary": "List system launch daemons",
-      "tags": [
-        {
-          "name": "native"
-        }
-      ],
-      "x-branchkit-privilege": "process",
       "x-since": "0.1.0"
     },
     {
@@ -31523,11 +31534,10 @@
     {
       "admits_events": [],
       "description": "List and inspect running processes",
-      "method_count": 11,
+      "method_count": 10,
       "methods": [
+        "native.background_items",
         "native.cron_jobs",
-        "native.launchd_agents",
-        "native.launchd_daemons",
         "native.process_count",
         "native.process_cpu_usage",
         "native.process_exists",
