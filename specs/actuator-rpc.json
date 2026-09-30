@@ -2646,6 +2646,59 @@
         ],
         "type": "object"
       },
+      "PhraseStep": {
+        "description": "One command a phrase named.",
+        "properties": {
+          "label": {
+            "description": "What the command is called: its description, else a summary of its\npattern. What a question about the phrase names it by.",
+            "type": "string"
+          },
+          "resolved": {
+            "$ref": "#/$defs/ResolveResult",
+            "description": "The resolve that matched these words: the action, its owner, the tags\nit sets and clears, and the scoped views at the time."
+          },
+          "start": {
+            "description": "Where in the phrase's words this command starts.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "words": {
+            "description": "The words it consumed.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "label",
+          "resolved",
+          "start",
+          "words"
+        ],
+        "type": "object"
+      },
+      "PhraseStop": {
+        "description": "Where a phrase stopped short of its last word, and why.",
+        "properties": {
+          "at": {
+            "description": "Where in the phrase's words the unresolved rest begins.",
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "resolved": {
+            "$ref": "#/$defs/ResolveResult",
+            "description": "The resolve of the words from `at`: a tie (`tied_candidates`), the\nstart of a longer command (`has_completions`), a codeword in progress\n(`bridge_active`), or no command at all."
+          }
+        },
+        "required": [
+          "at",
+          "resolved"
+        ],
+        "type": "object"
+      },
       "PipelineStatusEntry": {
         "properties": {
           "ephemeral": {
@@ -2988,6 +3041,135 @@
             "type": "object"
           }
         ]
+      },
+      "ResolveResult": {
+        "properties": {
+          "action": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Action"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The winning command's action, template-resolved. Typed in the schema\nsince 2026-09-19 — it is the same `Action` `dispatch` takes, which is\nwhat a consumer does with it."
+          },
+          "active_plugin_gates": {
+            "description": "All currently-active gates from `plugin.<X>.*` namespaces other than\nthe resolving caller's own (`plugin.<caller>.*`). Lets the caller\nmake session-end cleanup decisions (\"is any other plugin's mode\nactive?\") without maintaining a parallel local view of state. Host\ncallers see all plugin gates.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "args": {
+            "additionalProperties": true,
+            "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed. Opaque by\ndesign: each value is whatever its capture bound (a word, a number, a\ncollection record), so it stays raw JSON.",
+            "type": "object"
+          },
+          "bridge_active": {
+            "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
+            "type": "boolean"
+          },
+          "clears_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "consumed_count": {
+            "format": "uint",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "has_completions": {
+            "description": "The winning command's dictated-argument descriptor, if declared: the",
+            "type": "boolean"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/$defs/DiscoverItem"
+            },
+            "type": "array"
+          },
+          "matched": {
+            "type": "boolean"
+          },
+          "next_words": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "owner_plugin": {
+            "type": "string"
+          },
+          "requires_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scoped_prefixes": {
+            "description": "Platform-wide list of namespace prefixes that mark a tag as\n\"scoped.\" Voice plugin uses this to classify `sets_tags` entries\nfrom a matched command as scoped mode tags without shadowing the\nconfiguration locally.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "scoped_tags": {
+            "description": "Currently active scoped tags at match time.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "sets_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "telemetry": {
+            "$ref": "#/$defs/ResolveTelemetry"
+          },
+          "tied_candidates": {
+            "description": "The genuinely-tied candidate set, populated only when resolution\nreduced to 2+ equally-eligible commands the matcher could not\nseparate (same gating + scope, same winning length). When non-empty,\n`matched` is `false`, NO tag writes were applied, and `command_no_match`\nwas suppressed: rather than arbitrarily pick an iteration-order winner,\nthe platform hands the consuming plugin the full set to disambiguate.\nThe signal is generic — any plugin can read it and resolve the tie\nhowever its surface allows. Additive — a non-tie-aware consumer sees an\nempty list and a normal single-winner response.",
+            "items": {
+              "$ref": "#/$defs/TiedCandidate"
+            },
+            "type": "array"
+          },
+          "title": {
+            "type": "string"
+          },
+          "trace_id": {
+            "description": "Trace ID generated by the actuator for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents. Per-match — bridge-driven multi-utterance completions\nproduce different trace_ids for seed and completion. Cross-\nresolve threading for the same push-to-talk hold goes through\nthe ambient `correlation_id` derived from `session_id`. See\n`MatchCommandsResult.trace_id` for the full discussion.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "active_plugin_gates",
+          "args",
+          "bridge_active",
+          "clears_tags",
+          "consumed_count",
+          "has_completions",
+          "items",
+          "matched",
+          "next_words",
+          "owner_plugin",
+          "requires_tags",
+          "scoped_prefixes",
+          "scoped_tags",
+          "sets_tags",
+          "telemetry",
+          "tied_candidates",
+          "title",
+          "trace_id"
+        ],
+        "type": "object"
       },
       "ResolveTelemetry": {
         "description": "Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The\ninternal type can't derive `Serialize`/`JsonSchema` because it lives in\nthe matching crate alongside non-serializable internals — this struct\nis the wire shape exposed through `commands.resolve`.",
@@ -7314,7 +7496,7 @@
             },
             "args": {
               "additionalProperties": true,
-              "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed.",
+              "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed. Opaque by\ndesign: each value is whatever its capture bound (a word, a number, a\ncollection record), so it stays raw JSON.",
               "type": "object"
             },
             "bridge_active": {
@@ -7416,6 +7598,98 @@
         }
       },
       "summary": "Resolve words against the command registry — returns dispatch decision, partial-match feedback, and tiebreaker telemetry in one envelope",
+      "tags": [
+        {
+          "name": "matching"
+        }
+      ],
+      "x-branchkit-privilege": "dispatch",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "commands.resolve_phrase",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "preview",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "Change nothing. Each step resolves against a scratch copy of the full\nactive tag set, which the step's tag writes then update, so later\nsteps see the modes earlier ones enter; the live tags are never\nwritten, no codeword in progress is consulted or advanced, and no\nmatch telemetry is emitted. Default false: each step's tag writes are\napplied as it matches, exactly as `commands.resolve` applies them.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "session_id",
+          "required": false,
+          "schema": {
+            "description": "Audio session ID, as for `commands.resolve`. Informational.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "source",
+          "required": false,
+          "schema": {
+            "description": "Input source, as for `commands.resolve`: \"command_hold\", \"continuous\",\n\"selection\", \"api\".",
+            "type": "string"
+          }
+        },
+        {
+          "name": "words",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The phrase's words, in order.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "commands_resolve_phrase_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `commands.resolve_phrase`.",
+          "properties": {
+            "dropped": {
+              "description": "Positions of words dropped as silence: no command and no completion\nwhile a scoped mode was active.",
+              "items": {
+                "format": "uint",
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            "steps": {
+              "description": "The commands the phrase named, in order.",
+              "items": {
+                "$ref": "#/$defs/PhraseStep"
+              },
+              "type": "array"
+            },
+            "stopped": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/PhraseStop"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Present when resolution stopped before the last word."
+            }
+          },
+          "required": [
+            "steps"
+          ],
+          "title": "ResolvePhraseResult",
+          "type": "object"
+        }
+      },
+      "summary": "Resolve a whole phrase into the commands it names, in order (\"snap left\": the mode entry, then the command it gates) — preview changes nothing, commit applies each step's tag writes",
       "tags": [
         {
           "name": "matching"
@@ -31531,9 +31805,10 @@
     {
       "admits_events": [],
       "description": "Resolve spoken words to any plugin's commands, seeing what they capture, and dispatch typed actions to plugins on behalf of the user",
-      "method_count": 2,
+      "method_count": 3,
       "methods": [
         "commands.resolve",
+        "commands.resolve_phrase",
         "dispatch"
       ],
       "name": "dispatch",
