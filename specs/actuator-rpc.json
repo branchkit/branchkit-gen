@@ -9235,7 +9235,7 @@
           "type": "object"
         }
       },
-      "summary": "Switch keyboard input source",
+      "summary": "Switch keyboard input source. On Linux, not available on GNOME (GNOME Shell switches input sources only from its own switcher; it exposes no way to ask)",
       "tags": [
         {
           "name": "input"
@@ -9735,7 +9735,7 @@
           "type": "object"
         }
       },
-      "summary": "List all on-screen window IDs",
+      "summary": "List all on-screen window IDs. On Linux, not available on GNOME (GNOME exposes no window list; only the focused window is visible)",
       "tags": [
         {
           "name": "native"
@@ -10345,7 +10345,7 @@
           "type": "integer"
         }
       },
-      "summary": "Count windows for an app by bundle ID",
+      "summary": "Count windows for an app by bundle ID. On Linux, not available on GNOME (GNOME exposes no window list; only the focused window is visible)",
       "tags": [
         {
           "name": "native"
@@ -12286,7 +12286,7 @@
           "type": "object"
         }
       },
-      "summary": "Cascade all windows for an app",
+      "summary": "Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible)",
       "tags": [
         {
           "name": "native"
@@ -13128,7 +13128,7 @@
           "type": "object"
         }
       },
-      "summary": "Get the current cursor position",
+      "summary": "Get the current cursor position. On Linux, not available on sway, GNOME or other Wayland compositors (Wayland gives a client no global pointer position, and XWayland knows it only over its own windows; only X11 sessions can read it)",
       "tags": [
         {
           "name": "native"
@@ -13171,7 +13171,7 @@
           "type": "object"
         }
       },
-      "summary": "Get current cursor type and position",
+      "summary": "Get current cursor type and position. On Linux, not available on sway, GNOME or other Wayland compositors (Wayland gives a client no global pointer position, and XWayland knows it only over its own windows; only X11 sessions can read it)",
       "tags": [
         {
           "name": "native"
@@ -16778,7 +16778,7 @@
           "type": "object"
         }
       },
-      "summary": "Hide an app by bundle ID",
+      "summary": "Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
@@ -17240,7 +17240,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if an application is hidden",
+      "summary": "Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
@@ -18255,7 +18255,7 @@
           "type": "object"
         }
       },
-      "summary": "Maximize window to fill screen",
+      "summary": "Maximize window to fill screen. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state); nor on GNOME (GNOME exposes no window IPC; use its own tiling keybinds)",
       "tags": [
         {
           "name": "native"
@@ -18632,7 +18632,7 @@
           "type": "object"
         }
       },
-      "summary": "Minimize a window by ID",
+      "summary": "Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
@@ -18925,7 +18925,7 @@
           "type": "object"
         }
       },
-      "summary": "Move a window to a different display",
+      "summary": "Move a window to a different display. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)",
       "tags": [
         {
           "name": "native"
@@ -18972,7 +18972,7 @@
           "type": "object"
         }
       },
-      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
+      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME moves windows between workspaces only from its own shortcuts; its XWayland windows ignore the EWMH request)",
       "tags": [
         {
           "name": "native"
@@ -20094,7 +20094,7 @@
           "type": "object"
         }
       },
-      "summary": "Pin or unpin a window above all others",
+      "summary": "Pin or unpin a window above all others. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through); nor on sway (sway has no stacking levels; floating windows are always above tiled ones)",
       "tags": [
         {
           "name": "native"
@@ -22631,7 +22631,7 @@
           "type": "object"
         }
       },
-      "summary": "Hide or unhide an app",
+      "summary": "Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
@@ -23732,7 +23732,7 @@
           "type": "object"
         }
       },
-      "summary": "Switch to a keyboard input source by ID",
+      "summary": "Switch to a keyboard input source by ID. On Linux, not available on GNOME (GNOME Shell switches input sources only from its own switcher; it exposes no way to ask)",
       "tags": [
         {
           "name": "native"
@@ -24764,7 +24764,7 @@
           "type": "object"
         }
       },
-      "summary": "Set window transparency",
+      "summary": "Set window transparency. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)",
       "tags": [
         {
           "name": "native"
@@ -24810,7 +24810,7 @@
           "type": "object"
         }
       },
-      "summary": "Set a window's level (floating, normal, below)",
+      "summary": "Set a window's level (floating, normal, below). On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through); nor on sway (sway has no stacking levels; floating windows are always above tiled ones)",
       "tags": [
         {
           "name": "native"
@@ -25012,7 +25012,7 @@
           "type": "object"
         }
       },
-      "summary": "Set a window to appear on all spaces (sticky). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue",
+      "summary": "Set a window to appear on all spaces (sticky). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)",
       "tags": [
         {
           "name": "native"
@@ -26490,7 +26490,7 @@
           "type": "object"
         }
       },
-      "summary": "Toggle native fullscreen for a window",
+      "summary": "Toggle native fullscreen for a window. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state); nor on GNOME (GNOME exposes no window IPC; use its own tiling keybinds)",
       "tags": [
         {
           "name": "native"
@@ -26775,7 +26775,7 @@
           "type": "object"
         }
       },
-      "summary": "Unhide a hidden application",
+      "summary": "Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
@@ -26814,7 +26814,7 @@
           "type": "object"
         }
       },
-      "summary": "Restore a minimized window by ID",
+      "summary": "Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
       "tags": [
         {
           "name": "native"
