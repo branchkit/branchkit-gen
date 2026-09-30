@@ -3919,7 +3919,7 @@
           "name": "bundle_id",
           "required": true,
           "schema": {
-            "description": "macOS bundle identifier (e.g., `com.google.Chrome`).",
+            "description": "The focused app's identity: the bundle identifier on macOS\n(`com.google.Chrome`), the WM_CLASS class on Linux\n(`Google-chrome`), the lowercased executable name on Windows\n(`chrome`).",
             "type": "string"
           }
         }
@@ -4330,6 +4330,14 @@
           "required": true,
           "schema": {
             "description": "Name of the collection that was updated.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "description": "Set when the platform recomposed the collection from manifests\nrather than a plugin writing it: `reload` (plugins were reloaded) or\n`rebuild` (one plugin was rebuilt in development). Absent on an\nordinary write.",
             "type": "string"
           }
         },
@@ -5762,7 +5770,7 @@
           "type": "object"
         }
       },
-      "summary": "Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)",
+      "summary": "Delete an installed artifact from the caller's own artifact namespace (ref: <plugin>/<artifact>)",
       "tags": [
         {
           "name": "misc"
@@ -7623,7 +7631,7 @@
               "type": "boolean"
             },
             "displaced": {
-              "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The displaced plugin should receive an\n`effect_displaced` notification (section 10.2). Notification path is\nstubbed in v1 — see registered handler.",
+              "description": "When the assertion displaced an existing top-of-stack owner, this\nnames that plugin. The platform broadcasts\n`_platform.effect.displaced` naming it as `displaced_owner`.",
               "type": "string"
             },
             "enforced": {
@@ -7631,7 +7639,7 @@
               "type": "boolean"
             },
             "granted": {
-              "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (fail-next-assertion semantics per section 10.3) or when the\neffect name is unknown.",
+              "description": "True when the assertion is now top-of-stack and effective.\nFalse when the user has revoked consent for this effect on this\nplugin (a revocation fails the next assertion) or when the\neffect name is unknown.",
               "type": "boolean"
             }
           },

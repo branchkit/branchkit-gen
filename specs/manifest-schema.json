@@ -1,16 +1,16 @@
 {
   "$defs": {
     "AccessLevel": {
-      "description": "Access level for plugin-provided resources (stores, events, action prefix).\nControls who can consume the resource. Part of the Plugin Interaction Model.",
+      "description": "Access level for plugin-provided resources (collections, events, action prefix).\nControls who can consume the resource.",
       "oneOf": [
         {
           "const": "open",
-          "description": "Any declared consumer can access. Bundled/same-author auto-approved, third-party needs user approval.",
+          "description": "Any plugin that declares the resource passes this level; the user's\ngrant for the connection decides.",
           "type": "string"
         },
         {
           "const": "same_author",
-          "description": "Only plugins from the same author can access. Auto-granted, no user prompt.",
+          "description": "Meant for plugins by the same author. The manifest `author` is not\nverified, so nothing is granted by it: at run time a consumer passes\nthis level as it would `open`, and the user's grant decides.",
           "type": "string"
         },
         {
@@ -521,11 +521,11 @@
     },
     "CollectionSchema": {
       "additionalProperties": false,
-      "description": "Unified schema for a collection.\n\nPhase F: legacy `kind` enum + `key_field`/`value_field`/`id_field`/\n`default_recording_enabled`/`retention_days` fields removed. Every\ndeclaration uses the state shape: `preset` + slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
+      "description": "Schema for a collection: a `preset` plus any slot overrides\n(storage / writers / merge / lifecycle / feeds_matching / etc).",
       "properties": {
         "access": {
           "$ref": "#/$defs/AccessLevel",
-          "description": "Read access level. Default `open`. (Phase F: subsumed by `privacy.access_level`.)"
+          "description": "Read access level. Default `open`. `privacy.access_level`, when set,\ntakes precedence; on an owned `plugin.<id>.` name, `open` here reads\nas `private`, so open one with `privacy.access_level`."
         },
         "cardinality": {
           "anyOf": [
@@ -539,11 +539,11 @@
           "description": "State policy slot — meaningful only with `preset: \"tag\"`."
         },
         "clear_on_unrelated_command": {
-          "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nSub-sprint 6.4: replaces voice's inline auto-clear in matchWords with\na manifest-declared trigger resolved server-side in `commands.match`.\nOnly meaningful for `feeds_matching: AsGates { scoped: true }` —\nvalidation rejects the flag on other shapes. Distinct from\n`Lifecycle::ClearOnEvent` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
+          "description": "Auto-clear all gates in this namespace when a command matches that\ndoes not write a tag here (i.e. the user has \"moved on\" mid-session).\nResolved by the platform when a command matches. Acts only on a\nscoped gate collection (`feeds_matching: as_gates` with\n`scoped: true`) whose lifecycle is `clear_on_event`; on any other\nshape the flag is accepted and has no effect. Distinct from\n`clear_on_event` because the trigger is conditional on the\nmatched command's tag effects, not a bus event.",
           "type": "boolean"
         },
         "clears_when_cleared": {
-          "description": "Tags whose clearing should automatically clear this tag too. Used\nfor dependent state that's only meaningful while a parent gate is\nheld — most commonly mid-capture mode tags (`sets_on_partial`)\nwhose lifetime is bounded by their parent's `requires_tags`. For\nthe common case the platform auto-infers the relationship from\n`requires_tags` + `sets_on_partial`; this field is an escape hatch\nfor cascades where the parent isn't in `requires_tags`. A dependent\nclears when ANY of its parents clears; cycles are rejected at load.",
+          "description": "Tags whose clearing should automatically clear this tag too. Used\nfor dependent state that's only meaningful while a parent gate is\nheld — most commonly mid-capture mode tags (`sets_on_partial`)\nwhose lifetime is bounded by their parent's `requires_tags`. For\nthe common case the platform auto-infers the relationship from\n`requires_tags` + `sets_on_partial`; this field is an escape hatch\nfor cascades where the parent isn't in `requires_tags`. A dependent\nclears when ANY of its parents clears. A cycle is not rejected: the\nplatform drops the edge that closes it and reports a\n`validation.warning`.",
           "items": {
             "type": "string"
           },
@@ -645,7 +645,7 @@
           ]
         },
         "held_by_writer": {
-          "description": "Whether records in this collection are HOLDS — assertions about the\nwriting process's own live state — rather than durable statements that\noutlive it. When true, the platform releases the writer's records in\n`cleanup_terminated_plugin` the moment that plugin's process\nterminates (crash, disable, uninstall, restart), through the same\ndelete path an explicit `collection.delete_records` takes, so gates\nclear, events fire, and the matcher renarrows uniformly.\n\nThe rule underneath: the side that survives the crash must own the\nrelease. Before this existed, every plugin holding an exclusive tag\nhad to hand-roll a boot-time reconcile (browser's boot_reconcile.go,\nvoice's clearOrphanedSpeakingTag) — and a third-party plugin that\ndidn't know to would brick voice control on its first crash, since a\nstranded exclusive tag suppresses every command and narrows the\nengine.\n\nDefaults by preset: `tag` → true (a tag is almost always \"my process\nis in this state right now\"), everything else → false (data,\nentities and logs are statements, not holds). Declare explicitly to\noverride either way — `plugin.voice.mode` opts OUT because continuous\nmode is durable user intent that a hot-reload restore deliberately\nreads back.\n\nMatcher-written gates (`writers: platform_only`, written under\n`_platform` authority) are unaffected regardless: reaping is keyed on\nthe record's writer, and the platform never dies. Those are held by\nthe user's session, not by a process, and their `clear_on_event`\nlifecycles already model that.",
+          "description": "Whether records in this collection are HOLDS — assertions about the\nwriting process's own live state — rather than durable statements that\noutlive it. When true, the platform releases the writer's records\nthe moment that plugin's process terminates (crash, disable,\nuninstall, restart), through the same\ndelete path an explicit `collection.delete_records` takes, so gates\nclear, events fire, and the matcher renarrows uniformly.\n\nThe rule underneath: the side that survives the crash must own the\nrelease. Before this existed, every plugin holding an exclusive tag\nhad to hand-roll a boot-time reconcile (browser's boot_reconcile.go,\nvoice's clearOrphanedSpeakingTag) — and a third-party plugin that\ndidn't know to would brick voice control on its first crash, since a\nstranded exclusive tag suppresses every command and narrows the\nengine.\n\nDefaults by preset: `tag` → true (a tag is almost always \"my process\nis in this state right now\"), everything else → false (data,\nentities and logs are statements, not holds). Declare explicitly to\noverride either way — `plugin.voice.mode` opts OUT because continuous\nmode is durable user intent that a hot-reload restore deliberately\nreads back.\n\nMatcher-written gates (`writers: platform_only`, written under\n`_platform` authority) are unaffected regardless: reaping is keyed on\nthe record's writer, and the platform never dies. Those are held by\nthe user's session, not by a process, and their `clear_on_event`\nlifecycles already model that.",
           "type": [
             "boolean",
             "null"
@@ -877,7 +877,7 @@
           "type": "object"
         }
       ],
-      "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — and this was the last one declared at manifest top level, as\n`dispatch_prefixes`, next to `dispatch_via`. `dispatch_via` is a MODE and\nstays where it is; the targets are what a user consents to, and they\nbelong under `consumes` with the rest.\n\n`actions` narrows the DECLARATION, not the grant: expanding the grant to\n(caller, target, action) took the two declaring plugins from 5 consent\nrows to 39, and a consent list long enough to scroll is one people click\nthrough. So the user still decides per prefix while the platform can hold\nthe plugin to the narrower thing it said."
+      "description": "One action prefix this plugin dispatches to.\n\nDispatch is a consumption — a plugin reaching another plugin's action\nsurface — so the targets are declared under `consumes`, where the user\nconsents to them; `dispatch_via` stays at the top level as the MODE.\n\n`actions` narrows the DECLARATION, not the grant: the user decides per\nprefix, and the platform can hold the plugin to the narrower list it\ndeclared."
     },
     "Consumes": {
       "additionalProperties": false,
@@ -898,7 +898,7 @@
           "type": "array"
         },
         "dispatch": {
-          "description": "Action prefixes this plugin dispatches to, when `dispatch_via` is\n`direct`. Was the top-level `dispatch_prefixes`.",
+          "description": "Action prefixes this plugin dispatches to, when `dispatch_via` is\n`direct`.",
           "items": {
             "$ref": "#/$defs/ConsumedDispatch"
           },
@@ -1063,7 +1063,7 @@
         },
         {
           "const": "direct",
-          "description": "Constructs action strings directly; must also declare `dispatch_prefixes`.",
+          "description": "Constructs action strings directly; must also list its targets in\n`consumes.dispatch`.",
           "type": "string"
         }
       ]
@@ -1117,14 +1117,14 @@
           "type": "object"
         }
       ],
-      "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters (section 10.4 wire-forward-compat).\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
+      "description": "One entry in an `asserts` array. A bare string is sugar for\n`{ \"name\": \"<value>\" }`; the object form reserves an optional `args`\nbag for future per-effect parameters.\nv1 effects are parameter-less — `args` MUST be `None` until a\nspecific effect's registry entry opts into accepting parameters."
     },
     "EffectDeclaration": {
       "additionalProperties": false,
       "description": "One exclusivity-shape effect declaration. A plugin may declare\nmultiple entries when its experience surfaces have independent\nlifecycles; each entry is one consent unit at install time.",
       "properties": {
         "asserts": {
-          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters (section 10.4 wire-forward-compat).\n\nThis block used to carry `conflict_resolution` too. Dropped\n2026-08-27: how contention over a resource is arbitrated is a\nproperty of the RESOURCE, not of one party claiming it — two\nasserters declaring different modes for one effect was expressible\nand meaningless. The registry's `default_mode`/`allowed_modes`\ngovern; when plugin-defined effects land, the field reappears on\nthe DEFINITION side, where it belongs.",
+          "description": "Registered effect names this plugin will assert. Each entry is\neither a bare string (sugar for `{ \"name\": \"...\" }`) or an object\nwith `name` and an optional `args` bag reserved for future\nper-effect parameters.\n\nThis block used to carry `conflict_resolution` too. Dropped\n2026-08-27: how contention over a resource is arbitrated is a\nproperty of the RESOURCE, not of one party claiming it — two\nasserters declaring different modes for one effect was expressible\nand meaningless. The registry's `default_mode`/`allowed_modes`\ngovern; when plugin-defined effects land, the field reappears on\nthe DEFINITION side, where it belongs.",
           "items": {
             "$ref": "#/$defs/EffectAssertEntry"
           },
@@ -1153,7 +1153,7 @@
         "access": {
           "$ref": "#/$defs/AccessLevel",
           "default": "open",
-          "description": "Who may assert it. `Open` (default): any declared consumer, with a\nuser grant. `SameAuthor`: plugins sharing this manifest's author,\nauto-granted. `Private`: only the defining plugin itself."
+          "description": "Who may assert it. `open` (default): any declared consumer, with a\nuser grant. `same_author`: meant for plugins sharing this manifest's\nauthor; nothing is granted by author, so it also needs a user grant.\n`private`: only the defining plugin itself."
         },
         "description": {
           "description": "What holding this effect means. Shown on the Effects tab and in\nconsent copy for plugins that assert it. Plugin-authored text:\nrendered as data in platform chrome, never as markup.",
@@ -1182,7 +1182,7 @@
       "type": "object"
     },
     "FeedsMatching": {
-      "description": "Opt-in modes for matching-engine consumption. Closed enum at the platform\nlevel; growth requires a deliberate platform release. See proposal section 3.4.",
+      "description": "Opt-in modes for matching-engine consumption. Closed enum at the platform\nlevel; growth requires a deliberate platform release.",
       "oneOf": [
         {
           "description": "Most data — not consumed by the matching engine.",
@@ -1273,7 +1273,7 @@
           "type": "object"
         },
         {
-          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only (proposal section 9.3).",
+          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only.",
           "properties": {
             "from_field": {
               "type": "string"
@@ -1294,7 +1294,7 @@
           "type": "object"
         },
         {
-          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant (proposal section 9.4).",
+          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant.",
           "properties": {
             "name_field": {
               "type": "string"
@@ -1563,7 +1563,7 @@
           "type": "object"
         },
         {
-          "description": "Records cleared when any of the listed events fires on the event bus.\nSub-sprint 6.3 extended this from a single `event: String` to a list\nso scoped+transient namespaces can clear on multiple boundaries (e.g.\nboth `_platform.input.session_ended` and `_platform.discovery.closed`,\nwhich section 7.2's audit established as genuinely distinct triggers).\nAuthors writing a single-event lifecycle still use the array form\n(`\"events\": [\"x\"]`) — keeping the wire shape uniform with the JSON\nSchema so external validators agree with the runtime parser.",
+          "description": "Records cleared when any of the listed events fires on the event bus\n(e.g. both `_platform.input.session_ended` and\n`_platform.discovery.closed`). A single event is still a one-element\narray (`\"events\": [\"x\"]`).",
           "properties": {
             "events": {
               "items": {
@@ -1840,7 +1840,7 @@
       "type": "object"
     },
     "Preset": {
-      "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.\nSee proposal section 3.5.",
+      "description": "Manifest-level shorthand that resolves to a policy bundle at parse time.",
       "oneOf": [
         {
           "const": "tag",
@@ -2151,7 +2151,7 @@
       "description": "`policy.requires_tag` — gate-tag declaration.\n\nSpecifies a tag name that must be active at write time. Different\nfrom `feeds_matching: AsGates` (which describes how *this* collection\nproduces gates) — this is the inverse: what gate is required to write\nhere. Avoid declaring `requires_tag` on a collection whose own writes\nset/clear the named tag (self-referential gate).",
       "properties": {
         "tag": {
-          "description": "The exact tag name (e.g. `\"_platform.input.active\"`) that must be\nin the active gate set when a write reaches the chain.",
+          "description": "The exact tag name (e.g. `\"_platform.calibration.active\"`) that must be\nin the active gate set when a write reaches the chain.",
           "type": "string"
         }
       },
@@ -2222,7 +2222,7 @@
     },
     "StageDeclaration": {
       "additionalProperties": false,
-      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path (step 15.4). The actuator cannot statically\nverify handler presence — runtime invocation surfaces missing handlers.",
+      "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path. The platform cannot statically verify handler\npresence — runtime invocation surfaces missing handlers.",
       "properties": {
         "binary": {
           "description": "Binary name to spawn for this stage. Resolved relative to the plugin\ndirectory. If omitted, defaults to the stage name.",
@@ -2398,7 +2398,7 @@
         },
         {
           "const": "tag_list",
-          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab (state doc Phase D). A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
+          "description": "Read-only tag-namespace listing with current active gates.\nDefault for `tag` — surfaces tag-shape collections in the\nCollections tab. A plugin shipping\ncustom UI for a tag namespace overrides this slot.",
           "type": "string"
         },
         {
