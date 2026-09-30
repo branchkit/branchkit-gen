@@ -145,7 +145,7 @@ func splitIdentifierLower(s string) []string {
 
 func pyFieldType(typeName string, field *ActionFieldSchema) string {
 	switch field.EffectiveFieldType() {
-	case FieldTypeString:
+	case FieldTypeString, FieldTypeSecretRef:
 		return "str"
 	case FieldTypeInt:
 		return "int"

@@ -83,6 +83,7 @@ var validFieldTypes = map[FieldType]bool{
 	FieldTypeEnum:        true,
 	FieldTypeObject:      true,
 	FieldTypeJson:        true,
+	FieldTypeSecretRef:   true,
 }
 
 // validDisplayRoles are the field display roles the platform recognizes
@@ -326,7 +327,7 @@ func validateActionField(fieldPath string, f ActionFieldSchema, add func(Severit
 	ft := f.EffectiveFieldType()
 	if !validFieldTypes[ft] {
 		add(SeverityError, fieldPath+".field_type", fmt.Sprintf(
-			"field_type %q is not a recognized type (valid: string, int, number, boolean, string[], enum, object, json)",
+			"field_type %q is not a recognized type (valid: string, int, number, boolean, string[], enum, object, json, secret_ref)",
 			f.FieldType))
 	}
 	if ft == FieldTypeEnum && len(f.EnumValues) == 0 {

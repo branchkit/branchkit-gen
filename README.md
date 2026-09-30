@@ -159,6 +159,16 @@ HandlePlay(plugin, func(p PlayParams, _ *branchkit.OnActionRequest) (any, error)
 })
 ```
 
+The TypeScript and Python files carry the same registrars, `handlePlay(plugin, fn)` and `handle_play(plugin, fn)`, with `req.params` typed as `PlayParams`:
+
+```ts
+handlePlay(plugin, async (req) => {
+  if (req.params.mode === "shuffle") {
+    // ...
+  }
+});
+```
+
 ## Supported field types
 
 | `field_type` | Go | TypeScript | Python |
@@ -168,6 +178,7 @@ HandlePlay(plugin, func(p PlayParams, _ *branchkit.OnActionRequest) (any, error)
 | `number` | `float64` / `*float64` | `number` | `float` |
 | `boolean` | `bool` / `*bool` | `boolean` | `bool` |
 | `string[]` | `[]string` | `string[]` | `list[str]` |
+| `secret_ref` (the name of a stored secret) | `string` / `*string` | `string` | `str` |
 | `enum` (with `enum_values`) | typed `string` + `const` block | literal union | `Literal[...]` |
 | `object` (with nested `fields`) | `json.RawMessage` | `unknown` | `Any` |
 | `json` (escape hatch) | `json.RawMessage` | `unknown` | `Any` |

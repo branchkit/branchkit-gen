@@ -181,7 +181,7 @@ func renderGoActionHandler(b *strings.Builder, structName, fullAction string, sc
 func goFieldType(structName string, field *ActionFieldSchema) string {
 	ft := field.EffectiveFieldType()
 	switch ft {
-	case FieldTypeString:
+	case FieldTypeString, FieldTypeSecretRef:
 		if field.Required {
 			return "string"
 		}

@@ -23,6 +23,9 @@ const (
 	FieldTypeEnum        FieldType = "enum"
 	FieldTypeObject      FieldType = "object"
 	FieldTypeJson        FieldType = "json"
+	// FieldTypeSecretRef holds the NAME of an entry in the secret store, not
+	// the credential, so it is a string wherever it is typed.
+	FieldTypeSecretRef FieldType = "secret_ref"
 )
 
 // NeedsJSONImport returns true for field types that emit json.RawMessage

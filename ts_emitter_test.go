@@ -91,3 +91,35 @@ func TestRenderTS_JsonFieldType(t *testing.T) {
 		t.Errorf("json field should map to unknown:\n%s", out)
 	}
 }
+
+// Every action gets a typed registrar, as in Go (Handle<Action>) and Python
+// (handle_<action>): the action string and params type come from the manifest.
+// An action with no fields takes the untyped handler, as in Go.
+func TestRenderTS_ActionRegistrar(t *testing.T) {
+	m := &PluginManifest{
+		ActionPrefix: ptr("wm"),
+		ActionTypes: map[string]ActionTypeSchema{
+			"snap":  {Fields: []ActionFieldSchema{{Key: "edge", Required: true}}},
+			"reset": {},
+		},
+	}
+	out := RenderTS(m)
+	for _, want := range []string{
+		`import type { Plugin } from "@branchkitdev/plugin-sdk-ts";`,
+		"export function handleSnap(\n  plugin: Plugin,\n  fn: Parameters<typeof plugin.handleAction<SnapParams>>[1],\n): void {\n  plugin.handleAction<SnapParams>(\"wm.snap\", fn);\n}",
+		"export function handleReset(\n  plugin: Plugin,\n  fn: Parameters<typeof plugin.handleAction>[1],\n): void {\n  plugin.handleAction(\"wm.reset\", fn);\n}",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing:\n%s\nin:\n%s", want, out)
+		}
+	}
+}
+
+// A manifest with no action types imports nothing: an unused import is lint
+// noise every consumer inherits.
+func TestRenderTS_NoActionsNoImport(t *testing.T) {
+	out := RenderTS(&PluginManifest{})
+	if strings.Contains(out, "import") {
+		t.Errorf("no actions should mean no import:\n%s", out)
+	}
+}
