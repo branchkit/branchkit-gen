@@ -1273,6 +1273,11 @@
             "minimum": 0,
             "type": "integer"
           },
+          "is_asleep": {
+            "default": false,
+            "description": "Connected but asleep (display sleep): still listed, geometry last\nknown, not drawing until it wakes. Default false.",
+            "type": "boolean"
+          },
           "visible_h": {
             "default": 0,
             "format": "int32",
@@ -1310,6 +1315,7 @@
         "required": [
           "h",
           "id",
+          "is_asleep",
           "visible_h",
           "visible_w",
           "visible_x",
@@ -1332,6 +1338,11 @@
           "h": {
             "format": "int32",
             "type": "integer"
+          },
+          "is_asleep": {
+            "default": false,
+            "description": "The display is connected but asleep (display sleep, DPMS standby,\nthe console display turned off). It is still listed — it has not been\nremoved, and it comes back unchanged on wake — but it is not drawing:\nits geometry is the last known, and nothing drawn on it or captured\nfrom it is seen until it wakes. Default false, which is also what an\nOS or display server that cannot report display sleep reads as.",
+            "type": "boolean"
           },
           "is_builtin": {
             "description": "Whether this is a built-in display (laptop screen).",
@@ -1401,6 +1412,7 @@
         "required": [
           "display_id",
           "h",
+          "is_asleep",
           "is_builtin",
           "is_primary",
           "name",
