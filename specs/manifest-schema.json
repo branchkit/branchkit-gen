@@ -430,6 +430,34 @@
         }
       ]
     },
+    "CapabilitiesConfig": {
+      "additionalProperties": false,
+      "description": "`requires.capabilities`: the platform operations a plugin calls, by\nmethod name. Where this machine refuses one (the OS, the desktop session\nor the host cannot provide it), the plugin's card and install panel say\nso before anything is called. A `required` one refused here stops the\nplugin from starting, as an unapproved required privilege does; the rest\nonly reduce what it can do.",
+      "properties": {
+        "dynamic": {
+          "description": "Why this plugin's calls cannot be known from its source, when they\ncannot: it forwards calls a user's script names, or hosts an\ninterpreter. Such a plugin checks each call with `platform.profile`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "required": {
+          "description": "The operations, all listed in `uses`, the plugin is pointless\nwithout. Written by the author: only they know which calls have a\nway around.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "uses": {
+          "description": "Every platform operation the plugin calls. Derived from its source\n(`branchkit-cli dev platforms --write`), not written by hand.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "CaptureMacro": {
       "additionalProperties": false,
       "description": "One `capture_macros` entry: a named capture group declared once and\nreferenced from command patterns by name.",
@@ -2025,6 +2053,10 @@
       "additionalProperties": false,
       "description": "The plugin's ask: everything a person is shown and accepts at install.\n\nMembership test, deliberately not \"is it security-relevant\": **the user\nmust see this before accepting, because there is no later moment, or the\nlater moment is not enough.** `sockets` and `runtimes` are disclosed and\nnever granted — the install panel is the only place they are ever seen.\n`privileges` and `network` do have later moments on the plugin's card,\nbut the first acceptance is still here.\n\nThings that look like they belong and do not: `run` (the sandbox confines\nthe process whatever it names), `collection_data.keybinds` (a real\ncapability, but grant-checked through `Channel::CollectionWrite` and\nrevocable on the card, so its later moment is enough), and\n`consumes.effects` (coordination, not capability: effects are arbitrated\nat runtime, not a reach the plugin is granted). Moving a field across this\nboundary is a breaking manifest change, so a new top-level field must\nchoose a side when it is added.",
       "properties": {
+        "capabilities": {
+          "$ref": "#/$defs/CapabilitiesConfig",
+          "description": "The platform operations this plugin calls, so a person learns before\ninstalling what will not work on their machine."
+        },
         "dbus": {
           "anyOf": [
             {
