@@ -43,6 +43,117 @@
       "preset": "data",
       "writers": "platform_only"
     },
+    "_platform.binding_overrides": {
+      "cardinality": "multi",
+      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Writable by a plugin that declares it while the binding screen lives in the keyboard plugin; it narrows to platform-only when the screen moves into Settings.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "string",
+          "key": "id",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "source",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "string",
+          "key": "trigger",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "action",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "params",
+          "label": "",
+          "required": false
+        }
+      ],
+      "id_strategy": {
+        "field": "id",
+        "type": "by_field"
+      },
+      "merge": "collect",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    "_platform.bindings": {
+      "cardinality": "multi",
+      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `trigger` is a key combo (\"opt+shift+h\", \"opt+t down\"), `action` an exact dotted action type, `params` its params, `source` the trigger's kind (only \"keyboard\" today; omitted means keyboard). Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`. The contributor is the record's writer. The platform derives the hotkey table from these records and the user's edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "string",
+          "key": "id",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "source",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "string",
+          "key": "trigger",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "action",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "json",
+          "key": "params",
+          "label": "",
+          "required": false
+        }
+      ],
+      "id_strategy": {
+        "field": "id",
+        "type": "by_field"
+      },
+      "merge": "collect",
+      "preset": "data",
+      "storage": {
+        "type": "memory_only"
+      },
+      "writers": "anyone_who_declares"
+    },
+    "_platform.bindings.active": {
+      "cardinality": "singleton",
+      "description": "The hotkey table the platform derived and the hosts registered, one record: `entries` (each `{trigger, action, params, by_user, plugin_id}`: `by_user` for the user's edit, else `plugin_id` names the contributing plugin) and `shadowed` (each `{trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "id_strategy": {
+        "type": "singleton"
+      },
+      "merge": "authoritative",
+      "preset": "data",
+      "storage": {
+        "type": "memory_only"
+      },
+      "writers": "platform_only"
+    },
     "_platform.calibration.active": {
       "cardinality": "singleton",
       "description": "Platform-managed tag — set when a calibration trial is in progress, cleared on trial end. Plugins opt into defensive blocking during calibration by adding a `forbids_tag: _platform.calibration.active` policy on their own collections.",

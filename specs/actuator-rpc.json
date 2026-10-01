@@ -2969,49 +2969,6 @@
         ],
         "type": "object"
       },
-      "RegistryEntry": {
-        "properties": {
-          "action": {
-            "type": "string"
-          },
-          "combo": {
-            "type": "string"
-          },
-          "params": {
-            "description": "Params for the dispatch; absent means `{}`. Every fired bind\nexecutes `Action::Plugin { action_type, params, phase }` through the\nshared executor — the string-routing dialect is gone (2026-08-28).\n\nOpen by design, and the only open field in this shape: it is the\nreceiving plugin's params, typed per-plugin by `branchkit-gen` from\nthat plugin's `action_types`, exactly like `Action::Plugin.params`."
-          },
-          "source": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "action",
-          "combo",
-          "source"
-        ],
-        "type": "object"
-      },
-      "RegistrySnapshot": {
-        "properties": {
-          "entries": {
-            "items": {
-              "$ref": "#/$defs/RegistryEntry"
-            },
-            "type": "array"
-          },
-          "listen_up": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "entries",
-          "listen_up"
-        ],
-        "type": "object"
-      },
       "ReminderItem": {
         "properties": {
           "due_date": {
@@ -9645,50 +9602,6 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
-    },
-    {
-      "name": "keybinds.register",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "snapshot",
-          "required": true,
-          "schema": {
-            "$ref": "#/$defs/RegistrySnapshot",
-            "description": "The full keybind registry to install, replacing what is there.\n\nDeclared 2026-09-19 (census). The handler already deserialized\nexactly `RegistrySnapshot` and refused anything else; the doc\ncomment was transcribing the shape by hand, and had gone stale —\nan entry is `{ combo, action, source, params? }`."
-          }
-        }
-      ],
-      "result": {
-        "name": "keybinds_register_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "properties": {
-            "count": {
-              "description": "Number of entries cached after the registration.",
-              "format": "uint",
-              "minimum": 0,
-              "type": "integer"
-            },
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok",
-            "count"
-          ],
-          "title": "KeybindsRegisterResult",
-          "type": "object"
-        }
-      },
-      "summary": "Register keybind snapshot with the platform (caches and sends to Swift shell)",
-      "tags": [
-        {
-          "name": "keybinds"
-        }
-      ],
       "x-since": "0.1.0"
     },
     {
@@ -31529,6 +31442,24 @@
     {
       "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
       "name": "_platform.actuator_log_level",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Writable by a plugin that declares it while the binding screen lives in the keyboard plugin; it narrows to platform-only when the screen moves into Settings.",
+      "name": "_platform.binding_overrides",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    {
+      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `trigger` is a key combo (\"opt+shift+h\", \"opt+t down\"), `action` an exact dotted action type, `params` its params, `source` the trigger's kind (only \"keyboard\" today; omitted means keyboard). Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`. The contributor is the record's writer. The platform derives the hotkey table from these records and the user's edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
+      "name": "_platform.bindings",
+      "preset": "data",
+      "writers": "anyone_who_declares"
+    },
+    {
+      "description": "The hotkey table the platform derived and the hosts registered, one record: `entries` (each `{trigger, action, params, by_user, plugin_id}`: `by_user` for the user's edit, else `plugin_id` names the contributing plugin) and `shadowed` (each `{trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
+      "name": "_platform.bindings.active",
       "preset": "data",
       "writers": "platform_only"
     },
