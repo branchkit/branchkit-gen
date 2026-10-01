@@ -31446,10 +31446,10 @@
       "writers": "platform_only"
     },
     {
-      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Writable by a plugin that declares it while the binding screen lives in the keyboard plugin; it narrows to platform-only when the screen moves into Settings.",
+      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger, written by the platform's Keybinds page in Settings. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; only the platform writes it.",
       "name": "_platform.binding_overrides",
       "preset": "data",
-      "writers": "anyone_who_declares"
+      "writers": "platform_only"
     },
     {
       "description": "Contributed bindings — one record per trigger a plugin binds to an action. `trigger` is a key combo (\"opt+shift+h\", \"opt+t down\"), `action` an exact dotted action type, `params` its params, `source` the trigger's kind (only \"keyboard\" today; omitted means keyboard). Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`. The contributor is the record's writer. The platform derives the hotkey table from these records and the user's edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",

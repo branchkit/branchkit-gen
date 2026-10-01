@@ -45,7 +45,7 @@
     },
     "_platform.binding_overrides": {
       "cardinality": "multi",
-      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Writable by a plugin that declares it while the binding screen lives in the keyboard plugin; it narrows to platform-only when the screen moves into Settings.",
+      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger, written by the platform's Keybinds page in Settings. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; only the platform writes it.",
       "feeds_matching": {
         "type": "none"
       },
@@ -87,7 +87,7 @@
       },
       "merge": "collect",
       "preset": "data",
-      "writers": "anyone_who_declares"
+      "writers": "platform_only"
     },
     "_platform.bindings": {
       "cardinality": "multi",
