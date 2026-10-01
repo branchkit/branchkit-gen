@@ -2446,7 +2446,7 @@
         "description": "What confirming an item does — EXACTLY ONE of `say` or `dispatch`.\n\n`say` is the common case for commands: the words are routed through the\nsame matcher the person's voice would reach, so confirming an item is\nindistinguishable from speaking it. `dispatch` names an action type\ndirectly, for items that are not commands.",
         "properties": {
           "dispatch": {
-            "description": "An action type to dispatch — `windows.desk`.",
+            "description": "An action type to dispatch — `placement.desk`.",
             "type": "string"
           },
           "params": {
@@ -3988,7 +3988,7 @@
           },
           "desk": {
             "default": null,
-            "description": "Desk ordinal of the window's space: user spaces counted 1..N in\nmanaged-display order (on macOS, the Mission Control / Ctrl+N index —\nthe same convention as `windows.desk_switch`). Absent when the window\nis not on exactly one user space: minimized (no space), fullscreen\n(its space is not a user desk), or pinned to multiple spaces.",
+            "description": "Desk ordinal of the window's space: user spaces counted 1..N in\nmanaged-display order (on macOS, the Mission Control / Ctrl+N index —\nthe same convention as `placement.desk_switch`). Absent when the window\nis not on exactly one user space: minimized (no space), fullscreen\n(its space is not a user desk), or pinned to multiple spaces.",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
@@ -19432,7 +19432,7 @@
           "type": "object"
         }
       },
-      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME moves windows between workspaces only from its own shortcuts; its XWayland windows ignore the EWMH request)",
+      "summary": "DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move, and the call re-reads the window's spaces and reports false. Kept for older systems. For a working move, drive the visible path the bundled placement plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME moves windows between workspaces only from its own shortcuts; its XWayland windows ignore the EWMH request)",
       "tags": [
         {
           "name": "native"
@@ -28416,7 +28416,7 @@
           "name": "action",
           "required": true,
           "schema": {
-            "description": "Fully qualified action type (e.g., 'voice.dictation', 'windows.snap').",
+            "description": "Fully qualified action type (e.g., 'voice.dictation', 'placement.snap').",
             "type": "string"
           }
         },

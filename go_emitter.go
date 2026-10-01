@@ -133,7 +133,7 @@ func renderGoStruct(b *strings.Builder, structName, fullAction string, schema *A
 //
 //	// before — action string and params type are both hand-written, and
 //	// nothing checks either against plugin.json
-//	plugin.HandleAction("windows.snap", func(req *branchkit.OnActionRequest) (any, error) {
+//	plugin.HandleAction("placement.snap", func(req *branchkit.OnActionRequest) (any, error) {
 //	    var p SnapParams
 //	    if err := req.UnmarshalParams(&p); err != nil { return nil, err }
 //	    ...
