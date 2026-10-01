@@ -43,6 +43,49 @@
       "preset": "data",
       "writers": "platform_only"
     },
+    "_platform.binding_claims": {
+      "cardinality": "multi",
+      "description": "Who holds each contested trigger — one record per trigger plugins have contributed bindings for, keyed like an edit (the combo; `<source>:<trigger>` for a device's): `source`, `trigger`, and `order`, the plugins in the order they first contributed a binding for it. The first in `order` that contributes one holds the trigger, so a plugin installed later never takes a key already in use. A disabled plugin keeps its place; an uninstalled one leaves. Settings' \"Use this one\" moves a plugin to the front. Written only by the platform.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "string",
+          "key": "id",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "source",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "string",
+          "key": "trigger",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "json",
+          "key": "order",
+          "label": "",
+          "required": true
+        }
+      ],
+      "id_strategy": {
+        "field": "id",
+        "type": "by_field"
+      },
+      "merge": "collect",
+      "preset": "data",
+      "storage": {
+        "type": "shared_overrides"
+      },
+      "writers": "platform_only"
+    },
     "_platform.binding_overrides": {
       "cardinality": "multi",
       "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; no plugin writes it directly.",

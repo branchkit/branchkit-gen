@@ -3759,6 +3759,44 @@
         ],
         "type": "object"
       },
+      "TriggerDecl": {
+        "description": "One trigger a device source offers.",
+        "properties": {
+          "group": {
+            "description": "The heading it is listed under, e.g. the layer: `\"Group 2\"`. Absent\nlists it under the device alone.",
+            "type": "string"
+          },
+          "kind": {
+            "$ref": "#/$defs/TriggerKind",
+            "default": "button"
+          },
+          "label": {
+            "description": "What a person calls it: `\"Button 3\"`.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "description": "The name the source reports it by (`bindings.report`), without an\nevent word: `\"0x28bd:0x0202/g2/button3\"`.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "group",
+          "kind",
+          "label",
+          "name"
+        ],
+        "type": "object"
+      },
+      "TriggerKind": {
+        "description": "How a device trigger behaves, which decides how it can be bound.",
+        "enum": [
+          "button",
+          "momentary"
+        ],
+        "type": "string"
+      },
       "TtsVoice": {
         "properties": {
           "identifier": {
@@ -6098,6 +6136,49 @@
       ],
       "x-branchkit-emits": [
         "_platform.collection.updated"
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "bindings.set_triggers",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "triggers",
+          "required": true,
+          "schema": {
+            "description": "Every trigger this plugin offers now, replacing what it published\nbefore. Publish again when a device connects or goes away.",
+            "items": {
+              "$ref": "#/$defs/TriggerDecl"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "bindings_set_triggers_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "count": {
+              "description": "Triggers published.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "count"
+          ],
+          "title": "BindingsSetTriggersResult",
+          "type": "object"
+        }
+      },
+      "summary": "Publish the triggers the caller's device offers, so Settings can list and bind them",
+      "tags": [
+        {
+          "name": "bindings"
+        }
       ],
       "x-since": "0.1.0"
     },
@@ -31593,6 +31674,12 @@
     {
       "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
       "name": "_platform.actuator_log_level",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Who holds each contested trigger — one record per trigger plugins have contributed bindings for, keyed like an edit (the combo; `<source>:<trigger>` for a device's): `source`, `trigger`, and `order`, the plugins in the order they first contributed a binding for it. The first in `order` that contributes one holds the trigger, so a plugin installed later never takes a key already in use. A disabled plugin keeps its place; an uninstalled one leaves. Settings' \"Use this one\" moves a plugin to the front. Written only by the platform.",
+      "name": "_platform.binding_claims",
       "preset": "data",
       "writers": "platform_only"
     },
