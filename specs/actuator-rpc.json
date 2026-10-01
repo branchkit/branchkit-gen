@@ -1516,7 +1516,7 @@
                 "type": "null"
               }
             ],
-            "description": "The ready-to-store keybind value when the command's action is\nstatically bindable — a concrete plugin action with no capture\ntemplate, no sequence, and no intrinsic phase. Absent otherwise.\nThis is what the Keybinds tab's bind-a-command flow copies.\n\nDeclared 2026-09-19 (census). It was built here as a two-key\n`serde_json::Map` and described in this comment; `KeybindBinding`\nis that shape, and `RegistryEntry` is it plus combo and source."
+            "description": "The ready-to-store keybind value when the command's action is\nstatically bindable — a concrete plugin action with no capture\ntemplate, no sequence, and no intrinsic phase. Absent otherwise.\nThis is what the Keybinds page's bind-a-command flow copies.\n\nDeclared 2026-09-19 (census). It was built here as a two-key\n`serde_json::Map` and described in this comment; `KeybindBinding`\nis that shape."
           },
           "category": {
             "description": "Optional grouping label from the command definition (e.g. \"Navigation\").",
@@ -1990,7 +1990,7 @@
         "type": "object"
       },
       "KeybindBinding": {
-        "description": "The stored value of one keybind: which action it fires and with what.\n\nThis is what a `keybinds` collection record holds, and what the Keybinds\ntab's bind-a-command flow copies out of `commands.enumerate`\n(`EnumeratedCommand.binding`). A `RegistryEntry` is this plus the combo\nand where it came from.",
+        "description": "The stored value of one binding: which action it fires and with what.\n\nThis is what a `_platform.bindings` record holds, and what the Keybinds\npage's bind-a-command flow copies out of `commands.enumerate`\n(`EnumeratedCommand.binding`).",
         "properties": {
           "action": {
             "description": "Exact dotted action type, e.g. `\"voice.dictation\"`.",
