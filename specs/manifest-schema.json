@@ -99,6 +99,17 @@
       "additionalProperties": false,
       "description": "Schema declaration for a plugin-defined action type.\nEnables generic UI rendering (structured editor fields) for any plugin's actions.",
       "properties": {
+        "consequence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Consequence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Whether running this action can be undone. Omitted means\nunclassified, which BranchKit treats as risky. Only `reversible`\nchanges anything: the person may then always-allow a connected AI app\nto run it, and while it runs for such an app BranchKit refuses this\nplugin every platform call that cannot be undone. Ignored for a\nplugin that can act without platform calls (network access, running\nother programs, its own pipeline stages), since nothing could hold it\nto the claim."
+        },
         "fields": {
           "description": "Ordered list of fields for this action type.",
           "items": {
@@ -794,6 +805,26 @@
         }
       ],
       "description": "How one entry of `provides.collections` may be written: the declaration\ninline, or the path of a JSON file holding the same object.\n\nA path is a value, not a template — nothing is substituted or evaluated,\nand the file contains exactly what would otherwise sit inline. This is\nthe same choice `collection_data` gives you for records. Reach for a file\nwhen one feature's collections are getting in another's way; inline stays\nthe right answer for a small plugin."
+    },
+    "Consequence": {
+      "description": "Whether an action type's effect can be undone (`consequence`).",
+      "oneOf": [
+        {
+          "const": "reversible",
+          "description": "Undone by another command, or harmless: snap a window, switch\ndesktops, change the volume, scroll.",
+          "type": "string"
+        },
+        {
+          "const": "irreversible",
+          "description": "Local and cannot be undone: delete, empty the trash, quit an app.",
+          "type": "string"
+        },
+        {
+          "const": "external",
+          "description": "Leaves the computer or reaches other people: send, post, pay.",
+          "type": "string"
+        }
+      ]
     },
     "ConsumedCollection": {
       "anyOf": [
