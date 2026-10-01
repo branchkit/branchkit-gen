@@ -511,6 +511,37 @@
         ],
         "type": "object"
       },
+      "BindingEdge": {
+        "description": "The edge a source reports.",
+        "enum": [
+          "down",
+          "up",
+          "press"
+        ],
+        "type": "string"
+      },
+      "BindingEdit": {
+        "description": "One edit to one of the caller's own triggers.",
+        "properties": {
+          "action": {
+            "description": "The exact dotted action type to run. Empty unbinds the trigger, even\nover a plugin's contributed binding.",
+            "type": "string"
+          },
+          "params": {
+            "default": null,
+            "description": "Params for the action; absent means `{}`.\n\nOpen by design: the receiving plugin's shape, typed per-plugin by\n`branchkit-gen` from that plugin's `action_types`, exactly like a\ndispatched action's params."
+          },
+          "trigger": {
+            "description": "The trigger with its event word, if any: `\"g2/button3\"` fires on a\npress, `\"g2/button3 down\"` / `\"g2/button3 up\"` are a hold's two\nhalves, `\"g2/button3 toggle\"` alternates start/stop, and\n`\"g2/button3 repeat\"` fires phase `repeat` on down and `stop` on up.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "trigger"
+        ],
+        "type": "object"
+      },
       "BleCharacteristic": {
         "description": "A GATT characteristic.",
         "properties": {
@@ -5947,6 +5978,126 @@
         {
           "name": "misc"
         }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "bindings.report",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "event",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/BindingEdge",
+            "description": "Which edge happened."
+          }
+        },
+        {
+          "name": "trigger",
+          "required": true,
+          "schema": {
+            "description": "The trigger's name as this plugin spells it, without an event word:\n`\"g2/button3\"`, `\"m1/dial1 cw\"`. Report a hold's up with the same name\nas its down, even if a layer changed in between.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "bindings_report_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "binding": {
+              "description": "The bound trigger that matched, with its event word\n(`\"g2/button3 down\"`). Absent when nothing fired.",
+              "type": "string"
+            },
+            "fired": {
+              "description": "Whether a binding matched and its action ran. `false` for a trigger\nnothing is bound to; the press is dropped and recorded nowhere.",
+              "type": "boolean"
+            },
+            "status": {
+              "description": "The executor's status for the action: `\"ok\"`, `\"denied\"`, `\"not_handled\"` or `\"error\"`. Absent\nwhen nothing fired.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "fired"
+          ],
+          "title": "BindingsReportResult",
+          "type": "object"
+        }
+      },
+      "summary": "Report a press of one of the caller's own device triggers; the platform runs what it is bound to",
+      "tags": [
+        {
+          "name": "bindings"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "bindings.set",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "put",
+          "required": false,
+          "schema": {
+            "description": "Edits to write. Each takes its trigger's edit slot, replacing an\nearlier edit there — the user's from Settings included.",
+            "items": {
+              "$ref": "#/$defs/BindingEdit"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "remove",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "Triggers (with event words) whose edit to drop, so any contributed\nbinding shows through again.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "result": {
+        "name": "bindings_set_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "put": {
+              "description": "Edits written.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "removed": {
+              "description": "Edits dropped (a trigger with no edit counts as nothing).",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "put",
+            "removed"
+          ],
+          "title": "BindingsSetResult",
+          "type": "object"
+        }
+      },
+      "summary": "Set what the caller's own device triggers are bound to; the edits fire on the caller's authority",
+      "tags": [
+        {
+          "name": "bindings"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
       ],
       "x-since": "0.1.0"
     },
@@ -31446,19 +31597,19 @@
       "writers": "platform_only"
     },
     {
-      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger, written by the platform's Keybinds page in Settings. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; only the platform writes it.",
+      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; no plugin writes it directly.",
       "name": "_platform.binding_overrides",
       "preset": "data",
       "writers": "platform_only"
     },
     {
-      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `trigger` is a key combo (\"opt+shift+h\", \"opt+t down\"), `action` an exact dotted action type, `params` its params, `source` the trigger's kind (only \"keyboard\" today; omitted means keyboard). Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`. The contributor is the record's writer. The platform derives the hotkey table from these records and the user's edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
+      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `source` names who reports the trigger: \"keyboard\" (omitted means keyboard; `trigger` is a key combo, \"opt+shift+h\", \"opt+t down\") or a device plugin's id (`trigger` is a name that plugin defines, \"g2/button3\", with an optional event word: down, up, toggle, repeat). `action` is an exact dotted action type, `params` its params. Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`, plus `\"source\"` for a device's trigger. The contributor is the record's writer, and the binding fires on its authority. The platform derives each source's table from these records and the edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
       "name": "_platform.bindings",
       "preset": "data",
       "writers": "anyone_who_declares"
     },
     {
-      "description": "The hotkey table the platform derived and the hosts registered, one record: `entries` (each `{trigger, action, params, by_user, plugin_id}`: `by_user` for the user's edit, else `plugin_id` names the contributing plugin) and `shadowed` (each `{trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
+      "description": "The binding table the platform derived, one record: `entries` (each `{source, trigger, action, params, by_user, plugin_id, edited}`: `by_user` when it fires as the user, else `plugin_id` names the plugin it fires as; `edited` when an edit, not a contribution, holds it) and `shadowed` (each `{source, trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). The \"keyboard\" entries are what the hosts registered; a device plugin reads its own (`source` = its id) to know which presses to report. Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
       "name": "_platform.bindings.active",
       "preset": "data",
       "writers": "platform_only"

@@ -45,7 +45,7 @@
     },
     "_platform.binding_overrides": {
       "cardinality": "multi",
-      "description": "The user's edits to the bindings — one record per edited trigger, keyed by the trigger, written by the platform's Keybinds page in Settings. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; only the platform writes it.",
+      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; no plugin writes it directly.",
       "feeds_matching": {
         "type": "none"
       },
@@ -94,7 +94,7 @@
     },
     "_platform.bindings": {
       "cardinality": "multi",
-      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `trigger` is a key combo (\"opt+shift+h\", \"opt+t down\"), `action` an exact dotted action type, `params` its params, `source` the trigger's kind (only \"keyboard\" today; omitted means keyboard). Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`. The contributor is the record's writer. The platform derives the hotkey table from these records and the user's edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
+      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `source` names who reports the trigger: \"keyboard\" (omitted means keyboard; `trigger` is a key combo, \"opt+shift+h\", \"opt+t down\") or a device plugin's id (`trigger` is a name that plugin defines, \"g2/button3\", with an optional event word: down, up, toggle, repeat). `action` is an exact dotted action type, `params` its params. Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`, plus `\"source\"` for a device's trigger. The contributor is the record's writer, and the binding fires on its authority. The platform derives each source's table from these records and the edits (`_platform.binding_overrides`) on every write: two plugins binding one trigger resolve by plugin id, first wins, and the loser is reported in `_platform.bindings.active`.",
       "feeds_matching": {
         "type": "none"
       },
@@ -143,7 +143,7 @@
     },
     "_platform.bindings.active": {
       "cardinality": "singleton",
-      "description": "The hotkey table the platform derived and the hosts registered, one record: `entries` (each `{trigger, action, params, by_user, plugin_id}`: `by_user` for the user's edit, else `plugin_id` names the contributing plugin) and `shadowed` (each `{trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
+      "description": "The binding table the platform derived, one record: `entries` (each `{source, trigger, action, params, by_user, plugin_id, edited}`: `by_user` when it fires as the user, else `plugin_id` names the plugin it fires as; `edited` when an edit, not a contribution, holds it) and `shadowed` (each `{source, trigger, action, plugin_id, won_by}`: a binding that lost its trigger to another plugin and does not fire). The \"keyboard\" entries are what the hosts registered; a device plugin reads its own (`source` = its id) to know which presses to report. Rewritten on every change to `_platform.bindings` or `_platform.binding_overrides`; watch `_platform.collection.updated` to follow it.",
       "feeds_matching": {
         "type": "none"
       },
