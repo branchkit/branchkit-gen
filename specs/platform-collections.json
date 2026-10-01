@@ -87,6 +87,9 @@
       },
       "merge": "collect",
       "preset": "data",
+      "storage": {
+        "type": "shared_overrides"
+      },
       "writers": "platform_only"
     },
     "_platform.bindings": {
