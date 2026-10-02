@@ -1455,7 +1455,7 @@
         },
         "stack_order": {
           "default": 0,
-          "description": "Where this window sits when several share an anchor: offsets ascend from\nthe anchor edge. The LOWEST value stacks at the corner (pinned) — a\npersistent status window like a mode indicator wants a low order so it\nnever moves as others come and go — and HIGHER values stack away from it\n(transient toasts). Ties broken by channel id. Defaults to 0.",
+          "description": "Where this window sits when several share an anchor: offsets ascend from\nthe anchor edge. The LOWEST value stacks at the corner (pinned) — a\npersistent status window like a mode indicator wants a low order so it\nnever moves as others come and go — and HIGHER values stack away from it\n(transient toasts). Ties broken by channel id. Defaults to 0. A value\nbelow 0 is raised to 0: positions below are BranchKit's own, so no\nplugin window stacks between the corner and the permission prompt.",
           "format": "int32",
           "type": "integer"
         },
