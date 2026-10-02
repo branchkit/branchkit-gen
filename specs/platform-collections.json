@@ -88,7 +88,7 @@
     },
     "_platform.binding_overrides": {
       "cardinality": "multi",
-      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger. Same fields as `_platform.bindings`. Plugins read it; no plugin writes it directly.",
+      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger, and `disabled: true` switches the edit off — it keeps its trigger and action but does not fire, and holds the trigger empty until switched back on. Same fields as `_platform.bindings`, plus `disabled`. Plugins read it; no plugin writes it directly.",
       "feeds_matching": {
         "type": "none"
       },
@@ -120,6 +120,12 @@
         {
           "field_type": "json",
           "key": "params",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "boolean",
+          "key": "disabled",
           "label": "",
           "required": false
         }
