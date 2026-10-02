@@ -6106,11 +6106,11 @@
               "type": "string"
             },
             "fired": {
-              "description": "Whether a binding matched and its action ran. `false` for a trigger\nnothing is bound to; the press is dropped and recorded nowhere.",
+              "description": "Whether a binding matched and its action ran. `false` for a trigger\nnothing is bound to; the press is dropped and recorded nowhere.\n`false` too, with `status` `\"no_device_input\"`, when the caller holds\na device session and its device sent no input in the last second:\na press is accepted only from a device in use. A release (`up`) is\nnever refused this way.",
               "type": "boolean"
             },
             "status": {
-              "description": "The executor's status for the action: `\"ok\"`, `\"denied\"`, `\"not_handled\"` or `\"error\"`. Absent\nwhen nothing fired.",
+              "description": "The executor's status for the action: `\"ok\"`, `\"denied\"`, `\"not_handled\"` or `\"error\"`;\n`\"no_device_input\"` when the press was refused for want of recent\ninput from the caller's device. Absent when nothing was bound.",
               "type": "string"
             }
           },
