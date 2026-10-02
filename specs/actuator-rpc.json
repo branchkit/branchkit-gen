@@ -31739,7 +31739,7 @@
       "writers": "platform_only"
     },
     {
-      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger, and `disabled: true` switches the edit off — it keeps its trigger and action but does not fire, and holds the trigger empty until switched back on. Same fields as `_platform.bindings`, plus `disabled`. Plugins read it; no plugin writes it directly.",
+      "description": "Edits to the bindings — one record per edited trigger, keyed by the trigger (`<source>:<trigger>` for a device's). Written by the platform: as the user from the Keybinds page in Settings, or as a device plugin through `bindings.set`, for that plugin's own triggers only. One edit per trigger, the last writer's; it fires on its writer's authority. An edit always wins over a contributed binding; an empty `action` unbinds the trigger, and `disabled: true` switches the edit off — it keeps its trigger and action but does not fire, and holds the trigger empty until switched back on. `was` and `next` are the keys the binding had before (oldest first) and the keys stepped back from (nearest last), as chords without an event word, for the page's back and forward. Same fields as `_platform.bindings`, plus `disabled`, `was` and `next`. Plugins read it; no plugin writes it directly.",
       "name": "_platform.binding_overrides",
       "preset": "data",
       "writers": "platform_only"
