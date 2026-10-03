@@ -235,6 +235,34 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 		}
 	}
 
+	// setup_steps: each step's body is one of the plugin's own settings
+	// tabs, and plugin.report_setup names a step by its key — so a missing
+	// tab or a repeated key is an error, the same as at load.
+	tabs := map[string]bool{}
+	for _, tab := range m.Implements.SettingsTabs {
+		tabs[tab.Key] = true
+	}
+	stepKeys := map[string]bool{}
+	for i, step := range m.Implements.SetupSteps {
+		field := fmt.Sprintf("implements.setup_steps[%d]", i)
+		if !tabKeyRegex.MatchString(step.Key) {
+			add(SeverityError, field+".key",
+				fmt.Sprintf("setup_steps key %q must match [a-z0-9_-]+ (lowercase, digits, hyphens, underscores)", step.Key))
+		}
+		if stepKeys[step.Key] {
+			add(SeverityError, field+".key",
+				fmt.Sprintf("setup_steps key %q is declared twice — plugin.report_setup names a step by its key", step.Key))
+		}
+		stepKeys[step.Key] = true
+		if strings.TrimSpace(step.Label) == "" {
+			add(SeverityError, field+".label", fmt.Sprintf("setup step %q has an empty label", step.Key))
+		}
+		if !tabs[step.Tab] {
+			add(SeverityError, field+".tab",
+				fmt.Sprintf("setup step %q names tab %q, which is not one of this plugin's implements.settings_tabs — the step's body is that tab", step.Key, step.Tab))
+		}
+	}
+
 	// action_types: well-formed field types and enum_values presence
 	for actionName, schema := range m.ActionTypes {
 		validateActionType(actionName, schema, add)

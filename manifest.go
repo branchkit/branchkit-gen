@@ -124,13 +124,23 @@ func (c *ConsumedDispatch) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// PluginImplements parses the "implements" block. settings_tabs is the
-// only well-known key; everything else is a method declaration whose
-// presence (regardless of value) signals that the plugin handles that
-// JSON-RPC method.
+// PluginImplements parses the "implements" block. settings_tabs and
+// setup_steps are the well-known keys; everything else is a method
+// declaration whose presence (regardless of value) signals that the plugin
+// handles that JSON-RPC method.
 type PluginImplements struct {
 	SettingsTabs []SettingsTab
+	SetupSteps   []SetupStep
 	Methods      map[string]json.RawMessage
+}
+
+// SetupStep is one entry in implements.setup_steps: a step the plugin adds
+// to the Setup page, whose body is one of its own settings tabs.
+type SetupStep struct {
+	Key      string `json:"key"`
+	Label    string `json:"label"`
+	Tab      string `json:"tab"`
+	Required bool   `json:"required"`
 }
 
 // SettingsTab is one entry in implements.settings_tabs.
@@ -160,6 +170,12 @@ func (p *PluginImplements) UnmarshalJSON(data []byte) error {
 		if k == "settings_tabs" {
 			if err := json.Unmarshal(v, &p.SettingsTabs); err != nil {
 				return fmt.Errorf("implements.settings_tabs: %w", err)
+			}
+			continue
+		}
+		if k == "setup_steps" {
+			if err := json.Unmarshal(v, &p.SetupSteps); err != nil {
+				return fmt.Errorf("implements.setup_steps: %w", err)
 			}
 			continue
 		}

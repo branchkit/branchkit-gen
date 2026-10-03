@@ -3340,6 +3340,15 @@
         ],
         "type": "object"
       },
+      "SetupStepState": {
+        "description": "Where one Setup step stands, as its plugin reports it.",
+        "enum": [
+          "done",
+          "needs_you",
+          "in_progress"
+        ],
+        "type": "string"
+      },
       "Shape": {
         "description": "One shape.",
         "oneOf": [
@@ -29561,6 +29570,62 @@
         }
       },
       "summary": "Report whether this plugin can do its job. For a standing condition the platform cannot see from outside — a companion app disconnected, a device unplugged — not for a call that failed once.",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "plugin.report_setup",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "state",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/SetupStepState",
+            "description": "Where the step stands now. A step never reported reads as\n`needs_you` when it is required, and as optional otherwise."
+          }
+        },
+        {
+          "name": "step",
+          "required": true,
+          "schema": {
+            "description": "The step being reported: the `key` of one of this plugin's\n`implements.setup_steps`. A key the plugin did not declare is refused.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "summary",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "One user-facing line shown beside the step while it is folded —\n\"Large · 1.5 GB · commands on\". The plugin owns this text. Trimmed,\ncut to 120 characters, and rendered as data, never markup. Omitted or\nempty clears it.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "plugin_report_setup_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OkResult",
+          "type": "object"
+        }
+      },
+      "summary": "Report where one of this plugin's Setup steps stands — done, needs the person, or in progress — with one line of summary shown while it is folded. Only steps the plugin declared in implements.setup_steps.",
       "tags": [
         {
           "name": "misc"

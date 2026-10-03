@@ -191,6 +191,35 @@ func TestValidate_settingsTabKey(t *testing.T) {
 	}
 }
 
+func TestValidate_setupSteps(t *testing.T) {
+	errorsFor := func(steps []SetupStep) int {
+		m := minimalValid()
+		m.Implements.SettingsTabs = []SettingsTab{{Key: "setup", Label: "Setup"}}
+		m.Implements.SetupSteps = steps
+		n := 0
+		for _, i := range Validate(m, nil) {
+			if strings.HasPrefix(i.Field, "implements.setup_steps") && i.Severity == SeverityError {
+				n++
+			}
+		}
+		return n
+	}
+	if n := errorsFor([]SetupStep{{Key: "models", Label: "Speech models", Tab: "setup", Required: true}}); n != 0 {
+		t.Errorf("a valid step: %d errors", n)
+	}
+	if n := errorsFor([]SetupStep{{Key: "models", Label: "M", Tab: "nope"}}); n != 1 {
+		t.Errorf("a missing tab: %d errors, want 1", n)
+	}
+	if n := errorsFor([]SetupStep{
+		{Key: "a", Label: "A", Tab: "setup"},
+		{Key: "a", Label: "A", Tab: "setup"},
+		{Key: "Bad Key", Label: "B", Tab: "setup"},
+		{Key: "c", Label: " ", Tab: "setup"},
+	}); n != 3 {
+		t.Errorf("duplicate, bad key, empty label: %d errors, want 3", n)
+	}
+}
+
 func TestValidate_dispatchVia(t *testing.T) {
 	m := minimalValid()
 	m.DispatchVia = "direct"

@@ -1802,12 +1802,19 @@
       "additionalProperties": {
         "$ref": "#/$defs/MethodDecl"
       },
-      "description": "Methods a plugin declares it implements (actuator → plugin RPC).\n\n`settings_tabs` is a named field because it carries structured metadata (label, key, reads)\nand is semantically different from method declarations. All other method names are open-ended\n— plugins can declare any method name without actuator code changes.",
+      "description": "Methods a plugin declares it implements (actuator → plugin RPC).\n\n`settings_tabs` and `setup_steps` are named fields because they carry structured metadata\nand are semantically different from method declarations. All other method names are open-ended\n— plugins can declare any method name without actuator code changes.",
       "properties": {
         "settings_tabs": {
           "description": "Settings tabs provided by this plugin (structured metadata, not a method declaration).",
           "items": {
             "$ref": "#/$defs/PluginSettingsTabDecl"
+          },
+          "type": "array"
+        },
+        "setup_steps": {
+          "description": "Steps this plugin adds to the Setup page — the checklist of what\nBranchKit needs before it works (permissions, a model to download, a\ndevice to pair). Shown after the platform's own steps, in plugin load\norder. Each step's body is one of this plugin's settings tabs; the\nplugin reports each step's state with `plugin.report_setup`.",
+          "items": {
+            "$ref": "#/$defs/PluginSetupStepDecl"
           },
           "type": "array"
         }
@@ -1846,6 +1853,34 @@
       "required": [
         "label",
         "key"
+      ],
+      "type": "object"
+    },
+    "PluginSetupStepDecl": {
+      "additionalProperties": false,
+      "description": "One step a plugin adds to the Setup page.\n\nThe platform owns the page: where the step sits, the \"N of M done\" count,\nwhether it starts folded or open. The plugin owns what the step is about:\nits body is one of the plugin's own settings tabs, rendered in the same\nsandboxed frame as on the plugin's page, and its state is whatever the\nplugin last reported with `plugin.report_setup`.",
+      "properties": {
+        "key": {
+          "description": "The step's id, unique within this plugin. `plugin.report_setup`\nnames the step by this key. Lowercase letters, digits, `-` and `_`.",
+          "type": "string"
+        },
+        "label": {
+          "description": "The step's heading on the Setup page — a few plain words\n(\"Speech models\").",
+          "type": "string"
+        },
+        "required": {
+          "description": "`true` when BranchKit is not set up until this step reports `done`:\nthe step counts toward \"N of M done\" and starts open until then.\nDefault `false`: an optional step is listed but never blocks.",
+          "type": "boolean"
+        },
+        "tab": {
+          "description": "The settings tab that is the step's body: the `key` of one of this\nplugin's own `implements.settings_tabs`. A plugin can give setup a\nsmall tab of its own or reuse an existing one.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "label",
+        "tab"
       ],
       "type": "object"
     },
