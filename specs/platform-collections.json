@@ -159,7 +159,7 @@
     },
     "_platform.bindings": {
       "cardinality": "multi",
-      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `source` names who reports the trigger: \"keyboard\" (omitted means keyboard; `trigger` is a key combo, \"opt+shift+h\", \"opt+t down\") or a device plugin's id (`trigger` is a name that plugin defines, \"g2/button3\", with an optional event word: down, up, toggle, repeat). `action` is an exact dotted action type, `params` its params. Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`, plus `\"source\"` for a device's trigger. The contributor is the record's writer, and the binding fires on its authority. The platform derives each source's table from these records and the edits (`_platform.binding_overrides`) on every write. When two plugins bind one trigger, the plugin that contributed a binding for it first keeps it (`_platform.binding_claims`); the other binding is reported in `_platform.bindings.active` as shadowed.",
+      "description": "Contributed bindings — one record per trigger a plugin binds to an action. `source` names who reports the trigger: \"keyboard\" (omitted means keyboard; `trigger` is a key combo, \"opt+shift+h\", \"opt+t down\") or a device plugin's id (`trigger` is a name that plugin defines, \"g2/button3\", with an optional event word: down, up, toggle, repeat). `action` is an exact dotted action type, `params` its params. Manifests contribute through `collection_data`, keyed by trigger: `{\"opt+t down\": {\"action\": \"voice.dictation\"}}`, plus `\"source\"` for a device's trigger. The contributor is the record's writer, and the binding fires on its authority. The platform derives each source's table from these records and the edits (`_platform.binding_overrides`) on every write. When two plugins bind one trigger, the plugin that contributed a binding for it first keeps it (`_platform.binding_claims`); the other binding is reported in `_platform.bindings.active` as shadowed. A key combo's binding may carry `while`, a list of tags: it is live only while every one is active and its plugin is running. Until then its key is not grabbed from the OS and passes to the focused app (Esc that cancels dictation only while dictating).",
       "feeds_matching": {
         "type": "none"
       },
@@ -191,6 +191,12 @@
         {
           "field_type": "json",
           "key": "params",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "while",
           "label": "",
           "required": false
         }
