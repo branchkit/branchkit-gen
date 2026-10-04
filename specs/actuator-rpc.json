@@ -29055,6 +29055,59 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "pipelines.audio_level",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "since_ms",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "A moment in Unix milliseconds (the wall clock). When given, the\nresult's `peak_db` is the loudest audio captured since then, looking\nback at most 30 seconds.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "pipelines_audio_level_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "floor_db": {
+              "description": "The quietest level reported, in dBFS. Audio at the floor is digital\nsilence — no signal at all, which a quiet room never produces: the\nsystem is recording from the wrong or a muted input, or is not\nletting BranchKit hear the microphone.",
+              "format": "double",
+              "type": "number"
+            },
+            "level_db": {
+              "description": "How loud the audio crossing the pipelines is now, in dBFS. Absent\nwhen nothing is being captured.",
+              "format": "double",
+              "type": "number"
+            },
+            "peak_db": {
+              "description": "The loudest level since `since_ms`, in dBFS. Absent when no audio was\ncaptured in that time, or `since_ms` was not given.",
+              "format": "double",
+              "type": "number"
+            }
+          },
+          "required": [
+            "floor_db"
+          ],
+          "title": "PipelinesAudioLevelResult",
+          "type": "object"
+        }
+      },
+      "summary": "How loud the captured audio is, now and at its loudest since a moment you name (dBFS) — tells a working microphone from a silent one",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "microphone",
+      "x-since": "0.1.0"
+    },
+    {
       "name": "pipelines.grammar",
       "paramStructure": "by-name",
       "params": [
@@ -32470,8 +32523,10 @@
     {
       "admits_events": [],
       "description": "Capture microphone audio through a platform pipeline",
-      "method_count": 0,
-      "methods": [],
+      "method_count": 1,
+      "methods": [
+        "pipelines.audio_level"
+      ],
       "name": "microphone",
       "risk": "dangerous"
     },
