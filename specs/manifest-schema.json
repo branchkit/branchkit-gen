@@ -1704,7 +1704,8 @@
           "type": "array"
         },
         "host_name": {
-          "description": "The native-messaging host name the extension asks the browser for,\ne.g. `com.branchkit.pairing`. Reverse-DNS, the manifests' `name`.",
+          "description": "The native-messaging host name the extension asks the browser for,\ne.g. `com.branchkit.pairing`. Reverse-DNS, the manifests' `name`:\nlowercase letters, digits and `_` in dot-separated parts. Unique\nacross installed plugins, as is each extension id: a name or id two\nplugins claim is registered for neither.",
+          "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
           "type": "string"
         }
       },

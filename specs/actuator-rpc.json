@@ -17459,11 +17459,14 @@
           "type": "object"
         }
       },
-      "summary": "Resolve a hostname to IP addresses",
+      "summary": "Resolve a hostname to IP addresses. A plugin may resolve only a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "system",
       "x-since": "0.1.0"
@@ -19682,11 +19685,14 @@
           "type": "object"
         }
       },
-      "summary": "Run a quick network quality test (upload/download Mbps). Exists only on macOS; elsewhere it is refused with platform_no_analogue",
+      "summary": "Run a quick network quality test (upload/download Mbps). The test contacts Apple, so a plugin declares mensura.cdn-apple.com in requires.network. Exists only on macOS; elsewhere it is refused with platform_no_analogue",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
       "x-since": "0.1.0"
@@ -19720,11 +19726,14 @@
           "type": "object"
         }
       },
-      "summary": "Check if a host is reachable via network",
+      "summary": "Check if a host is reachable via network. A plugin may check only a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
       "x-since": "0.1.0"
@@ -20678,11 +20687,14 @@
           "type": "number"
         }
       },
-      "summary": "Ping a host and return latency in milliseconds",
+      "summary": "Ping a host and return latency in milliseconds. A plugin may ping only a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
       "x-since": "0.1.0"
@@ -21464,11 +21476,14 @@
           "type": "object"
         }
       },
-      "summary": "Get the external/public IP address via a DNS lookup (no HTTP)",
+      "summary": "Get the external/public IP address via a DNS lookup (no HTTP). The lookup asks OpenDNS, so a plugin declares resolver1.opendns.com in requires.network",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "system",
       "x-since": "0.1.0"
