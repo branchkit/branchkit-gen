@@ -424,7 +424,7 @@
       "writers": "platform_only"
     },
     "_platform.notification_prefs": {
-      "description": "How the platform shows `system.notify` notices (crate::notifications). One record `{enabled, keep, pause_on_pointer}`: whether the window shows at all, how long it stays (`5s`, `10s`, `20s`, `until_dismissed`; a floor, never a cut), and whether pointing at it pauses it. No record: on, 10s, pause. Set on Settings › Effects; applied to the next notice.",
+      "description": "How the platform shows `system.notify` notices. One record `{enabled, keep, pause_on_pointer}`: whether the window shows at all, how long it stays (`5s`, `10s`, `20s`, `until_dismissed`; a floor, never a cut), and whether pointing at it pauses it. No record: on, 10s, pause. Set on Settings › Effects; applied to the next notice.",
       "feeds_matching": {
         "type": "none"
       },
