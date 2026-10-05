@@ -272,7 +272,7 @@
           "type": "object"
         },
         {
-          "description": "A `.tar.bz2` from which named members are extracted, flattened.",
+          "description": "A `.tar.bz2` from which named members are extracted. A file name is\nmatched wherever it sits and written flat at the artifact's root; a\nname ending in `/` is a directory, extracted as a tree at its path\nbelow the archive's top folder (`espeak-ng-data/` for model data a\nruntime opens as a directory).",
           "properties": {
             "dest": {
               "type": [
@@ -2298,6 +2298,13 @@
       "additionalProperties": false,
       "description": "One stage implementation declared in a plugin manifest's `provides.stages`.\nThe HashMap key in `Provides::stages` is the plugin-local stage name (e.g.\n`custom-stt`); the fully-qualified name on the wire and in pipeline records\nis `<plugin_id>.<stage_name>`.\n\nThe plugin must also implement the corresponding RPC handler for the\nstreaming dispatch path. The platform cannot statically verify handler\npresence — runtime invocation surfaces missing handlers.",
       "properties": {
+        "args": {
+          "description": "Arguments this stage is always spawned with, before any a pipeline\nadds — so one binary can be declared as several stages (a speech\nengine per voice model: `[\"--model\", \"<artifact>\", ...]`). A\n`--model` here names one of this plugin's artifacts, and the stage's\nsandbox is granted that artifact, as for a model a pipeline names.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "binary": {
           "description": "Binary name to spawn for this stage. Resolved relative to the plugin\ndirectory. If omitted, defaults to the stage name.",
           "type": [

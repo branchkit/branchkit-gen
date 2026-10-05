@@ -3599,6 +3599,37 @@
         ],
         "type": "object"
       },
+      "SpeechEngineInfo": {
+        "description": "One engine in `speech.engines`.",
+        "properties": {
+          "engine": {
+            "description": "What `speech.say` names it by: `system`, or a stage's qualified name.",
+            "type": "string"
+          },
+          "error": {
+            "description": "Why the engine asked for could not start (a model not downloaded).",
+            "type": "string"
+          },
+          "running": {
+            "description": "Running now (the OS voice always is).",
+            "type": "boolean"
+          },
+          "voices": {
+            "description": "The voices it declared when it last started; empty for an engine\nnot yet started, and for the OS voice today.",
+            "items": {
+              "$ref": "#/$defs/SpeechVoice"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "engine",
+          "error",
+          "running",
+          "voices"
+        ],
+        "type": "object"
+      },
       "SpeechLocale": {
         "properties": {
           "identifier": {
@@ -3615,6 +3646,29 @@
           "identifier",
           "is_available",
           "language"
+        ],
+        "type": "object"
+      },
+      "SpeechVoice": {
+        "description": "One voice an engine declared.",
+        "properties": {
+          "id": {
+            "description": "What `speech.say`'s `voice` names it by.",
+            "type": "string"
+          },
+          "locale": {
+            "description": "BCP 47 tag of the language it speaks.",
+            "type": "string"
+          },
+          "name": {
+            "description": "The voice as a person would choose it.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "locale",
+          "name"
         ],
         "type": "object"
       },
@@ -5670,6 +5724,77 @@
       "x-branchkit-delivery": "at-most-once",
       "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.speech.finished",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "engine",
+          "required": true,
+          "schema": {
+            "description": "What spoke it, as in `_platform.speech.started`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "description": "The utterance, as `speech.say` returned it.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "interrupted",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "True when it was stopped, superseded or failed before its end.",
+            "type": "boolean"
+          }
+        }
+      ],
+      "summary": "An utterance is over: played to its end, cut off, or never heard",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "_platform.speech.started",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "engine",
+          "required": true,
+          "schema": {
+            "description": "What spoke it: `system` for the OS voice, otherwise the speech\nengine stage's qualified name.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "id",
+          "required": true,
+          "schema": {
+            "description": "The utterance, as `speech.say` returned it.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "An utterance began to be heard: its first sound left the speakers",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
+      "x-since": "0.2.0"
     },
     {
       "name": "_platform.system.did_wake",
@@ -31093,30 +31218,64 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "speech.say",
+      "name": "speech.engines",
       "paramStructure": "by-name",
       "params": [
         {
-          "name": "priority",
+          "name": "engine",
           "required": false,
           "schema": {
             "default": null,
-            "description": "`\"normal\"` queues behind whatever is playing; `\"high\"` cuts it off\nand speaks now. Defaults to normal.",
+            "description": "Start this engine if it is not running and wait (up to 30 s) for its\nvoices. Omitted: list every engine as it is, starting none — an\nengine holds its model in memory once started.",
             "type": "string"
           }
-        },
+        }
+      ],
+      "result": {
+        "name": "speech_engines_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `speech.engines`.",
+          "properties": {
+            "engines": {
+              "items": {
+                "$ref": "#/$defs/SpeechEngineInfo"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "engines"
+          ],
+          "title": "SpeechEnginesResult",
+          "type": "object"
+        }
+      },
+      "summary": "List the speech engines `speech.say` can speak through, and the voices each offers; naming one starts it and waits for its voices",
+      "tags": [
         {
-          "name": "text",
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "speech",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "speech.restart_engine",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "engine",
           "required": true,
           "schema": {
-            "description": "The words. Plain language, no markup; the system voice reads it as is.",
+            "description": "A speech engine stage the calling plugin ships.",
             "minLength": 1,
             "type": "string"
           }
         }
       ],
       "result": {
-        "name": "speech_say_result",
+        "name": "speech_restart_engine_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
@@ -31132,7 +31291,98 @@
           "type": "object"
         }
       },
-      "summary": "Speak words through the system voice (a primitive: the platform makes the sound and reports the span for echo suppression; what to say is the caller's policy)",
+      "summary": "Stop a speech engine the caller ships so its next utterance starts it afresh (a new model chosen)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "speech",
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "speech.say",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "engine",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "What speaks it: `\"system\"` (the default) is the operating system's\nown voice; otherwise the qualified name of a speech engine stage a\nplugin ships (`stage_type` `tts`), started with its first utterance\nand kept running.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "locale",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "BCP 47 tag of the language the words are in, when known.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "priority",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "`\"normal\"` queues behind whatever is playing; `\"high\"` cuts it off\nand speaks now. Defaults to normal.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "rate",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Pace relative to the voice's normal one: 1.0 is normal, 2.0 twice as\nfast. Speech engines only, today.",
+            "format": "float",
+            "type": "number"
+          }
+        },
+        {
+          "name": "text",
+          "required": true,
+          "schema": {
+            "description": "The words. Plain language, no markup; the system voice reads it as is.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "voice",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "A voice the engine declared (its capability's `voices`); absent or\nunknown means the engine's default. Speech engines only, today.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "speech_say_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `speech.say`.",
+          "properties": {
+            "id": {
+              "description": "The utterance: `_platform.speech.started` / `finished` carry it.",
+              "type": "string"
+            },
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "id"
+          ],
+          "title": "SpeechSayResult",
+          "type": "object"
+        }
+      },
+      "summary": "Speak words through the system voice or a speech engine stage (a primitive: the platform makes the sound and reports the span for echo suppression; what to say is the caller's policy)",
       "tags": [
         {
           "name": "misc"
@@ -31831,6 +32081,8 @@
         "_platform.power.changed",
         "_platform.privilege.granted",
         "_platform.selection.picked",
+        "_platform.speech.finished",
+        "_platform.speech.started",
         "_platform.system.did_wake",
         "_platform.system.will_sleep",
         "_platform.thermal.changed",
@@ -32860,7 +33112,7 @@
     {
       "admits_events": [],
       "description": "Speak through the system voice and post VoiceOver announcements (the platform makes the sound; what to say is the plugin's)",
-      "method_count": 8,
+      "method_count": 10,
       "methods": [
         "native.dictation_enabled",
         "native.siri_enabled",
@@ -32868,6 +33120,8 @@
         "native.speech_recognition_available",
         "native.speech_recognize_file",
         "speech.announce",
+        "speech.engines",
+        "speech.restart_engine",
         "speech.say",
         "speech.stop"
       ],
