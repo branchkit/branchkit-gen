@@ -2591,7 +2591,7 @@
             "type": "string"
           },
           "kind": {
-            "description": "One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,\n`outcome`, `problem`, `progress`. Carried as a string so a kind this\nplatform does not know degrades to `outcome` instead of failing.",
+            "description": "One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,\n`outcome`, `problem`, `progress`, `notice`. Carried as a string so a\nkind this platform does not know degrades to `outcome` instead of\nfailing.",
             "type": "string"
           },
           "locale": {
