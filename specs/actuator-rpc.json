@@ -28977,6 +28977,15 @@
       "paramStructure": "by-name",
       "params": [
         {
+          "name": "draws_own_window",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "The calling plugin draws this channel's window itself (with\n`hud.push`), and publishes the state only so the meaning reaches every\nother renderer: speech, the window's accessibility element, any\nplugin that renders states. The platform then holds and broadcasts\nthe state as usual but draws nothing into the window, so the plugin's\nown drawing stays. Default `false`: the platform draws the window.",
+            "type": "boolean"
+          }
+        },
+        {
           "name": "state",
           "required": true,
           "schema": {
