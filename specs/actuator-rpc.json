@@ -31938,6 +31938,12 @@
       "writers": "platform_only"
     },
     {
+      "description": "How the platform shows `system.notify` notices (crate::notifications). One record `{enabled, keep, pause_on_pointer}`: whether the window shows at all, how long it stays (`5s`, `10s`, `20s`, `until_dismissed`; a floor, never a cut), and whether pointing at it pauses it. No record: on, 10s, pause. Set on Settings › Effects; applied to the next notice.",
+      "name": "_platform.notification_prefs",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
       "description": "Pipeline records — typed streaming compositions of stages. Each record describes how signals flow through stage implementations contributed by plugins until a decision-maker emits an action call. The platform owns the schema; plugins contribute records via `consumes.collections`.",
       "name": "_platform.pipelines",
       "preset": "data",
