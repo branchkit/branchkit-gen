@@ -31422,6 +31422,75 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "stages.request",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "body",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "What to ask. Opaque to the platform by design: carried to the stage\nunread, its shape the stage's own contract with the plugin."
+          }
+        },
+        {
+          "name": "params",
+          "required": false,
+          "schema": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "description": "Arguments the stage is started with, as `--key value` pairs, the way a\npipeline passes a stage's params. `model` names one of the caller's\nartifacts and grants the stage read access to it. One warm process is\nkept per stage and set of arguments.",
+            "type": "object"
+          }
+        },
+        {
+          "name": "stage",
+          "required": true,
+          "schema": {
+            "description": "A request stage the caller ships (`stage_type: \"request\"` in its\nmanifest's `provides.stages`), by its name there.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "timeout_ms",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "How long to wait for the answer, in milliseconds. Default 30000, at\nmost 120000. A stage that does not answer in time is stopped.",
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      ],
+      "result": {
+        "name": "stages_request_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "body": {
+              "description": "The stage's answer, as it sent it. Opaque to the platform by design:\nits shape is the contract between the stage and the plugin that ships\nit, as the request's `body` is."
+            }
+          },
+          "required": [
+            "body"
+          ],
+          "title": "StagesRequestResult",
+          "type": "object"
+        }
+      },
+      "summary": "Ask a request stage the caller ships for one answer",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "system.launch_app",
       "paramStructure": "by-name",
       "params": [
