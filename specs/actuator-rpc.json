@@ -725,6 +725,22 @@
         ],
         "type": "object"
       },
+      "CaretContext": {
+        "description": "The text on either side of the caret in the focused text field: up to 64\ncharacters before the selection's start and after its end (with nothing\nselected, both sides of the caret). What a plugin\ntyping into the field needs to fit its text into what is already there: a\nleading space, a capital at a sentence start. Never read from a password\nfield: the capability answers nothing there.",
+        "properties": {
+          "after": {
+            "type": "string"
+          },
+          "before": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "after",
+          "before"
+        ],
+        "type": "object"
+      },
       "ClipboardContents": {
         "description": "Clipboard contents read from the OS.",
         "properties": {
@@ -9891,7 +9907,7 @@
           "type": "object"
         }
       },
-      "summary": "Type text into the active application via clipboard paste",
+      "summary": "Type text into the focused application as synthesized key events (the clipboard is not used)",
       "tags": [
         {
           "name": "input"
@@ -12780,6 +12796,39 @@
       ],
       "x-branchkit-privilege": "windows",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.caret_context",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_caret_context_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "context": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/CaretContext"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "title": "NativeCaretContextResult",
+          "type": "object"
+        }
+      },
+      "summary": "Get the text on either side of the caret in the focused text field: up to 64 characters before the selection's start and after its end. For fitting typed text into what is already there (spacing, a capital at a sentence start). Answers nothing for a password field, a control with no text, or when the field cannot be read.",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "text.caret",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.cascade_windows",
@@ -32971,6 +33020,16 @@
       ],
       "name": "system.indicator",
       "risk": "low"
+    },
+    {
+      "admits_events": [],
+      "description": "A few characters either side of the text cursor in the focused field, never a password field",
+      "method_count": 1,
+      "methods": [
+        "native.caret_context"
+      ],
+      "name": "text.caret",
+      "risk": "dangerous"
     },
     {
       "admits_events": [],
