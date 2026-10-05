@@ -32281,6 +32281,12 @@
       "writers": "platform_only"
     },
     {
+      "description": "How HUD windows look for this person. One record `{text_size}`: `small`, `default`, `large` or `larger`, scaling every HUD's text through the HUD kit (never under 11px). No record: default. Set on Settings › Effects; applied live to open windows.",
+      "name": "_platform.hud_prefs",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
       "description": "Active input sessions, ONE RECORD PER INPUT PLUGIN — `active` is a fact about that plugin's world (true while it is capturing), `source` is the writing plugin id (also the record id), `directives` is a closed-vocabulary bag of platform-defined behavior flags. The platform reads the FOLD: the session is active if any writer's record says so, and a directive applies if any ACTIVE writer asserts it (`ActuatorState::input_state`). Records are writer-held, so a crashed input plugin's assertion drops instead of wedging every dispatch. This was a singleton — meaning the second input plugin ever written (foot pedal, eye tracker, MIDI…) would have silently clobbered voice's session and vice versa; per-writer records are what make input plugins a CATEGORY rather than a slot. The platform owns the schema; plugins write via `consumes.writes` (preferred) or `consumes.collections` (backwards compat) + the `anyone_who_declares` writers slot.",
       "name": "_platform.input",
       "preset": "data",
