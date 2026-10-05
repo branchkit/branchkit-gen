@@ -1,6 +1,6 @@
 # branchkit-gen
 
-Codegen and validation for [BranchKit](https://branchkit.dev) plugin manifests.
+Codegen and validation for [BranchKit](https://github.com/branchkit) plugin manifests (`plugin.json`). BranchKit is an accessibility plugin platform for the desktop; plugins are written in Go, TypeScript or Python.
 
 - **Generate** typed action param types from your `plugin.json`'s `action_types` block (`actions_gen.go`, `actions_gen.ts`, `actions_gen.py`), and typed record shapes for the collections it reads (`collections_gen.*`).
 - **Validate** your `plugin.json` against the manifest contract — same checks the BranchKit runtime applies, runnable in CI before you ship.
@@ -10,6 +10,8 @@ Codegen and validation for [BranchKit](https://branchkit.dev) plugin manifests.
 ```bash
 go install github.com/branchkit/branchkit-gen@latest
 ```
+
+Requires Go 1.24.5 or newer.
 
 Or clone and build locally:
 
@@ -48,6 +50,33 @@ Every generated file starts with a header naming the command that regenerates it
 // Regenerate from the plugin directory: branchkit-gen --plugin .
 ```
 
+### Collection record types
+
+A plugin that reads another plugin's collection can name the fields it reads in
+`consumes.collections`:
+
+```json
+"consumes": {
+  "collections": [
+    { "name": "_platform.key_names", "fields": ["name", "code"] }
+  ]
+}
+```
+
+For each such entry, `branchkit-gen` writes a record type into
+`collections_gen.go` / `.ts` / `.py` beside the action file (`PlatformKeyNamesRecord`
+here). You name the fields; their types come from the collection's provider, so
+a provider's rename breaks your build on the next generate instead of
+zero-filling a hand-written struct at runtime. A field the provider does not
+declare is left out, and an entry without `fields` produces nothing.
+
+Providers are found two ways. The platform's own `_platform.*` collections are
+built in. Any other collection is typed from the `provides.collections` entry
+of a plugin directory directly under the directory you run from. To type a
+collection another plugin introduces (for example `apps`, from the system
+plugin), put a checkout of that plugin beside yours and run from their parent:
+`branchkit-gen --plugin ./my-plugin`.
+
 ### Validate
 
 ```bash
@@ -71,16 +100,17 @@ branchkit-gen validate --no-drift ./my-plugin
 
 **Manifest checks** mirror the rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `settings_tabs` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields.
 
-**Drift checks** (Go plugins only, today) compare the plugin against an OpenRPC spec embedded in the binary at build time:
+**Drift checks** compare the plugin against the platform's OpenRPC spec, embedded in the binary at build time:
 
-- Each capability you declare must exist in the public capability list — typos here only surface at install time without `validate`.
-- For every `*.Call("method.name", …)` callsite in your `src/` tree, the validator looks up the method in the spec and reports:
+- Each privilege in `requires.privileges` must be one the platform defines; without `validate`, a typo surfaces only at install time.
+- A `min_api_version` newer than the embedded spec is reported, since the checks below would then be incomplete; install a newer `branchkit-gen`.
+- For every `<x>.Call("method.name", …)` callsite in a Go plugin's `src/` tree, the validator looks up the method in the spec and reports:
   - **error** if the method's `x-removed-in` ≤ your `min_api_version` (the call will hard-fail at runtime)
   - **error** if the method's `x-since` is greater than your `min_api_version` (you'd run on an older actuator that doesn't have it)
   - **warn** if the method is currently deprecated (plan a migration)
   - **info** if the method isn't in the platform spec at all (typo, or a plugin-to-plugin call)
 
-Static analysis is best-effort — runtime-computed method names slip through. TypeScript drift detection is not yet implemented; pass `--no-drift` if you only want manifest checks.
+The method checks are best-effort and narrow. They read only Go source, and only calls that pass the method name as a string literal to `Call`. The SDKs' generated typed wrappers (`plugin.InputTypeText(...)`), which is how plugins are meant to call the platform, are not analysed, nor is TypeScript or Python source. For which operating systems a plugin's calls work on, use `branchkit-cli dev platforms`, which reads all three languages and the typed wrappers. Pass `--no-drift` to run only the manifest checks.
 
 ## Example
 
