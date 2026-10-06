@@ -5512,7 +5512,7 @@
           }
         }
       ],
-      "summary": "A pipeline's consumer stages were pre-warmed (models loaded, ready to run)",
+      "summary": "A pipeline's consumer stages are running with their models loaded: after a pre-warm, or after a run had to start them (_platform.pipeline.warming)",
       "tags": [
         {
           "name": "notifications"
@@ -5521,6 +5521,39 @@
       "x-branchkit-delivery": "at-most-once",
       "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.pipeline.warming",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "pipeline",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "stages",
+          "required": true,
+          "schema": {
+            "description": "The consumer stages being started, by qualified name.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        }
+      ],
+      "summary": "A pipeline run must start consumer stages that were not running (their models are loading); its source is buffered meanwhile, and _platform.pipeline.warmed follows once they are ready",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "routine",
+      "x-since": "0.2.0"
     },
     {
       "name": "_platform.plugin.degraded",
@@ -32153,6 +32186,7 @@
         "_platform.pipeline.started",
         "_platform.pipeline.stopped",
         "_platform.pipeline.warmed",
+        "_platform.pipeline.warming",
         "_platform.plugin.degraded",
         "_platform.plugin.disabled",
         "_platform.plugin.enabled",
