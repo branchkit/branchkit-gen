@@ -33230,6 +33230,14 @@
     },
     {
       "admits_events": [],
+      "description": "Run machine-learning models on the GPU (on-device acceleration; no network access, no file access)",
+      "method_count": 0,
+      "methods": [],
+      "name": "stage.gpu",
+      "risk": "low"
+    },
+    {
+      "admits_events": [],
       "description": "Capture microphone audio in a pipeline stage the plugin ships",
       "method_count": 0,
       "methods": [],
