@@ -23233,13 +23233,13 @@
           "type": "object"
         }
       },
-      "summary": "Get the currently selected text from the frontmost app",
+      "summary": "Get the text selected in the focused app, never from a password field. Read through the OS accessibility interface; on macOS, an app that offers no selection through it is asked to copy, and the clipboard is put back.",
       "tags": [
         {
           "name": "native"
         }
       ],
-      "x-branchkit-privilege": "accessibility",
+      "x-branchkit-privilege": "text.selection",
       "x-since": "0.1.0"
     },
     {
@@ -32405,7 +32405,7 @@
     {
       "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "method_count": 26,
+      "method_count": 25,
       "methods": [
         "native.accessibility_display_invert",
         "native.accessibility_enabled",
@@ -32428,7 +32428,6 @@
         "native.mouse_keys",
         "native.on_screen_keyboard_enabled",
         "native.screen_reader_enabled",
-        "native.selected_text",
         "native.slow_keys",
         "native.sticky_keys",
         "native.text_scale",
@@ -33375,6 +33374,16 @@
         "native.caret_context"
       ],
       "name": "text.caret",
+      "risk": "dangerous"
+    },
+    {
+      "admits_events": [],
+      "description": "The text selected in the app you are using, when a command asks for it, never a password field",
+      "method_count": 1,
+      "methods": [
+        "native.selected_text"
+      ],
+      "name": "text.selection",
       "risk": "dangerous"
     },
     {
