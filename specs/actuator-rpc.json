@@ -32345,7 +32345,7 @@
       "writers": "platform_only"
     },
     {
-      "description": "In-flight model download progress from the platform shell (which runs the downloader). Single record at id='_platform'.",
+      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it. Single record at id='singleton'.",
       "name": "_platform.model_download",
       "preset": "data",
       "writers": "platform_only"

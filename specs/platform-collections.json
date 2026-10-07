@@ -394,7 +394,7 @@
     },
     "_platform.model_download": {
       "cardinality": "singleton",
-      "description": "In-flight model download progress from the platform shell (which runs the downloader). Single record at id='_platform'.",
+      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it. Single record at id='singleton'.",
       "feeds_matching": {
         "type": "none"
       },
@@ -410,6 +410,12 @@
           "key": "progress",
           "label": "",
           "required": true
+        },
+        {
+          "field_type": "string",
+          "key": "model",
+          "label": "",
+          "required": false
         }
       ],
       "id_strategy": {
