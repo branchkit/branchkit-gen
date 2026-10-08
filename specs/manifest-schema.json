@@ -1415,6 +1415,35 @@
       ],
       "type": "object"
     },
+    "HudCardDecl": {
+      "description": "A card channel declared in a plugin manifest (`hud_cards`).",
+      "properties": {
+        "channel": {
+          "description": "The channel the plugin publishes `output.state` documents on. Unique\nacross every plugin's windows and cards.",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "description": "What the cards are, for the person and for accessibility.",
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Anchor"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Where the cards appear. Absent: the default for each document's kind\n(choices top-center, mode top-right, the rest bottom-right)."
+        }
+      },
+      "required": [
+        "channel"
+      ],
+      "type": "object"
+    },
     "HudWindowDecl": {
       "description": "A HUD window declaration from a plugin manifest.",
       "properties": {
@@ -2614,6 +2643,13 @@
         }
       ],
       "description": "How this plugin determines dispatch targets (commands, action_types, or direct).\nRequires `dispatch` privilege."
+    },
+    "hud_cards": {
+      "description": "HUD card channels: no window of their own; each `output.state`\ndocument is drawn by the platform as a card in a shared region. See\n`hud_cards::HudCardDecl`.",
+      "items": {
+        "$ref": "#/$defs/HudCardDecl"
+      },
+      "type": "array"
     },
     "hud_targets": {
       "description": "HUD targets this plugin provides (e.g. [\"alphabet\", \"calibrate\"]).",
