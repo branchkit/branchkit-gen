@@ -1589,6 +1589,34 @@
         ],
         "type": "object"
       },
+      "ExecutedActionReport": {
+        "description": "One action's result in a [`PipelineExecutedEventParams`]. Carries the\naction's type, never its params: those can hold what the person said.",
+        "properties": {
+          "action_type": {
+            "description": "Dotted action type (`tiling.snap`); `sequence` for a sequence.",
+            "type": "string"
+          },
+          "denial": {
+            "description": "Why it was refused, when `status` is `denied` and the platform knows.",
+            "type": "string"
+          },
+          "handler": {
+            "description": "Plugin that handled it, when it routed to one.",
+            "type": "string"
+          },
+          "status": {
+            "description": "`ok`, `error`, `not_handled`, `denied` or `simulated`.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action_type",
+          "denial",
+          "handler",
+          "status"
+        ],
+        "type": "object"
+      },
       "ExternalDisk": {
         "properties": {
           "file_system": {
@@ -5370,6 +5398,64 @@
       "x-branchkit-delivery": "at-most-once",
       "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.pipeline.executed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "actions",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "One entry per action, in the order they ran.",
+            "items": {
+              "$ref": "#/$defs/ExecutedActionReport"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "outcome",
+          "required": true,
+          "schema": {
+            "description": "`\"ran\"`: every action in `actions` was executed (each with its own\nstatus). `\"dropped\"`: the owner's `on_transcript` call failed (it\ntimed out, returned an error, was not running, or answered with\nactions that could not be read) and nothing ran; a late answer is\ndiscarded. `reason` says which.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "owner_plugin",
+          "required": true,
+          "schema": {
+            "description": "The pipeline's owner, the plugin that introduced it.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "pipeline",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "description": "Why the turn was dropped. Absent when it ran.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "What the platform did with one utterance's actions: each action's status, or that the turn was dropped. Addressed to the pipeline's owner",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "own",
+      "x-since": "0.2.0"
     },
     {
       "name": "_platform.pipeline.started",
@@ -32252,7 +32338,8 @@
         "_platform.hid.connected",
         "_platform.hid.disconnected",
         "_platform.hid.input",
-        "_platform.hid.report"
+        "_platform.hid.report",
+        "_platform.pipeline.executed"
       ],
       "name": "own",
       "privilege": null
