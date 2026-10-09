@@ -1429,6 +1429,13 @@
           "description": "What the cards are, for the person and for accessibility.",
           "type": "string"
         },
+        "on_close": {
+          "description": "An action of this plugin's own, run when the person closes the card\n(its close button, Escape, or `hud.hide` of the channel), with\n`{\"channel\": …}` as its params: how a plugin whose card stays until\npicked learns it was closed instead. Not run when the plugin clears\nthe card itself, nor when a timed card runs out.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "region": {
           "anyOf": [
             {
