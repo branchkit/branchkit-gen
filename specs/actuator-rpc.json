@@ -3186,6 +3186,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "drawn_by_platform": {
+            "description": "The required tag is a select mode's: the platform draws its list as\na palette card itself, so a renderer of its own (voice's Discovery\nwindow) leaves it to that card.",
+            "type": "boolean"
+          },
           "has_completions": {
             "description": "The winning command's dictated-argument descriptor, if declared: the",
             "type": "boolean"
@@ -3259,6 +3263,7 @@
           "bridge_active",
           "clears_tags",
           "consumed_count",
+          "drawn_by_platform",
           "has_completions",
           "items",
           "matched",
@@ -8098,6 +8103,10 @@
               "format": "uint",
               "minimum": 0,
               "type": "integer"
+            },
+            "drawn_by_platform": {
+              "description": "The required tag is a select mode's: the platform draws its list as\na palette card itself, so a renderer of its own (voice's Discovery\nwindow) leaves it to that card.",
+              "type": "boolean"
             },
             "has_completions": {
               "description": "The winning command's dictated-argument descriptor, if declared: the",
