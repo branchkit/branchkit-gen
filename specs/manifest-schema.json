@@ -2187,7 +2187,7 @@
         },
         {
           "const": "focused_window",
-          "description": "The focused window's frame: the window sits inside it, at its anchor,\nand follows the focus. On the display while no window is focused.",
+          "description": "The window the person is working in: the HUD sits inside its frame,\nat its anchor, and follows the focus to another window. While the\ndesktop or a BranchKit window has the focus, the last window stays\nthe reference; once it closes, the display.",
           "type": "string"
         },
         {
