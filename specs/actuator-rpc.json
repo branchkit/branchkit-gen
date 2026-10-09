@@ -1349,6 +1349,11 @@
             "description": "Connected but asleep (display sleep): still listed, geometry last\nknown, not drawing until it wakes. Default false.",
             "type": "boolean"
           },
+          "is_primary": {
+            "default": false,
+            "description": "The system's main display: where the menu bar is (macOS), the\nprimary monitor (Windows), RandR's primary output (X11). Default\nfalse; a source that cannot say leaves every display false.",
+            "type": "boolean"
+          },
           "visible_h": {
             "default": 0,
             "format": "int32",
@@ -1387,6 +1392,7 @@
           "h",
           "id",
           "is_asleep",
+          "is_primary",
           "visible_h",
           "visible_w",
           "visible_x",
