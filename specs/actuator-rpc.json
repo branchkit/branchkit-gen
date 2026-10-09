@@ -3078,7 +3078,8 @@
         "enum": [
           "display",
           "focused_window",
-          "pointer"
+          "pointer",
+          "caret"
         ],
         "type": "string"
       },
@@ -13099,6 +13100,39 @@
       ],
       "x-branchkit-privilege": "windows",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.caret_bounds",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "native_caret_bounds_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "bounds": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AccessibleBounds"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "title": "NativeCaretBoundsResult",
+          "type": "object"
+        }
+      },
+      "summary": "Get where the caret is on screen: the rectangle of the selection's start in the focused text field (a thin one at a bare caret), in the coordinates window frames use. For putting something beside where the person is typing. Answers nothing for a password field, a control with no text, or when the field cannot say.",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "text.caret",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.caret_context",
@@ -33549,8 +33583,9 @@
     {
       "admits_events": [],
       "description": "A few characters either side of the text cursor in the focused field, never a password field",
-      "method_count": 1,
+      "method_count": 2,
       "methods": [
+        "native.caret_bounds",
         "native.caret_context"
       ],
       "name": "text.caret",

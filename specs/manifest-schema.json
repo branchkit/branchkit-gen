@@ -2194,6 +2194,11 @@
           "const": "pointer",
           "description": "The pointer, where it was when the window opened: the window sits\nbeside it on the side the anchor names (`bottom-right`: below it and\nto its right; `center`: centred on it). On the display where the\npointer's place cannot be read (a Wayland session), or while the\nplugin lacks the `display` privilege: the window's place would show\nwhere the pointer is.",
           "type": "string"
+        },
+        {
+          "const": "caret",
+          "description": "The text caret, where it was when the window opened: the window sits\nabove or below the line being typed, lined up with the caret along\nit: `bottom-left` under the line with its left edge at the caret,\n`top-right` above it with its right edge there, `center` on it.\nOn the display where the caret cannot be read (a field that does not\nsay, a Wayland session on Linux), or while the plugin lacks the\n`text.caret` privilege: the window's place would show where the\nperson is typing.",
+          "type": "string"
         }
       ]
     },
