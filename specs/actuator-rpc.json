@@ -33582,7 +33582,7 @@
     },
     {
       "admits_events": [],
-      "description": "A few characters either side of the text cursor in the focused field, never a password field",
+      "description": "A few characters either side of the text cursor in the focused field, and where that cursor is on screen; never a password field",
       "method_count": 2,
       "methods": [
         "native.caret_bounds",
