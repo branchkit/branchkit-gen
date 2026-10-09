@@ -350,7 +350,7 @@
         "type": "object"
       },
       "Anchor": {
-        "description": "Anchor position for a HUD window on screen.",
+        "description": "Where a HUD window sits against what it is placed relative to: one of the\nnine points of a three-by-three grid, a vertical position (top, centre,\nbottom) and a horizontal one (left, centre, right). The grid is complete,\nso the list never grows.",
         "enum": [
           "top-left",
           "top-right",
@@ -358,7 +358,9 @@
           "bottom-left",
           "bottom-right",
           "bottom-center",
-          "center"
+          "center",
+          "center-left",
+          "center-right"
         ],
         "type": "string"
       },
@@ -2471,6 +2473,26 @@
         ],
         "type": "object"
       },
+      "Offset": {
+        "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. With `relative_to: display` and `anchor: top-left`, the\nwindow's exact place on the display.",
+        "properties": {
+          "x": {
+            "default": 0,
+            "format": "int32",
+            "type": "integer"
+          },
+          "y": {
+            "default": 0,
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ],
+        "type": "object"
+      },
       "OnActionStatus": {
         "enum": [
           "ok",
@@ -3044,6 +3066,15 @@
           "snr_db"
         ],
         "type": "object"
+      },
+      "RelativeTo": {
+        "description": "What a HUD window is placed against.",
+        "enum": [
+          "display",
+          "focused_window",
+          "pointer"
+        ],
+        "type": "string"
       },
       "ReminderItem": {
         "properties": {
@@ -8859,12 +8890,33 @@
           }
         },
         {
+          "name": "offset",
+          "required": false,
+          "schema": {
+            "$ref": "#/$defs/Offset",
+            "default": {
+              "x": 0,
+              "y": 0
+            },
+            "description": "A nudge from the anchored place, in pixels: `x` right, `y` down."
+          }
+        },
+        {
           "name": "on_pointer",
           "required": false,
           "schema": {
             "$ref": "#/$defs/OnPointer",
             "default": "none",
             "description": "Pointer-dodge behavior: \"none\" (default) or \"fade\" (dodge the mouse —\nfade to near-transparent while the pointer is inside the frame)."
+          }
+        },
+        {
+          "name": "relative_to",
+          "required": false,
+          "schema": {
+            "$ref": "#/$defs/RelativeTo",
+            "default": "display",
+            "description": "What the window is placed against: `display` (the default),\n`focused_window` or `pointer`."
           }
         },
         {

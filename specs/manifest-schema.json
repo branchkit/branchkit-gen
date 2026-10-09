@@ -140,7 +140,7 @@
       "type": "object"
     },
     "Anchor": {
-      "description": "Anchor position for a HUD window on screen.",
+      "description": "Where a HUD window sits against what it is placed relative to: one of the\nnine points of a three-by-three grid, a vertical position (top, centre,\nbottom) and a horizontal one (left, centre, right). The grid is complete,\nso the list never grows.",
       "enum": [
         "top-left",
         "top-right",
@@ -148,7 +148,9 @@
         "bottom-left",
         "bottom-right",
         "bottom-center",
-        "center"
+        "center",
+        "center-left",
+        "center-right"
       ],
       "type": "string"
     },
@@ -1478,10 +1480,23 @@
           "minimum": 0,
           "type": "integer"
         },
+        "offset": {
+          "$ref": "#/$defs/Offset",
+          "default": {
+            "x": 0,
+            "y": 0
+          },
+          "description": "A nudge from the anchored place, in pixels. Defaults to none."
+        },
         "on_pointer": {
           "$ref": "#/$defs/OnPointer",
           "default": "none",
           "description": "Pointer-dodge behavior: what this window does when the pointer\nreaches it. Defaults to `none`."
+        },
+        "relative_to": {
+          "$ref": "#/$defs/RelativeTo",
+          "default": "display",
+          "description": "What the window is placed against. Defaults to `display`."
         },
         "stack_order": {
           "default": 0,
@@ -1771,6 +1786,22 @@
         }
       ],
       "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
+    },
+    "Offset": {
+      "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. With `relative_to: display` and `anchor: top-left`, the\nwindow's exact place on the display.",
+      "properties": {
+        "x": {
+          "default": 0,
+          "format": "int32",
+          "type": "integer"
+        },
+        "y": {
+          "default": 0,
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
     },
     "OnPointer": {
       "description": "What a HUD window does when the pointer moves into its frame.",
@@ -2142,6 +2173,26 @@
         {
           "const": "disabled",
           "description": "Recording disabled, plugin cannot append.",
+          "type": "string"
+        }
+      ]
+    },
+    "RelativeTo": {
+      "description": "What a HUD window is placed against.",
+      "oneOf": [
+        {
+          "const": "display",
+          "description": "The display's visible area: the window sits inside it, at its anchor.",
+          "type": "string"
+        },
+        {
+          "const": "focused_window",
+          "description": "The focused window's frame: the window sits inside it, at its anchor,\nand follows the focus. On the display while no window is focused.",
+          "type": "string"
+        },
+        {
+          "const": "pointer",
+          "description": "The pointer, where it was when the window opened: the window sits\nbeside it on the side the anchor names (`bottom-right`: below it and\nto its right; `center`: centred on it). On the display where the\npointer's place cannot be read (a Wayland session).",
           "type": "string"
         }
       ]
