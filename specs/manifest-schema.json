@@ -1788,7 +1788,7 @@
       "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
     },
     "Offset": {
-      "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. The anchored place is 20 pixels in from the edges of the\ndisplay's usable area (or the focused window), so with `anchor:\ntop-left` the window's top-left corner is at that inset plus the offset;\na negative offset reaches the edge.",
+      "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. The anchored place is 20 pixels in from the edges of the\ndisplay's usable area (or the focused window), so with `anchor:\ntop-left` the window's top-left corner is at that inset plus the offset;\na negative offset reaches the edge. A window never leaves the usable\narea: an offset past it stops at its edge.",
       "properties": {
         "x": {
           "default": 0,
@@ -2187,7 +2187,7 @@
         },
         {
           "const": "focused_window",
-          "description": "The window the person is working in: the HUD sits inside its frame,\nat its anchor, and follows the focus to another window. While the\ndesktop or a BranchKit window has the focus, the last window stays\nthe reference; once it closes, the display. Follows only while the\nplugin holds `windows` or `events.world` (its place shows the\nwindow's frame); otherwise on the display.",
+          "description": "The window the person is working in: the HUD sits inside its frame,\nat its anchor, and follows the focus to another window. While the\ndesktop or a BranchKit window has the focus, the last window stays\nthe reference; once it closes, the display. Follows only while the\nplugin holds `windows`, `events.world` or `events.*` (its place shows the\nwindow's frame); otherwise on the display.",
           "type": "string"
         },
         {
