@@ -1788,7 +1788,7 @@
       "description": "Network access level for macOS sandbox enforcement.\nDetermines which Seatbelt profile rules are generated."
     },
     "Offset": {
-      "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. With `relative_to: display` and `anchor: top-left`, the\nwindow's exact place on the display.",
+      "description": "A nudge from where the anchor puts a window, in pixels: `x` to the right,\n`y` down. The anchored place is 20 pixels in from the edges of the\ndisplay's usable area (or the focused window), so with `anchor:\ntop-left` the window's top-left corner is at that inset plus the offset;\na negative offset reaches the edge.",
       "properties": {
         "x": {
           "default": 0,
