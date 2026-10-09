@@ -2192,7 +2192,7 @@
         },
         {
           "const": "pointer",
-          "description": "The pointer, where it was when the window opened: the window sits\nbeside it on the side the anchor names (`bottom-right`: below it and\nto its right; `center`: centred on it). On the display where the\npointer's place cannot be read (a Wayland session).",
+          "description": "The pointer, where it was when the window opened: the window sits\nbeside it on the side the anchor names (`bottom-right`: below it and\nto its right; `center`: centred on it). On the display where the\npointer's place cannot be read (a Wayland session). Needs the\n`display` privilege: the window's place shows where the pointer is.",
           "type": "string"
         }
       ]
