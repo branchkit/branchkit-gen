@@ -952,7 +952,7 @@
             "type": "string"
           },
           "action_json": {
-            "description": "Raw action JSON for editor decomposition (complements the display\n`action` string).\n\nOPEN BY DESIGN — do not declare this `Option<Action>`. It is built by\n`crate::actions::action_to_json`, which is NOT `serde::to_value`: for\na parameterized command (`Action::Template` / `CompiledTemplate`, the\nshape every command with captures carries) it deliberately emits the\nAUTHORED dialect — a flat `{\"type\": \"browser.scroll\", …}` whose `type`\nis the dotted plugin action type, not the `Action` tag. That is the\nright thing for an editor, which decomposes and round-trips what the\nauthor wrote, but it is a superset of the `Action` wire shape and one\ngenerated type would lie about it. Same verdict, same reason, as\n`CommandSpec.action`: this field's verdict follows the function that\nbuilds it (`action_to_json`), not the type it is built from."
+            "description": "Raw action JSON for editor decomposition (complements the display\n`action` string), in the authored dialect a command's `action` is\nwritten in."
           },
           "canonical": {
             "type": "string"
@@ -1051,7 +1051,7 @@
         "description": "One Command in a `commands.push` payload — published purely for\ndiscoverability. Wire deserialization goes through\n`commands::parse_commands_with_templates` against the opaque JSON\nvalue, so adding/removing a field here doesn't change runtime\nbehavior. Edit `commands::PartialCommand` first; mirror here.",
         "properties": {
           "action": {
-            "description": "Action fired on match.\n\nOPEN BY DESIGN — deliberately NOT declared `crate::actions::Action`,\nunlike `dispatch`'s `action` and `commands.resolve`'s, which are\ntyped. What `commands.push` accepts is the AUTHORED dialect, and\n`crate::actions::parse_action_or_template` shows it is a strict\nsuperset of the `Action` wire shape: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), the sequence\nenvelope (`{\"type\":\"sequence\",\"actions\":[…]}`) whose entries are\nthemselves authored-dialect, AND the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` carries a dotted plugin\naction type and the remaining keys are the params. Commands whose\npattern has captures additionally carry `{N}` placeholders, which\n`templateify_commands` later turns into `Action::Template`.\n\nOne generated type would have to lie about at least two of those, so\nthis stays `Value`, deliberately open rather than counted as a gap to\nclose. `branchkit-gen` types the params per plugin from the plugin's\nown `action_types`, which is where an author actually gets checked."
+            "description": "Action fired on match, in the authored dialect: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), a sequence\n(`{\"type\":\"sequence\",\"actions\":[…]}`), or the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` is the dotted plugin\naction type and the remaining keys are its params."
           },
           "cancels_bridge": {
             "description": "When true, this gated command is allowed to win during a\nmid-bridge restricted resolve. Default false: gated sibling\ncommands (`show_hints`, `dismiss`-style) are suppressed while\nthe user is mid-codeword. Set true on explicit cancel words\n(`dismiss`, `cancel`, `exit`) that should be able to abort an\nin-progress bridge.",
@@ -2326,7 +2326,7 @@
         "type": "object"
       },
       "MenuItem": {
-        "description": "A menu bar item (or submenu) from an application.\n\nSelf-referential via `children: Vec<MenuItem>`. schemars handles\nthe recursion via a `$defs` entry; the previous utoipa-specific\n`#[schema(no_recursion)]` annotation was dropped in\nPhase 2j-utoipa-removal.",
+        "description": "A menu bar item (or submenu) from an application. Submenus nest through\n`children`.",
         "properties": {
           "children": {
             "description": "Child menu items (submenus).",
@@ -2559,7 +2559,7 @@
           },
           "extra": {
             "additionalProperties": true,
-            "description": "Open extension, namespaced by plugin id — see [`OutputState::extra`].",
+            "description": "Open extension, namespaced by plugin id (`{\"voice\": {...}}`), with the\nsame rules as the state's own `extra`.",
             "type": "object"
           },
           "id": {
@@ -2648,7 +2648,7 @@
             "type": "string"
           },
           "kind": {
-            "description": "One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,\n`outcome`, `problem`, `progress`, `notice`. Carried as a string so a\nkind this platform does not know degrades to `outcome` instead of\nfailing.",
+            "description": "One of a closed vocabulary: `choices`, `mode`,\n`outcome`, `problem`, `progress`, `notice`. Carried as a string so a\nkind this platform does not know degrades to `outcome` instead of\nfailing.",
             "type": "string"
           },
           "locale": {
@@ -2683,11 +2683,11 @@
             "type": "string"
           },
           "urgency": {
-            "description": "One of the closed [`OutputUrgency`] vocabulary: `ambient`, `notable`,\n`interrupt`. A string for the same reason `kind` is; unknown degrades\nto `ambient`.",
+            "description": "One of a closed vocabulary: `ambient`, `notable`,\n`interrupt`. A string for the same reason `kind` is; unknown degrades\nto `ambient`.",
             "type": "string"
           },
           "v": {
-            "description": "The contract version this document was written against\n([`OUTPUT_STATE_V`]). Information for a renderer, never a gate.",
+            "description": "The contract version this document was written against (currently\n`1`). Information for a renderer, never a gate.",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
@@ -3291,7 +3291,7 @@
         "type": "object"
       },
       "ResolveTelemetry": {
-        "description": "Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The\ninternal type can't derive `Serialize`/`JsonSchema` because it lives in\nthe matching crate alongside non-serializable internals — this struct\nis the wire shape exposed through `commands.resolve`.",
+        "description": "How the matcher reached its decision for `commands.resolve`: which\nkind of command won, and what it saw on the way.",
         "properties": {
           "gated_partial_seen": {
             "description": "True iff any gated command's Partial was observed during\ncategorization. When `winner == Ungated` and this is `true`, the\nmatcher's `suppress_ungated` propagation failed to fire.",
@@ -4285,7 +4285,7 @@
     }
   },
   "info": {
-    "description": "Complete BranchKit protocol surface: actuator-side methods (called by plugins via JSON-RPC over stdio), plugin-side methods (called by the actuator on managed plugins), and platform notification events. Auto-generated from the `crate::operations::registered::*` and `crate::operations::plugin_protocol` inventory registries.",
+    "description": "Complete BranchKit protocol surface: actuator-side methods (called by plugins via JSON-RPC over stdio), plugin-side methods (called by the actuator on managed plugins), and platform notification events. Generated from the platform's own registry of operations, so it lists exactly what this version serves.",
     "title": "BranchKit RPC",
     "version": "0.2.0"
   },
@@ -7067,7 +7067,7 @@
         "name": "collection_get_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Result of a store read operation, including merge metadata.\n\nAlso serves as the canonical `collection.get` result type — re-exported by\n`crate::operations::types::CollectionGetResult`. The merge strategy serializes\nas a snake_case string (`\"authoritative\"` or `\"collect\"`) thanks\nto the `#[serde(rename_all = \"snake_case\")]` derive on\n`MergeStrategy`.\nWire type for `collection.get` RPC response. The `entries` field is a\nconvenience flat map (key_field → value_field) derived from `data` at\nread time. It contains bare values only — no internal provenance metadata.\nThe internal entity cache with per-item provenance is built separately\nvia `build_entity_flat_map` in state.rs.",
+          "description": "A collection as `collection.get` returns it: its contributions merged,\nwith how they were merged (`merge`: `authoritative` or `collect`). The\n`entries` field is a convenience flat map (key_field → value_field)\nderived from `data` at read time. It holds bare values only, with no\nrecord of which plugin contributed each one.",
           "properties": {
             "data": {},
             "entries": {
@@ -7818,7 +7818,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "The commands to push. Replaces the commands contributed by the\ncalling plugin (the whole set, or one `group`).\n\nThe RUNTIME type stays `serde_json::Value` deliberately: each entry\nis parsed individually into `commands::PartialCommand` further in,\nso one malformed command is reported as one malformed command\nrather than failing the caller's whole push. The SCHEMA says what\nthe entries are (2026-09-19 census) — this is the one place\n`#[schemars(with = ...)]` earns its keep, making the schema MORE\nprecise than the declaration rather than less, which is the exact\nopposite of every other use of it this census deleted.\n\nUntil now the generated wrapper took raw JSON, which is why all\nthree SDKs hand-wrote a typed push beside it (Go's\n`PushCommandSpecs`).",
+            "description": "The commands to push. Replaces the commands contributed by the\ncalling plugin (the whole set, or one `group`). A malformed entry is\nreported on its own; the rest of the push still applies.",
             "items": {
               "$ref": "#/$defs/CommandSpec"
             },
@@ -31819,7 +31819,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Auto-dismiss duration in seconds. When absent, defaults to\n[`DEFAULT_NOTIFY_DURATION_SECS`] (5s). Pass `0` for a sticky\nnotification that only closes when the user clicks Dismiss.\nPass any positive integer for a custom duration.",
+            "description": "Auto-dismiss duration in seconds. When absent, defaults to\n5 seconds. Pass `0` for a sticky\nnotification that only closes when the user clicks Dismiss.\nPass any positive integer for a custom duration.",
             "format": "uint32",
             "minimum": 0,
             "type": "integer"
