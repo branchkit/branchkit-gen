@@ -2851,6 +2851,16 @@
         ],
         "type": "object"
       },
+      "PipelineStopReason": {
+        "description": "Why a pipeline stopped. Only `requested` is a stop someone asked for; the\nothers end a run its owner may want to start again.",
+        "enum": [
+          "requested",
+          "ended",
+          "error",
+          "reload"
+        ],
+        "type": "string"
+      },
       "PluginLogLevel": {
         "oneOf": [
           {
@@ -5535,9 +5545,32 @@
       "paramStructure": "by-name",
       "params": [
         {
+          "name": "error",
+          "required": false,
+          "schema": {
+            "description": "What went wrong, when `reason` is `error`. The same text\n`_platform.pipeline.error` carried just before.",
+            "type": "string"
+          }
+        },
+        {
           "name": "pipeline",
           "required": true,
           "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/PipelineStopReason"
+          }
+        },
+        {
+          "name": "trigger",
+          "required": false,
+          "schema": {
+            "description": "`keybind` when the pipeline's own keybind trigger stopped it.",
             "type": "string"
           }
         }
