@@ -2282,11 +2282,18 @@
           },
           "type": "array"
         },
+        "protected_reads": {
+          "description": "The protected kinds of window this plugin asks to read:\n`password_managers` (what a password manager's windows show) and\n`branchkit_windows` (what BranchKit's own windows show, the consent\nprompt among them). Without an entry here, every accessibility,\nscreenshot, caret and selection read whose target is one of them is\nrefused, whatever privileges the plugin holds. Each entry is a switch\non the plugin's card, off for every plugin, bundled or not, until the\nperson turns it on there.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "reasons": {
           "additionalProperties": {
             "type": "string"
           },
-          "description": "Why the plugin asks for each thing it requests, one plain sentence\neach, shown under that line on its card (\"So a button can run the\naction you gave it\"). Keyed `<kind>:<what>`: the kind is one the\nuser grants, and `what` is the request exactly as this manifest\ndeclares it — `privilege:dispatch`, `dispatch:<plugin id>`,\n`collection_read:<collection>`, `collection_write:<collection>`,\n`event_subscription:<pattern>`, `effect_assert:<effect>`,\n`network_host:<host entry>`, `device:hid:<vvvv:pppp>`,\n`device:ble:<service>`, `app_preference:<domain entry>`,\n`wmi_class:<entry>`, `dbus_method:<entry>`, `blob_read:<channel>`.\nInside `requires` on purpose: a reason is part of what the person\napproves, so it is hashed with the requests it explains. A key that\nnames nothing the plugin requests is a manifest warning.",
+          "description": "Why the plugin asks for each thing it requests, one plain sentence\neach, shown under that line on its card (\"So a button can run the\naction you gave it\"). Keyed `<kind>:<what>`: the kind is one the\nuser grants, and `what` is the request exactly as this manifest\ndeclares it — `privilege:dispatch`, `dispatch:<plugin id>`,\n`collection_read:<collection>`, `collection_write:<collection>`,\n`event_subscription:<pattern>`, `effect_assert:<effect>`,\n`network_host:<host entry>`, `device:hid:<vvvv:pppp>`,\n`device:ble:<service>`, `app_preference:<domain entry>`,\n`wmi_class:<entry>`, `dbus_method:<entry>`, `blob_read:<channel>`,\n`protected_read:<kind>`.\nInside `requires` on purpose: a reason is part of what the person\napproves, so it is hashed with the requests it explains. A key that\nnames nothing the plugin requests is a manifest warning.",
           "type": "object"
         },
         "runtimes": {
