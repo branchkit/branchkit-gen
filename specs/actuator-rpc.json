@@ -436,6 +436,44 @@
         ],
         "type": "object"
       },
+      "AxTarget": {
+        "description": "One control a person can act on.",
+        "properties": {
+          "action": {
+            "description": "The action that acts on it: `press`, `toggle`, `focus`, `expand` or\n`show_menu`.",
+            "type": "string"
+          },
+          "bounds": {
+            "$ref": "#/$defs/AccessibleBounds",
+            "description": "Where it is on screen, in the coordinates window frames use."
+          },
+          "id": {
+            "description": "The element's handle, for `native.ax_perform_action`.",
+            "type": "string"
+          },
+          "name": {
+            "description": "What it is called: its name, else its description. Absent when it\nhas neither, and always absent for a protected (password) field.",
+            "type": "string"
+          },
+          "protected": {
+            "description": "A password field: its name is withheld.",
+            "type": "boolean"
+          },
+          "role": {
+            "description": "Its ARIA role (`button`, `link`, `checkbox`, `textbox`, ...).",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action",
+          "bounds",
+          "id",
+          "name",
+          "protected",
+          "role"
+        ],
+        "type": "object"
+      },
       "BackgroundItem": {
         "description": "A program that runs in the background or starts at login\n(`native.background_items`).",
         "properties": {
@@ -11966,6 +12004,111 @@
       ],
       "x-branchkit-privilege": "accessibility",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "native.ax_targets",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "budget",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The most elements to read (default 1500, at most 3000).",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "limit",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The most targets to return (default 200).",
+            "format": "uint32",
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        {
+          "name": "pid",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The application to read; the one in front when absent.",
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        {
+          "name": "region",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AccessibleBounds"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Only controls whose centre lies inside this rectangle (a gaze point\nand its surroundings); the whole focused window when absent."
+          }
+        }
+      ],
+      "result": {
+        "name": "native_ax_targets_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The actionable controls of one application window.",
+          "properties": {
+            "pid": {
+              "description": "The application whose window was read.",
+              "format": "int32",
+              "type": "integer"
+            },
+            "targets": {
+              "description": "The controls, in walk order: the window's own controls breadth\nfirst, web content (a browser page, an Electron app's document)\nafter them.",
+              "items": {
+                "$ref": "#/$defs/AxTarget"
+              },
+              "type": "array"
+            },
+            "truncated": {
+              "description": "A limit stopped the walk: the list is not the whole window.",
+              "type": "boolean"
+            },
+            "window": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/AccessibleBounds"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The window's own bounds, when it reports them."
+            }
+          },
+          "required": [
+            "pid",
+            "targets",
+            "truncated"
+          ],
+          "title": "AxTargets",
+          "type": "object"
+        }
+      },
+      "summary": "Get the controls a person can act on in an application's focused window: role, name, action and bounds of each, without field values (a password field's name is withheld). For choosing a control to act on by voice, gaze or switch",
+      "tags": [
+        {
+          "name": "native"
+        }
+      ],
+      "x-branchkit-privilege": "accessibility",
+      "x-since": "0.2.0"
     },
     {
       "name": "native.ax_unobserve",
@@ -32661,7 +32804,7 @@
     {
       "admits_events": [],
       "description": "Inspect and manipulate the UI element tree",
-      "method_count": 25,
+      "method_count": 26,
       "methods": [
         "native.accessibility_display_invert",
         "native.accessibility_enabled",
@@ -32671,6 +32814,7 @@
         "native.ax_perform_action",
         "native.ax_read_attributes",
         "native.ax_set_attribute",
+        "native.ax_targets",
         "native.ax_unobserve",
         "native.bold_text_enabled",
         "native.bounce_keys",
