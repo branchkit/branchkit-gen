@@ -1759,6 +1759,13 @@
           "description": "The native-messaging host name the extension asks the browser for,\ne.g. `com.branchkit.pairing`. Reverse-DNS, the manifests' `name`:\nlowercase letters, digits and `_` in dot-separated parts. Unique\nacross installed plugins, as is each extension id: a name or id two\nplugins claim is registered for neither.",
           "pattern": "^[a-z0-9_]+(\\.[a-z0-9_]+)+$",
           "type": "string"
+        },
+        "safari_extension_ids": {
+          "description": "Safari web extension ids allowed to connect: the bundle identifier of\nthe app extension (.appex) that carries the extension. Safari has no\nhost manifests; it delivers the extension's native message to that\napp extension, which asks the pairing host on the extension's behalf\nwith this id. Safari guarantees the caller is the containing app's own\nextension, so the id selects the plugin rather than gating the caller.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "required": [
