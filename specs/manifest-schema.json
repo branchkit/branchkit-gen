@@ -2345,6 +2345,10 @@
       "additionalProperties": false,
       "description": "One external selection surface's declaration. Everything else about the\nsurface — its tag, its minted collections, its assignments collection —\nis derived from the plugin id and the surface name.",
       "properties": {
+        "badges": {
+          "description": "The platform draws each row's code word over the screen at the row's\nposition, for a surface whose rows are things on screen (the\ncontrols of a window). Each row then carries `x`, `y` (its top-left\ncorner, screen points) and `w`, `h`; a row without them gets no\nbadge. The words are the platform's, drawn in its own style: the\nplugin supplies places, never text, so nothing it draws this way can\npass for a prompt. Needs the `overlay` privilege, and draws only\nwhile it is granted.",
+          "type": "boolean"
+        },
         "dictation_profile": {
           "anyOf": [
             {
