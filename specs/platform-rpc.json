@@ -6366,6 +6366,65 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "actions.push",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "actions",
+          "required": true,
+          "schema": {
+            "additionalProperties": {
+              "$ref": "#/$defs/ActionTypeSchema"
+            },
+            "description": "Action types by name, without the plugin's `action_prefix`\n(`linear.update_issue` becomes `<prefix>.linear.update_issue`). The\nsame shape as the manifest's `action_types`. Replaces what this\nplugin pushed before: all of it, or one `group`. An empty map clears.\nA name the manifest declares is refused: a pushed action cannot\nredefine one the person consented to at install.",
+            "type": "object"
+          }
+        },
+        {
+          "name": "group",
+          "required": false,
+          "schema": {
+            "description": "Replace only this group of your pushed actions (one per connected\nserver, say), leaving the others. Omit to replace the whole set.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "actions_push_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "Result of `actions.push`.",
+          "properties": {
+            "count": {
+              "description": "How many action types this plugin now holds from pushes, all groups.",
+              "format": "uint",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "warnings": {
+              "description": "Problems that do not refuse the push, worded as manifest load\nwords them (an operation in `uses` missing from\n`requires.capabilities.uses`, for instance).",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "count"
+          ],
+          "title": "ActionsPushResult",
+          "type": "object"
+        }
+      },
+      "summary": "Declare action types at run time, beside the manifest's: replaces what this plugin pushed (all of it, or one group)",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "artifact.delete",
       "paramStructure": "by-name",
       "params": [
