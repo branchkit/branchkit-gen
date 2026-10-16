@@ -6492,11 +6492,12 @@
       "params": [
         {
           "name": "actions",
-          "required": true,
+          "required": false,
           "schema": {
             "additionalProperties": {
               "$ref": "#/$defs/PushedActionType"
             },
+            "default": {},
             "description": "Action types by name, without the plugin's `action_prefix`\n(`linear.update_issue` becomes `<prefix>.linear.update_issue`). The\nsame shape as the manifest's `action_types`. Replaces what this\nplugin pushed before: all of it, or one `group`. An empty map clears.\nA name the manifest declares is refused: a pushed action cannot\nredefine one the person consented to at install.",
             "type": "object"
           }
