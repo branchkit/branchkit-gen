@@ -6,7 +6,7 @@ import (
 	"fmt"
 )
 
-//go:embed specs/actuator-rpc.json
+//go:embed specs/platform-rpc.json
 var embeddedSpec []byte
 
 // embeddedManifestSchema is the generated plugin manifest JSON Schema,

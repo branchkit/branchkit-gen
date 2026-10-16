@@ -29133,7 +29133,7 @@
       "summary": "Handle a routed action (matched command, keybind, or manual dispatch)",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -29201,7 +29201,7 @@
       "summary": "Build phonetic data for speech recognition from the current command set",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -29315,7 +29315,7 @@
       "summary": "Decide what a transcript from a pipeline you own means, and return the actions the platform should execute. Called only for pipelines declaring `dispatch: \"delegated\"`; the platform executes the response itself, so the plugin never dispatches for routing.",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -30812,7 +30812,7 @@
       "summary": "Render a settings tab's HTML content",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -32293,7 +32293,7 @@
       "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the actuator passes to trial_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -32322,7 +32322,7 @@
       "summary": "Reverse the state writes a previous trial_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
@@ -32363,7 +32363,7 @@
       "summary": "Return concrete calibration prompts for a command whose vocabulary the host can't derive itself — a runtime list, a dynamic hint cross-product, or free-text examples. Optional: implement it on a plugin that owns such a command; the calibration host falls back to its own default (codewords / filler) when the hook is absent or returns an empty list. The owner owns the count and how slots combine.",
       "tags": [
         {
-          "name": "actuator-to-plugin"
+          "name": "platform-to-plugin"
         }
       ],
       "x-since": "0.1.0"
