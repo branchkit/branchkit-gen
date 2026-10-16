@@ -28,23 +28,6 @@
       "preset": "data",
       "writers": "platform_only"
     },
-    "_platform.actuator_log_level": {
-      "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
-      "feeds_matching": {
-        "type": "none"
-      },
-      "fields": [
-        {
-          "field_type": "string",
-          "key": "level",
-          "label": "",
-          "required": true
-        }
-      ],
-      "label": "the platform's log level",
-      "preset": "data",
-      "writers": "platform_only"
-    },
     "_platform.binding_claims": {
       "cardinality": "multi",
       "description": "Who holds each contested trigger — one record per trigger plugins have contributed bindings for, keyed like an edit (the combo; `<source>:<trigger>` for a device's): `source`, `trigger`, and `order`, the plugins in the order they first contributed a binding for it. The first in `order` that contributes one holds the trigger, so a plugin installed later never takes a key already in use. A disabled plugin keeps its place; an uninstalled one leaves. Settings' \"Use this one\" moves a plugin to the front. Written only by the platform.",
@@ -348,8 +331,25 @@
       "preset": "named_entities",
       "writers": "anyone_who_declares"
     },
+    "_platform.log_level": {
+      "description": "Global log-level threshold for branchkit.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "string",
+          "key": "level",
+          "label": "",
+          "required": true
+        }
+      ],
+      "label": "the platform's log level",
+      "preset": "data",
+      "writers": "platform_only"
+    },
     "_platform.log_recording": {
-      "description": "Whether the diagnostic logs (actuator.log, show-all, audit) keep the user's own content — what they said or typed, and what plugins and stages printed. One record `{enabled}`. Off: every field an event's redaction policy names is written as its size. No record: a release build keeps it off, a dev build on. Applied live.",
+      "description": "Whether the diagnostic logs (branchkit.log, show-all, audit) keep the user's own content — what they said or typed, and what plugins and stages printed. One record `{enabled}`. Off: every field an event's redaction policy names is written as its size. No record: a release build keeps it off, a dev build on. Applied live.",
       "feeds_matching": {
         "type": "none"
       },

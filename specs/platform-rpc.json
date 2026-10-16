@@ -30140,7 +30140,7 @@
               }
             ],
             "default": null,
-            "description": "Severity level for the line. v1 callers omit this and the handler\nfalls through to `Debug`; v2 callers pass one of\n`trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin\nthreshold are dropped at the handler; `warn`/`error` additionally\ncross-post to `actuator.log` via the `plugin.diagnostic` event."
+            "description": "Severity level for the line. v1 callers omit this and the handler\nfalls through to `Debug`; v2 callers pass one of\n`trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin\nthreshold are dropped at the handler; `warn`/`error` additionally\ncross-post to `branchkit.log` via the `plugin.diagnostic` event."
           }
         },
         {
@@ -30170,7 +30170,7 @@
           "type": "object"
         }
       },
-      "summary": "Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.",
+      "summary": "Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in branchkit.log.",
       "tags": [
         {
           "name": "misc"
@@ -32638,12 +32638,6 @@
       "writers": "platform_only"
     },
     {
-      "description": "Global log-level threshold for actuator.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
-      "name": "_platform.actuator_log_level",
-      "preset": "data",
-      "writers": "platform_only"
-    },
-    {
       "description": "Who holds each contested trigger — one record per trigger plugins have contributed bindings for, keyed like an edit (the combo; `<source>:<trigger>` for a device's): `source`, `trigger`, and `order`, the plugins in the order they first contributed a binding for it. The first in `order` that contributes one holds the trigger, so a plugin installed later never takes a key already in use. A disabled plugin keeps its place; an uninstalled one leaves. Settings' \"Use this one\" moves a plugin to the front. Written only by the platform.",
       "name": "_platform.binding_claims",
       "preset": "data",
@@ -32698,7 +32692,13 @@
       "writers": "anyone_who_declares"
     },
     {
-      "description": "Whether the diagnostic logs (actuator.log, show-all, audit) keep the user's own content — what they said or typed, and what plugins and stages printed. One record `{enabled}`. Off: every field an event's redaction policy names is written as its size. No record: a release build keeps it off, a dev build on. Applied live.",
+      "description": "Global log-level threshold for branchkit.log (the TextFormatterSink). One record `{level}`; lines below the level are dropped. Default follows BRANCHKIT_LOG_LEVEL / `info`.",
+      "name": "_platform.log_level",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
+      "description": "Whether the diagnostic logs (branchkit.log, show-all, audit) keep the user's own content — what they said or typed, and what plugins and stages printed. One record `{enabled}`. Off: every field an event's redaction policy names is written as its size. No record: a release build keeps it off, a dev build on. Applied live.",
       "name": "_platform.log_recording",
       "preset": "data",
       "writers": "platform_only"
