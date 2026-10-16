@@ -965,7 +965,7 @@
         "type": "object"
       },
       "CommandOverride": {
-        "description": "A user override of a command's *spoken phrase* — \"say `new_pattern` instead\nof `default_pattern` for `action`.\" A keyed delta on top of the contributed\ndefaults, owned by the platform and applied when the command union is built\n(`rebuild_commands_cache`), so it wins over the default and survives the\ncontributing plugin/extension re-contributing on reconnect.\n\nKeyed by the stable `(action, default_pattern)` identity, NOT by the phrase\n(which changes the instant you override it):\n - `action` — the full action id (`Action::type_label`, e.g.\n   `browser.scroll`), carrying the plugin prefix so the layer stays\n   plugin-agnostic across browser/tiling/system.\n - `default_pattern` — the default spoken form this replaces\n   (`Command::display_name`, the actuator's canonical `<capture>` notation).\n   Needed because one action can carry several patterns, each with its own\n   params; the key names which one.\n\nA stale override (default renamed/removed upstream) simply stops matching\nand the new default applies — single source + derived delta, no dual-sync.\nKeyed by identity, not by phrase: a phrase key changes the moment it is\noverridden, so it could never be reset or re-targeted.",
+        "description": "A user override of a command's *spoken phrase* — \"say `new_pattern` instead\nof `default_pattern` for `action`.\" A keyed delta on top of the contributed\ndefaults, owned by the platform and applied when the command union is built\n(`rebuild_commands_cache`), so it wins over the default and survives the\ncontributing plugin/extension re-contributing on reconnect.\n\nKeyed by the stable `(action, default_pattern)` identity, NOT by the phrase\n(which changes the instant you override it):\n - `action` — the full action id (`Action::type_label`, e.g.\n   `browser.scroll`), carrying the plugin prefix so the layer stays\n   plugin-agnostic across browser/tiling/system.\n - `default_pattern` — the default spoken form this replaces\n   (`Command::display_name`, the platform's canonical `<capture>` notation).\n   Needed because one action can carry several patterns, each with its own\n   params; the key names which one.\n\nA stale override (default renamed/removed upstream) simply stops matching\nand the new default applies — single source + derived delta, no dual-sync.\nKeyed by identity, not by phrase: a phrase key changes the moment it is\noverridden, so it could never be reset or re-targeted.",
         "properties": {
           "action": {
             "type": "string"
@@ -3038,7 +3038,7 @@
         "properties": {
           "apply_bias": {
             "default": false,
-            "description": "When set, the actuator stamps the live never-standalone Lever E penalty\n(`build_never_standalone_weights_inner`) onto this item so the re-decode\nreproduces the biased live behavior. The word set is the actuator's, not the\ncaller's — the plugin only opts in. Off = unbiased decode.",
+            "description": "When set, the platform stamps the live never-standalone Lever E penalty\n(`build_never_standalone_weights_inner`) onto this item so the re-decode\nreproduces the biased live behavior. The word set is the platform's, not the\ncaller's — the plugin only opts in. Off = unbiased decode.",
             "type": "boolean"
           },
           "audio": {
@@ -3047,7 +3047,7 @@
           },
           "bias_strength": {
             "default": null,
-            "description": "L2 strength sweep: when set, the actuator stamps the never-standalone word set\nat exactly this cost (instead of the configured live penalty), so the caller\ncan probe the same clip across a ladder of strengths and find its flip\nthreshold. The word set is still the actuator's — only the cost is requested.\nTakes precedence over `apply_bias`; <= 0 means unbiased.",
+            "description": "L2 strength sweep: when set, the platform stamps the never-standalone word set\nat exactly this cost (instead of the configured live penalty), so the caller\ncan probe the same clip across a ladder of strengths and find its flip\nthreshold. The word set is still the platform's — only the cost is requested.\nTakes precedence over `apply_bias`; <= 0 means unbiased.",
             "format": "double",
             "type": "number"
           },
@@ -3220,7 +3220,7 @@
             "type": "object"
           },
           "bridge_active": {
-            "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
+            "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
             "type": "boolean"
           },
           "clears_tags": {
@@ -3300,7 +3300,7 @@
             "type": "string"
           },
           "trace_id": {
-            "description": "Trace ID generated by the actuator for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents. Per-match — bridge-driven multi-utterance completions\nproduce different trace_ids for seed and completion. Cross-\nresolve threading for the same push-to-talk hold goes through\nthe ambient `correlation_id` derived from `session_id`. See\n`MatchCommandsResult.trace_id` for the full discussion.",
+            "description": "Trace ID generated by the platform for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents. Per-match — bridge-driven multi-utterance completions\nproduce different trace_ids for seed and completion. Cross-\nresolve threading for the same push-to-talk hold goes through\nthe ambient `correlation_id` derived from `session_id`. See\n`MatchCommandsResult.trace_id` for the full discussion.",
             "type": "string"
           }
         },
@@ -4216,7 +4216,7 @@
           },
           "source": {
             "default": "observed",
-            "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by actuator channel infrastructure.",
+            "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by platform channel infrastructure.",
             "type": "string"
           },
           "space_ids": {
@@ -4323,7 +4323,7 @@
     }
   },
   "info": {
-    "description": "Complete BranchKit protocol surface: actuator-side methods (called by plugins via JSON-RPC over stdio), plugin-side methods (called by the actuator on managed plugins), and platform notification events. Generated from the platform's own registry of operations, so it lists exactly what this version serves.",
+    "description": "Complete BranchKit protocol surface: platform-side methods (called by plugins via JSON-RPC over stdio), plugin-side methods (called by the platform on managed plugins), and platform notification events. Generated from the platform's own registry of operations, so it lists exactly what this version serves.",
     "title": "BranchKit RPC",
     "version": "0.2.0"
   },
@@ -5389,7 +5389,7 @@
           "name": "generation",
           "required": true,
           "schema": {
-            "description": "Monotonic across the actuator process. A renderer mid-utterance\nabandons what it is conveying when a newer generation arrives —\nbut see `meaning_changed`.",
+            "description": "Monotonic across the app process. A renderer mid-utterance\nabandons what it is conveying when a newer generation arrives —\nbut see `meaning_changed`.",
             "format": "uint64",
             "minimum": 0,
             "type": "integer"
@@ -6757,7 +6757,7 @@
               "type": "integer"
             },
             "version": {
-              "description": "The latest version; it rises across generations AND across actuator\nrestarts, so a consumer can tell new from already-seen.",
+              "description": "The latest version; it rises across generations AND across platform\nrestarts, so a consumer can tell new from already-seen.",
               "format": "uint64",
               "minimum": 0,
               "type": "integer"
@@ -8161,7 +8161,7 @@
               "type": "object"
             },
             "bridge_active": {
-              "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See actuator commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
+              "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
               "type": "boolean"
             },
             "clears_tags": {
@@ -8241,7 +8241,7 @@
               "type": "string"
             },
             "trace_id": {
-              "description": "Trace ID generated by the actuator for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents. Per-match — bridge-driven multi-utterance completions\nproduce different trace_ids for seed and completion. Cross-\nresolve threading for the same push-to-talk hold goes through\nthe ambient `correlation_id` derived from `session_id`. See\n`MatchCommandsResult.trace_id` for the full discussion.",
+              "description": "Trace ID generated by the platform for causal correlation. Links\nthis resolve result to downstream dispatch, state writes, and HUD\nevents. Per-match — bridge-driven multi-utterance completions\nproduce different trace_ids for seed and completion. Cross-\nresolve threading for the same push-to-talk hold goes through\nthe ambient `correlation_id` derived from `session_id`. See\n`MatchCommandsResult.trace_id` for the full discussion.",
               "type": "string"
             }
           },
@@ -8425,7 +8425,7 @@
           "name": "signal",
           "required": true,
           "schema": {
-            "description": "Raw control-stream signal string (e.g. \"open hud\", \"hide discovery\").\nForwarded verbatim to the Swift shell via the actuator's control stream.",
+            "description": "Raw control-stream signal string (e.g. \"open hud\", \"hide discovery\").\nForwarded verbatim to the Swift shell via the platform's control stream.",
             "minLength": 1,
             "type": "string"
           }
@@ -8505,7 +8505,7 @@
         "name": "dispatch_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Dispatch response. The wire shape varies by branch:\n\n  - Success:     `{ \"status\": \"ok\", \"control_message\": …, \"handler\": …, \"result\": … }`\n  - Not handled: `{ \"status\": \"not_handled\", \"handler\": … }`\n  - Error:       `{ \"status\": \"error\", \"handler\": …, \"message\": … }`\n  - Denied:      `{ \"status\": \"denied\", \"message\": … }`\n\n`result` carries the structured payload from the handling plugin's\n`on_action` response — opaque to the actuator, piped through as-is.",
+          "description": "Dispatch response. The wire shape varies by branch:\n\n  - Success:     `{ \"status\": \"ok\", \"control_message\": …, \"handler\": …, \"result\": … }`\n  - Not handled: `{ \"status\": \"not_handled\", \"handler\": … }`\n  - Error:       `{ \"status\": \"error\", \"handler\": …, \"message\": … }`\n  - Denied:      `{ \"status\": \"denied\", \"message\": … }`\n\n`result` carries the structured payload from the handling plugin's\n`on_action` response — opaque to the platform, piped through as-is.",
           "properties": {
             "control_message": {
               "description": "Control message to forward to the Swift host (if any).\nPresent on `status == \"ok\"`; absent on `status == \"error\"`.",
@@ -8520,7 +8520,7 @@
               "type": "string"
             },
             "result": {
-              "description": "Structured result payload from the handling plugin's action handler.\nOpaque to the actuator — piped through from the plugin's response."
+              "description": "Structured result payload from the handling plugin's action handler.\nOpaque to the platform — piped through from the plugin's response."
             },
             "status": {
               "description": "`\"ok\"` for success, `\"denied\"` if the caller lacks dispatch\npermission, `\"error\"` for an internal panic captured by\n`std::panic::catch_unwind`.",
@@ -8774,7 +8774,7 @@
           "name": "event_type",
           "required": true,
           "schema": {
-            "description": "Convention-based event type (e.g. \"clipboard.copied\"). The\n`_platform.*` namespace is reserved for the actuator.",
+            "description": "Convention-based event type (e.g. \"clipboard.copied\"). The\n`_platform.*` namespace is reserved for the platform.",
             "minLength": 1,
             "type": "string"
           }
@@ -29116,7 +29116,7 @@
               "type": "string"
             },
             "result": {
-              "description": "Structured result payload. Opaque to the actuator — piped through\nto the dispatch caller as-is. Plugins use this to return data from\naction handlers (e.g., computed values, confirmation details)."
+              "description": "Structured result payload. Opaque to the platform — piped through\nto the dispatch caller as-is. Plugins use this to return data from\naction handlers (e.g., computed values, confirmation details)."
             },
             "status": {
               "$ref": "#/$defs/OnActionStatus",
@@ -30148,7 +30148,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).\nRenders between the timestamp and the payload in the per-plugin\nlog file, matching the actuator log's `[TAG]` column convention.\nEmpty/missing renders as `[<ts>] <payload>` with no tag bracket.",
+            "description": "Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).\nRenders between the timestamp and the payload in the per-plugin\nlog file, matching the platform log's `[TAG]` column convention.\nEmpty/missing renders as `[<ts>] <payload>` with no tag bracket.",
             "type": "string"
           }
         }
@@ -30697,7 +30697,7 @@
           "type": "object"
         }
       },
-      "summary": "Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec",
+      "summary": "Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the platform runs it because the grammar is platform state and plugins cannot exec",
       "tags": [
         {
           "name": "misc"
@@ -31439,7 +31439,7 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "conflict": {
-              "description": "Terminal-command-rule conflict report: a human-readable reason if this\ncandidate command would make another command unreachable (or be\nunreachable itself). **Advisory only** — the actuator does NOT block the\nsave; the caller decides what to do. Null when there's no conflict. With\n`check_only: true` in the request, the candidate is checked and reported\nbut NOT saved. The actuator only reports; blocking a user-authored save\nis the calling plugin's decision.",
+              "description": "Terminal-command-rule conflict report: a human-readable reason if this\ncandidate command would make another command unreachable (or be\nunreachable itself). **Advisory only** — the platform does NOT block the\nsave; the caller decides what to do. Null when there's no conflict. With\n`check_only: true` in the request, the candidate is checked and reported\nbut NOT saved. The platform only reports; blocking a user-authored save\nis the calling plugin's decision.",
               "type": "string"
             },
             "ok": {
@@ -31562,7 +31562,7 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "conflict": {
-              "description": "See `SettingsRulesCreateResult::conflict` — advisory conflict report;\nthe actuator reports but never blocks.",
+              "description": "See `SettingsRulesCreateResult::conflict` — advisory conflict report;\nthe platform reports but never blocks.",
               "type": "string"
             },
             "ok": {
@@ -32035,7 +32035,7 @@
           "type": "object"
         }
       },
-      "summary": "Start a shell command via /bin/bash -c, run by the actuator outside any plugin sandbox (security-sensitive; not on Windows)",
+      "summary": "Start a shell command via /bin/bash -c, run by the platform outside any plugin sandbox (security-sensitive; not on Windows)",
       "tags": [
         {
           "name": "system"
@@ -32138,10 +32138,10 @@
         "name": "trial_enter_context_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Flat wire view of the context a trial entered. The actuator's internal\n`ContextSpec` is a discriminated union (which the SDK type emitters\ncan't materialize across the boundary), so the RPC result is this flat\nDTO — its fields map 1:1 onto the host-side `ContextSpec`\n(`kind`/`tags`/`fixture_handle`).",
+          "description": "Flat wire view of the context a trial entered. The platform's internal\n`ContextSpec` is a discriminated union (which the SDK type emitters\ncan't materialize across the boundary), so the RPC result is this flat\nDTO — its fields map 1:1 onto the host-side `ContextSpec`\n(`kind`/`tags`/`fixture_handle`).",
           "properties": {
             "fixture_handle": {
-              "description": "Fixture handle returned by a dynamic command's owner; empty for\nstatic tiers. The actuator already registered it under the trial.",
+              "description": "Fixture handle returned by a dynamic command's owner; empty for\nstatic tiers. The platform already registered it under the trial.",
               "type": "string"
             },
             "kind": {
@@ -32149,7 +32149,7 @@
               "type": "string"
             },
             "tags": {
-              "description": "Active-tag set the matcher sees during the trial: a mode-gated\ncommand's `requires_tags` (empty for base/slotted). Empty for the\ndynamic tier, whose tags are written plugin-side by the fixture.\nThe actuator platform-wrote these and recorded them on the trial so\n`trial_end` clears them. The host passes them to\n`commands.resolve --preview` to compute the functional (Resolves)\nsignal.",
+              "description": "Active-tag set the matcher sees during the trial: a mode-gated\ncommand's `requires_tags` (empty for base/slotted). Empty for the\ndynamic tier, whose tags are written plugin-side by the fixture.\nThe platform platform-wrote these and recorded them on the trial so\n`trial_end` clears them. The host passes them to\n`commands.resolve --preview` to compute the functional (Resolves)\nsignal.",
               "items": {
                 "type": "string"
               },
@@ -32279,7 +32279,7 @@
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
             "fixture_handle": {
-              "description": "Opaque, plugin-chosen handle. The actuator hands it back via\n`trial_release_fixture` so the plugin can reverse this\nspecific fixture's writes without keeping ambient state.",
+              "description": "Opaque, plugin-chosen handle. The platform hands it back via\n`trial_release_fixture` so the plugin can reverse this\nspecific fixture's writes without keeping ambient state.",
               "type": "string"
             }
           },
@@ -32290,7 +32290,7 @@
           "type": "object"
         }
       },
-      "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the actuator passes to trial_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
+      "summary": "Hydrate runtime state so the named dynamic-vocab command's vocabulary reaches its maximal realistic shape — return an opaque handle the platform passes to trial_release_fixture on trial end. Implemented by plugins that own dynamic-vocab commands (DependentCapture, or captures against runtime-only collections).",
       "tags": [
         {
           "name": "platform-to-plugin"
@@ -32319,7 +32319,7 @@
           "type": "object"
         }
       },
-      "summary": "Reverse the state writes a previous trial_apply_fixture made. Called by the actuator on trial_end for each registered handle.",
+      "summary": "Reverse the state writes a previous trial_apply_fixture made. Called by the platform on trial_end for each registered handle.",
       "tags": [
         {
           "name": "platform-to-plugin"

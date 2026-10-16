@@ -14,7 +14,7 @@ import (
 // embeddedPlatformCollections is the generated declared-schema set for the
 // `_platform.*` collections, synced from `contracts/`.
 //
-// Their shapes live in the actuator's synthetic manifest, which is Rust, so
+// Their shapes live in the platform's synthetic manifest, which is Rust, so
 // they appear in no plugin.json — and three first-party plugins consume
 // `_platform.key_names`. Without this the emitter could type two thirds of
 // the fleet's declared reads and would silently skip the rest.

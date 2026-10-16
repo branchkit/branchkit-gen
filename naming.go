@@ -6,7 +6,7 @@ import (
 )
 
 // fieldAcronyms are segments that receive full-uppercase treatment when
-// converting snake_case JSON keys to Go identifiers. Matches the actuator's
+// converting snake_case JSON keys to Go identifiers. Matches the platform's
 // go_types::FIELD_ACRONYMS set so generated output is byte-identical.
 var fieldAcronyms = map[string]bool{
 	"id": true, "ip": true, "url": true, "html": true,

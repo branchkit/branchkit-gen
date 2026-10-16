@@ -110,7 +110,7 @@ func locField(c CalledMethod) string {
 
 // currentSpecLatest returns the spec's API version. Named separately so
 // the deprecation comparison is readable: "deprecated_in <= latest_known_version"
-// means "the deprecation is in effect on this actuator."
+// means "the deprecation is in effect on this platform."
 func currentSpecLatest(s *Spec) string {
 	return s.APIVersion
 }

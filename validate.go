@@ -278,7 +278,7 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	//
 	// These five moved into `requires` in manifest api_version 0.2.0.
 	// Reported as info, an author migrating sees validation pass while the
-	// actuator loads their plugin with no privileges, no network and no
+	// platform loads their plugin with no privileges, no network and no
 	// declared sockets. This tool is the first thing an author runs, so it
 	// has to say the same thing the runtime will.
 	movedToRequires := []string{"privileges", "optional_privileges", "network", "sockets", "runtimes"}

@@ -106,7 +106,7 @@ branchkit-gen validate --no-drift ./my-plugin
 - A `min_api_version` newer than the embedded spec is reported, since the checks below would then be incomplete; install a newer `branchkit-gen`.
 - For every `<x>.Call("method.name", …)` callsite in a Go plugin's `src/` tree, the validator looks up the method in the spec and reports:
   - **error** if the method's `x-removed-in` ≤ your `min_api_version` (the call will hard-fail at runtime)
-  - **error** if the method's `x-since` is greater than your `min_api_version` (you'd run on an older actuator that doesn't have it)
+  - **error** if the method's `x-since` is greater than your `min_api_version` (you'd run on an older platform that doesn't have it)
   - **warn** if the method is currently deprecated (plan a migration)
   - **info** if the method isn't in the platform spec at all (typo, or a plugin-to-plugin call)
 

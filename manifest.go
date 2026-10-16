@@ -227,7 +227,7 @@ func (f *ActionFieldSchema) EffectiveFieldType() FieldType {
 // expression: nothing is evaluated, and the file holds the same static
 // object that would otherwise sit inline.
 //
-// Mirrors `resolve_collection_refs` in the actuator, including its
+// Mirrors `resolve_collection_refs` in the platform, including its
 // containment rules. The two must agree: this tool and the runtime read the
 // same manifests, and a disagreement about what a declaration says is the
 // kind of split that only shows up in production.
