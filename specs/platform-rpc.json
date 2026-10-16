@@ -1022,7 +1022,8 @@
             "description": "Raw action JSON for editor decomposition (complements the display\n`action` string), in the authored dialect a command's `action` is\nwritten in."
           },
           "blocked_reasons": {
-            "description": "Why the platform has this command switched off, one sentence per\nreason (an operation this machine refuses; a pushed action gone or\nchanged); empty when it is live. A changed action needs the person to\nopen the command and save it again.",
+            "default": [],
+            "description": "Why the platform has this command switched off, one sentence per\nreason (an operation this machine refuses; a pushed action gone or\nchanged); empty when it is live. A changed action needs the person to\nopen the command and save it again. Always sent, empty or not, as the\nschema says.",
             "items": {
               "type": "string"
             },
