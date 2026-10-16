@@ -3034,6 +3034,127 @@
         ],
         "type": "object"
       },
+      "PushedActionField": {
+        "additionalProperties": false,
+        "description": "One input of a pushed action type: the manifest's `ActionFieldSchema`,\nrequest-side. No `default`: it would be untyped JSON, and a pushed\naction's caller fills every input it needs.",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "display": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FieldDisplay"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "enum_values": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "field_type": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FieldType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fields": {
+            "description": "Nested inputs of an `object` field.",
+            "items": {
+              "$ref": "#/$defs/PushedActionField"
+            },
+            "type": "array"
+          },
+          "for_host": {
+            "type": "string"
+          },
+          "key": {
+            "description": "JSON key name.",
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "description",
+          "display",
+          "enum_values",
+          "field_type",
+          "fields",
+          "for_host",
+          "key",
+          "label",
+          "placeholder",
+          "required"
+        ],
+        "type": "object"
+      },
+      "PushedActionType": {
+        "additionalProperties": false,
+        "description": "One action type as `actions.push` takes it: the manifest's\n`ActionTypeSchema` with the inputs a plugin may leave out optional, and a\n`label` it must give (a pushed action is read by a person in the builder).\nIts own type, not `ActionTypeSchema`, because a request-side type's\ndefaulted fields are generated optional: sharing it would turn the\nfields every plugin READS (`actions.list`, `render_settings`) into\npointers. Same field names, so it converts to the manifest shape as is;\n`pushed_types_track_the_manifest_shape` fails if the two drift.",
+        "properties": {
+          "consequence": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Consequence"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether running it can be undone; omitted means unclassified,\ntreated as risky."
+          },
+          "fields": {
+            "description": "Its inputs, in order.",
+            "items": {
+              "$ref": "#/$defs/PushedActionField"
+            },
+            "type": "array"
+          },
+          "label": {
+            "description": "What the person sees in the builder (\"Update an issue\").",
+            "type": "string"
+          },
+          "modes": {
+            "description": "`tap`, `hold` and/or `toggle`; `[\"tap\"]` when omitted.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "uses": {
+            "description": "Platform operations it cannot work without, by method name.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "consequence",
+          "fields",
+          "label",
+          "modes",
+          "uses"
+        ],
+        "type": "object"
+      },
       "RedecodeItem": {
         "properties": {
           "apply_bias": {
@@ -6374,7 +6495,7 @@
           "required": true,
           "schema": {
             "additionalProperties": {
-              "$ref": "#/$defs/ActionTypeSchema"
+              "$ref": "#/$defs/PushedActionType"
             },
             "description": "Action types by name, without the plugin's `action_prefix`\n(`linear.update_issue` becomes `<prefix>.linear.update_issue`). The\nsame shape as the manifest's `action_types`. Replaces what this\nplugin pushed before: all of it, or one `group`. An empty map clears.\nA name the manifest declares is refused: a pushed action cannot\nredefine one the person consented to at install.",
             "type": "object"
