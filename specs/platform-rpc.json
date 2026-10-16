@@ -679,6 +679,35 @@
         ],
         "type": "object"
       },
+      "BlockedCommand": {
+        "description": "A command the words name that the platform has switched off.",
+        "properties": {
+          "command": {
+            "description": "The command's name.",
+            "type": "string"
+          },
+          "gates": {
+            "description": "The gate tags themselves (`_platform.unavailable:<op>`,\n`_platform.action_absent:<type>`, `_platform.action_changed:<type>`).",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "reasons": {
+            "description": "Why, one sentence per gate, in the person's words.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "command",
+          "gates",
+          "reasons"
+        ],
+        "type": "object"
+      },
       "BluetoothDevice": {
         "description": "A paired or connected Bluetooth device.",
         "properties": {
@@ -992,6 +1021,13 @@
           "action_json": {
             "description": "Raw action JSON for editor decomposition (complements the display\n`action` string), in the authored dialect a command's `action` is\nwritten in."
           },
+          "blocked_reasons": {
+            "description": "Why the platform has this command switched off, one sentence per\nreason (an operation this machine refuses; a pushed action gone or\nchanged); empty when it is live. A changed action needs the person to\nopen the command and save it again.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
           "canonical": {
             "type": "string"
           },
@@ -1042,6 +1078,7 @@
         },
         "required": [
           "action",
+          "blocked_reasons",
           "canonical",
           "category",
           "clears_tags",
@@ -3340,6 +3377,17 @@
             "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed. Opaque by\ndesign: each value is whatever its capture bound (a word, a number, a\ncollection record), so it stays raw JSON.",
             "type": "object"
           },
+          "blocked": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/BlockedCommand"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing (bug fdd14d7). Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
+          },
           "bridge_active": {
             "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
             "type": "boolean"
@@ -3429,6 +3477,7 @@
           "action",
           "active_plugin_gates",
           "args",
+          "blocked",
           "bridge_active",
           "clears_tags",
           "consumed_count",
@@ -8340,6 +8389,17 @@
               "additionalProperties": true,
               "description": "Named captures, keyed by binding name. Empty when the matched action\nis a template the platform has already resolved into the concrete\n`action`; populated only when template resolution failed. Opaque by\ndesign: each value is whatever its capture bound (a word, a number, a\ncollection record), so it stays raw JSON.",
               "type": "object"
+            },
+            "blocked": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/BlockedCommand"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing (bug fdd14d7). Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
             },
             "bridge_active": {
               "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
