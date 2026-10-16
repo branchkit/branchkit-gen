@@ -3387,7 +3387,7 @@
                 "type": "null"
               }
             ],
-            "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing (bug fdd14d7). Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
+            "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing. Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
           },
           "bridge_active": {
             "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
@@ -8400,7 +8400,7 @@
                   "type": "null"
                 }
               ],
-              "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing (bug fdd14d7). Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
+              "description": "When nothing matched because the command the words name is switched\noff by the platform itself (an operation this machine refuses, a\npushed action gone or changed), which command and why, so the caller\ncan say so instead of nothing. Never set for a mode or\ncontext the person has not entered: only platform gates are lifted to\nfind it."
             },
             "bridge_active": {
               "description": "True when an active `PendingPartial` bridge survived this resolve\n(either advanced one token, or rejected the new utterance without\ndropping). Tells the voice plugin to leave the discovery HUD as-is\n— the bridge's previously-rendered items are still the correct view\nof what completes the in-progress capture. Without this flag the\nvoice plugin would either replace the HUD with empty/AIR content\n(because `items` is empty under bridge survival) or close it via\nthe \"no match, no partial\" branch. See platform commit history for\nthe matching `capture.progress` suppression. False by\ndefault; only true when the bridge survived.",
