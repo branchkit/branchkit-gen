@@ -711,6 +711,23 @@
       "preset": "data",
       "writers": "platform_only"
     },
+    "_platform.spoken_check": {
+      "description": "Whether BranchKit checks with the person before running a command they said that cannot be undone or that reaches beyond the computer: an action type declared `consequence: irreversible` or `external`. One record `{ask_first}`. No record: off. Keys, clicks and scripts never ask. Set on Settings › Effects; applied to the next utterance.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "boolean",
+          "key": "ask_first",
+          "label": "",
+          "required": true
+        }
+      ],
+      "label": "checking before spoken commands",
+      "preset": "data",
+      "writers": "platform_only"
+    },
     "_platform.stage_log_thresholds": {
       "description": "Per-stage log-level threshold for pipeline-stage diagnostics. Structured lines below the threshold are dropped before emission. Default is `info`.",
       "feeds_matching": {

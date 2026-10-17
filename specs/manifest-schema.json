@@ -108,7 +108,7 @@
               "type": "null"
             }
           ],
-          "description": "Whether running this action can be undone. Omitted means\nunclassified, which BranchKit treats as risky. Only `reversible`\nchanges anything: the person may then always-allow a connected AI app\nto run it, and while it runs for such an app BranchKit refuses this\nplugin every platform call that cannot be undone. Ignored for a\nplugin that can act without platform calls (network access, running\nother programs, its own pipeline stages), since nothing could hold it\nto the claim."
+          "description": "Whether running this action can be undone. Omitted means\nunclassified, which BranchKit treats as risky when a connected AI app\nasks to run it.\n\n`reversible`: the person may always-allow a connected AI app to run\nit, and while it runs for such an app BranchKit refuses this plugin\nevery platform call that cannot be undone. Ignored for a plugin that\ncan act without platform calls (network access, running other\nprograms, its own pipeline stages), since nothing could hold it to the\nclaim.\n\n`irreversible` or `external`: when the person has asked to be checked\nwith before spoken commands that cannot be undone, a command that runs\nthis action is held until they say go ahead. BranchKit words that\nquestion from this action type's label, its fields' values and your\nplugin's name. This is how a plugin gets a confirmation for its own\ndestructive actions: declare it, here or when pushing the type."
         },
         "fields": {
           "description": "Ordered list of fields for this action type.",
@@ -824,7 +824,7 @@
         },
         {
           "const": "external",
-          "description": "Leaves the computer or reaches other people: send, post, pay.",
+          "description": "Leaves the computer or reaches other people: send, post, pay, change\nsomething in an outside service.",
           "type": "string"
         }
       ]
