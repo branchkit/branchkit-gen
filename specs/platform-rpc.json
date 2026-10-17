@@ -3280,6 +3280,14 @@
         ],
         "type": "object"
       },
+      "RedirectHost": {
+        "description": "Which loopback name the service accepts in a redirect address. Some\naccept only `localhost`, some only `127.0.0.1`.",
+        "enum": [
+          "loopback",
+          "localhost"
+        ],
+        "type": "string"
+      },
       "RelativeTo": {
         "description": "What a HUD window is placed against.",
         "enum": [
@@ -5502,6 +5510,53 @@
       "x-branchkit-delivery": "at-most-once",
       "x-branchkit-event-family": "routine",
       "x-since": "0.1.0"
+    },
+    {
+      "name": "_platform.oauth.changed",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "connected",
+          "required": true,
+          "schema": {
+            "description": "Signed in now: requests naming the provider's token will carry it.",
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "plugin",
+          "required": true,
+          "schema": {
+            "description": "The plugin the sign-in is for.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "provider",
+          "required": true,
+          "schema": {
+            "description": "The provider name the plugin gave `oauth.connect`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "reason",
+          "required": false,
+          "schema": {
+            "description": "Why not, when `connected` is false: the person chose not now, the\nservice refused, the exchange failed, or the person signed out.",
+            "type": "string"
+          }
+        }
+      ],
+      "summary": "A plugin's sign-in to an outside service finished, failed, was declined or was signed out. Addressed to that plugin",
+      "tags": [
+        {
+          "name": "notifications"
+        }
+      ],
+      "x-branchkit-delivery": "at-most-once",
+      "x-branchkit-event-family": "own",
+      "x-since": "0.2.0"
     },
     {
       "name": "_platform.output.cleared",
@@ -29301,6 +29356,220 @@
       "x-since": "0.2.0"
     },
     {
+      "name": "oauth.connect",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "api_host",
+          "required": true,
+          "schema": {
+            "description": "The host the access token is sent to (often the API host, which can\ndiffer from the token endpoint's). Must be a host this plugin\ndeclares or has requested.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "authorization_endpoint",
+          "required": true,
+          "schema": {
+            "description": "The service's authorization endpoint (https). The person's browser\ngoes here.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "client_id",
+          "required": true,
+          "schema": {
+            "description": "Your client ID with this service: one you registered as the plugin's\nauthor, one you obtained by dynamic client registration, or the\nperson's own. A public client: no secret is sent, PKCE protects the\nexchange.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "provider",
+          "required": true,
+          "schema": {
+            "description": "Your name for the service, used again in `oauth.status`,\n`oauth.disconnect` and the token's secret name (`oauth.<provider>`):\n1-64 of `a-z 0-9 _ -`.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "redirect_host",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/RedirectHost"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "The loopback name the service accepts in its redirect address.\nDefault `loopback` (`127.0.0.1`)."
+          }
+        },
+        {
+          "name": "resource",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "A resource indicator (RFC 8707) sent with both requests, when the\nservice wants one: an MCP server's own URL, for instance.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "scopes",
+          "required": false,
+          "schema": {
+            "default": [],
+            "description": "The scopes to ask for, as the service names them. Shown to the person\nbefore they sign in.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        {
+          "name": "token_endpoint",
+          "required": true,
+          "schema": {
+            "description": "The service's token endpoint (https). Must be a host this plugin\ndeclares or has requested with `network.request_host`; the exchange\ngoes out through this plugin's network grants.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "oauth_connect_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "status": {
+              "description": "`asking`: the person is being asked. `_platform.oauth.changed` says\nhow it ends.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "title": "OauthConnectResult",
+          "type": "object"
+        }
+      },
+      "summary": "Ask the person to sign in to an outside service for this plugin. BranchKit runs the sign-in and keeps the tokens; the plugin spends the access token by naming oauth.<provider> in http.request",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.oauth.changed"
+      ],
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "oauth.disconnect",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "provider",
+          "required": true,
+          "schema": {
+            "description": "The provider name given to `oauth.connect`.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "oauth_disconnect_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "removed": {
+              "description": "Whether there was a sign-in to forget.",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "removed"
+          ],
+          "title": "OauthDisconnectResult",
+          "type": "object"
+        }
+      },
+      "summary": "Forget this plugin's sign-in to a service: both tokens and the record",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-emits": [
+        "_platform.oauth.changed"
+      ],
+      "x-since": "0.2.0"
+    },
+    {
+      "name": "oauth.status",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "provider",
+          "required": true,
+          "schema": {
+            "description": "The provider name given to `oauth.connect`.",
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "oauth_status_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "api_host": {
+              "description": "Where the token is sent, when signed in.",
+              "type": "string"
+            },
+            "connected": {
+              "description": "Signed in: a request naming `oauth.<provider>` to the API host\ncarries the token.",
+              "type": "boolean"
+            },
+            "expires_at_ms": {
+              "description": "When the access token stops working (milliseconds since the Unix\nepoch), if the service said.",
+              "format": "uint64",
+              "minimum": 0,
+              "type": "integer"
+            },
+            "scopes": {
+              "description": "What the service granted, when signed in.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "connected",
+            "scopes"
+          ],
+          "title": "OauthStatusResult",
+          "type": "object"
+        }
+      },
+      "summary": "Whether this plugin is signed in to a service, what the service granted, and where the token goes. Never the token",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.2.0"
+    },
+    {
       "name": "on_action",
       "paramStructure": "by-name",
       "params": [
@@ -32858,6 +33127,7 @@
         "_platform.hid.disconnected",
         "_platform.hid.input",
         "_platform.hid.report",
+        "_platform.oauth.changed",
         "_platform.pipeline.executed"
       ],
       "name": "own",
