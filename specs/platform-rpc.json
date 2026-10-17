@@ -29434,7 +29434,7 @@
           "required": false,
           "schema": {
             "default": [],
-            "description": "The scopes to ask for, as the service names them. Shown to the person\nbefore they sign in.",
+            "description": "The scopes to ask for, as the service names them: at most 20, each\n1-200 printable characters with no spaces or quotes. Shown to the\nperson, as the service's words, before they sign in.",
             "items": {
               "type": "string"
             },
