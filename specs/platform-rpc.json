@@ -3866,6 +3866,14 @@
         ],
         "type": "object"
       },
+      "SignInFlow": {
+        "description": "How the person approves a sign-in.",
+        "enum": [
+          "browser",
+          "device"
+        ],
+        "type": "string"
+      },
       "SpaceInfo": {
         "description": "Information about a macOS Space.",
         "properties": {
@@ -29384,6 +29392,31 @@
             "description": "Your client ID with this service: one you registered as the plugin's\nauthor, one you obtained by dynamic client registration, or the\nperson's own. A public client: no secret is sent, PKCE protects the\nexchange.",
             "minLength": 1,
             "type": "string"
+          }
+        },
+        {
+          "name": "device_authorization_endpoint",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The device flow's device authorization endpoint (https), when no\n`issuer` is given. The token endpoint must be on its host or a\nsubdomain.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "flow",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SignInFlow"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "How the person approves: `browser` (default), the service's page in\nthe browser here, or `device`, a short code the person enters on the\nservice's page on this machine or another device (RFC 8628, for a\nservice that offers it)."
           }
         },
         {
