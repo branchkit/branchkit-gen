@@ -29370,10 +29370,10 @@
         },
         {
           "name": "authorization_endpoint",
-          "required": true,
+          "required": false,
           "schema": {
-            "description": "The service's authorization endpoint (https). The person's browser\ngoes here.",
-            "minLength": 1,
+            "default": null,
+            "description": "The service's authorization endpoint (https), when no `issuer` is\ngiven. The person's browser goes here.",
             "type": "string"
           }
         },
@@ -29383,6 +29383,15 @@
           "schema": {
             "description": "Your client ID with this service: one you registered as the plugin's\nauthor, one you obtained by dynamic client registration, or the\nperson's own. A public client: no secret is sent, PKCE protects the\nexchange.",
             "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "issuer",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The service's issuer (https), for a service that publishes its\nendpoints (RFC 8414 authorization server metadata, or OpenID Connect\ndiscovery): BranchKit reads the authorization and token endpoints\nfrom it, as this plugin, and they must name the same issuer. Give\nthis or both endpoints. Must be a host this plugin declares or has\nrequested.",
             "type": "string"
           }
         },
@@ -29434,10 +29443,10 @@
         },
         {
           "name": "token_endpoint",
-          "required": true,
+          "required": false,
           "schema": {
-            "description": "The service's token endpoint (https). Must be a host this plugin\ndeclares or has requested with `network.request_host`; the exchange\ngoes out through this plugin's network grants.",
-            "minLength": 1,
+            "default": null,
+            "description": "The service's token endpoint (https), when no `issuer` is given. It\nmust be on the authorization endpoint's host or one of its\nsubdomains: the place the person signs in vouches for where the code\nis redeemed. Must be a host this plugin declares or has requested;\nthe exchange goes out through this plugin's network grants.",
             "type": "string"
           }
         }
