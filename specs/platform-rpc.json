@@ -1108,7 +1108,7 @@
             "description": "Action fired on match, in the authored dialect: the tagged form\n(`{\"type\":\"plugin\",\"action_type\":…,\"params\":{…}}`), a sequence\n(`{\"type\":\"sequence\",\"actions\":[…]}`), or the flat form\n(`{\"type\":\"browser.click\", …}`) where `type` is the dotted plugin\naction type and the remaining keys are its params."
           },
           "cancels_bridge": {
-            "description": "When true, this gated command is allowed to win while a\nmulti-word pattern is part-way through (a held partial match).\nDefault false: a one-word gated command that does not continue\nthe held match is suppressed until it completes. A command of two\nor more words wins without the flag. Set true on one-word cancel\nwords (`over`) that should be able to abort the held match.",
+            "description": "When true, this gated command is allowed to win while a\nmulti-word pattern is part-way through (a held partial match).\nDefault false: a one-word gated command that does not continue\nthe held match is suppressed until it completes. A command of two\nor more words that opens with a literal word wins without the flag.\nSet true on one-word cancel words (`over`) that should be able to\nabort the held match.",
             "type": "boolean"
           },
           "category": {
