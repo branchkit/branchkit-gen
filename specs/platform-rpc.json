@@ -5793,9 +5793,34 @@
           }
         },
         {
+          "name": "focused_app",
+          "required": false,
+          "schema": {
+            "description": "The application focused when this utterance ended: for a held\npipeline, at the stop (the app the words were meant for); for one\nnever stopped, now. Reported, never interpreted.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "focused_app_now",
+          "required": false,
+          "schema": {
+            "description": "The application focused as this transcript is emitted. Differs from\n`focused_app` when focus moved while a held pipeline transcribed.",
+            "type": "string"
+          }
+        },
+        {
           "name": "is_final",
           "required": true,
           "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "partial",
+          "required": false,
+          "schema": {
+            "default": false,
+            "description": "The engine's own \"this text may still change\" mark, as it sent it.",
             "type": "boolean"
           }
         },
