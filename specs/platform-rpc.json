@@ -33355,7 +33355,7 @@
       "writers": "platform_only"
     },
     {
-      "description": "Per-plugin interaction grants (dispatch, event subscription, collection read).",
+      "description": "Per-plugin interaction grants: for every consent channel, what is granted and what was already offered.",
       "name": "_platform.plugins.interaction_grants",
       "preset": "data",
       "writers": "platform_only"

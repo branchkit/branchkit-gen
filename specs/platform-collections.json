@@ -600,7 +600,7 @@
       "writers": "platform_only"
     },
     "_platform.plugins.interaction_grants": {
-      "description": "Per-plugin interaction grants (dispatch, event subscription, collection read).",
+      "description": "Per-plugin interaction grants: for every consent channel, what is granted and what was already offered.",
       "feeds_matching": {
         "type": "none"
       },
@@ -619,13 +619,163 @@
         },
         {
           "field_type": "json",
+          "key": "dispatch_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
           "key": "event_subscriptions",
           "label": "",
           "required": false
         },
         {
           "field_type": "json",
+          "key": "event_subscriptions_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
           "key": "collection_reads",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "collection_reads_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "collection_writes",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "collection_writes_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "effect_asserts",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "effect_asserts_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "network_hosts",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "network_hosts_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "blob_reads",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "blob_reads_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "dbus_methods",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "dbus_methods_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "wmi_classes",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "wmi_classes_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "app_preferences",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "app_preferences_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "app_preference_writes",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "app_preference_writes_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "devices",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "devices_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "connection_access",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "connection_access_offered",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "protected_reads",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "protected_reads_offered",
           "label": "",
           "required": false
         }
