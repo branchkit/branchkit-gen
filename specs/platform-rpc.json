@@ -2945,6 +2945,45 @@
         ],
         "type": "string"
       },
+      "PlatformProfileResponse": {
+        "description": "What this machine can do, asked before calling rather than learned from a\nrefusal.\n\nTitled `PlatformProfileResponse`, the name every SDK already gives\n`platform.profile`'s result: `on_ready` carries the same struct, and one\ntitle makes the two one SDK type (emit-sdk lifts it as a shared\ncomponent) rather than two with the same fields.",
+        "properties": {
+          "host": {
+            "description": "The host process serving host-dependent operations and events.",
+            "type": "string"
+          },
+          "os": {
+            "description": "`macos`, `linux` or `windows`.",
+            "type": "string"
+          },
+          "session": {
+            "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`gnome` or `other_wayland`. Absent on other systems.",
+            "type": "string"
+          },
+          "unavailable": {
+            "description": "Every operation a plugin can call that would be refused here, with\nthe reason and detail the refusal itself carries. An operation not\nlisted runs here.",
+            "items": {
+              "$ref": "#/$defs/UnavailableOperation"
+            },
+            "type": "array"
+          },
+          "unobservable_events": {
+            "description": "Host events (`_platform.*`) that are never delivered here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "host",
+          "os",
+          "session",
+          "unavailable",
+          "unobservable_events"
+        ],
+        "type": "object"
+      },
       "PluginLogLevel": {
         "oneOf": [
           {
@@ -10611,6 +10650,68 @@
         }
       ],
       "x-branchkit-privilege": "input",
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "list_action_types",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "list_action_types_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of `list_action_types`: the action types the plugin registered\nhandlers for. The platform diffs it against the manifest's `action_types`.",
+          "properties": {
+            "action_types": {
+              "default": null,
+              "description": "A plugin that dispatches dynamically registers none and may answer\n`null`.",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "title": "ListActionTypesResult",
+          "type": "object"
+        }
+      },
+      "summary": "SDK handshake: return the action types this plugin registered handlers for. Every SDK answers it itself; the platform calls it at readiness and diffs the answer against the manifest's action_types.",
+      "tags": [
+        {
+          "name": "platform-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "list_methods",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "list_methods_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of `list_methods`: the request methods the plugin registered.\nThe platform reads it at readiness so the settings-HTML validator can\nflag a control that posts to a method with no handler.",
+          "properties": {
+            "methods": {
+              "default": null,
+              "description": "`null` or absent means \"cannot tell\", not \"none\".",
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "title": "ListMethodsResult",
+          "type": "object"
+        }
+      },
+      "summary": "SDK handshake: return the request methods this plugin registered. Every SDK answers it itself; the platform calls it at readiness so the settings-HTML validator can flag a control that posts to a method with no handler.",
+      "tags": [
+        {
+          "name": "platform-to-plugin"
+        }
+      ],
       "x-since": "0.1.0"
     },
     {
@@ -29771,20 +29872,43 @@
         "name": "on_commands_changed_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of `on_commands_changed`, and its SCHEMA, as the request is.",
           "properties": {
             "processed_count": {
-              "format": "int64",
+              "format": "uint",
+              "minimum": 0,
               "type": "integer"
             }
           },
           "required": [
             "processed_count"
           ],
-          "title": "BuildCommandRegistryResult",
+          "title": "OnCommandsChangedResponse",
           "type": "object"
         }
       },
       "summary": "Build phonetic data for speech recognition from the current command set",
+      "tags": [
+        {
+          "name": "platform-to-plugin"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "on_ready",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "platform",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/PlatformProfileResponse",
+            "description": "What this machine can do: `platform.profile`'s answer, kept by the SDK\nso a plugin can ask before it calls."
+          }
+        }
+      ],
+      "summary": "SDK handshake, a notification: every plugin has started, so other plugins' collections are safe to read. Carries the platform profile, which every SDK keeps.",
       "tags": [
         {
           "name": "platform-to-plugin"
@@ -30600,7 +30724,7 @@
         "name": "platform_profile_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "What this machine can do, asked before calling rather than learned from a\nrefusal.",
+          "description": "What this machine can do, asked before calling rather than learned from a\nrefusal.\n\nTitled `PlatformProfileResponse`, the name every SDK already gives\n`platform.profile`'s result: `on_ready` carries the same struct, and one\ntitle makes the two one SDK type (emit-sdk lifts it as a shared\ncomponent) rather than two with the same fields.",
           "properties": {
             "host": {
               "description": "The host process serving host-dependent operations and events.",
@@ -30635,7 +30759,7 @@
             "unavailable",
             "unobservable_events"
           ],
-          "title": "PlatformProfileResult",
+          "title": "PlatformProfileResponse",
           "type": "object"
         }
       },
