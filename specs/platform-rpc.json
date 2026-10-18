@@ -811,6 +811,14 @@
         ],
         "type": "object"
       },
+      "ClientAuth": {
+        "description": "How a client secret reaches the token endpoint (RFC 6749 section 2.3.1).",
+        "enum": [
+          "basic",
+          "post"
+        ],
+        "type": "string"
+      },
       "ClipboardContents": {
         "description": "Clipboard contents read from the OS.",
         "properties": {
@@ -29386,11 +29394,36 @@
           }
         },
         {
+          "name": "client_auth",
+          "required": false,
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ClientAuth"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "How the client secret is sent: `basic` (default, HTTP Basic) or\n`post` (in the form body), as the service requires."
+          }
+        },
+        {
           "name": "client_id",
           "required": true,
           "schema": {
             "description": "Your client ID with this service: one you registered as the plugin's\nauthor, one you obtained by dynamic client registration, or the\nperson's own. A public client: no secret is sent, PKCE protects the\nexchange.",
             "minLength": 1,
+            "type": "string"
+          }
+        },
+        {
+          "name": "client_secret",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "For a service that insists on a client secret: the name of a secret\nin this plugin's drawer, bound to the token endpoint's host. Ask the\nperson for it with `secrets.request_slot` (their own app's secret),\nor store one the service publishes as not secret with `secrets.set`.\nBranchKit sends it to the token endpoint and nowhere else; the plugin\nnever reads it back.",
             "type": "string"
           }
         },
