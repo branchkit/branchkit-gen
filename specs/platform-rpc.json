@@ -97,14 +97,11 @@
           "actions",
           "bounds",
           "children_count",
-          "description",
           "id",
-          "name",
           "native_role",
           "pid",
           "role",
-          "states",
-          "value"
+          "states"
         ],
         "type": "object"
       },
@@ -141,10 +138,6 @@
             "type": "integer"
           }
         },
-        "required": [
-          "id",
-          "pid"
-        ],
         "type": "object"
       },
       "Action": {
@@ -268,10 +261,8 @@
           "enum_values",
           "field_type",
           "fields",
-          "for_host",
           "key",
           "label",
-          "placeholder",
           "required"
         ],
         "type": "object"
@@ -468,7 +459,6 @@
           "action",
           "bounds",
           "id",
-          "name",
           "protected",
           "role"
         ],
@@ -507,11 +497,8 @@
           }
         },
         "required": [
-          "display_name",
           "mechanism",
           "name",
-          "program",
-          "running",
           "scope",
           "starts_automatically"
         ],
@@ -734,7 +721,6 @@
         },
         "required": [
           "address",
-          "device_type",
           "is_connected",
           "is_paired",
           "name"
@@ -763,11 +749,7 @@
           }
         },
         "required": [
-          "calendar",
-          "end",
           "is_all_day",
-          "location",
-          "start",
           "title"
         ],
         "type": "object"
@@ -846,10 +828,7 @@
         },
         "required": [
           "available_types",
-          "content_type",
-          "file_urls",
-          "image_base64",
-          "text"
+          "content_type"
         ],
         "type": "object"
       },
@@ -873,10 +852,7 @@
           }
         },
         "required": [
-          "content_type",
-          "file_urls",
-          "image_base64",
-          "text"
+          "content_type"
         ],
         "type": "object"
       },
@@ -931,9 +907,7 @@
           }
         },
         "required": [
-          "group",
           "id",
-          "on_behalf_of",
           "revision",
           "timestamp_ms",
           "writer"
@@ -964,7 +938,6 @@
           "id",
           "source",
           "speakable",
-          "subtitle",
           "title"
         ],
         "type": "object"
@@ -1091,7 +1064,6 @@
           "canonical",
           "category",
           "clears_tags",
-          "description",
           "is_user",
           "pattern",
           "plugin_name",
@@ -1125,8 +1097,6 @@
         },
         "required": [
           "canonical",
-          "category",
-          "keycode",
           "word"
         ],
         "type": "object"
@@ -1201,10 +1171,7 @@
         },
         "required": [
           "cancels_bridge",
-          "category",
           "clears_tags",
-          "description",
-          "discovery",
           "display_sources",
           "pattern",
           "requires_tags",
@@ -1271,10 +1238,7 @@
           }
         },
         "required": [
-          "email",
-          "name",
-          "organization",
-          "phone"
+          "name"
         ],
         "type": "object"
       },
@@ -1305,9 +1269,7 @@
         "required": [
           "architecture",
           "chip",
-          "core_count",
-          "efficiency_cores",
-          "performance_cores"
+          "core_count"
         ],
         "type": "object"
       },
@@ -1332,7 +1294,6 @@
           }
         },
         "required": [
-          "body",
           "delivered_at",
           "id",
           "title"
@@ -1390,7 +1351,6 @@
         "required": [
           "id",
           "speakable",
-          "subtitle",
           "tag",
           "title"
         ],
@@ -1669,10 +1629,7 @@
         "required": [
           "action",
           "binding",
-          "category",
-          "description",
           "dynamic",
-          "dynamic_owner",
           "id",
           "owner_plugin",
           "pattern",
@@ -1703,8 +1660,6 @@
         },
         "required": [
           "action_type",
-          "denial",
-          "handler",
           "status"
         ],
         "type": "object"
@@ -1735,7 +1690,6 @@
           }
         },
         "required": [
-          "file_system",
           "free_bytes",
           "is_removable",
           "mount_point",
@@ -1769,8 +1723,6 @@
         },
         "required": [
           "label",
-          "max_rpm",
-          "min_rpm",
           "rpm"
         ],
         "type": "object"
@@ -1861,10 +1813,7 @@
           }
         },
         "required": [
-          "driver",
-          "name",
-          "vendor",
-          "vram_bytes"
+          "name"
         ],
         "type": "object"
       },
@@ -1887,10 +1836,7 @@
           }
         },
         "required": [
-          "icon",
           "id",
-          "subtitle",
-          "tag",
           "title"
         ],
         "type": "object"
@@ -1947,7 +1893,6 @@
         "required": [
           "allowed",
           "axes",
-          "ble_uuid",
           "buttons",
           "id",
           "open",
@@ -2043,10 +1988,7 @@
           }
         },
         "required": [
-          "name",
-          "prefix",
-          "secret",
-          "value"
+          "name"
         ],
         "type": "object"
       },
@@ -2167,10 +2109,7 @@
         },
         "required": [
           "dynamic",
-          "dynamic_owner",
           "id",
-          "subtitle",
-          "tag",
           "title"
         ],
         "type": "object"
@@ -2227,14 +2166,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "compacted",
-          "cursor",
-          "limit",
-          "since_ms",
-          "until_ms",
-          "writer"
-        ],
         "type": "object"
       },
       "ListeningPort": {
@@ -2257,9 +2188,7 @@
           }
         },
         "required": [
-          "pid",
           "port",
-          "process_name",
           "protocol"
         ],
         "type": "object"
@@ -2292,7 +2221,6 @@
         },
         "required": [
           "id",
-          "on_behalf_of",
           "timestamp_ms",
           "writer"
         ],
@@ -2315,7 +2243,6 @@
           }
         },
         "required": [
-          "bundle_id",
           "hidden",
           "name",
           "path"
@@ -2442,7 +2369,6 @@
           "children",
           "enabled",
           "index",
-          "shortcut",
           "title"
         ],
         "type": "object"
@@ -2481,11 +2407,8 @@
         },
         "required": [
           "display_name",
-          "ipv4",
-          "ipv6",
           "is_loopback",
           "is_up",
-          "mac_address",
           "name"
         ],
         "type": "object"
@@ -2517,13 +2440,7 @@
           }
         },
         "required": [
-          "album",
-          "app_bundle_id",
-          "artist",
-          "duration",
-          "elapsed",
-          "is_playing",
-          "title"
+          "is_playing"
         ],
         "type": "object"
       },
@@ -2614,10 +2531,6 @@
             "type": "string"
           }
         },
-        "required": [
-          "dispatch",
-          "say"
-        ],
         "type": "object"
       },
       "OutputItem": {
@@ -2666,10 +2579,8 @@
         "required": [
           "action",
           "alt_phrases",
-          "extra",
           "id",
           "phrase",
-          "subtitle",
           "title"
         ],
         "type": "object"
@@ -2779,8 +2690,6 @@
         },
         "required": [
           "channel",
-          "extra",
-          "footer",
           "kind",
           "locale",
           "phrase",
@@ -2861,7 +2770,6 @@
         },
         "required": [
           "count",
-          "group",
           "name",
           "writer"
         ],
@@ -2978,7 +2886,6 @@
         "required": [
           "host",
           "os",
-          "session",
           "unavailable",
           "unobservable_events"
         ],
@@ -3110,12 +3017,8 @@
           }
         },
         "required": [
-          "cpu_percent",
-          "memory_bytes",
           "name",
-          "path",
-          "pid",
-          "user"
+          "pid"
         ],
         "type": "object"
       },
@@ -3177,16 +3080,11 @@
           }
         },
         "required": [
-          "description",
           "display",
           "enum_values",
           "field_type",
           "fields",
-          "for_host",
-          "key",
-          "label",
-          "placeholder",
-          "required"
+          "key"
         ],
         "type": "object"
       },
@@ -3235,7 +3133,6 @@
           "consequence",
           "fields",
           "label",
-          "modes",
           "uses"
         ],
         "type": "object"
@@ -3282,7 +3179,6 @@
         "required": [
           "apply_bias",
           "audio",
-          "bias_strength",
           "id",
           "noise",
           "words"
@@ -3365,9 +3261,7 @@
           }
         },
         "required": [
-          "due_date",
           "is_completed",
-          "list_name",
           "priority",
           "title"
         ],
@@ -3542,7 +3436,6 @@
           "items",
           "matched",
           "next_words",
-          "owner_plugin",
           "requires_tags",
           "scoped_prefixes",
           "scoped_tags",
@@ -3571,8 +3464,7 @@
         },
         "required": [
           "gated_partial_seen",
-          "winner",
-          "winning_pattern"
+          "winner"
         ],
         "type": "object"
       },
@@ -3598,11 +3490,9 @@
           }
         },
         "required": [
-          "bundle_id",
           "is_active",
           "is_hidden",
-          "name",
-          "pid"
+          "name"
         ],
         "type": "object"
       },
@@ -3650,7 +3540,6 @@
           }
         },
         "required": [
-          "detail",
           "mechanism",
           "state"
         ],
@@ -3908,7 +3797,6 @@
           }
         },
         "required": [
-          "folder",
           "name"
         ],
         "type": "object"
@@ -3978,7 +3866,6 @@
         },
         "required": [
           "engine",
-          "error",
           "running",
           "voices"
         ],
@@ -4056,8 +3943,7 @@
           "kind",
           "modified",
           "name",
-          "path",
-          "size"
+          "path"
         ],
         "type": "object"
       },
@@ -4080,8 +3966,6 @@
           }
         },
         "required": [
-          "accent_color",
-          "highlight_color",
           "increase_contrast",
           "reduce_motion",
           "reduce_transparency"
@@ -4107,10 +3991,7 @@
           }
         },
         "required": [
-          "authorized",
-          "id",
-          "name",
-          "vendor"
+          "name"
         ],
         "type": "object"
       },
@@ -4215,7 +4096,6 @@
           }
         },
         "required": [
-          "group",
           "kind",
           "label",
           "name"
@@ -4269,7 +4149,6 @@
           }
         },
         "required": [
-          "detail",
           "op",
           "reason"
         ],
@@ -4294,11 +4173,7 @@
           }
         },
         "required": [
-          "manufacturer",
-          "name",
-          "product_id",
-          "serial_number",
-          "vendor_id"
+          "name"
         ],
         "type": "object"
       },
@@ -4365,14 +4240,11 @@
           }
         },
         "required": [
-          "alpha",
           "bounds",
           "display_id",
           "is_focused",
           "is_fullscreen",
           "is_minimized",
-          "subrole",
-          "title",
           "window_id"
         ],
         "type": "object"
@@ -4486,12 +4358,8 @@
         "required": [
           "app_id",
           "app_name",
-          "desk",
           "h",
           "id",
-          "is_fullscreen",
-          "is_minimized",
-          "pid",
           "source",
           "space_ids",
           "title",
@@ -4543,7 +4411,6 @@
         },
         "required": [
           "access",
-          "deny_reason",
           "fields",
           "introducer",
           "merge",
