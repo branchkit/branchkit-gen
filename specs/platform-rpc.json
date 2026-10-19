@@ -2029,6 +2029,20 @@
         ],
         "type": "object"
       },
+      "IndicatorState": {
+        "description": "What the indicator shows.",
+        "enum": [
+          "idle",
+          "input_text",
+          "input_action",
+          "listening",
+          "standby",
+          "processing",
+          "speaking",
+          "loading"
+        ],
+        "type": "string"
+      },
       "InputSource": {
         "description": "An available keyboard input source.",
         "properties": {
@@ -6639,6 +6653,44 @@
       "x-since": "0.1.0"
     },
     {
+      "name": "artifact.download",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "ref",
+          "required": true,
+          "schema": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "artifact_download_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OkResult",
+          "type": "object"
+        }
+      },
+      "summary": "Download one of the caller's own declared artifacts (ref: <plugin>/<artifact>) on the platform's downloader; progress is published to _platform.model_download",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-since": "0.1.0"
+    },
+    {
       "name": "bindings.propose",
       "paramStructure": "by-name",
       "params": [
@@ -9529,6 +9581,44 @@
           "name": "hud"
         }
       ],
+      "x-since": "0.1.0"
+    },
+    {
+      "name": "indicator.set",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "state",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/IndicatorState"
+          }
+        }
+      ],
+      "result": {
+        "name": "indicator_set_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OkResult",
+          "type": "object"
+        }
+      },
+      "summary": "Show what input is doing on the recording indicator (menu bar or tray icon, and the floating pill): idle, capturing text or an action, listening, asleep, processing, speaking or loading",
+      "tags": [
+        {
+          "name": "misc"
+        }
+      ],
+      "x-branchkit-privilege": "microphone",
       "x-since": "0.1.0"
     },
     {
@@ -33941,8 +34031,9 @@
     {
       "admits_events": [],
       "description": "Capture microphone audio through a platform pipeline",
-      "method_count": 1,
+      "method_count": 2,
       "methods": [
+        "indicator.set",
         "pipelines.audio_level"
       ],
       "name": "microphone",
