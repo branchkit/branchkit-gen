@@ -3343,6 +3343,7 @@
             "type": "boolean"
           },
           "clears_tags": {
+            "description": "The tags this resolve cleared, on the same terms as `sets_tags`.",
             "items": {
               "type": "string"
             },
@@ -3400,6 +3401,7 @@
             "type": "array"
           },
           "sets_tags": {
+            "description": "The tags this resolve set: what its commit applied, not only what the\ncommand asked for, so a write the policy chain refused, or one a hold\nended before, is absent. A preview reports what committing would set.",
             "items": {
               "type": "string"
             },
@@ -8409,6 +8411,7 @@
               "type": "boolean"
             },
             "clears_tags": {
+              "description": "The tags this resolve cleared, on the same terms as `sets_tags`.",
               "items": {
                 "type": "string"
               },
@@ -8466,6 +8469,7 @@
               "type": "array"
             },
             "sets_tags": {
+              "description": "The tags this resolve set: what its commit applied, not only what the\ncommand asked for, so a write the policy chain refused, or one a hold\nended before, is absent. A preview reports what committing would set.",
               "items": {
                 "type": "string"
               },
