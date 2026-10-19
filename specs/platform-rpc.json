@@ -8718,45 +8718,6 @@
       "x-since": "0.1.0"
     },
     {
-      "name": "control.signal",
-      "paramStructure": "by-name",
-      "params": [
-        {
-          "name": "signal",
-          "required": true,
-          "schema": {
-            "description": "Raw control-stream signal string (e.g. \"open hud\", \"hide discovery\").\nForwarded verbatim to the Swift shell via the platform's control stream.",
-            "minLength": 1,
-            "type": "string"
-          }
-        }
-      ],
-      "result": {
-        "name": "control_signal_result",
-        "schema": {
-          "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
-          "properties": {
-            "ok": {
-              "type": "boolean"
-            }
-          },
-          "required": [
-            "ok"
-          ],
-          "title": "OkResult",
-          "type": "object"
-        }
-      },
-      "summary": "Send a control signal to the Swift shell via the control stream",
-      "tags": [
-        {
-          "name": "control"
-        }
-      ],
-      "x-since": "0.1.0"
-    },
-    {
       "name": "discovery.closed",
       "paramStructure": "by-name",
       "params": [],
@@ -8805,12 +8766,8 @@
         "name": "dispatch_result",
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
-          "description": "Dispatch response. The wire shape varies by branch:\n\n  - Success:     `{ \"status\": \"ok\", \"control_message\": …, \"handler\": …, \"result\": … }`\n  - Not handled: `{ \"status\": \"not_handled\", \"handler\": … }`\n  - Error:       `{ \"status\": \"error\", \"handler\": …, \"message\": … }`\n  - Denied:      `{ \"status\": \"denied\", \"message\": … }`\n\n`result` carries the structured payload from the handling plugin's\n`on_action` response — opaque to the platform, piped through as-is.",
+          "description": "Dispatch response. The wire shape varies by branch:\n\n  - Success:     `{ \"status\": \"ok\", \"handler\": …, \"result\": … }`\n  - Not handled: `{ \"status\": \"not_handled\", \"handler\": … }`\n  - Error:       `{ \"status\": \"error\", \"handler\": …, \"message\": … }`\n  - Denied:      `{ \"status\": \"denied\", \"message\": … }`\n\n`result` carries the structured payload from the handling plugin's\n`on_action` response — opaque to the platform, piped through as-is.",
           "properties": {
-            "control_message": {
-              "description": "Control message to forward to the Swift host (if any).\nPresent on `status == \"ok\"`; absent on `status == \"error\"`.",
-              "type": "string"
-            },
             "handler": {
               "description": "Plugin that handled the action. Present on `status == \"ok\"`.",
               "type": "string"
@@ -29783,11 +29740,6 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "control_message": {
-              "default": "",
-              "description": "Control message to forward to the Swift host (e.g., 'show commands').",
-              "type": "string"
-            },
             "result": {
               "description": "Structured result payload. Opaque to the platform — piped through\nto the dispatch caller as-is. Plugins use this to return data from\naction handlers (e.g., computed values, confirmation details)."
             },
@@ -31759,10 +31711,6 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "control_message": {
-              "description": "Control message to forward to the Swift host\n(always `\"close hud\"` here).",
-              "type": "string"
-            },
             "item_id": {
               "description": "Id of the picked item (from the original `HUDItem.id`).",
               "type": "string"
@@ -31778,8 +31726,7 @@
           "required": [
             "ok",
             "item_id",
-            "reset_engine",
-            "control_message"
+            "reset_engine"
           ],
           "title": "SelectionPickResult",
           "type": "object"
@@ -31897,10 +31844,6 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
-            "control_message": {
-              "description": "Control message to forward to the Swift host\n(e.g. \"hide discovery\", \"hide hud\"), if any.",
-              "type": "string"
-            },
             "ok": {
               "type": "boolean"
             },
