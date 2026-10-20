@@ -3182,6 +3182,11 @@
             ],
             "default": null
           },
+          "structured": {
+            "default": false,
+            "description": "When set, the item decodes through the live STRUCTURED grammar: the\npattern DAG and union a starting recognition pipeline is seeded with\n(the `pipelines.grammar` full export), so a word decodes only where a\ncommand places it, exactly as in the live stage. Off = the flat live\nunion. The grammar is the platform's; the plugin only opts in. Ignored\nwhen `words` is given. Bias does not apply on this path: structure\nsupersedes it, as in the live stage.",
+            "type": "boolean"
+          },
           "words": {
             "default": [],
             "items": {
@@ -3195,12 +3200,18 @@
           "audio",
           "id",
           "noise",
+          "structured",
           "words"
         ],
         "type": "object"
       },
       "RedecodeLine": {
         "properties": {
+          "decode_ms": {
+            "description": "Wall-clock time the recognizer spent decoding this item, in\nmilliseconds (model load excluded). Absent when the item failed.",
+            "format": "double",
+            "type": "number"
+          },
           "error": {
             "type": "string"
           },
@@ -3210,6 +3221,14 @@
           "text": {
             "default": "",
             "type": "string"
+          },
+          "word_margins": {
+            "description": "Per-word confidence margins of the decoded words, in order: how far each\nword's best token led its runner-up. The weakest is the decode's least\ncertain word. Absent when the recognizer reports none.",
+            "items": {
+              "format": "double",
+              "type": "number"
+            },
+            "type": "array"
           }
         },
         "required": [
