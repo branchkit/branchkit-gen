@@ -30388,6 +30388,10 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "grammar_version": {
+              "description": "Content version of the structured grammar in that payload (only with\n`full: true` and the structured grammar on): the same version\n`recognition.redecode` reports for items decoded under it.",
+              "type": "string"
+            },
             "vocabulary_update": {
               "description": "Full seed payload (only with `full: true`)."
             },
@@ -31346,6 +31350,10 @@
         "schema": {
           "$schema": "https://json-schema.org/draft/2020-12/schema",
           "properties": {
+            "grammar_version": {
+              "description": "Content version of the structured grammar the items that asked for it\nwere decoded under (`structured`). The live grammar changes as plugins\npush vocabulary, so a caller caching verdicts keys them by this, not by\na grammar it fetched earlier. Equal to `pipelines.grammar`'s\n`grammar_version` for the same grammar. Empty when no item was\ndecoded structured.",
+              "type": "string"
+            },
             "lines": {
               "items": {
                 "$ref": "#/$defs/RedecodeLine"
