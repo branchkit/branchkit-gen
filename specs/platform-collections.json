@@ -778,6 +778,18 @@
           "key": "protected_reads_offered",
           "label": "",
           "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "paired_extensions",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "paired_extensions_offered",
+          "label": "",
+          "required": false
         }
       ],
       "id_strategy": {
