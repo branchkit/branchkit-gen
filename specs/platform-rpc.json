@@ -31317,6 +31317,15 @@
           }
         },
         {
+          "name": "language",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "The language a dictation stage's probe decodes in, e.g. `\"en\"`, as the\nlive stage's `--language`. Absent = the stage's default. A command\nstage's probe ignores it.",
+            "type": "string"
+          }
+        },
+        {
           "name": "max_active",
           "required": false,
           "schema": {
