@@ -1967,6 +1967,27 @@
       ],
       "type": "object"
     },
+    "PluginSupport": {
+      "additionalProperties": false,
+      "description": "Where a plugin's users get help (`PluginManifest::support`).",
+      "properties": {
+        "email": {
+          "description": "An address that takes problem reports. The report page opens a\nmessage to it with the report ID filled in; the person attaches the\nreport file.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "description": "An `https://` page where people report problems with the plugin: an\nissue tracker or a form. The report page opens it in the browser.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
     "PreferencesConfig": {
       "additionalProperties": false,
       "description": "`requires.preferences`: other apps' settings domains, each\n`<store>:<domain>` in the store its OS keeps settings in:\n`defaults:com.apple.dock` (macOS), `gsettings:org.gnome.desktop.interface`\n(Linux; a relocatable schema adds `:<path>`), `registry:Software\\7-Zip`\n(Windows: a key under HKEY_CURRENT_USER, covering the keys below it).\nA plugin for several OSes lists each one's domains; each shows on its\nown OS. Security and network settings, and settings naming a program\nsomething else runs, are refused at load.",
@@ -3348,6 +3369,17 @@
       },
       "description": "External selection surfaces:\nviews this plugin (or its remote client) renders itself — a command\npalette, a window picker — whose ADDRESSING the platform owns. The\nsurface's lifecycle is its rows collection's contents: rows present ⇒\nthe platform sets the surface's exclusive `_surface.<plugin>.<name>`\ntag, assigns pointing-deck codewords, and mints the matchable\ncollections; rows drained ⇒ everything clears. Assignments flow back\nthrough the platform-owned `…_assign` collection the client\nsubscribes to. Commands bind the surface with a `<row:@name>` tail\ncapture.",
       "type": "object"
+    },
+    "support": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PluginSupport"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Where this plugin's users get help. When a person saves a problem\nreport about this plugin (Help > Report a problem), BranchKit sends\nthem here instead of to the BranchKit team, with the report ID and\nits version filled in. Declare `url`, `email` or both; without it,\nreports about the plugin go to the BranchKit team."
     },
     "version": {
       "default": "",
