@@ -33485,7 +33485,7 @@
       "writers": "anyone_who_declares"
     },
     {
-      "description": "How often BranchKit checks for plugin updates, and when it last did. One record `{daily, last_checked}`. daily true (the default, also with no record): at most one automatic check a day, after plugins load. false: only when the person asks (Plugins › Check for Updates). A check asks GitHub for the latest release of each installed plugin and refreshes the Community plugins list. last_checked: unix seconds.",
+      "description": "How often BranchKit checks for plugin updates, and when it last did. One record `{daily, last_checked, last_attempt}`. daily true (the default, also with no record): at most one automatic check a day, after plugins load. false: only when the person asks (Plugins › Check for Updates). A check asks GitHub for the latest release of each installed plugin and refreshes the Community plugins list. last_checked: unix seconds of the last check that reached its sources; last_attempt: of the last try, one that reached none (offline) being retried no sooner than an hour.",
       "name": "_platform.update_check",
       "preset": "data",
       "writers": "platform_only"
