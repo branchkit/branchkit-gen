@@ -1852,6 +1852,13 @@
         }
       ]
     },
+    "PageLayout": {
+      "description": "The shell layouts a page may declare. Closed: plugins choose,\nthe platform draws.",
+      "enum": [
+        "workbench"
+      ],
+      "type": "string"
+    },
     "Platform": {
       "enum": [
         "macos",
@@ -1878,17 +1885,17 @@
       "additionalProperties": {
         "$ref": "#/$defs/MethodDecl"
       },
-      "description": "Methods a plugin declares it implements (platform → plugin RPC).\n\n`settings_tabs` and `setup_steps` are named fields because they carry structured metadata\nand are semantically different from method declarations. All other method names are open-ended\n— plugins can declare any method name without platform code changes.",
+      "description": "Methods a plugin declares it implements (platform → plugin RPC).\n\n`pages` and `setup_steps` are named fields because they carry structured metadata\nand are semantically different from method declarations. All other method names are open-ended\n— plugins can declare any method name without platform code changes.",
       "properties": {
-        "settings_tabs": {
-          "description": "Settings tabs provided by this plugin (structured metadata, not a method declaration).",
+        "pages": {
+          "description": "The plugin's own pages, shown in its tab strip in BranchKit\n(structured metadata, not a method declaration).",
           "items": {
-            "$ref": "#/$defs/PluginSettingsTabDecl"
+            "$ref": "#/$defs/PluginPageDecl"
           },
           "type": "array"
         },
         "setup_steps": {
-          "description": "Steps this plugin adds to the Setup page — the checklist of what\nBranchKit needs before it works (permissions, a model to download, a\ndevice to pair). Shown after the platform's own steps, in plugin load\norder. Each step's body is one of this plugin's settings tabs; the\nplugin reports each step's state with `plugin.report_setup`.",
+          "description": "Steps this plugin adds to the Setup page — the checklist of what\nBranchKit needs before it works (permissions, a model to download, a\ndevice to pair). Shown after the platform's own steps, in plugin load\norder. Each step's body is one of this plugin's pages; the\nplugin reports each step's state with `plugin.report_setup`.",
           "items": {
             "$ref": "#/$defs/PluginSetupStepDecl"
           },
@@ -1897,9 +1904,9 @@
       },
       "type": "object"
     },
-    "PluginSettingsTabDecl": {
+    "PluginPageDecl": {
       "additionalProperties": false,
-      "description": "A settings tab declared in the plugin manifest.",
+      "description": "One of the plugin's own pages, declared in `implements.pages`.",
       "properties": {
         "key": {
           "type": "string"
@@ -1910,16 +1917,16 @@
         "layout": {
           "anyOf": [
             {
-              "$ref": "#/$defs/SettingsTabLayout"
+              "$ref": "#/$defs/PageLayout"
             },
             {
               "type": "null"
             }
           ],
-          "description": "How the shell frames this tab. Absent = the ordinary page: rail,\nthe Plugins sidebar, the pane. `\"workbench\"` = the tab is a place you\ngo into and come back from: the sidebar collapses at every width and\na \"‹ Plugins\" back button sits atop the pane, the treatment the shell\nalready gives every page at window widths. For dense two-pane tabs\n(a command editor, a calibration bench) that need the room. The\nplatform owns the vocabulary; a plugin picks from it."
+          "description": "How the shell frames this page. Absent = the ordinary page: rail,\nthe Plugins sidebar, the pane. `\"workbench\"` = the page is a place you\ngo into and come back from: the sidebar collapses at every width and\na \"‹ Plugins\" back button sits atop the pane, the treatment the shell\nalready gives every page at window widths. For dense two-pane pages\n(a command editor, a calibration bench) that need the room. The\nplatform owns the vocabulary; a plugin picks from it."
         },
         "reads": {
-          "description": "Shared store names this tab needs for rendering (e.g. [\"commands\", \"corrections\"]).",
+          "description": "Shared store names this page needs for rendering (e.g. [\"commands\", \"corrections\"]).",
           "items": {
             "type": "string"
           },
@@ -1934,7 +1941,7 @@
     },
     "PluginSetupStepDecl": {
       "additionalProperties": false,
-      "description": "One step a plugin adds to the Setup page.\n\nThe platform owns the page: where the step sits, the \"N of M done\" count,\nwhether it starts folded or open. The plugin owns what the step is about:\nits body is one of the plugin's own settings tabs, rendered in the same\nsandboxed frame as on the plugin's page, and its state is whatever the\nplugin last reported with `plugin.report_setup`.",
+      "description": "One step a plugin adds to the Setup page.\n\nThe platform owns the page: where the step sits, the \"N of M done\" count,\nwhether it starts folded or open. The plugin owns what the step is about:\nits body is one of the plugin's own pages, rendered in the same\nsandboxed frame as on the plugin's page, and its state is whatever the\nplugin last reported with `plugin.report_setup`.",
       "properties": {
         "key": {
           "description": "The step's id, unique within this plugin. `plugin.report_setup`\nnames the step by this key. Lowercase letters, digits, `-` and `_`.",
@@ -1949,7 +1956,7 @@
           "type": "boolean"
         },
         "tab": {
-          "description": "The settings tab that is the step's body: the `key` of one of this\nplugin's own `implements.settings_tabs`. A plugin can give setup a\nsmall tab of its own or reuse an existing one.",
+          "description": "The page that is the step's body: the `key` of one of this\nplugin's own `implements.pages`. A plugin can give setup a\nsmall page of its own or reuse an existing one.",
           "type": "string"
         }
       },
@@ -2384,13 +2391,6 @@
       ],
       "type": "object"
     },
-    "SettingsTabLayout": {
-      "description": "The shell layouts a settings tab may declare. Closed: plugins choose,\nthe platform draws.",
-      "enum": [
-        "workbench"
-      ],
-      "type": "string"
-    },
     "SocketsConfig": {
       "additionalProperties": false,
       "description": "Platform-bound sockets for a plugin (see the `sockets` manifest field).",
@@ -2600,7 +2600,7 @@
         },
         {
           "const": "form",
-          "description": "Generic per-field settings form: current value, shipped default,\nchanged-indicator, per-field revert. Default for `settings` —\nrenderable because the preset requires every field declared with a\n`default`. A plugin wanting richer UI keeps `settings_tabs` as the\nescape hatch.",
+          "description": "Generic per-field settings form: current value, shipped default,\nchanged-indicator, per-field revert. Default for `settings` —\nrenderable because the preset requires every field declared with a\n`default`. A plugin wanting richer UI keeps `pages` as the\nescape hatch.",
           "type": "string"
         }
       ]

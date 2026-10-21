@@ -124,18 +124,18 @@ func (c *ConsumedDispatch) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// PluginImplements parses the "implements" block. settings_tabs and
+// PluginImplements parses the "implements" block. pages and
 // setup_steps are the well-known keys; everything else is a method
 // declaration whose presence (regardless of value) signals that the plugin
 // handles that JSON-RPC method.
 type PluginImplements struct {
-	SettingsTabs []SettingsTab
-	SetupSteps   []SetupStep
-	Methods      map[string]json.RawMessage
+	Pages      []Page
+	SetupSteps []SetupStep
+	Methods    map[string]json.RawMessage
 }
 
 // SetupStep is one entry in implements.setup_steps: a step the plugin adds
-// to the Setup page, whose body is one of its own settings tabs.
+// to the Setup page, whose body is one of its own pages.
 type SetupStep struct {
 	Key      string `json:"key"`
 	Label    string `json:"label"`
@@ -143,8 +143,8 @@ type SetupStep struct {
 	Required bool   `json:"required"`
 }
 
-// SettingsTab is one entry in implements.settings_tabs.
-type SettingsTab struct {
+// Page is one entry in implements.pages: one of the plugin's own pages.
+type Page struct {
 	Key   string `json:"key"`
 	Label string `json:"label"`
 }
@@ -156,7 +156,7 @@ func (p *PluginImplements) HasMethod(name string) bool {
 }
 
 // UnmarshalJSON splits the open-ended implements block into the
-// settings_tabs list and a generic method map.
+// pages list and a generic method map.
 func (p *PluginImplements) UnmarshalJSON(data []byte) error {
 	if len(data) == 0 || string(data) == "null" {
 		return nil
@@ -168,8 +168,11 @@ func (p *PluginImplements) UnmarshalJSON(data []byte) error {
 	p.Methods = make(map[string]json.RawMessage, len(raw))
 	for k, v := range raw {
 		if k == "settings_tabs" {
-			if err := json.Unmarshal(v, &p.SettingsTabs); err != nil {
-				return fmt.Errorf("implements.settings_tabs: %w", err)
+			return fmt.Errorf("implements.settings_tabs was renamed implements.pages (same entries)")
+		}
+		if k == "pages" {
+			if err := json.Unmarshal(v, &p.Pages); err != nil {
+				return fmt.Errorf("implements.pages: %w", err)
 			}
 			continue
 		}

@@ -177,16 +177,16 @@ func TestValidate_settingsTabKey(t *testing.T) {
 	}
 	for _, c := range cases {
 		m := minimalValid()
-		m.Implements.SettingsTabs = []SettingsTab{{Key: c.key, Label: "X"}}
+		m.Implements.Pages = []Page{{Key: c.key, Label: "X"}}
 		got := Validate(m, nil)
 		have := false
 		for _, i := range got {
-			if strings.HasPrefix(i.Field, "implements.settings_tabs") && i.Severity == SeverityError {
+			if strings.HasPrefix(i.Field, "implements.pages") && i.Severity == SeverityError {
 				have = true
 			}
 		}
 		if have != c.wantHave {
-			t.Errorf("settings_tabs key=%q: got error=%v, want %v", c.key, have, c.wantHave)
+			t.Errorf("pages key=%q: got error=%v, want %v", c.key, have, c.wantHave)
 		}
 	}
 }
@@ -194,7 +194,7 @@ func TestValidate_settingsTabKey(t *testing.T) {
 func TestValidate_setupSteps(t *testing.T) {
 	errorsFor := func(steps []SetupStep) int {
 		m := minimalValid()
-		m.Implements.SettingsTabs = []SettingsTab{{Key: "setup", Label: "Setup"}}
+		m.Implements.Pages = []Page{{Key: "setup", Label: "Setup"}}
 		m.Implements.SetupSteps = steps
 		n := 0
 		for _, i := range Validate(m, nil) {
@@ -492,5 +492,18 @@ func TestValidDisplayRoles_matchesManifestSchema(t *testing.T) {
 		if !fromSchema[role] {
 			t.Errorf("validDisplayRoles has %q not present in schema", role)
 		}
+	}
+}
+
+// The old key is refused by name rather than read as a method declaration,
+// which would leave the plugin with no pages and no hint why.
+func TestImplements_settingsTabsRenamedToPages(t *testing.T) {
+	var p PluginImplements
+	err := json.Unmarshal([]byte(`{"settings_tabs":[{"key":"a","label":"A"}]}`), &p)
+	if err == nil || !strings.Contains(err.Error(), "implements.pages") {
+		t.Fatalf("want an error naming implements.pages, got %v", err)
+	}
+	if err := json.Unmarshal([]byte(`{"pages":[{"key":"a","label":"A"}]}`), &p); err != nil || len(p.Pages) != 1 {
+		t.Fatalf("pages: err=%v pages=%v", err, p.Pages)
 	}
 }

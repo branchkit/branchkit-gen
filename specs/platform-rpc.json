@@ -31470,7 +31470,7 @@
           "name": "tab_key",
           "required": true,
           "schema": {
-            "description": "Which settings tab to render (from manifest implements.settings_tabs[].key).",
+            "description": "Which page to render (from manifest implements.pages[].key).",
             "type": "string"
           }
         },

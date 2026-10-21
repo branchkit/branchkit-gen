@@ -220,26 +220,25 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 	// settings_tab (singular) is deprecated
 	if m.SettingsTab != nil {
 		add(SeverityWarn, "settings_tab",
-			"settings_tab (singular) is deprecated — use implements.settings_tabs instead")
+			"settings_tab (singular) is deprecated — use implements.pages instead")
 	}
 
-	// settings_tabs[].key charset (security-relevant — flows into URLs and HTML attrs)
-	for i, tab := range m.Implements.SettingsTabs {
+	// pages[].key charset (security-relevant — flows into URLs and HTML attrs)
+	for i, tab := range m.Implements.Pages {
 		if !tabKeyRegex.MatchString(tab.Key) {
 			add(SeverityError,
-				fmt.Sprintf("implements.settings_tabs[%d].key", i),
+				fmt.Sprintf("implements.pages[%d].key", i),
 				fmt.Sprintf(
-					"settings_tabs key %q must match [a-z0-9_-]+ (lowercase, digits, hyphens, underscores). "+
+					"page key %q must match [a-z0-9_-]+ (lowercase, digits, hyphens, underscores). "+
 						"Other characters are rejected because the key flows into HTML attributes and URL paths.",
 					tab.Key))
 		}
 	}
 
-	// setup_steps: each step's body is one of the plugin's own settings
-	// tabs, and plugin.report_setup names a step by its key — so a missing
+	// setup_steps: each step's body is one of the plugin's own pages, and plugin.report_setup names a step by its key — so a missing
 	// tab or a repeated key is an error, the same as at load.
 	tabs := map[string]bool{}
-	for _, tab := range m.Implements.SettingsTabs {
+	for _, tab := range m.Implements.Pages {
 		tabs[tab.Key] = true
 	}
 	stepKeys := map[string]bool{}
@@ -259,7 +258,7 @@ func Validate(m *PluginManifest, raw map[string]any) []Issue {
 		}
 		if !tabs[step.Tab] {
 			add(SeverityError, field+".tab",
-				fmt.Sprintf("setup step %q names tab %q, which is not one of this plugin's implements.settings_tabs — the step's body is that tab", step.Key, step.Tab))
+				fmt.Sprintf("setup step %q names tab %q, which is not one of this plugin's implements.pages — the step's body is that page", step.Key, step.Tab))
 		}
 	}
 

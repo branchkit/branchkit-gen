@@ -98,7 +98,7 @@ branchkit-gen validate --no-drift ./my-plugin
 
 `validate` runs two layers of checks. Errors exit non-zero so CI can gate on a clean run.
 
-**Manifest checks** mirror the rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `settings_tabs` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields.
+**Manifest checks** mirror the rules the BranchKit runtime applies at plugin load time: `id` and `action_prefix` format, `min_api_version` semver, `pages` key safety, `dispatch_via` consistency, well-formed `action_types` (valid `field_type`, `enum` declarations carry `enum_values`), and informational notes for unrecognized top-level fields.
 
 **Drift checks** compare the plugin against the platform's OpenRPC spec, embedded in the binary at build time:
 
