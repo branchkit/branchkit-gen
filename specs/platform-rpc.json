@@ -21341,11 +21341,14 @@
           "type": "object"
         }
       },
-      "summary": "Open a URL or file path with the default handler",
+      "summary": "Open a URL or file path with the default handler. A plugin may open a web address only for a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "filesystem",
       "x-since": "0.1.0"
@@ -21380,11 +21383,14 @@
           "type": "object"
         }
       },
-      "summary": "Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused",
+      "summary": "Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused. A plugin may open a web address only for a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
@@ -21427,11 +21433,14 @@
           "type": "object"
         }
       },
-      "summary": "Open a URL or path with a specific application",
+      "summary": "Open a URL or path with a specific application. A plugin may open a web address only for a host it declares in requires.network that the user has switched on",
       "tags": [
         {
           "name": "native"
         }
+      ],
+      "x-branchkit-emits": [
+        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "apps.control",
       "x-since": "0.1.0"
