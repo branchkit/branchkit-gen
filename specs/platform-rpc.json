@@ -21439,7 +21439,7 @@
       "x-branchkit-emits": [
         "plugin.network_connect"
       ],
-      "x-branchkit-privilege": "apps.control",
+      "x-branchkit-privilege": "filesystem",
       "x-since": "0.1.0"
     },
     {
@@ -33598,7 +33598,7 @@
     {
       "admits_events": [],
       "description": "Launch, quit, activate, and hide applications",
-      "method_count": 12,
+      "method_count": 11,
       "methods": [
         "native.activate_app",
         "native.force_quit_app",
@@ -33607,7 +33607,6 @@
         "native.new_app_window",
         "native.open_app_settings",
         "native.open_url",
-        "native.open_with_app",
         "native.quit_app",
         "native.set_app_hidden",
         "native.unhide_app",
@@ -33814,8 +33813,8 @@
     },
     {
       "admits_events": [],
-      "description": "File operations — trash, search, tags, reveal",
-      "method_count": 54,
+      "description": "File operations — open files and links in any app (which may then reach the internet), trash, search, tags, reveal",
+      "method_count": 55,
       "methods": [
         "native.app_support_directory",
         "native.clear_file_quarantine",
@@ -33852,6 +33851,7 @@
         "native.mount_points",
         "native.move_file",
         "native.open_target",
+        "native.open_with_app",
         "native.pdf_extract_text",
         "native.pdf_page_count",
         "native.quick_look",
