@@ -30514,6 +30514,15 @@
             "default": {},
             "type": "object"
           }
+        },
+        {
+          "name": "record_to",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Record this run's input audio: a folder, relative to the caller's own\ndata dir, that receives one 16 kHz mono 16-bit WAV per span of audio\n(audio start to audio stop) the run's first consumer stage is given,\nand a line per WAV in its `manifest.jsonl`: `{file, started_utc,\nduration_ms, pipeline}`. Keeping, labelling and deleting the\nrecordings is the caller's. Plugins only (it writes the caller's data\ndir). Absent = nothing is recorded.",
+            "type": "string"
+          }
         }
       ],
       "result": {
