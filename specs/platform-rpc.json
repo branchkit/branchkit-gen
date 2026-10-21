@@ -21341,14 +21341,11 @@
           "type": "object"
         }
       },
-      "summary": "Open a URL or file path with the default handler. A plugin may open a web address only for a host it declares in requires.network that the user has switched on",
+      "summary": "Open a URL or file path with the default handler",
       "tags": [
         {
           "name": "native"
         }
-      ],
-      "x-branchkit-emits": [
-        "plugin.network_connect"
       ],
       "x-branchkit-privilege": "filesystem",
       "x-since": "0.1.0"
