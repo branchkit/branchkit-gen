@@ -981,6 +981,28 @@
       },
       "writers": "anyone_who_declares"
     },
+    "_platform.update_check": {
+      "description": "How often BranchKit checks for plugin updates, and when it last did. One record `{daily, last_checked}`. daily true (the default, also with no record): at most one automatic check a day, after plugins load. false: only when the person asks (Plugins › Check for Updates). A check asks GitHub for the latest release of each installed plugin and refreshes the Community plugins list. last_checked: unix seconds.",
+      "feeds_matching": {
+        "type": "none"
+      },
+      "fields": [
+        {
+          "field_type": "boolean",
+          "key": "daily",
+          "label": "",
+          "required": true
+        },
+        {
+          "field_type": "number",
+          "key": "last_checked",
+          "label": "",
+          "required": false
+        }
+      ],
+      "preset": "data",
+      "writers": "platform_only"
+    },
     "_platform.user_collection_schemas": {
       "description": "User-created collection schema definitions.",
       "feeds_matching": {
