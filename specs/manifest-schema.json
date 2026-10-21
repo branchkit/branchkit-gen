@@ -3035,7 +3035,7 @@
       ]
     },
     "icon_color": {
-      "description": "The colour the settings draw your icon in, by NAME from the\nplatform's twelve (every legal value is in this schema's `enum`):\nthe tile behind it or the glyph itself, whichever icon style the user\nhas chosen in the View menu; the default style draws no colour at\nall. A name, never a value, for the same reason `icon` is one.\nUnknown or absent names fall back to a colour picked from your\nplugin's id, so two plugins with no colour still differ.",
+      "description": "The colour the settings draw your icon in, by NAME from the\nplatform's twelve (every legal value is in this schema's `enum`):\nthe tile behind it or the glyph itself, whichever icon style the user\nhas chosen in the View menu (a tinted tile by default; the Plain\nstyle draws no colour). A name, never a value, for the same reason `icon` is one.\nUnknown or absent names fall back to a colour picked from your\nplugin's id, so two plugins with no colour still differ.",
       "enum": [
         null,
         "amber",
