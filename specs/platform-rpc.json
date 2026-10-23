@@ -2879,7 +2879,7 @@
             "type": "string"
           },
           "session": {
-            "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`gnome` or `other_wayland`. Absent on other systems.",
+            "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`hyprland`, `gnome` or `other_wayland`. Absent on other systems.",
             "type": "string"
           },
           "unavailable": {
@@ -13757,7 +13757,7 @@
           "type": "object"
         }
       },
-      "summary": "Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible)",
+      "summary": "Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible); nor on Hyprland (Hyprland tiles windows; there is no cascade)",
       "tags": [
         {
           "name": "native"
@@ -18249,7 +18249,7 @@
           "type": "object"
         }
       },
-      "summary": "Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -18714,7 +18714,7 @@
           "type": "object"
         }
       },
-      "summary": "Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -20106,7 +20106,7 @@
           "type": "object"
         }
       },
-      "summary": "Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -24123,7 +24123,7 @@
           "type": "object"
         }
       },
-      "summary": "Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -28267,7 +28267,7 @@
           "type": "object"
         }
       },
-      "summary": "Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -28306,7 +28306,7 @@
           "type": "object"
         }
       },
-      "summary": "Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)",
+      "summary": "Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)",
       "tags": [
         {
           "name": "native"
@@ -30711,7 +30711,7 @@
               "type": "string"
             },
             "session": {
-              "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`gnome` or `other_wayland`. Absent on other systems.",
+              "description": "On Linux, the desktop session the window tools drive: `x11`, `sway`,\n`hyprland`, `gnome` or `other_wayland`. Absent on other systems.",
               "type": "string"
             },
             "unavailable": {
