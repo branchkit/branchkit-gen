@@ -34126,6 +34126,14 @@
     },
     {
       "admits_events": [],
+      "description": "Run any plugin's commands and your own rules from what its voice pipeline hears, as if you said them",
+      "method_count": 0,
+      "methods": [],
+      "name": "pipelines.speak_for_user",
+      "risk": "dangerous"
+    },
+    {
+      "admits_events": [],
       "description": "Battery state, power source, and charging status",
       "method_count": 12,
       "methods": [
