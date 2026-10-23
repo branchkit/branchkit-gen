@@ -394,7 +394,7 @@
     },
     "_platform.model_download": {
       "cardinality": "singleton",
-      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it, and `error` says why the last one stopped short, if it did. Single record at id='singleton'.",
+      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it, and `error` says why the last one stopped short, if it did. `failures` maps every model ref whose last download failed to its reason, kept until that model is asked for again. Single record at id='singleton'.",
       "feeds_matching": {
         "type": "none"
       },
@@ -420,6 +420,12 @@
         {
           "field_type": "string",
           "key": "error",
+          "label": "",
+          "required": false
+        },
+        {
+          "field_type": "json",
+          "key": "failures",
           "label": "",
           "required": false
         }

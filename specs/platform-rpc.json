@@ -33406,7 +33406,7 @@
       "writers": "platform_only"
     },
     {
-      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it, and `error` says why the last one stopped short, if it did. Single record at id='singleton'.",
+      "description": "In-flight model download progress, from the platform's downloader. One download runs at a time; `model` names it, and `error` says why the last one stopped short, if it did. `failures` maps every model ref whose last download failed to its reason, kept until that model is asked for again. Single record at id='singleton'.",
       "name": "_platform.model_download",
       "preset": "data",
       "writers": "platform_only"
