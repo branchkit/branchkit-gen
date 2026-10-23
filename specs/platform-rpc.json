@@ -32760,6 +32760,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "calibration",
       "x-since": "0.1.0"
     },
     {
@@ -32800,6 +32801,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "calibration",
       "x-since": "0.1.0"
     },
     {
@@ -32861,6 +32863,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "calibration",
       "x-since": "0.1.0"
     },
     {
@@ -32906,6 +32909,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "calibration",
       "x-since": "0.1.0"
     },
     {
@@ -32948,6 +32952,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "calibration",
       "x-since": "0.1.0"
     },
     {
@@ -33655,6 +33660,20 @@
         "native.reminders_incomplete"
       ],
       "name": "calendar",
+      "risk": "moderate"
+    },
+    {
+      "admits_events": [],
+      "description": "Put other plugins' commands into their context for a recognition test, and ask those plugins for sample phrases",
+      "method_count": 5,
+      "methods": [
+        "trial.begin",
+        "trial.end",
+        "trial.enter_context",
+        "trial.register_fixture",
+        "trial.resolve_samples"
+      ],
+      "name": "calibration",
       "risk": "moderate"
     },
     {
