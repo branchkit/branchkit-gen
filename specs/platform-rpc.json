@@ -4357,7 +4357,7 @@
           },
           "source": {
             "default": "observed",
-            "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by platform channel infrastructure.",
+            "description": "\"observed\" = discovered via OS accessibility APIs.\n\"managed\" = HUD window created by platform channel infrastructure.\n\"assumed\" = stands for a window the platform cannot see: on GNOME\nWayland, the focused window, whose frame is not readable and is\ngiven as its display's visible bounds. Its geometry is not a fact.",
             "type": "string"
           },
           "space_ids": {
