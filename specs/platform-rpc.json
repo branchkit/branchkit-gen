@@ -8376,7 +8376,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Narrow completions to commands contributed by these collections'\ncontributors. None or empty = all.",
+            "description": "Narrow completions to commands stored in these command-set\ncollections. None or empty = all.",
             "items": {
               "type": "string"
             },
