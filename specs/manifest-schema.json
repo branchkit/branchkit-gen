@@ -2382,10 +2382,10 @@
     },
     "Resources": {
       "additionalProperties": false,
-      "description": "What a plugin asks for beyond the default share of the computer\n(`requires.resources`).",
+      "description": "What a plugin, or one of its stages, asks for beyond the default share of\nthe computer (`requires.resources`, `provides.stages.<name>.resources`).",
       "properties": {
         "memory_mb": {
-          "description": "The memory, in MB, the plugin's processes may hold together, from 64\nto 8192. Without it, 1024. Ask for what the plugin needs at its\nbusiest, with room to spare: past it, the plugin is stopped and\nrestarted.",
+          "description": "The memory, in MB, the processes may hold together (the plugin's, or\nthe stage's), from 64 to 8192. Without it, 1024. Ask for what is\nneeded at the busiest, the largest model loaded included, with room\nto spare: past it, the plugin or stage is stopped and restarted.",
           "format": "uint32",
           "maximum": 8192,
           "minimum": 64,
@@ -2501,6 +2501,17 @@
           "description": "Resolution priority when multiple stages match a type-based reference.\nHigher wins. Default 0.",
           "format": "int32",
           "type": "integer"
+        },
+        "resources": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Resources"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "What this stage asks for beyond the default share: its own memory,\napart from its plugin's (a stage is a process of its own). Shown\nbeside the stage on its plugin's card."
         },
         "stage_type": {
           "description": "Plugin-defined stage type string. The platform uses this for\ntype-based resolution (`*.stt`) — matching producers to consumers.\nPlugins define their own vocabulary (e.g. `stt`, `tts`, `resolver`).",
