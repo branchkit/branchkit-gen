@@ -10,7 +10,7 @@
         },
         {
           "const": "same_author",
-          "description": "Meant for plugins by the same author. The manifest `author` is not\nverified, so nothing is granted by it: at run time a consumer passes\nthis level as it would `open`, and the user's grant decides.",
+          "description": "Only plugins that declare the same manifest `publisher` as the\nprovider (or the provider itself), and the user's grant still\ndecides: a narrowing, never a grant. Advisory until plugin signing\nverifies `publisher`: a plugin can claim any publisher, so this keeps\nout plugins that say they are someone else's, not plugins that lie.\nA plugin with no `publisher`, or an unparseable one, matches nobody\nbut itself.",
           "type": "string"
         },
         {
@@ -1187,7 +1187,7 @@
         "access": {
           "$ref": "#/$defs/AccessLevel",
           "default": "open",
-          "description": "Who may assert it. `open` (default): any declared consumer, with a\nuser grant. `same_author`: meant for plugins sharing this manifest's\nauthor; nothing is granted by author, so it also needs a user grant.\n`private`: only the defining plugin itself."
+          "description": "Who may assert it. `open` (default): any declared consumer, with a\nuser grant. `same_author`: only plugins declaring this manifest's\n`publisher`, also with a user grant. `private`: only the defining\nplugin itself."
         },
         "description": {
           "description": "What holding this effect means. Shown on the Effects tab and in\nconsent copy for plugins that assert it. Plugin-authored text:\nrendered as data in platform chrome, never as markup.",
