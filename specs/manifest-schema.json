@@ -2324,6 +2324,17 @@
           "description": "Why the plugin asks for each thing it requests, one plain sentence\neach, shown under that line on its card (\"So a button can run the\naction you gave it\"). Keyed `<kind>:<what>`: the kind is one the\nuser grants, and `what` is the request exactly as this manifest\ndeclares it — `privilege:dispatch`, `dispatch:<plugin id>`,\n`collection_read:<collection>`, `collection_write:<collection>`,\n`event_subscription:<pattern>`, `effect_assert:<effect>`,\n`network_host:<host entry>`, `device:hid:<vvvv:pppp>`,\n`device:ble:<service>`, `app_preference:<domain entry>`,\n`wmi_class:<entry>`, `dbus_method:<entry>`, `blob_read:<channel>`,\n`protected_read:<kind>`.\nInside `requires` on purpose: a reason is part of what the person\napproves, so it is hashed with the requests it explains. A key that\nnames nothing the plugin requests is a manifest warning.",
           "type": "object"
         },
+        "resources": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Resources"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "More of the computer than every plugin gets by default. Without it a\nplugin's processes may hold 1024 MB of memory together; past what it\nmay hold, BranchKit stops the plugin and restarts it as if it had\ncrashed. Shown on the plugin's card, and an update that asks for more\nasks the person again."
+        },
         "runtimes": {
           "description": "Managed language runtimes this plugin's processes may execute, by name\n(e.g. `[\"python\"]`). Each name resolves to\n`<app_support>/runtimes/<name>/`, granted read+exec in the sandbox\npolicy. The platform only grants the paths — provisioning is\n`branchkit-cli runtime install <name>` (the plugin itself runs\nnetwork-denied, same split as declared models), and a runtime absent\nfrom disk is the plugin's own error to surface, never a sandbox\nviolation.",
           "items": {
@@ -2367,6 +2378,23 @@
       "required": [
         "tag"
       ],
+      "type": "object"
+    },
+    "Resources": {
+      "additionalProperties": false,
+      "description": "What a plugin asks for beyond the default share of the computer\n(`requires.resources`).",
+      "properties": {
+        "memory_mb": {
+          "description": "The memory, in MB, the plugin's processes may hold together, from 64\nto 8192. Without it, 1024. Ask for what the plugin needs at its\nbusiest, with room to spare: past it, the plugin is stopped and\nrestarted.",
+          "format": "uint32",
+          "maximum": 8192,
+          "minimum": 64,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
       "type": "object"
     },
     "SelectionSurfaceSchema": {
