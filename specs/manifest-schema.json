@@ -1307,7 +1307,7 @@
           "type": "object"
         },
         {
-          "description": "Word-level substitutions applied before pattern matching.\nScoped to introducer's commands only.",
+          "description": "Reserved, not implemented: the validator refuses it. Meant for\nword-level substitutions applied before pattern matching, scoped to\nthe introducer's commands.",
           "properties": {
             "from_field": {
               "type": "string"
@@ -1328,7 +1328,7 @@
           "type": "object"
         },
         {
-          "description": "Names from data records resolvable in `<x>` captures within the\nintroducer's own action namespace. Cross-plugin requires explicit\ngrant.",
+          "description": "Reserved, not implemented: the validator refuses it. Meant for names\nfrom data records resolvable in `<x>` captures within the\nintroducer's own action namespace, cross-plugin only by grant.",
           "properties": {
             "name_field": {
               "type": "string"
