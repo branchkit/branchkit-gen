@@ -1837,12 +1837,12 @@
       "oneOf": [
         {
           "const": "time",
-          "description": "Time-ordered (typically ULID-derived). Default for `log`.",
+          "description": "Newest first, by last write. Default for `log`.",
           "type": "string"
         },
         {
           "const": "by_id",
-          "description": "Lexicographic by id field. Default for `named_entities`, `data`.",
+          "description": "Lexicographic by id. Default for `named_entities`, `data`. Minted ids\nare ULIDs, so for those this is creation order.",
           "type": "string"
         },
         {
