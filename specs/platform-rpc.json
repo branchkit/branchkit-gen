@@ -6571,7 +6571,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "actions.push",
@@ -6631,7 +6632,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "artifact.delete",
@@ -6669,7 +6671,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "artifact.download",
@@ -6707,7 +6710,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "bindings.propose",
@@ -6762,7 +6766,8 @@
           "name": "bindings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "bindings.report",
@@ -6817,7 +6822,8 @@
           "name": "bindings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "bindings.set",
@@ -6882,7 +6888,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "bindings.set_triggers",
@@ -6925,7 +6932,8 @@
           "name": "bindings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "blob.publish",
@@ -7021,7 +7029,8 @@
       "x-branchkit-emits": [
         "_platform.blob.updated"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "blob.state",
@@ -7084,7 +7093,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collection.append",
@@ -7133,7 +7143,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.append_keyed",
@@ -7191,7 +7202,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collection.count",
@@ -7230,7 +7242,8 @@
           "name": "collections"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.delete_records",
@@ -7292,7 +7305,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.fetch",
@@ -7342,7 +7356,8 @@
           "name": "collections"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.fetch_compacted",
@@ -7392,7 +7407,8 @@
           "name": "collections"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collection.get",
@@ -7445,7 +7461,8 @@
           "name": "collections"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.list",
@@ -7500,7 +7517,8 @@
           "name": "collections"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.patch",
@@ -7556,7 +7574,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.put",
@@ -7642,7 +7661,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "collection.replace",
@@ -7739,7 +7759,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collections.create_user",
@@ -7797,7 +7818,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collections.list",
@@ -7838,7 +7860,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "collections.owned",
@@ -7869,7 +7892,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.add_alias",
@@ -7923,7 +7947,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.confusability",
@@ -7979,7 +8004,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.delete",
@@ -8017,7 +8043,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.enumerate",
@@ -8049,7 +8076,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.list",
@@ -8089,7 +8117,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.list_aliases",
@@ -8120,7 +8149,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.list_overrides",
@@ -8151,7 +8181,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.push",
@@ -8210,7 +8241,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.remove_alias",
@@ -8268,7 +8300,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.reset",
@@ -8306,7 +8339,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.reset_override",
@@ -8356,7 +8390,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.resolve",
@@ -8591,7 +8626,8 @@
         }
       ],
       "x-branchkit-privilege": "dispatch",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.resolve_phrase",
@@ -8683,7 +8719,8 @@
         }
       ],
       "x-branchkit-privilege": "dispatch",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "commands.set_override",
@@ -8737,7 +8774,8 @@
           "name": "commands"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "discovery.closed",
@@ -8769,7 +8807,8 @@
       "x-branchkit-emits": [
         "_platform.discovery.closed"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "dispatch",
@@ -8823,7 +8862,8 @@
         "_platform.action.executed"
       ],
       "x-branchkit-privilege": "dispatch",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "effects.assert",
@@ -8880,7 +8920,8 @@
         "_platform.effect.displaced",
         "_platform.effect.ownership_changed"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "effects.is_active",
@@ -8923,7 +8964,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "effects.retract",
@@ -8969,7 +9011,8 @@
       "x-branchkit-emits": [
         "_platform.effect.ownership_changed"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "events.append",
@@ -9025,7 +9068,8 @@
           "name": "events"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "events.emit",
@@ -9082,7 +9126,8 @@
           "name": "events"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "http.request",
@@ -9184,7 +9229,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.create_channel",
@@ -9339,7 +9385,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.hide",
@@ -9378,7 +9425,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.push",
@@ -9429,7 +9477,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.remove_channel",
@@ -9472,7 +9521,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.set_size",
@@ -9521,7 +9571,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "hud.show",
@@ -9560,7 +9611,8 @@
           "name": "hud"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "indicator.set",
@@ -9598,7 +9650,8 @@
         }
       ],
       "x-branchkit-privilege": "microphone",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.click",
@@ -9638,7 +9691,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_action",
@@ -9687,7 +9741,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_history",
@@ -9719,7 +9774,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_read",
@@ -9777,7 +9833,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_read_all",
@@ -9809,7 +9866,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_read_format",
@@ -9847,7 +9905,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_write",
@@ -9892,7 +9951,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.clipboard_write_items",
@@ -9933,7 +9993,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.double_click",
@@ -9982,7 +10043,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.drag",
@@ -10055,7 +10117,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.list_input_sources",
@@ -10087,7 +10150,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.mouse_button",
@@ -10136,7 +10200,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.parse_key_event",
@@ -10236,7 +10301,8 @@
           "name": "input"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.press_key",
@@ -10300,7 +10366,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.raw_key",
@@ -10351,7 +10418,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.right_click",
@@ -10400,7 +10468,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.scroll",
@@ -10459,7 +10528,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.select_all",
@@ -10489,7 +10559,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.switch_input_source",
@@ -10527,7 +10598,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.triple_click",
@@ -10576,7 +10648,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "input.type_text",
@@ -10615,7 +10688,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "list_action_types",
@@ -10646,7 +10720,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "list_methods",
@@ -10677,7 +10752,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.accent_color",
@@ -10706,7 +10782,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.accessibility_display_invert",
@@ -10735,7 +10812,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.accessibility_enabled",
@@ -10764,7 +10842,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.activate_app",
@@ -10811,7 +10890,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.active_network_service",
@@ -10840,7 +10920,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.active_ports",
@@ -10872,7 +10953,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.active_space",
@@ -10904,7 +10986,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.airdrop_enabled",
@@ -10933,7 +11016,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.airport_power",
@@ -10962,7 +11046,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.alert_sound",
@@ -10991,7 +11076,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.alert_volume",
@@ -11013,7 +11099,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.all_window_ids",
@@ -11045,7 +11132,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.apfs_snapshots",
@@ -11074,7 +11162,8 @@
         }
       ],
       "x-branchkit-privilege": "storage",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_bundle_path",
@@ -11112,7 +11201,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_focused_window_id",
@@ -11142,7 +11232,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_icon",
@@ -11196,7 +11287,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_icon_path",
@@ -11226,7 +11318,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_is_agent",
@@ -11264,7 +11357,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_is_running",
@@ -11302,7 +11396,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_launch_at_login",
@@ -11340,7 +11435,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_metadata",
@@ -11398,7 +11494,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_path",
@@ -11428,7 +11525,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_pid",
@@ -11459,7 +11557,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_support_directory",
@@ -11488,7 +11587,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_verification",
@@ -11520,7 +11620,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_version",
@@ -11550,7 +11651,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_volumes",
@@ -11582,7 +11684,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_windows",
@@ -11623,7 +11726,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.app_windows_count",
@@ -11655,7 +11759,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.apps_for_path",
@@ -11696,7 +11801,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.audio_device_volume",
@@ -11740,7 +11846,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.audio_devices",
@@ -11772,7 +11879,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.audio_input_device",
@@ -11801,7 +11909,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.audio_input_level",
@@ -11823,7 +11932,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.audio_output_device",
@@ -11852,7 +11962,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.auto_brightness",
@@ -11881,7 +11992,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.auto_rearrange_spaces",
@@ -11910,7 +12022,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.auto_timezone",
@@ -11939,7 +12052,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.autocorrect_enabled",
@@ -11968,7 +12082,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.automatic_login_user",
@@ -11997,7 +12112,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.automation_permission",
@@ -12035,7 +12151,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_element_at_point",
@@ -12155,7 +12272,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_element_tree",
@@ -12192,7 +12310,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_observe",
@@ -12246,7 +12365,8 @@
         "_platform.ax.notification"
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_perform_action",
@@ -12291,7 +12411,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_read_attributes",
@@ -12332,7 +12453,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_set_attribute",
@@ -12382,7 +12504,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_targets",
@@ -12487,7 +12610,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ax_unobserve",
@@ -12525,7 +12649,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.background_items",
@@ -12557,7 +12682,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.batch_is_tileable",
@@ -12601,7 +12727,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.batch_set_frames",
@@ -12654,7 +12781,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.battery",
@@ -12706,7 +12834,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.battery_cycle_count",
@@ -12729,7 +12858,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.battery_health",
@@ -12758,7 +12888,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.battery_max_capacity",
@@ -12780,7 +12911,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.battery_time_remaining",
@@ -12803,7 +12935,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_devices",
@@ -12844,7 +12977,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_discover_services",
@@ -12888,7 +13022,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_subscribe",
@@ -12947,7 +13082,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_subscribe_all_then_write",
@@ -13011,7 +13147,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_unsubscribe",
@@ -13067,7 +13204,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ble_write",
@@ -13150,7 +13288,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.bluetooth_devices",
@@ -13182,7 +13321,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.bluetooth_power",
@@ -13211,7 +13351,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.bold_text_enabled",
@@ -13240,7 +13381,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.boot_volume",
@@ -13269,7 +13411,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.borders",
@@ -13311,7 +13454,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.bounce_keys",
@@ -13340,7 +13484,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.brightness",
@@ -13381,7 +13526,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.bundle_for_remote_port",
@@ -13419,7 +13565,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.calendar_events_range",
@@ -13468,7 +13615,8 @@
         }
       ],
       "x-branchkit-privilege": "calendar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.calendar_events_today",
@@ -13500,7 +13648,8 @@
         }
       ],
       "x-branchkit-privilege": "calendar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.calendar_permission",
@@ -13529,7 +13678,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.camera_permission",
@@ -13558,7 +13708,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cameras",
@@ -13590,7 +13741,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.caps_lock_state",
@@ -13619,7 +13771,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.capture_window",
@@ -13663,7 +13816,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.caret_bounds",
@@ -13696,7 +13850,8 @@
         }
       ],
       "x-branchkit-privilege": "text.caret",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.caret_context",
@@ -13729,7 +13884,8 @@
         }
       ],
       "x-branchkit-privilege": "text.caret",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cascade_windows",
@@ -13767,7 +13923,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.center_window",
@@ -13806,7 +13963,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.check_permission",
@@ -13848,7 +14006,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.clear_file_quarantine",
@@ -13886,7 +14045,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.clear_notifications",
@@ -13924,7 +14084,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications.others",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.click_menu_item",
@@ -13973,7 +14134,8 @@
         }
       ],
       "x-branchkit-privilege": "menu",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.clipboard_change_count",
@@ -14004,7 +14166,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.clipboard_image_dimensions",
@@ -14033,7 +14196,8 @@
         }
       ],
       "x-branchkit-privilege": "clipboard",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.close_window",
@@ -14071,7 +14235,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.color_at_point",
@@ -14146,7 +14311,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.computer_name",
@@ -14175,7 +14341,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.computer_sleep_time",
@@ -14198,7 +14365,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.contacts_permission",
@@ -14227,7 +14395,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.copy_file",
@@ -14273,7 +14442,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cpu_info",
@@ -14306,7 +14476,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cpu_temperature",
@@ -14328,7 +14499,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cpu_usage",
@@ -14350,7 +14522,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.create_directory",
@@ -14388,7 +14561,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cron_jobs",
@@ -14420,7 +14594,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.currency_code",
@@ -14449,7 +14624,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.current_datetime",
@@ -14478,7 +14654,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.current_user",
@@ -14516,7 +14693,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.current_user_admin",
@@ -14545,7 +14723,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.current_wallpaper",
@@ -14574,7 +14753,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cursor",
@@ -14609,7 +14789,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.cursor_info",
@@ -14652,7 +14833,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dark_mode",
@@ -14681,7 +14863,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.date_format",
@@ -14731,7 +14914,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dbus_call",
@@ -14832,7 +15016,8 @@
       "x-branchkit-emits": [
         "plugin.dbus_call"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.default_app_for_mime_type",
@@ -14870,7 +15055,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.default_app_for_uti",
@@ -14908,7 +15094,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.default_browser",
@@ -14937,7 +15124,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.default_email_client",
@@ -14966,7 +15154,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.default_printer",
@@ -14995,7 +15184,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.delete_file",
@@ -15033,7 +15223,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.desktop_directory",
@@ -15062,7 +15253,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.detect_barcodes",
@@ -15094,7 +15286,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.detect_barcodes_file",
@@ -15135,7 +15328,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dictation_enabled",
@@ -15164,7 +15358,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.differentiate_without_color",
@@ -15193,7 +15388,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.directory_contents",
@@ -15242,7 +15438,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.disk_space",
@@ -15298,7 +15495,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.disk_usage",
@@ -15336,7 +15534,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dismiss_notification",
@@ -15375,7 +15574,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications.others",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_brightness",
@@ -15397,7 +15597,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_color_profiles",
@@ -15429,7 +15630,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_count",
@@ -15460,7 +15662,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_mirroring",
@@ -15489,7 +15692,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_refresh_rate",
@@ -15521,7 +15725,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_rotation",
@@ -15553,7 +15758,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_scale_factor",
@@ -15585,7 +15791,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_serial_number",
@@ -15614,7 +15821,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.display_sleep_time",
@@ -15637,7 +15845,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.displays",
@@ -15669,7 +15878,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dnd",
@@ -15704,7 +15914,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dns_servers",
@@ -15736,7 +15947,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_auto_hide",
@@ -15765,7 +15977,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_magnification",
@@ -15794,7 +16007,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_minimize_effect",
@@ -15823,7 +16037,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_minimize_to_app",
@@ -15852,7 +16067,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_position",
@@ -15881,7 +16097,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_show_indicators",
@@ -15910,7 +16127,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_show_recents",
@@ -15939,7 +16157,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dock_size",
@@ -15962,7 +16181,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.documents_directory",
@@ -15991,7 +16211,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.downloads_directory",
@@ -16020,7 +16241,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.dwell_click",
@@ -16049,7 +16271,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.eject_disk",
@@ -16087,7 +16310,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.empty_trash",
@@ -16116,7 +16340,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.env_var",
@@ -16154,7 +16379,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.epoch_time",
@@ -16185,7 +16411,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.extended_attributes",
@@ -16214,7 +16441,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.external_disks",
@@ -16246,7 +16474,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.external_display_names",
@@ -16278,7 +16507,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.fan_speeds",
@@ -16310,7 +16540,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.fast_user_switching",
@@ -16339,7 +16570,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_acl",
@@ -16369,7 +16601,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_creation_date",
@@ -16399,7 +16632,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_exists",
@@ -16437,7 +16671,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_extended_attributes",
@@ -16478,7 +16713,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_hash",
@@ -16524,7 +16760,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_metadata",
@@ -16591,7 +16828,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_mime_type",
@@ -16621,7 +16859,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_modification_date",
@@ -16651,7 +16890,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_owner",
@@ -16689,7 +16929,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_quarantine",
@@ -16727,7 +16968,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_sharing_enabled",
@@ -16756,7 +16998,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_size",
@@ -16788,7 +17031,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_tags",
@@ -16828,7 +17072,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_type",
@@ -16866,7 +17111,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.file_uti",
@@ -16896,7 +17142,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.filevault_status",
@@ -16925,7 +17172,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_default_view",
@@ -16954,7 +17202,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_new_window_target",
@@ -16983,7 +17232,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_show_extensions",
@@ -17012,7 +17262,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_show_hidden",
@@ -17041,7 +17292,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_show_path_bar",
@@ -17070,7 +17322,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_show_status_bar",
@@ -17099,7 +17352,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.finder_window_path",
@@ -17128,7 +17382,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.firewall_enabled",
@@ -17157,7 +17412,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.first_day_of_week",
@@ -17180,7 +17436,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.flush_dns",
@@ -17209,7 +17466,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.fn_key_function",
@@ -17238,7 +17496,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.focus_modes",
@@ -17267,7 +17526,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.focused_element",
@@ -17300,7 +17560,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.focused_window_id",
@@ -17329,7 +17590,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.font_smoothing",
@@ -17358,7 +17620,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.force_quit_app",
@@ -17396,7 +17659,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.format_date",
@@ -17442,7 +17706,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.frontmost_app",
@@ -17475,7 +17740,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.full_disk_access",
@@ -17504,7 +17770,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.function_keys_standard",
@@ -17533,7 +17800,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.gateway_address",
@@ -17562,7 +17830,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.generate_pdf",
@@ -17611,7 +17880,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.get_window_info",
@@ -17682,7 +17952,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.glob_files",
@@ -17733,7 +18004,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.gpu_info",
@@ -17765,7 +18037,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.grayscale_enabled",
@@ -17794,7 +18067,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.group_windows_by_app",
@@ -17823,7 +18097,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.handoff_enabled",
@@ -17852,7 +18127,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hardware_model",
@@ -17881,7 +18157,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hardware_uuid",
@@ -17910,7 +18187,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_claim",
@@ -17951,7 +18229,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_close",
@@ -17990,7 +18269,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_devices",
@@ -18021,7 +18301,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_elements",
@@ -18065,7 +18346,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_open",
@@ -18106,7 +18388,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_release",
@@ -18145,7 +18428,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hid_send_report",
@@ -18220,7 +18504,8 @@
       "x-branchkit-emits": [
         "plugin.device_access"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hide_app",
@@ -18259,7 +18544,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.highlight_color",
@@ -18288,7 +18574,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.home_directory",
@@ -18317,7 +18604,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.homebrew_prefix",
@@ -18346,7 +18634,8 @@
         }
       ],
       "x-branchkit-privilege": "storage",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hostname",
@@ -18375,7 +18664,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hostname_resolve",
@@ -18419,7 +18709,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.hot_corners",
@@ -18448,7 +18739,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.icloud_desktop_sync",
@@ -18477,7 +18769,8 @@
         }
       ],
       "x-branchkit-privilege": "icloud",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.icloud_drive_path",
@@ -18506,7 +18799,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.icloud_signed_in",
@@ -18535,7 +18829,8 @@
         }
       ],
       "x-branchkit-privilege": "icloud",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.increase_contrast",
@@ -18564,7 +18859,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.input_sources",
@@ -18596,7 +18892,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.installed_apps",
@@ -18628,7 +18925,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.interface_style_switcher",
@@ -18657,7 +18955,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ipv6_address",
@@ -18686,7 +18985,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.is_app_hidden",
@@ -18724,7 +19024,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.is_directory",
@@ -18762,7 +19063,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.is_file_hidden",
@@ -18800,7 +19102,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.kernel_version",
@@ -18829,7 +19132,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.key_repeat_delay",
@@ -18851,7 +19155,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.key_repeat_rate",
@@ -18873,7 +19178,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.keyboard_brightness",
@@ -18895,7 +19201,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.keyboard_layout",
@@ -18936,7 +19243,8 @@
           "name": "native"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.keychain_delete",
@@ -18975,7 +19283,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.keychain_read",
@@ -19013,7 +19322,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.keychain_write",
@@ -19060,7 +19370,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.kill_process",
@@ -19107,7 +19418,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.last_reboot",
@@ -19136,7 +19448,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.launch_app",
@@ -19183,7 +19496,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.list_audio_input_devices",
@@ -19215,7 +19529,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.list_audio_output_devices",
@@ -19247,7 +19562,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.list_notifications",
@@ -19279,7 +19595,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications.others",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.list_shortcuts",
@@ -19311,7 +19628,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.list_spaces",
@@ -19343,7 +19661,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.live_text_enabled",
@@ -19372,7 +19691,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.local_ip",
@@ -19401,7 +19721,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.locale",
@@ -19430,7 +19751,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.locate_pointer_enabled",
@@ -19459,7 +19781,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.location_enabled",
@@ -19488,7 +19811,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.log_out",
@@ -19518,7 +19842,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.logged_in_users",
@@ -19550,7 +19875,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.login_items",
@@ -19582,7 +19908,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.login_items_modern",
@@ -19614,7 +19941,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.low_power_mode",
@@ -19643,7 +19971,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mac_address",
@@ -19672,7 +20001,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.magnifier_enabled",
@@ -19701,7 +20031,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.maximize_window",
@@ -19739,7 +20070,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.measurement_system",
@@ -19768,7 +20100,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.media_next_track",
@@ -19798,7 +20131,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.media_play_pause",
@@ -19828,7 +20162,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.media_previous_track",
@@ -19858,7 +20193,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.memory_info",
@@ -19891,7 +20227,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.memory_pressure",
@@ -19920,7 +20257,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.menu_bar",
@@ -19961,7 +20299,8 @@
         }
       ],
       "x-branchkit-privilege": "menu",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.menu_bar_auto_hide",
@@ -19990,7 +20329,8 @@
         }
       ],
       "x-branchkit-privilege": "menu",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.menu_bar_battery_percent",
@@ -20019,7 +20359,8 @@
         }
       ],
       "x-branchkit-privilege": "menubar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.menu_bar_clock_format",
@@ -20048,7 +20389,8 @@
         }
       ],
       "x-branchkit-privilege": "menubar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.microphone_permission",
@@ -20077,7 +20419,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.minimize_window",
@@ -20116,7 +20459,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.model_name",
@@ -20145,7 +20489,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mono_audio",
@@ -20174,7 +20519,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mount_points",
@@ -20206,7 +20552,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mouse_button_click",
@@ -20264,7 +20611,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mouse_keys",
@@ -20293,7 +20641,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mouse_speed",
@@ -20315,7 +20664,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.move_file",
@@ -20361,7 +20711,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.move_window_to_display",
@@ -20409,7 +20760,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.move_window_to_space",
@@ -20456,7 +20808,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.mute",
@@ -20494,7 +20847,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_bandwidth",
@@ -20523,7 +20877,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_dns_domain",
@@ -20552,7 +20907,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_interfaces",
@@ -20584,7 +20940,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_proxy_enabled",
@@ -20613,7 +20970,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_quality",
@@ -20645,7 +21003,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_reachable",
@@ -20686,7 +21045,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_signal_strength",
@@ -20708,7 +21068,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.network_ssid",
@@ -20737,7 +21098,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.new_app_window",
@@ -20775,7 +21137,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.night_shift",
@@ -20804,7 +21167,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.notification_sound_enabled",
@@ -20833,7 +21197,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.notify",
@@ -20892,7 +21257,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.now_playing",
@@ -20925,7 +21291,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.number_format_decimal",
@@ -20954,7 +21321,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ocr_clipboard",
@@ -20986,7 +21354,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ocr_file",
@@ -21027,7 +21396,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ocr_screen",
@@ -21059,7 +21429,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ocr_screen_region",
@@ -21124,7 +21495,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ocr_window",
@@ -21166,7 +21538,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.on_screen_keyboard_enabled",
@@ -21195,7 +21568,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_app_settings",
@@ -21234,7 +21608,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_finder_window",
@@ -21273,7 +21648,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_system_settings",
@@ -21312,7 +21688,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_target",
@@ -21351,7 +21728,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_url",
@@ -21393,7 +21771,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.open_with_app",
@@ -21443,7 +21822,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.optimized_charging",
@@ -21472,7 +21852,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.pdf_extract_text",
@@ -21512,7 +21893,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.pdf_page_count",
@@ -21544,7 +21926,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.pin_window_above",
@@ -21590,7 +21973,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.pinch_to_zoom",
@@ -21619,7 +22003,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.ping",
@@ -21653,7 +22038,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.play_feedback_when_volume_changed",
@@ -21682,7 +22068,8 @@
         }
       ],
       "x-branchkit-privilege": "sound",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.play_sound",
@@ -21721,7 +22108,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.poll_burst",
@@ -21751,7 +22139,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.power_adapter_connected",
@@ -21780,7 +22169,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.power_mode",
@@ -21809,7 +22199,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.power_source",
@@ -21838,7 +22229,8 @@
         }
       ],
       "x-branchkit-privilege": "power",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.press_and_hold_enabled",
@@ -21867,7 +22259,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.prevent_sleep",
@@ -21913,7 +22306,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.primary_display",
@@ -21946,7 +22340,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.primary_display_id",
@@ -21977,7 +22372,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.printer_sharing_enabled",
@@ -22006,7 +22402,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.printers",
@@ -22038,7 +22435,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_count",
@@ -22069,7 +22467,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_cpu_usage",
@@ -22100,7 +22499,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_exists",
@@ -22138,7 +22538,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_info",
@@ -22196,7 +22597,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_list",
@@ -22228,7 +22630,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_memory_usage",
@@ -22260,7 +22663,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_name",
@@ -22290,7 +22694,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_parent_pid",
@@ -22321,7 +22726,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_path",
@@ -22351,7 +22757,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.process_start_time",
@@ -22381,7 +22788,8 @@
         }
       ],
       "x-branchkit-privilege": "process",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.proxy_settings",
@@ -22410,7 +22818,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.public_ip",
@@ -22442,7 +22851,8 @@
         "plugin.network_connect"
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.purgeable_space",
@@ -22465,7 +22875,8 @@
         }
       ],
       "x-branchkit-privilege": "storage",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.quick_look",
@@ -22519,7 +22930,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.quit_app",
@@ -22557,7 +22969,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.raise_window",
@@ -22596,7 +23009,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.random_uuid",
@@ -22625,7 +23039,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.read_app_preference",
@@ -22665,7 +23080,8 @@
       "x-branchkit-emits": [
         "plugin.app_preference"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.read_file",
@@ -22703,7 +23119,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.read_file_binary",
@@ -22751,7 +23168,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.read_plist",
@@ -22780,7 +23198,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.recent_documents",
@@ -22821,7 +23240,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.reduce_motion",
@@ -22850,7 +23270,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.reduce_transparency",
@@ -22879,7 +23300,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.reminders_incomplete",
@@ -22911,7 +23333,8 @@
         }
       ],
       "x-branchkit-privilege": "calendar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.remote_login_enabled",
@@ -22940,7 +23363,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.rename_file",
@@ -22986,7 +23410,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.request_screen_capture",
@@ -23015,7 +23440,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.resource_usage",
@@ -23062,7 +23488,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.restart_app",
@@ -23100,7 +23527,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.reveal_in_finder",
@@ -23139,7 +23567,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.rosetta_installed",
@@ -23168,7 +23597,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.run_applescript",
@@ -23216,7 +23646,8 @@
         }
       ],
       "x-branchkit-privilege": "shell",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.run_jxa",
@@ -23254,7 +23685,8 @@
         }
       ],
       "x-branchkit-privilege": "shell",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.run_shortcut",
@@ -23300,7 +23732,8 @@
         }
       ],
       "x-branchkit-privilege": "shell",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.running_apps",
@@ -23332,7 +23765,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_capture_permission",
@@ -23361,7 +23795,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_count",
@@ -23392,7 +23827,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_lock",
@@ -23422,7 +23858,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_locked",
@@ -23451,7 +23888,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_reader_enabled",
@@ -23480,7 +23918,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_resolution",
@@ -23509,7 +23948,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_saver_ask_password",
@@ -23538,7 +23978,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_saver_delay",
@@ -23561,7 +24002,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_saver_start",
@@ -23591,7 +24033,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_saver_status",
@@ -23620,7 +24063,8 @@
         }
       ],
       "x-branchkit-privilege": "session",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screen_sharing_enabled",
@@ -23649,7 +24093,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screenshot",
@@ -23717,7 +24162,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screenshot_format",
@@ -23746,7 +24192,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screenshot_include_shadow",
@@ -23775,7 +24222,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screenshot_location",
@@ -23804,7 +24252,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.screenshot_show_thumbnail",
@@ -23833,7 +24282,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.scroll_direction",
@@ -23862,7 +24312,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.scroll_direction_natural",
@@ -23891,7 +24342,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.search_contacts",
@@ -23932,7 +24384,8 @@
         }
       ],
       "x-branchkit-privilege": "contacts",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.secure_input_enabled",
@@ -23961,7 +24414,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.selected_finder_items",
@@ -23993,7 +24447,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.selected_text",
@@ -24022,7 +24477,8 @@
         }
       ],
       "x-branchkit-privilege": "text.selection",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.serial_number",
@@ -24051,7 +24507,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_airport_power",
@@ -24088,7 +24545,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_app_hidden",
@@ -24133,7 +24591,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_app_muted",
@@ -24178,7 +24637,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_app_volume",
@@ -24224,7 +24684,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_audio_device",
@@ -24272,7 +24733,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_audio_device_volume",
@@ -24319,7 +24781,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_audio_input_device",
@@ -24357,7 +24820,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_audio_output_device",
@@ -24395,7 +24859,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_auto_rearrange_spaces",
@@ -24432,7 +24897,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_bluetooth_power",
@@ -24469,7 +24935,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_bounce_keys",
@@ -24506,7 +24973,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_brightness",
@@ -24555,7 +25023,8 @@
         }
       ],
       "x-branchkit-privilege": "display",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dark_mode",
@@ -24593,7 +25062,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dnd",
@@ -24631,7 +25101,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_auto_hide",
@@ -24668,7 +25139,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_magnification",
@@ -24705,7 +25177,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_minimize_effect",
@@ -24743,7 +25216,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_position",
@@ -24781,7 +25255,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_show_recents",
@@ -24818,7 +25293,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dock_size",
@@ -24856,7 +25332,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_dwell_click",
@@ -24893,7 +25370,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_extended_attribute",
@@ -24946,7 +25424,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_file_hidden",
@@ -24991,7 +25470,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_file_permissions",
@@ -25037,7 +25517,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_finder_show_extensions",
@@ -25074,7 +25555,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_finder_show_hidden",
@@ -25111,7 +25593,8 @@
         }
       ],
       "x-branchkit-privilege": "finder",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_highlight_color",
@@ -25149,7 +25632,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_hot_corner",
@@ -25196,7 +25680,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_input_source",
@@ -25234,7 +25719,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_key_repeat_delay",
@@ -25272,7 +25758,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_key_repeat_rate",
@@ -25310,7 +25797,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_magnifier_enabled",
@@ -25347,7 +25835,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_menu_bar_auto_hide",
@@ -25384,7 +25873,8 @@
         }
       ],
       "x-branchkit-privilege": "menubar",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_mono_audio",
@@ -25421,7 +25911,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_mouse_keys",
@@ -25458,7 +25949,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_mouse_speed",
@@ -25496,7 +25988,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_night_shift",
@@ -25534,7 +26027,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_on_screen_keyboard_enabled",
@@ -25571,7 +26065,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_power_mode",
@@ -25609,7 +26104,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_screen_reader_enabled",
@@ -25646,7 +26142,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_screenshot_format",
@@ -25684,7 +26181,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_screenshot_include_shadow",
@@ -25721,7 +26219,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_screenshot_location",
@@ -25759,7 +26258,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_scroll_direction_natural",
@@ -25796,7 +26296,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_sidebar_icon_size",
@@ -25835,7 +26336,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_slow_keys",
@@ -25872,7 +26374,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_stage_manager",
@@ -25909,7 +26412,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_sticky_keys",
@@ -25946,7 +26450,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_tap_to_click",
@@ -25983,7 +26488,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_text_scale",
@@ -26021,7 +26527,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_trackpad_speed",
@@ -26059,7 +26566,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_url_scheme_handler",
@@ -26105,7 +26613,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_visual_alerts_enabled",
@@ -26142,7 +26651,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_volume",
@@ -26181,7 +26691,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_wallpaper",
@@ -26219,7 +26730,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_alpha",
@@ -26266,7 +26778,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_level",
@@ -26312,7 +26825,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_position",
@@ -26367,7 +26881,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_shadow",
@@ -26413,7 +26928,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_size",
@@ -26468,7 +26984,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.set_window_sticky",
@@ -26514,7 +27031,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.sharing_name",
@@ -26543,7 +27061,8 @@
         }
       ],
       "x-branchkit-privilege": "sharing",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.show_scroll_bars",
@@ -26572,7 +27091,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.sidebar_icon_size",
@@ -26601,7 +27121,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.siri_enabled",
@@ -26630,7 +27151,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.sleep_now",
@@ -26660,7 +27182,8 @@
         }
       ],
       "x-branchkit-privilege": "system.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.slow_keys",
@@ -26689,7 +27212,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.smart_quotes_enabled",
@@ -26718,7 +27242,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.smart_zoom",
@@ -26747,7 +27272,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.sound_effects_enabled",
@@ -26776,7 +27302,8 @@
         }
       ],
       "x-branchkit-privilege": "sound",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.spaces_span_displays",
@@ -26805,7 +27332,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.speech_locales",
@@ -26837,7 +27365,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.speech_recognition_available",
@@ -26866,7 +27395,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.speech_recognize_file",
@@ -26904,7 +27434,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.spelling_language",
@@ -26933,7 +27464,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.spotlight",
@@ -26995,7 +27527,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.stage_manager_enabled",
@@ -27024,7 +27557,8 @@
         }
       ],
       "x-branchkit-privilege": "dock",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.startup_disk",
@@ -27053,7 +27587,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.startup_sound_enabled",
@@ -27082,7 +27617,8 @@
         }
       ],
       "x-branchkit-privilege": "sound",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.status_indicator",
@@ -27111,7 +27647,8 @@
         }
       ],
       "x-branchkit-privilege": "system.indicator",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.sticky_keys",
@@ -27140,7 +27677,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.swipe_between_pages",
@@ -27169,7 +27707,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.switch_space",
@@ -27209,7 +27748,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.switch_space_when_switching_app",
@@ -27238,7 +27778,8 @@
         }
       ],
       "x-branchkit-privilege": "spaces",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.symlink",
@@ -27284,7 +27825,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_appearance",
@@ -27317,7 +27859,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_info",
@@ -27361,7 +27904,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_integrity",
@@ -27393,7 +27937,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_language",
@@ -27422,7 +27967,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_region",
@@ -27451,7 +27997,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_sounds",
@@ -27483,7 +28030,8 @@
         }
       ],
       "x-branchkit-privilege": "sound",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_uptime",
@@ -27520,7 +28068,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.system_uptime_seconds",
@@ -27551,7 +28100,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.tap_to_click",
@@ -27580,7 +28130,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.temp_directory",
@@ -27609,7 +28160,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.temperature_unit",
@@ -27638,7 +28190,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.text_replacements",
@@ -27667,7 +28220,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.text_scale",
@@ -27689,7 +28243,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.thermal_state",
@@ -27718,7 +28273,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.three_finger_drag",
@@ -27747,7 +28303,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.thunderbolt_devices",
@@ -27779,7 +28336,8 @@
         }
       ],
       "x-branchkit-privilege": "hardware",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.time_format",
@@ -27829,7 +28387,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.time_machine_last_backup",
@@ -27858,7 +28417,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.time_machine_status",
@@ -27887,7 +28447,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.timezone",
@@ -27916,7 +28477,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.toggle_bluetooth",
@@ -27953,7 +28515,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.toggle_fullscreen",
@@ -27992,7 +28555,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.toggle_wifi",
@@ -28029,7 +28593,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.touch_id_available",
@@ -28058,7 +28623,8 @@
         }
       ],
       "x-branchkit-privilege": "security",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.trackpad_speed",
@@ -28080,7 +28646,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.transparency_consent",
@@ -28110,7 +28677,8 @@
         }
       ],
       "x-branchkit-privilege": "privacy",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.trash",
@@ -28148,7 +28716,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.true_tone",
@@ -28177,7 +28746,8 @@
         }
       ],
       "x-branchkit-privilege": "appearance",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.tts_voices",
@@ -28209,7 +28779,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.twenty_four_hour_clock",
@@ -28238,7 +28809,8 @@
         }
       ],
       "x-branchkit-privilege": "locale",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.unhide_app",
@@ -28277,7 +28849,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.unminimize_window",
@@ -28316,7 +28889,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.unzip",
@@ -28362,7 +28936,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.url_scheme_handler",
@@ -28400,7 +28975,8 @@
         }
       ],
       "x-branchkit-privilege": "apps",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.usb_devices",
@@ -28432,7 +29008,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.user_avatar",
@@ -28461,7 +29038,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.user_name",
@@ -28490,7 +29068,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.user_shell",
@@ -28519,7 +29098,8 @@
         }
       ],
       "x-branchkit-privilege": "user",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.visual_alerts_enabled",
@@ -28548,7 +29128,8 @@
         }
       ],
       "x-branchkit-privilege": "accessibility",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.volume",
@@ -28583,7 +29164,8 @@
         }
       ],
       "x-branchkit-privilege": "audio",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.vpn_status",
@@ -28612,7 +29194,8 @@
         }
       ],
       "x-branchkit-privilege": "network",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.warp_cursor",
@@ -28659,7 +29242,8 @@
         }
       ],
       "x-branchkit-privilege": "input",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.wifi",
@@ -28708,7 +29292,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.wifi_networks",
@@ -28740,7 +29325,8 @@
         }
       ],
       "x-branchkit-privilege": "system",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_app",
@@ -28770,7 +29356,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_bounds",
@@ -28825,7 +29412,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_display_id",
@@ -28857,7 +29445,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_is_fullscreen",
@@ -28887,7 +29476,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_is_minimized",
@@ -28917,7 +29507,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_layer",
@@ -28948,7 +29539,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_screenshot",
@@ -28979,7 +29571,8 @@
         }
       ],
       "x-branchkit-privilege": "screenshot",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_subrole",
@@ -29009,7 +29602,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.window_title",
@@ -29039,7 +29633,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.wmi_query",
@@ -29128,7 +29723,8 @@
       "x-branchkit-emits": [
         "plugin.wmi_query"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.world_model",
@@ -29188,7 +29784,8 @@
         }
       ],
       "x-branchkit-privilege": "windows",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.write_app_preference",
@@ -29244,7 +29841,8 @@
       "x-branchkit-emits": [
         "plugin.app_preference"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.write_file",
@@ -29289,7 +29887,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.xcode_path",
@@ -29318,7 +29917,8 @@
         }
       ],
       "x-branchkit-privilege": "storage",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.xcode_version",
@@ -29347,7 +29947,8 @@
         }
       ],
       "x-branchkit-privilege": "storage",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "native.zip",
@@ -29393,7 +29994,8 @@
         }
       ],
       "x-branchkit-privilege": "filesystem",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "network.request_host",
@@ -29441,7 +30043,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "oauth.connect",
@@ -29615,7 +30218,8 @@
       "x-branchkit-emits": [
         "_platform.oauth.changed"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "oauth.disconnect",
@@ -29657,7 +30261,8 @@
       "x-branchkit-emits": [
         "_platform.oauth.changed"
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "oauth.status",
@@ -29714,7 +30319,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "on_action",
@@ -29789,7 +30395,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "on_commands_changed",
@@ -29859,7 +30466,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "on_ready",
@@ -29880,7 +30488,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "on_transcript",
@@ -29994,7 +30603,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "output.clear",
@@ -30043,7 +30653,8 @@
       "x-branchkit-emits": [
         "_platform.output.cleared"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "output.state",
@@ -30105,7 +30716,8 @@
       "x-branchkit-emits": [
         "_platform.output.state"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "overlay.clear",
@@ -30144,7 +30756,8 @@
         }
       ],
       "x-branchkit-privilege": "overlay",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "overlay.show",
@@ -30194,7 +30807,8 @@
         }
       ],
       "x-branchkit-privilege": "overlay",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "overrides.apply",
@@ -30292,7 +30906,8 @@
       "x-branchkit-emits": [
         "_platform.collection.updated"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "overrides.list",
@@ -30323,7 +30938,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.audio_level",
@@ -30376,7 +30992,8 @@
         }
       ],
       "x-branchkit-privilege": "microphone",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.grammar",
@@ -30424,7 +31041,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.inject",
@@ -30487,7 +31105,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.run",
@@ -30553,7 +31172,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.status",
@@ -30598,7 +31218,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.stop",
@@ -30646,7 +31267,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "pipelines.warm",
@@ -30693,7 +31315,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "platform.profile",
@@ -30748,7 +31371,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "plugin.data.export",
@@ -30802,7 +31426,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "plugin.debug",
@@ -30865,7 +31490,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "plugin.report_health",
@@ -30912,7 +31538,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "plugin.report_setup",
@@ -30968,7 +31595,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "privacy.get_recording",
@@ -31006,7 +31634,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "privacy.set_recording",
@@ -31051,7 +31680,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "stable"
     },
     {
       "name": "privileges.list",
@@ -31083,7 +31713,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "privileges.relinquish",
@@ -31122,7 +31753,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "privileges.request",
@@ -31170,7 +31802,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "recognition.bias.apply",
@@ -31222,7 +31855,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "recognition.bias.get",
@@ -31260,7 +31894,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "recognition.bias.set",
@@ -31318,7 +31953,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "recognition.redecode",
@@ -31405,7 +32041,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "render_settings",
@@ -31517,7 +32154,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "secrets.delete",
@@ -31555,7 +32193,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "secrets.is_set",
@@ -31593,7 +32232,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "secrets.list",
@@ -31630,7 +32270,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "secrets.request_slot",
@@ -31687,7 +32328,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "secrets.set",
@@ -31743,7 +32385,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "selection.pick",
@@ -31795,7 +32438,8 @@
       "x-branchkit-emits": [
         "_platform.selection.picked"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "selection.set",
@@ -31855,7 +32499,8 @@
           "name": "selection"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "session.boundary",
@@ -31887,7 +32532,8 @@
       "x-branchkit-emits": [
         "_platform.input.session_boundary"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "session.end_cleanup",
@@ -31923,7 +32569,8 @@
       "x-branchkit-emits": [
         "_platform.input.session_ended"
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "settings.patch_signals",
@@ -31962,7 +32609,8 @@
           "name": "settings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "settings.redirect",
@@ -32000,7 +32648,8 @@
           "name": "settings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "settings.refresh",
@@ -32029,7 +32678,8 @@
           "name": "settings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "settings.rules_create",
@@ -32152,7 +32802,8 @@
           "name": "settings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "settings.rules_update",
@@ -32275,7 +32926,8 @@
           "name": "settings"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "speech.announce",
@@ -32314,7 +32966,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "speech.engines",
@@ -32357,7 +33010,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "speech.restart_engine",
@@ -32397,7 +33051,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "speech.say",
@@ -32488,7 +33143,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "speech.stop",
@@ -32518,7 +33174,8 @@
         }
       ],
       "x-branchkit-privilege": "speech",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "stages.request",
@@ -32587,7 +33244,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.2.0"
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
     },
     {
       "name": "system.launch_app",
@@ -32636,7 +33294,8 @@
         }
       ],
       "x-branchkit-privilege": "apps.control",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "system.notify",
@@ -32695,7 +33354,8 @@
         }
       ],
       "x-branchkit-privilege": "notifications",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "system.run_shell",
@@ -32735,7 +33395,8 @@
         }
       ],
       "x-branchkit-privilege": "shell",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial.begin",
@@ -32764,7 +33425,8 @@
         }
       ],
       "x-branchkit-privilege": "calibration",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial.end",
@@ -32805,7 +33467,8 @@
         }
       ],
       "x-branchkit-privilege": "calibration",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial.enter_context",
@@ -32867,7 +33530,8 @@
         }
       ],
       "x-branchkit-privilege": "calibration",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial.register_fixture",
@@ -32913,7 +33577,8 @@
         }
       ],
       "x-branchkit-privilege": "calibration",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial.resolve_samples",
@@ -32956,7 +33621,8 @@
         }
       ],
       "x-branchkit-privilege": "calibration",
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial_apply_fixture",
@@ -32994,7 +33660,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial_release_fixture",
@@ -33023,7 +33690,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "trial_samples",
@@ -33064,7 +33732,8 @@
           "name": "platform-to-plugin"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "vocabulary.commit",
@@ -33093,7 +33762,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     },
     {
       "name": "wiring.describe",
@@ -33125,7 +33795,8 @@
           "name": "misc"
         }
       ],
-      "x-since": "0.1.0"
+      "x-since": "0.1.0",
+      "x-stability": "experimental"
     }
   ],
   "openrpc": "1.2.4",
