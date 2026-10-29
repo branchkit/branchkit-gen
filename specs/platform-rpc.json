@@ -8207,6 +8207,9 @@
           "name": "commands"
         }
       ],
+      "x-branchkit-emits": [
+        "_platform.collection.updated"
+      ],
       "x-since": "0.1.0"
     },
     {
