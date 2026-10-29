@@ -34008,6 +34008,12 @@
       "writers": "platform_only"
     },
     {
+      "description": "How BranchKit checks for its own updates, separate from plugin updates (`_platform.update_check`). One record `{mode, last_checked, last_attempt, latest, notes_url, apply, dismissed}`. mode notify (the default, also with no record): at most one automatic check a day, and a notice in Settings when a newer release is out; auto: not offered yet, read as notify; never: no check at all. A check runs `branchkit-cli app check-updates`, which asks GitHub for the latest release of branchkit/releases. last_checked: unix seconds of the last check that reached GitHub; last_attempt: of the last try, one that did not (offline) being retried no sooner than an hour. latest, notes_url, apply: what the last check that reached GitHub found (apply is self, or package-manager for a Linux .deb/.rpm install). dismissed: the version whose package-manager notice was dismissed, which is told once.",
+      "name": "_platform.app_update",
+      "preset": "data",
+      "writers": "platform_only"
+    },
+    {
       "description": "Who holds each contested trigger — one record per trigger plugins have contributed bindings for, keyed like an edit (the combo; `<source>:<trigger>` for a device's): `source`, `trigger`, and `order`, the plugins in the order they first contributed a binding for it. The first in `order` that contributes one holds the trigger, so a plugin installed later never takes a key already in use. A disabled plugin keeps its place; an uninstalled one leaves. Settings' \"Use this one\" moves a plugin to the front. Written only by the platform.",
       "name": "_platform.binding_claims",
       "preset": "data",
