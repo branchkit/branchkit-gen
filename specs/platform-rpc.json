@@ -33835,6 +33835,14 @@
     },
     {
       "admits_events": [],
+      "description": "Start programs it ships or the runtimes it declares, inside its sandbox",
+      "method_count": 0,
+      "methods": [],
+      "name": "exec.own",
+      "risk": "moderate"
+    },
+    {
+      "admits_events": [],
       "description": "File operations — open files and links in any app (which may then reach the internet), trash, search, tags, reveal",
       "method_count": 55,
       "methods": [
