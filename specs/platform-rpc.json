@@ -5661,6 +5661,15 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "run_id",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "The run that failed, as its `_platform.pipeline.started` named it.\nEmpty when no run failed (a `pipelines.warm` that could not start the\npipeline's stages).",
+            "type": "string"
+          }
         }
       ],
       "summary": "A pipeline encountered an error",
@@ -5755,7 +5764,7 @@
           "required": false,
           "schema": {
             "default": "",
-            "description": "This run's id: opaque, never reused for another run. The run's\n`_platform.pipeline.stopped` and every `on_transcript` it causes carry\nthe same one.",
+            "description": "This run's id: opaque, never reused for another run. The run's\n`_platform.pipeline.stopped`, its `_platform.pipeline.error`, and each\n`_platform.pipeline.transcript` and `on_transcript` it causes carry\nthe same one.",
             "type": "string"
           }
         }
@@ -5881,6 +5890,15 @@
           "name": "pipeline",
           "required": true,
           "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "run_id",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "The run that produced this transcript, as its\n`_platform.pipeline.started` named it. Empty when no run produced it\n(`pipelines.ingest_transcript`).",
             "type": "string"
           }
         },
