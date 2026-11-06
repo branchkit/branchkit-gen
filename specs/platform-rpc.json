@@ -30567,6 +30567,28 @@
       "x-stability": "experimental"
     },
     {
+      "name": "on_stop",
+      "paramStructure": "by-name",
+      "params": [],
+      "result": {
+        "name": "on_stop_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of `on_stop`: none. Answering at all says the plugin's\ncleanup is done.",
+          "title": "OnStopResult",
+          "type": "object"
+        }
+      },
+      "summary": "The platform is about to stop this running plugin (switched off, removed, restarted for anything but a crash or a hang, or the app quitting); answer when your cleanup is done. Optional: sent only to a plugin that registered it. The plugin's connection stays open until it answers, so it may still call the platform while it cleans up, for at most 5 seconds; after the answer, or the 5 seconds, it is stopped as any plugin is.",
+      "tags": [
+        {
+          "name": "platform-to-plugin"
+        }
+      ],
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
+    },
+    {
       "name": "on_transcript",
       "paramStructure": "by-name",
       "params": [
