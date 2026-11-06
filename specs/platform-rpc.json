@@ -9432,7 +9432,7 @@
           "name": "channel",
           "required": true,
           "schema": {
-            "description": "The channel to give the keyboard: a card channel of the caller's\n(its typing box, or its first choice, takes the keyboard while the\ncard is on screen), or a window channel of the caller's (needs the\n`dispatch` privilege). A plugin's channel only; empty is accepted\nfrom the host alone, and lets it pick the window most needing an\nanswer.",
+            "description": "The channel to give the keyboard: a card channel of the caller's\n(its typing box, or its first choice, takes the keyboard while the\ncard is on screen), or a window channel of the caller's that is\nshown and takes input (needs the `dispatch` privilege). Refused\nwhile a permission question waits. A plugin's channel only; empty\nis accepted from the host alone, and lets it pick the window most\nneeding an answer.",
             "type": "string"
           }
         }
