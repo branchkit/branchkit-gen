@@ -30579,7 +30579,7 @@
           "type": "object"
         }
       },
-      "summary": "The platform is about to stop this running plugin (switched off, removed, restarted for anything but a crash or a hang, or the app quitting); answer when your cleanup is done. Optional: sent only to a plugin that registered it. The plugin's connection stays open until it answers, so it may still call the platform while it cleans up, for at most 5 seconds; after the answer, or the 5 seconds, it is stopped as any plugin is.",
+      "summary": "The platform is about to stop this running plugin: it was switched off or removed, restarted to load a new build, lost a capability it requires, or the app is quitting. Answer when your cleanup is done. Optional: sent only to a plugin that registered it. The connection stays open until the answer, so the plugin may still call the platform while it cleans up, for at most 5 s (2 s when the app is quitting); then it is stopped as any plugin is. A plugin that crashed or stopped answering is not asked, nor one restarted to take a permission away",
       "tags": [
         {
           "name": "platform-to-plugin"
