@@ -5749,6 +5749,15 @@
           "schema": {
             "type": "string"
           }
+        },
+        {
+          "name": "run_id",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "This run's id: opaque, never reused for another run. The run's\n`_platform.pipeline.stopped` and every `on_transcript` it causes carry\nthe same one.",
+            "type": "string"
+          }
         }
       ],
       "summary": "A pipeline was started",
@@ -5785,6 +5794,15 @@
           "required": true,
           "schema": {
             "$ref": "#/$defs/PipelineStopReason"
+          }
+        },
+        {
+          "name": "run_id",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "The run that stopped, as its `_platform.pipeline.started` named it.",
+            "type": "string"
           }
         },
         {
@@ -30539,6 +30557,15 @@
           "required": true,
           "schema": {
             "description": "Pipeline that produced this transcript. A plugin may own several.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "run_id",
+          "required": false,
+          "schema": {
+            "default": "",
+            "description": "The run of that pipeline that produced it: the same opaque id as the\n`run_id` on that run's `_platform.pipeline.started` and\n`_platform.pipeline.stopped`, never reused for another run. A plugin\nthat runs one pipeline more than once at a time (a held run and a\npersistent one, say) tells their transcripts apart by it. Empty when\nno run produced the transcript (`pipelines.ingest_transcript`).",
             "type": "string"
           }
         },
