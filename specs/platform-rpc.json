@@ -9425,6 +9425,45 @@
       "x-stability": "experimental"
     },
     {
+      "name": "hud.focus",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "channel",
+          "required": true,
+          "schema": {
+            "description": "The channel to give the keyboard: a card channel of the caller's\n(its typing box, or its first choice, takes the keyboard while the\ncard is on screen), or a window channel of the caller's (needs the\n`dispatch` privilege). A plugin's channel only; empty is accepted\nfrom the host alone, and lets it pick the window most needing an\nanswer.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "hud_focus_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "description": "The result of an operation that carries NO DATA — the acknowledgement\nof a command that either succeeds or returns an error.\n\n`ok` is a literal `true`. It exists because the JSON-RPC result must be\nsomething, and a `false` is unreachable: a failure leaves through the\nerror channel instead.\n\n**This type is load-bearing for the SDKs, not decoration.** `emit-sdk`\nclassifies a result whose only field is `ok` by its schema TITLE: this\none means \"no data\", so the generated wrapper returns `error` alone and\nno per-method response struct is emitted. Any OTHER title carrying a\nlone `ok` means the field is a real answer computed from a real call,\nand the wrapper returns it.\n\nThat distinction did not exist until 2026-09-22 and the two meanings\nshared one shape. The rule \"a lone `ok` carries no information\" was\nwritten 2026-04-01, when it was true of every operation that had one;\nthe native codegen pipeline introduced computed `ok` a month later as 2\noperations out of 28, and it grew to 62 — `delete_file`, `copy_file`,\n`kill_process`, `close_window` — while every one of them reported\nsuccess through a wrapper that could not say otherwise. See\n`scripts/check-result-reachability.py`.\n\nSo: **a new operation that acknowledges rather than answers declares\nthis type.** Declaring its own `{ok: bool}` struct instead now means\nsomething specific and different.",
+          "properties": {
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok"
+          ],
+          "title": "OkResult",
+          "type": "object"
+        }
+      },
+      "summary": "Give the keyboard to one of the calling plugin's HUD cards or windows",
+      "tags": [
+        {
+          "name": "hud"
+        }
+      ],
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
+    },
+    {
       "name": "hud.hide",
       "paramStructure": "by-name",
       "params": [
