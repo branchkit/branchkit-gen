@@ -2547,6 +2547,14 @@
         },
         "type": "object"
       },
+      "OutputAttention": {
+        "description": "What a document may do to the person's attention, as the platform\nallows it. The platform computes it once, where `output.state`\npublishes, from the document's request (`urgency: interrupt`, or a\n`problem`) and the plugin's `requires.interrupts`; it is held beside the\ndocument and carried in the `_platform.output.state` event, and every\nconsumer (the card stack's order, the person's hold, the screen-reader\nrole, speech) reads it instead of the producer's `urgency` or `kind`.",
+        "enum": [
+          "polite",
+          "interrupt"
+        ],
+        "type": "string"
+      },
       "OutputItem": {
         "description": "One thing the person can know about or act on.\n\nEvery item has a `phrase`; an item with an `action` can be confirmed, and\nconfirming it does what the action says. Without an action, an item is\ninformation, and a renderer that offers items in turn skips it.",
         "properties": {
@@ -5560,6 +5568,14 @@
       "name": "_platform.output.state",
       "paramStructure": "by-name",
       "params": [
+        {
+          "name": "attention",
+          "required": true,
+          "schema": {
+            "$ref": "#/$defs/OutputAttention",
+            "description": "What the state may do to the person's attention, as the platform\nallows it: `interrupt` (shown past the person's hold, announced at\nonce, may cut into other speech) only when the document asks to\n(`urgency: interrupt`, or a `problem`) and its plugin declares\n`requires.interrupts`; otherwise `polite`. A renderer reads this,\nnot `state.urgency` or `state.kind`, to decide whether to interrupt."
+          }
+        },
         {
           "name": "channel",
           "required": true,
