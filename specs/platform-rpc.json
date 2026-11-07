@@ -31928,7 +31928,7 @@
           "name": "strength",
           "required": true,
           "schema": {
-            "description": "Strength to apply (> 0; the setting is also switched on).",
+            "description": "Strength to apply (above 0, at most 32; the setting is also switched on).",
             "format": "double",
             "type": "number"
           }
@@ -31961,6 +31961,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "recognition.bias",
       "x-since": "0.1.0",
       "x-stability": "experimental"
     },
@@ -32021,7 +32022,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "Omitted = leave the stored strength unchanged. Negative → 0.",
+            "description": "Omitted = leave the stored strength unchanged. Negative → 0, above 32 → 32.",
             "format": "double",
             "type": "number"
           }
@@ -32059,6 +32060,7 @@
           "name": "misc"
         }
       ],
+      "x-branchkit-privilege": "recognition.bias",
       "x-since": "0.1.0",
       "x-stability": "experimental"
     },
@@ -34994,6 +34996,17 @@
       "methods": [],
       "name": "questions.answer",
       "risk": "dangerous"
+    },
+    {
+      "admits_events": [],
+      "description": "Set the recognition bias that decides close calls between command words, for every plugin's commands",
+      "method_count": 2,
+      "methods": [
+        "recognition.bias.apply",
+        "recognition.bias.set"
+      ],
+      "name": "recognition.bias",
+      "risk": "moderate"
     },
     {
       "admits_events": [],
