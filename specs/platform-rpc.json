@@ -6201,6 +6201,22 @@
           }
         },
         {
+          "name": "picked_by",
+          "required": true,
+          "schema": {
+            "description": "Who answered it: the owner itself, another plugin holding the\n`dispatch` privilege and a dispatch grant to the owner, or\n`_platform` for the host. A list's owner tells its own pick from\nanother plugin's by comparing this with `plugin_id`.",
+            "type": "string"
+          }
+        },
+        {
+          "name": "plugin_id",
+          "required": true,
+          "schema": {
+            "description": "The plugin whose list was answered: the one that set it with\n`selection.set`, or `_platform` for the host's own list.",
+            "type": "string"
+          }
+        },
+        {
           "name": "tag",
           "required": true,
           "schema": {
@@ -6209,7 +6225,7 @@
           }
         }
       ],
-      "summary": "User selected an item from the selection HUD",
+      "summary": "An item of a selection was picked: names whose list (plugin_id) and who answered it (picked_by)",
       "tags": [
         {
           "name": "notifications"
@@ -32513,6 +32529,50 @@
       "x-stability": "experimental"
     },
     {
+      "name": "selection.clear",
+      "paramStructure": "by-name",
+      "params": [
+        {
+          "name": "owner",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Whose selection to end. Omitted, the caller's own. A plugin may end\nonly its own; the host may end any.",
+            "type": "string"
+          }
+        }
+      ],
+      "result": {
+        "name": "selection_clear_result",
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "properties": {
+            "cleared": {
+              "description": "Whether there was a selection to end. `false` is not an error: the\nlist was already picked, cleared, or never set.",
+              "type": "boolean"
+            },
+            "ok": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "ok",
+            "cleared"
+          ],
+          "title": "SelectionClearResult",
+          "type": "object"
+        }
+      },
+      "summary": "End a selection without a pick and close its window: a plugin ends its own, the host any",
+      "tags": [
+        {
+          "name": "selection"
+        }
+      ],
+      "x-since": "0.2.0",
+      "x-stability": "experimental"
+    },
+    {
       "name": "selection.pick",
       "paramStructure": "by-name",
       "params": [
@@ -32524,6 +32584,15 @@
             "format": "uint64",
             "minimum": 0,
             "type": "integer"
+          }
+        },
+        {
+          "name": "owner",
+          "required": false,
+          "schema": {
+            "default": null,
+            "description": "Whose selection to answer: the plugin id that set it. Omitted, the\ncaller's own. A plugin answering another plugin's list needs the\n`dispatch` privilege and the person's dispatch grant to that plugin,\nthe same record that lets it run that plugin's actions.",
+            "type": "string"
           }
         }
       ],
@@ -32553,7 +32622,7 @@
           "type": "object"
         }
       },
-      "summary": "Resolve a selection pick by index — clears selection state, emits event, closes HUD",
+      "summary": "Answer a selection by index: the caller's own, or another plugin's (`owner`) with the dispatch privilege and grant to it — ends the selection, emits _platform.selection.picked, closes its window",
       "tags": [
         {
           "name": "selection"
@@ -32574,7 +32643,7 @@
           "required": false,
           "schema": {
             "default": null,
-            "description": "HUD channel to show the selection in. Defaults to `\"main\"`.",
+            "description": "The window to show the selection in: a HUD channel the calling\nplugin created. Another plugin's channel, a platform window or a\nname that is not a channel id is refused. Omitted, no window opens:\nthe list can still be picked, by voice or by another plugin.",
             "type": "string"
           }
         },
@@ -32617,7 +32686,7 @@
           "type": "object"
         }
       },
-      "summary": "Show the selection HUD with items for the user to pick from",
+      "summary": "Offer the person a list to pick one item from, shown in a window the calling plugin owns (or none); replaces only the caller's own list",
       "tags": [
         {
           "name": "selection"
