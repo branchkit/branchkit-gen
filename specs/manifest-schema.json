@@ -2274,6 +2274,10 @@
           ],
           "description": "HID products and Bluetooth LE services this plugin drives, each a\ngrant on the plugin's card."
         },
+        "interrupts": {
+          "description": "That this plugin's HUD output may interrupt the person: a card or\nwindow it marks `urgency: interrupt`, or a `problem` it publishes,\nis shown even while the person holds cards back and is read out at\nonce. For the whole plugin, every channel it owns. Ask only when\nsomething the plugin reports cannot wait (a microphone that stopped,\na command that failed). Shown on the plugin's card and at install,\nand an update that starts asking asks the person again.",
+          "type": "boolean"
+        },
         "network": {
           "anyOf": [
             {
