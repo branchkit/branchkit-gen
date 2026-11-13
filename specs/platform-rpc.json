@@ -20170,7 +20170,7 @@
           "type": "object"
         }
       },
-      "summary": "Maximize window to fill screen. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state); nor on GNOME (GNOME exposes no window IPC; use its own tiling keybinds)",
+      "summary": "Maximize window to fill screen. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state)",
       "tags": [
         {
           "name": "native"
