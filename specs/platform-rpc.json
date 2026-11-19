@@ -6188,14 +6188,14 @@
           }
         }
       ],
-      "summary": "An item of a selection was picked: names whose list (plugin_id) and who answered it (picked_by)",
+      "summary": "An item of the receiving plugin's selection was picked: names the list's owner (plugin_id) and who answered it (picked_by). Addressed to the owner alone",
       "tags": [
         {
           "name": "notifications"
         }
       ],
       "x-branchkit-delivery": "at-most-once",
-      "x-branchkit-event-family": "routine",
+      "x-branchkit-event-family": "own",
       "x-since": "0.1.0"
     },
     {
@@ -34081,7 +34081,6 @@
         "_platform.plugin.enabled",
         "_platform.power.changed",
         "_platform.privilege.granted",
-        "_platform.selection.picked",
         "_platform.speech.finished",
         "_platform.speech.started",
         "_platform.system.did_wake",
@@ -34142,7 +34141,8 @@
         "_platform.hid.input",
         "_platform.hid.report",
         "_platform.oauth.changed",
-        "_platform.pipeline.executed"
+        "_platform.pipeline.executed",
+        "_platform.selection.picked"
       ],
       "name": "own",
       "privilege": null
