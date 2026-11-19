@@ -95,7 +95,6 @@
         },
         "required": [
           "actions",
-          "bounds",
           "children_count",
           "id",
           "native_role",
@@ -257,7 +256,6 @@
         },
         "required": [
           "description",
-          "display",
           "enum_values",
           "field_type",
           "fields",
@@ -310,7 +308,6 @@
           }
         },
         "required": [
-          "consequence",
           "fields",
           "label",
           "modes",
@@ -660,9 +657,7 @@
         },
         "required": [
           "characteristic_uuid",
-          "data",
-          "service_uuid",
-          "write_type"
+          "service_uuid"
         ],
         "type": "object"
       },
@@ -1170,14 +1165,8 @@
           }
         },
         "required": [
-          "cancels_bridge",
-          "clears_tags",
-          "display_sources",
-          "pattern",
-          "requires_tags",
-          "sets_on_partial",
-          "sets_tags",
-          "variants"
+          "action",
+          "pattern"
         ],
         "type": "object"
       },
@@ -1628,7 +1617,6 @@
         },
         "required": [
           "action",
-          "binding",
           "dynamic",
           "id",
           "owner_plugin",
@@ -2024,7 +2012,6 @@
         },
         "required": [
           "html",
-          "raw",
           "target_id"
         ],
         "type": "object"
@@ -2508,10 +2495,6 @@
             "type": "integer"
           }
         },
-        "required": [
-          "x",
-          "y"
-        ],
         "type": "object"
       },
       "OnActionStatus": {
@@ -2599,8 +2582,6 @@
           }
         },
         "required": [
-          "action",
-          "alt_phrases",
           "id",
           "phrase",
           "title"
@@ -2643,7 +2624,6 @@
           }
         },
         "required": [
-          "items",
           "title"
         ],
         "type": "object"
@@ -2715,8 +2695,6 @@
           "kind",
           "locale",
           "phrase",
-          "progress",
-          "sections",
           "title",
           "urgency",
           "v"
@@ -3102,10 +3080,6 @@
           }
         },
         "required": [
-          "display",
-          "enum_values",
-          "field_type",
-          "fields",
           "key"
         ],
         "type": "object"
@@ -3152,10 +3126,7 @@
           }
         },
         "required": [
-          "consequence",
-          "fields",
-          "label",
-          "uses"
+          "label"
         ],
         "type": "object"
       },
@@ -3204,12 +3175,8 @@
           }
         },
         "required": [
-          "apply_bias",
           "audio",
-          "id",
-          "noise",
-          "structured",
-          "words"
+          "id"
         ],
         "type": "object"
       },
@@ -3467,10 +3434,8 @@
           }
         },
         "required": [
-          "action",
           "active_plugin_gates",
           "args",
-          "blocked",
           "bridge_active",
           "clears_tags",
           "consumed_count",
@@ -4090,7 +4055,6 @@
           }
         },
         "required": [
-          "action",
           "args",
           "clears_tags",
           "consumed_count",
@@ -4139,7 +4103,6 @@
           }
         },
         "required": [
-          "kind",
           "label",
           "name"
         ],
